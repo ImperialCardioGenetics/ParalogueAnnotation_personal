@@ -1,0 +1,298 @@
+---
+title: "Paralog Annotation of Clinvar results"
+output: html_notebook
+---
+### Material and Methods Notes
+
+The Paralog Annotation algorithm was wriiten by Erica as a perl script plugin (called __ParalogueAnno_plugin_cleanup.pm__) for Ensembl's VEP version 90 (https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html). 
+
+The plugin has two arguments:
+
+* the first parameter has 2 options:
+    + ```variant``` (default) returns only the paralogous variants if any are present in the associated paralogs of the query gene found in the ensembl compara database
+    + ```paraloc``` returns only paralog variant locations in the form of genomic coordinates of the corresponding codon in ALL paralogs;
+* the second parameter has 2 options:
+    + ```all``` for all variants;
+    +  ```damaging``` (default) for only damaging variant.
+The majority of the time ```paraloc``` mode is used.
+
+The initial output by VEP and the Plugin (VEP+Plugin) is not reader friendly for either the user nor if you want to parse informations. So a python wrapper, shwon below, for the VEP+Plugin was written to automatically parse the results, namely the paralogous variant information.
+
+__VEP_ParalogAnno.py___(Note the code below is not polished for release and is a WIP)_
+```{python echo = TRUE, eval = FALSE}
+import  os, sys, subprocess, re
+
+#WRAPPER FOR VEP+PLUGIN
+
+def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
+	# flavour = int(sys.argv[1])	#0(no plugin), 1(variants), or 2(paraloc)
+	# input_dir = sys.argv[2]	#input directory
+	# input_file = sys.argv[3]	#name of input file
+	# # output_file = sys.argv[3]	#name of output file
+	# genome_build = str(sys.argv[4]) #37, 38
+	# VEPversion = int(sys.argv[5]) #83, 87, 90
+
+	#e.g. python3 benchmark.py 0 /data/Share/nick/Paralog_Anno/data_files 10_pathogenic.vcf 38 87
+
+	# print(type(flavour))
+	if flavour == 0:
+		# print("check")
+		flavour = ""
+		output_file = input_file.rsplit(".",1)[0]+".out_no_plugin"
+		print(output_file)
+	elif flavour == 1:
+		flavour = "--plugin ParalogueAnno_plugin_cleanup"
+		output_file = input_file.rsplit(".",1)[0]+".out"
+		print(output_file)
+	elif flavour == 2:
+		flavour = "--plugin ParalogueAnno_plugin_cleanup,paraloc"
+		output_file = input_file.rsplit(".",1)[0]+".out_paraloc"
+		print(output_file)
+
+	# print(input_file)
+
+	if not input_dir.endswith("/"):
+		input_dir = input_dir+"/"
+	print(input_dir)
+
+	if VEPversion == 90:
+		#VEP version 90
+		# rm_command = ("rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/90_GRCh" + genome_build)
+		mv_command = (
+			"mv /data/Share/nick/Paralog_Anno/homo_sapiens_non_use/90_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens"
+			)
+		command = (
+			"perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-vep/vep --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
+			" -i " + input_dir + input_file +
+			" -o " + input_dir + output_file + 
+			" " + flavour
+			)
+		mv_back_command = (
+			"mv /data/Share/nick/Paralog_Anno/homo_sapiens/90_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens_non_use"
+			)
+	
+	print(command)
+	os.system(command)
+	
+	with open(
+		input_dir + output_file + 
+		"_summary.html"
+		) as infile:
+		for line in infile:
+			if "<td>Run time</td>" in line:
+				if VEPversion == 83 or VEPversion == 87:
+					#IF VEP87 AND 83
+					m = re.search(r"<td>Run time<\/td> <td>.*second.<\/td>", line)
+					# print(m.group())
+					run_time = m.group().split("</td> <td>")[1].rstrip("</td>")
+					print(run_time, "\n")
+				elif VEPversion == 90:
+					# #IF VEP90
+					m = re.search(r"<td>Run time<\/td><td>.*second.<\/td>", line)
+					# print(m.group())
+					run_time = m.group().split("</td><td>")[1].rstrip("</td>")
+					print(run_time, "\n")
+
+	###TESTED THE BELOW WITH VEP90#### MIGHT NOT WORK WITH OTHER VERSIONS
+	#reads through outfile of vep+plugin and tidies up data by extracting only variants that have paralogs and spits that out as another outfile
+	out_file = open(input_dir + output_file + "_paralogs", "w")
+	if not flavour == "":
+		with open(
+			input_dir + output_file
+			) as infile:
+			for line in infile:
+				if not line.startswith("#"):
+					line = line.split("CSQ=")
+					CSQ = line[0]
+					print(CSQ)	#print query variant
+					line = line[1].split(",")
+					# print(line, "\n")
+					for x in line:
+						y = x.split("|")
+						# print(y, "\n")
+						gene = y[3]
+						paralog = y[23]
+						if paralog == "" or paralog == "\n":
+							paralog_check = 0
+						else:
+							paralog_check = 1
+						if paralog_check == 1:
+							print(x, "\n")
+							out_file.write(
+								str(CSQ)+"PARALOGS->"
+								+str(x)+"\n"
+								)
+	out_file.close()
+	
+# VEP_Plugin_run(2, "/data/Share/nick/Paralog_Anno/data_files", "new_extracted_clinvar_cm_intepretated_raw_variants_2.vcf", "38", 87)
+
+
+flavour = int(sys.argv[1])	#0(no plugin), 1(variants), or 2(paraloc)
+input_dir = sys.argv[2]	#input directory
+input_file = sys.argv[3]	#name of input file
+genome_build = str(sys.argv[4]) #37, 38
+VEPversion = int(sys.argv[5]) #83, 87, 90
+VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion)
+
+```
+
+#### Benchmarking performance of the plugin
+
+To demonstrate speed at which VEP+Plugin takes to run
+```{python echo = TRUE, eval = FALSE }
+#Script for benchmarking VEP with different flavours by auto extracting set number of variants and running them
+
+import os, sys, subprocess, re
+sys.path.insert(0, "/data/Install/Python-3.6.3/")
+from VEP_ParalogAnno import *
+import numpy as np
+import pandas as pd
+from scipy import stats, integrate
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+file = sys.argv[1]	#e.g. data_files/ExAC.r1.sites.vep_onlySCN5A_GRCh38coords_wRefAl.vcf
+dir1 = file.split("/")
+onlyfile = dir1.pop()
+dir1 = "/".join(dir1)
+if not dir1.endswith("/"):
+	dir1 = dir1+"/"
+
+flavour = int(sys.argv[2]) #e.g 0
+VEPversion = int(sys.argv[3]) #e.g. 90
+
+x_list = list(range(100,1100,100))
+x_list.append(10)
+x_list.sort()
+y_list = []
+
+for x_var in x_list:
+	input_file = str(onlyfile.rstrip(".vcf"))+".first"+str(x_var)+"lines.vcf"
+	os.system("head -n"+str(x_var)+" "+str(dir1)+str(onlyfile)+" > "+str(dir1)+str(input_file))
+
+	VEP_Plugin_run(
+		flavour, 
+		"/data/Share/nick/Paralog_Anno/data_files", 
+		input_file,
+		"38",
+		VEPversion)
+
+	if flavour == 0:
+		# print("check")
+		output_file = input_file.rsplit(".",1)[0]+".out_no_plugin"
+		print(output_file)
+	elif flavour == 1:
+		output_file = input_file.rsplit(".",1)[0]+".out"
+		print(output_file)
+	elif flavour == 2:
+		output_file = input_file.rsplit(".",1)[0]+".out_paraloc"
+		print(output_file)
+
+	with open(
+		dir1 + output_file + 
+		"_summary.html"
+		) as infile:
+		for line in infile:
+			if "<td>Run time</td>" in line:
+				if VEPversion == 83 or VEPversion == 87:
+					#IF VEP87 AND 83
+					m = re.search(r"<td>Run time<\/td> <td>.*second.<\/td>", line)
+					# print(m.group())
+					run_time = m.group().split("</td> <td>")[1].rstrip("</td>")
+					print(run_time, "\n")
+				elif VEPversion == 90:
+					# #IF VEP90
+					m = re.search(r"<td>Run time<\/td><td>.*second.<\/td>", line)
+					# print(m.group())
+					run_time = m.group().split("</td><td>")[1].rstrip("</td>")
+					print(run_time, "\n")
+				y_list.append(int(run_time.split()[0]))
+
+x_list = [0] + x_list
+y_list = [0] + y_list
+print(x_list)
+print(y_list)
+
+
+# x_list = [0, 10, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+# y_list = [0, 26, 1114, 2177, 2739, 3128, 3656, 4328, 5285, 6242, 6463, 7280]
+
+
+
+
+
+fig, ax = plt.subplots(figsize=(15,10))
+axes = plt.gca()
+# axes.set_ylim([0,7500])
+plt.plot(x_list, y_list, 'ro')
+plt.xlabel("Number of variants in query", fontsize=15)
+plt.ylabel("Time taken (seconds)", fontsize=20)
+if flavour == 0:
+	plt.title("Time taken for VEP (no plugin) to run against number of varaints being searched")
+elif flavour == 1:
+	plt.title("Time taken for VEP (plugin in '-varaints' mode) to run against number of varaints being searched")
+elif flavour == 2:
+	plt.title("Time taken for VEP (plugin in '-paraloc' mode) to run against number of varaints being searched")
+# plt.show()
+plt.savefig(dir1+"benchmark_"+str(flavour)+"_"+str(VEPversion)+".png")
+plt.gcf().clear()
+```
+
+#### Annotation of Clinvar
+The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/. Note that since the initial look at what was available there's been updated Clinvar files. 
+
+```{r warning = FALSE, include = FALSE, eval = FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
+
+#Pathogenic
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
+# paralog_data = unite(paralog_data, Coord_info, V1, V2, V3, V4, V5, V6, V7, sep = "\t")
+# paralog_data$V8=sapply(as.character(paralog_data$V8), strsplit, split = "&")
+# paralog_data$V8=sapply(paralog_data$V8, unlist)
+# paralog_data = separate(paralog_data, V8, into = c("additional_info", "paralogs"), sep = "PARALOGS->")
+# max_sep = 0
+# for (i in paralog_data$paralogs){
+#   
+# }
+# paralog_data = separate(paralog_data, paralogs, into = c("VEP_annotation", "paralogs"), sep = "&", extra = "merge")
+
+
+p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+
+ptoa.Total_paralog_annotations = left_join(p.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptoa.num_of_paralog_anno = sum(!is.na(ptoa.Total_paralog_annotations$ID.y))
+
+p.num_interactions_per_annotated_var = ptop.num_of_paralog_anno/length(p.paralog_data$Variant_pos)
+
+#Benign
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
+
+b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+btob.Total_paralog_annotations = left_join(b.gathered_paralog_data,b.ref_data, by = c("paralog_pos" = "Variant_pos"))
+btob.num_of_paralog_anno = sum(!is.na(btob.Total_paralog_annotations$ID.y))
+
+btoa.Total_paralog_annotations = left_join(b.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
+btoa.num_of_paralog_anno = sum(!is.na(btoa.Total_paralog_annotations$ID.y))
+
+b.num_interactions_per_annotated_var = btob.num_of_paralog_anno/length(b.paralog_data$Variant_pos)
+
+#Pathogenic to Benign
+ptob.Total_paralog_annotations = left_join(p.gathered_paralog_data, b.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptob.num_of_paralog_anno = sum(!is.na(ptob.Total_paralog_annotations$ID.y))
+
+#Benign to Pathogenic
+btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+
+#contingency table
+con_table = matrix(c(ptop.num_of_paralog_anno, ptob.num_of_paralog_anno, btop.num_of_paralog_anno, btob.num_of_paralog_anno),ncol = 2)
+#fisher.test(matrix(c(50425,4819,34843,196), ncol = 2))
+#fisher.test(matrix(c(50425,308,34843,219), ncol = 2))
+```
