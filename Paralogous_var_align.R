@@ -7,20 +7,11 @@ lapply(Packages, library, character.only = TRUE)
 ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
 
 #Pathogenic
-# p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
-# p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+#p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+#p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 
 p.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
-# paralog_data = unite(paralog_data, Coord_info, V1, V2, V3, V4, V5, V6, V7, sep = "\t")
-# paralog_data$V8=sapply(as.character(paralog_data$V8), strsplit, split = "&")
-# paralog_data$V8=sapply(paralog_data$V8, unlist)
-# paralog_data = separate(paralog_data, V8, into = c("additional_info", "paralogs"), sep = "PARALOGS->")
-# max_sep = 0
-# for (i in paralog_data$paralogs){
-#   
-# }
-# paralog_data = separate(paralog_data, paralogs, into = c("VEP_annotation", "paralogs"), sep = "&", extra = "merge")
 
 
 p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
@@ -33,8 +24,8 @@ ptoa.num_of_paralog_anno = sum(!is.na(ptoa.Total_paralog_annotations$ID.y))
 p.num_interactions_per_annotated_var = ptop.num_of_paralog_anno/length(p.paralog_data$Variant_pos)
 
 #Benign
-# b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
-# b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+#b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+#b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 
 b.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
@@ -87,7 +78,7 @@ colnames(con_table3) = c("Number of variants in genes with paralogs", "Number of
 rownames(con_table3) = c("benign", "pathognic")
 
 #stats
-#for con_table2
+#for con_table2 (variants aligned to pathogenic)
 con_table2_TP = ptop.num_of_paralog_anno
 con_table2_FP = btop.num_of_paralog_anno
 con_table2_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
@@ -105,7 +96,8 @@ minus_con_table2_Prevalence = 1 - as.numeric(con_table2_Prevalence)
 con_table2_PPV_prevalence = (con_table2_Sensitivty * con_table2_Prevalence) / ((con_table2_Sensitivty * con_table2_Prevalence) + (minus_con_table2_Specifity * minus_con_table2_Prevalence))
 
 con_table2_FPR = con_table2_FP/(con_table2_FP+con_table2_TN)
-#for con_table3
+
+#for con_table3 (variants aligned to benign)
 con_table3_TP = btob.num_of_paralog_anno
 con_table3_FP = ptob.num_of_paralog_anno
 con_table3_TN = length(p.paralog_data$ID)-ptob.num_of_paralog_anno
