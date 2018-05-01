@@ -296,3 +296,18 @@ con_table = matrix(c(ptop.num_of_paralog_anno, ptob.num_of_paralog_anno, btop.nu
 #fisher.test(matrix(c(50425,4819,34843,196), ncol = 2))
 #fisher.test(matrix(c(50425,308,34843,219), ncol = 2))
 ```
+
+#### Plan for quality control of annotations
+REF              | All | Alt matches |Alt no match
+-----------------|-----|-------------|-------------
+                 |     |             |
+No QC            |     |             |
+                 |     |             |
+-----------------|-----|-------------|-------------
+                 |     |             |
+Paralog Conserved|     |             |
+                 |     |             |
+-----------------|-----|-------------|-------------
+                 |     |             |
+All Conserved    |     |             |
+                 |     |             |
