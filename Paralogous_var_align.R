@@ -7,9 +7,14 @@ lapply(Packages, library, character.only = TRUE)
 ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
 
 #Pathogenic
-#p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
-p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+#p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+
+p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE)
+p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
+# p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT")]
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
 
 p.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
 
@@ -24,9 +29,9 @@ ptoa.num_of_paralog_anno = sum(!is.na(ptoa.Total_paralog_annotations$ID.y))
 p.num_interactions_per_annotated_var = ptop.num_of_paralog_anno/length(p.paralog_data$Variant_pos)
 
 #Benign
-#b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
-b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+#b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 
 b.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
 
@@ -157,6 +162,65 @@ g + geom_bar(stat="identity", position = "dodge") +
   #   y_position = c(10000), xmin = c(3), xmax = c(3.45), annotations = c("*"), tip_length = 0) +
   labs(x = "", y = "number of variants") +
   geom_text(aes(label=y_vars), position=position_dodge(width=0.9), vjust=-0.25)
+
+#All together chart
+x_vars = c(
+  "total \n variants",
+  "total \n variants",
+  "variants only \n in genes \n w/ paralogs",
+  "variants only \n in genes \n w/ paralogs",
+  "variants \n aligned to \n pathogenic \n no QC",
+  "variants \n aligned to \n pathogenic \n no QC",
+  "variants \n aligned to \n benign \n no QC",
+  "variants \n aligned to \n benign \n no QC",
+  "variants \n aligned to \n pathogenic \n QC1",
+  "variants \n aligned to \n pathogenic \n QC1",
+  "variants \n aligned to \n benign \n QC1",
+  "variants \n aligned to \n benign \n QC1",
+  "variants \n aligned to \n pathogenic \n QC2",
+  "variants \n aligned to \n pathogenic \n QC2",
+  "variants \n aligned to \n benign \n QC2",
+  "variants \n aligned to \n benign \n QC2"
+)
+clinical_significance = c(
+  "pathogenic","benign","pathogenic","benign","pathogenic","benign","pathogenic","benign","pathogenic","benign","pathogenic","benign","pathogenic","benign","pathogenic","benign"
+)
+y_vars = c(
+  50425,
+  34843,
+  13611,
+  5300,
+  4819,
+  196,
+  308,
+  219,
+  4437,
+  44,
+  205,
+  92,
+  2338,
+  12,
+  104,
+  32
+)
+dt = data.frame(
+  x_vars,
+  y_vars,
+  clinical_significance
+)
+dt$x_vars <- factor(dt$x_vars, levels = unique(dt$x_vars))
+leg = c("pathogenic", "benign")
+
+g = ggplot(dt, aes(x=x_vars, y=y_vars, group = clinical_significance, fill=clinical_significance))
+g + geom_bar(stat="identity", position = "dodge") + 
+  # geom_signif(
+  #   y_position = c(50000,47000,44000), xmin = c(5,5,5), xmax = c(8,7,6), annotations = c("*","*","*"))
+  # geom_signif(
+  #   y_position = c(10000), xmin = c(3), xmax = c(3.45), annotations = c("*"), tip_length = 0) +
+  labs(x = "", y = "number of variants") +
+  geom_text(aes(label=y_vars), position=position_dodge(width=0.9), vjust=-0.25)
+
+
 
 
 
