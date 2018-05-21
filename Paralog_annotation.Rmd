@@ -1,6 +1,8 @@
 ---
 title: "Paralog Annotation of Clinvar results"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 ### Material and Methods Notes
 
@@ -296,6 +298,11 @@ con_table = matrix(c(ptop.num_of_paralog_anno, ptob.num_of_paralog_anno, btop.nu
 #fisher.test(matrix(c(50425,4819,34843,196), ncol = 2))
 #fisher.test(matrix(c(50425,308,34843,219), ncol = 2))
 ```
+
+Cannot QC for alt allele when using "paraloc" mode as it does not return alt allele. E.g. look at variant ID 13034 in p.tableized_data - REFID=1 for AA but neither ref allele nor alt allele for nt match.
+
+#### Paralogue stats
+According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues
 
 #### Plan for quality control of annotations
 REF              | All | Alt matches |Alt no match

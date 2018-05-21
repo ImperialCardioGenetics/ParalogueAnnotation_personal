@@ -127,8 +127,127 @@ $(document).ready(function () {
 <div id="material-and-methods-notes" class="section level3">
 <h3>Material and Methods Notes</h3>
 <p>The Paralog Annotation algorithm was wriiten by Erica as a perl script plugin (called <strong>ParalogueAnno_plugin_cleanup.pm</strong>) for Ensembl’s VEP version 90 (<a href="https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html" class="uri">https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html</a>).</p>
+<p>The plugin has two arguments:</p>
+<ul>
+<li>the first parameter has 2 options:
+<ul>
+<li><code>variant</code> (default) returns only the paralogous variants if any are present in the associated paralogs of the query gene found in the ensembl compara database</li>
+<li><code>paraloc</code> returns only paralog variant locations in the form of genomic coordinates of the corresponding codon in ALL paralogs;</li>
+</ul></li>
+<li>the second parameter has 2 options:
+<ul>
+<li><code>all</code> for all variants;</li>
+<li><code>damaging</code> (default) for only damaging variant. The majority of the time <code>paraloc</code> mode is used.</li>
+</ul></li>
+</ul>
+<p>The initial output by VEP and the Plugin (VEP+Plugin) is not reader friendly for either the user nor if you want to parse informations. So a python wrapper, shwon below, for the VEP+Plugin was written to automatically parse the results, namely the paralogous variant information.</p>
+<p><strong>VEP_ParalogAnno.py</strong><em>(Note the code below is not polished for release and is a WIP)</em></p>
+<pre class="python"><code>import  os, sys, subprocess, re
+#WRAPPER FOR VEP+PLUGIN
+def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
+    # flavour = int(sys.argv[1])    #0(no plugin), 1(variants), or 2(paraloc)
+    # input_dir = sys.argv[2]   #input directory
+    # input_file = sys.argv[3]  #name of input file
+    # # output_file = sys.argv[3]   #name of output file
+    # genome_build = str(sys.argv[4]) #37, 38
+    # VEPversion = int(sys.argv[5]) #83, 87, 90
+    #e.g. python3 benchmark.py 0 /data/Share/nick/Paralog_Anno/data_files 10_pathogenic.vcf 38 87
+    # print(type(flavour))
+    if flavour == 0:
+        # print(&quot;check&quot;)
+        flavour = &quot;&quot;
+        output_file = input_file.rsplit(&quot;.&quot;,1)[0]+&quot;.out_no_plugin&quot;
+        print(output_file)
+    elif flavour == 1:
+        flavour = &quot;--plugin ParalogueAnno_plugin_cleanup&quot;
+        output_file = input_file.rsplit(&quot;.&quot;,1)[0]+&quot;.out&quot;
+        print(output_file)
+    elif flavour == 2:
+        flavour = &quot;--plugin ParalogueAnno_plugin_cleanup,paraloc&quot;
+        output_file = input_file.rsplit(&quot;.&quot;,1)[0]+&quot;.out_paraloc&quot;
+        print(output_file)
+    # print(input_file)
+    if not input_dir.endswith(&quot;/&quot;):
+        input_dir = input_dir+&quot;/&quot;
+    print(input_dir)
+    if VEPversion == 90:
+        #VEP version 90
+        # rm_command = (&quot;rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/90_GRCh&quot; + genome_build)
+        mv_command = (
+            &quot;mv /data/Share/nick/Paralog_Anno/homo_sapiens_non_use/90_GRCh&quot; + genome_build + &quot; /data/Share/nick/Paralog_Anno/homo_sapiens&quot;
+            )
+        command = (
+            &quot;perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-vep/vep --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/&quot; +
+            &quot; -i &quot; + input_dir + input_file +
+            &quot; -o &quot; + input_dir + output_file + 
+            &quot; &quot; + flavour
+            )
+        mv_back_command = (
+            &quot;mv /data/Share/nick/Paralog_Anno/homo_sapiens/90_GRCh&quot; + genome_build + &quot; /data/Share/nick/Paralog_Anno/homo_sapiens_non_use&quot;
+            )
+    
+    print(command)
+    os.system(command)
+    
+    with open(
+        input_dir + output_file + 
+        &quot;_summary.html&quot;
+        ) as infile:
+        for line in infile:
+            if &quot;&lt;td&gt;Run time&lt;/td&gt;&quot; in line:
+                if VEPversion == 83 or VEPversion == 87:
+                    #IF VEP87 AND 83
+                    m = re.search(r&quot;&lt;td&gt;Run time&lt;\/td&gt; &lt;td&gt;.*second.&lt;\/td&gt;&quot;, line)
+                    # print(m.group())
+                    run_time = m.group().split(&quot;&lt;/td&gt; &lt;td&gt;&quot;)[1].rstrip(&quot;&lt;/td&gt;&quot;)
+                    print(run_time, &quot;\n&quot;)
+                elif VEPversion == 90:
+                    # #IF VEP90
+                    m = re.search(r&quot;&lt;td&gt;Run time&lt;\/td&gt;&lt;td&gt;.*second.&lt;\/td&gt;&quot;, line)
+                    # print(m.group())
+                    run_time = m.group().split(&quot;&lt;/td&gt;&lt;td&gt;&quot;)[1].rstrip(&quot;&lt;/td&gt;&quot;)
+                    print(run_time, &quot;\n&quot;)
+    ###TESTED THE BELOW WITH VEP90#### MIGHT NOT WORK WITH OTHER VERSIONS
+    #reads through outfile of vep+plugin and tidies up data by extracting only variants that have paralogs and spits that out as another outfile
+    out_file = open(input_dir + output_file + &quot;_paralogs&quot;, &quot;w&quot;)
+    if not flavour == &quot;&quot;:
+        with open(
+            input_dir + output_file
+            ) as infile:
+            for line in infile:
+                if not line.startswith(&quot;#&quot;):
+                    line = line.split(&quot;CSQ=&quot;)
+                    CSQ = line[0]
+                    print(CSQ)  #print query variant
+                    line = line[1].split(&quot;,&quot;)
+                    # print(line, &quot;\n&quot;)
+                    for x in line:
+                        y = x.split(&quot;|&quot;)
+                        # print(y, &quot;\n&quot;)
+                        gene = y[3]
+                        paralog = y[23]
+                        if paralog == &quot;&quot; or paralog == &quot;\n&quot;:
+                            paralog_check = 0
+                        else:
+                            paralog_check = 1
+                        if paralog_check == 1:
+                            print(x, &quot;\n&quot;)
+                            out_file.write(
+                                str(CSQ)+&quot;PARALOGS-&gt;&quot;
+                                +str(x)+&quot;\n&quot;
+                                )
+    out_file.close()
+    
+# VEP_Plugin_run(2, &quot;/data/Share/nick/Paralog_Anno/data_files&quot;, &quot;new_extracted_clinvar_cm_intepretated_raw_variants_2.vcf&quot;, &quot;38&quot;, 87)
+flavour = int(sys.argv[1])  #0(no plugin), 1(variants), or 2(paraloc)
+input_dir = sys.argv[2] #input directory
+input_file = sys.argv[3]    #name of input file
+genome_build = str(sys.argv[4]) #37, 38
+VEPversion = int(sys.argv[5]) #83, 87, 90
+VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion)</code></pre>
 <div id="benchmarking-performance-of-the-plugin" class="section level4">
 <h4>Benchmarking performance of the plugin</h4>
+<p>To demonstrate speed at which VEP+Plugin takes to run</p>
 <pre class="python"><code>#Script for benchmarking VEP with different flavours by auto extracting set number of variants and running them
 import os, sys, subprocess, re
 sys.path.insert(0, &quot;/data/Install/Python-3.6.3/&quot;)
@@ -213,6 +332,82 @@ plt.gcf().clear()</code></pre>
 <div id="annotation-of-clinvar" class="section level4">
 <h4>Annotation of Clinvar</h4>
 <p>The Clinvar file <strong>clinvar_20171029.vcf</strong> was downloaded from <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/" class="uri">ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/</a>. Note that since the initial look at what was available there’s been updated Clinvar files.</p>
+<p>Cannot QC for alt allele when using “paraloc” mode as it does not return alt allele. E.g. look at variant ID 13034 in p.tableized_data - REFID=1 for AA but neither ref allele nor alt allele for nt match.</p>
+</div>
+<div id="plan-for-quality-control-of-annotations" class="section level4">
+<h4>Plan for quality control of annotations</h4>
+<table>
+<thead>
+<tr class="header">
+<th>REF</th>
+<th>All</th>
+<th>Alt matches</th>
+<th>Alt no match</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>No QC</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>—————–</td>
+<td>—–</td>
+<td>————-</td>
+<td>————-</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Paralog Conserved</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>—————–</td>
+<td>—–</td>
+<td>————-</td>
+<td>————-</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>All Conserved</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
