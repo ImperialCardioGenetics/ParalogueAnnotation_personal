@@ -4,6 +4,18 @@ output:
   html_document:
     df_print: paged
 ---
+### Aims
+* Apply Paralogue annotation on other datasets
+  + "Genome Wide" - Clinvar dataset
+  + Cardiomyopathy genes - [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1]
+  + Channelopathy genes - [KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2]
+* Improve precision via increasing conservation of ref/alt alleles
+  + pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
+  + pairwise QC and family QC - ignore entire alignment columns if the entire family ref alleles are not conserved; NB analogous to para z scores
+  + pairwise QC and family QC and alt allele QC - ignore entire alignment columns if family ref allele and alt allele isn't conserved
+* investigate para z scores
+* investigate pfam meta domains
+
 ### Material and Methods Notes
 
 The Paralog Annotation algorithm was wriiten by Erica as a perl script plugin (called __ParalogueAnno_plugin_cleanup.pm__) for Ensembl's VEP version 90 (https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html). 
@@ -299,12 +311,32 @@ con_table = matrix(c(ptop.num_of_paralog_anno, ptob.num_of_paralog_anno, btop.nu
 #fisher.test(matrix(c(50425,308,34843,219), ncol = 2))
 ```
 
-Cannot QC for alt allele when using "paraloc" mode as it does not return alt allele. E.g. look at variant ID 13034 in p.tableized_data - REFID=1 for AA but neither ref allele nor alt allele for nt match.
+__/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py__was used to format the VEP output into table format for R processing. For example:
+```{bash}
+python /data/Install/LOFTEE/loftee-master/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info Amino_acids,Codons,Paralogue_Vars
+```
+
+
+
+Cannot QC for alt allele when using "paraloc" mode as it does not return alt allele. Have to use CSQ info from vanilla VEP output. Tableized the info, but note that there seems to be a bug with tableize:
+`Traceback (most recent call last):
+ File "/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py", line 396, in <module>
+   main(args)
+ File "/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py", line 346, in main
+   raise e
+KeyError: 'start_retained_variant'`
+For example the variant with ID 10324 is not returned after using tableized even though is should be.
+
+Doing so only returns 3343 patho to patho alignments instead of the previous 4819.
+
+
+Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 642 individual pairwise alignments. The number of actual unique variants this equates to is less - 418.
 
 #### Paralogue stats
 According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues
 
-#### Plan for quality control of annotations
+
+#### Plan for overall annotations table
 REF              | All | Alt matches |Alt no match
 -----------------|-----|-------------|-------------
                  |     |             |
@@ -318,3 +350,34 @@ Paralog Conserved|     |             |
                  |     |             |
 All Conserved    |     |             |
                  |     |             |
+                 
+Or what james suggested for his Hanover conf.:
+```{r include = TRUE, eval = TRUE}
+Col_names = c("",
+              "Total number of variants",
+              "Paralog Annotation w/ no QC",
+              "PA pairwise QC (paralogue conserved)",
+              "",
+              "PA pairwise + family QC (all conserved)",
+              "",
+              "PA pairwsie + family + alt allele QC",
+              ""
+              )
+Sub_col_names = c("",
+                  "",
+                  "no QC",
+                  "remaining",
+                  "removed",
+                  "remaining",
+                  "removed",
+                  "remaining",
+                  "removed"
+                  )
+Pathogenic_variants = c("Pathogenic variants",
+                        )
+Benign_variants = c("Benign variants",
+                    )
+Whole_clinvar_set = data.frame(
+  
+)
+```
