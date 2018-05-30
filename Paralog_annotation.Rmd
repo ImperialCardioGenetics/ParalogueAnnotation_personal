@@ -1,5 +1,5 @@
 ---
-title: "Paralog Annotation of Clinvar results"
+title: "Paralog Annotation Notes"
 output:
   html_document:
     df_print: paged
@@ -30,23 +30,29 @@ The plugin has two arguments:
     +  ```damaging``` (default) for only damaging variant.
 The majority of the time ```paraloc``` mode is used.
 
+The Ensembl team have touched up Erica's plugin and decrease runtime. The plugin is now called __ParalogueAnnotation.pm__
+
 The initial output by VEP and the Plugin (VEP+Plugin) is not reader friendly for either the user nor if you want to parse informations. So a python wrapper, shwon below, for the VEP+Plugin was written to automatically parse the results, namely the paralogous variant information.
 
 __VEP_ParalogAnno.py___(Note the code below is not polished for release and is a WIP)_
-```{python echo = TRUE, eval = FALSE}
+```{python echo include = FALSE}
 import  os, sys, subprocess, re
+import shlex, subprocess
 
 #WRAPPER FOR VEP+PLUGIN
 
 def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
-	# flavour = int(sys.argv[1])	#0(no plugin), 1(variants), or 2(paraloc)
+	# flavour = int(sys.argv[1])	#0(no plugin), 1(variants), 2(paraloc)
 	# input_dir = sys.argv[2]	#input directory
 	# input_file = sys.argv[3]	#name of input file
 	# # output_file = sys.argv[3]	#name of output file
 	# genome_build = str(sys.argv[4]) #37, 38
 	# VEPversion = int(sys.argv[5]) #83, 87, 90
 
-	#e.g. python3 benchmark.py 0 /data/Share/nick/Paralog_Anno/data_files 10_pathogenic.vcf 38 87
+	#e.g. python3 VEP_ParalogAnno.py 0 /data/Share/nick/Paralog_Anno/data_files 10_pathogenic.vcf 38 90
+
+	# if not len(os.listdir("/data/Share/nick/Paralog_Anno/homo_sapiens/")) == 0:
+	# 	sys.exit("Terminating script:/data/Share/nick/Paralog_Anno/homo_sapiens/ not empty. Please empty and try again")
 
 	# print(type(flavour))
 	if flavour == 0:
@@ -54,12 +60,28 @@ def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
 		flavour = ""
 		output_file = input_file.rsplit(".",1)[0]+".out_no_plugin"
 		print(output_file)
+	# elif flavour == 1:
+	# 	flavour = "--plugin ParalogueAnno_plugin_cleanup"
+	# 	output_file = input_file.rsplit(".",1)[0]+".out_old"
+	# 	print(output_file)
+	# elif flavour == 2:
+	# 	flavour = "--plugin ParalogueAnno_plugin_cleanup,paraloc"
+	# 	output_file = input_file.rsplit(".",1)[0]+".out_old_paraloc"
+	# 	print(output_file)
+	# elif flavour == 3:
+	# 	flavour = "--plugin ParalogueAnnotation"
+	# 	output_file = input_file.rsplit(".",1)[0]+".out_new"
+	# 	print(output_file)
+	# elif flavour == 4:
+	# 	flavour = "--plugin ParalogueAnnotation,paraloc"
+	# 	output_file = input_file.rsplit(".",1)[0]+".out_new_paraloc"
+	# 	print(output_file)
 	elif flavour == 1:
-		flavour = "--plugin ParalogueAnno_plugin_cleanup"
+		flavour = "--plugin ParalogueAnnotation"
 		output_file = input_file.rsplit(".",1)[0]+".out"
 		print(output_file)
 	elif flavour == 2:
-		flavour = "--plugin ParalogueAnno_plugin_cleanup,paraloc"
+		flavour = "--plugin ParalogueAnnotation,paraloc"
 		output_file = input_file.rsplit(".",1)[0]+".out_paraloc"
 		print(output_file)
 
@@ -69,6 +91,37 @@ def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
 		input_dir = input_dir+"/"
 	print(input_dir)
 
+
+	'''if VEPversion == 83:
+		#VEP version 83
+		# rm_command = ("rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/83_GRCh" + genome_build)
+		mv_command = (
+			"mv /data/Share/nick/Paralog_Anno/homo_sapiens_non_use/83_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens"
+			)
+		command = (
+			"perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/variant_effect_predictor.pl --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
+			" -i " + input_dir + input_file +
+			" -o " + input_dir + output_file + 
+			" " + flavour
+			)
+		mv_back_command = (
+			"mv /data/Share/nick/Paralog_Anno/homo_sapiens/83_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens_non_use"
+			)
+	elif VEPversion == 87:
+		#VEP version 87
+		# rm_command = ("rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/87_GRCh" + genome_build)
+		mv_command = (
+			"mv /data/Share/nick/Paralog_Anno/homo_sapiens_non_use/87_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens"
+			)
+		command = (
+			"perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-tools-release-87/ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
+			" -i " + input_dir + input_file +
+			" -o " + input_dir + output_file + 
+			" " + flavour
+			)
+		mv_back_command = (
+			"mv /data/Share/nick/Paralog_Anno/homo_sapiens/87_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens_non_use"
+			)'''
 	if VEPversion == 90:
 		#VEP version 90
 		# rm_command = ("rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/90_GRCh" + genome_build)
@@ -76,7 +129,8 @@ def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
 			"mv /data/Share/nick/Paralog_Anno/homo_sapiens_non_use/90_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens"
 			)
 		command = (
-			"perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-vep/vep --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
+			# "perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-vep/vep --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
+			"perl -I /data/Share/nick/Paralog_Anno /data/Install/ensembl-vep/vep --force_overwrite --vcf --allele_number --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
 			" -i " + input_dir + input_file +
 			" -o " + input_dir + output_file + 
 			" " + flavour
@@ -85,8 +139,12 @@ def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
 			"mv /data/Share/nick/Paralog_Anno/homo_sapiens/90_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens_non_use"
 			)
 	
+	# print(mv_command)
+	# os.system(mv_command)
 	print(command)
 	os.system(command)
+	# print(mv_back_command)
+	# os.system(mv_back_command)
 	
 	with open(
 		input_dir + output_file + 
@@ -136,19 +194,81 @@ def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
 								str(CSQ)+"PARALOGS->"
 								+str(x)+"\n"
 								)
+				else:
+					out_file.write(line)
 	out_file.close()
+	
+	# ###FOR CLINVAR VARIANTS AT LEAST###SCRAP ALL OF THIS, USE R TIDYVERSE JOIN METHOD INSTEAD
+	# out_file = open(input_dir + output_file + "_aligned_vars", "w")
+	# with open(input_dir + output_file + "_paralogs") as infile1:
+	# 	infile2 = open(input_dir + input_file, "r") 
+	# 	text_list = infile2.read()
+	# 	infile2.close()
+	# 	####TEST_BELOW####
+	# 	# chromosome = 1
+	# 	# pos1 = 1050574
+	# 	# pos2 = 1050575
+	# 	# pos3 = 1050576
+	# 	# s1 = re.findall("^"+str(chromosome)+"\t"+str(pos1)+"\s.*$", text_list, re.MULTILINE)
+	# 	# s2 = re.findall("^"+str(chromosome)+"\t"+str(pos2)+"\s.*$", text_list, re.MULTILINE)
+	# 	# s3 = re.findall("^"+str(chromosome)+"\t"+str(pos3)+"\s.*$", text_list, re.MULTILINE)		
+	# 	# if s1:
+	# 	# 	print("YES")
+	# 	# 	print(s1)
+	# 	# if s2:
+	# 	# 	print(s2)
+	# 	# if s3:
+	# 	# 	print(s3)
+	# 	####END_OF_TEST####
+	# 	for line in infile1:
+	# 		if not line.strip() == "":
+	# 			query_variant = line.split("PARALOGS->")[0]
+	# 			out_file.write(query_variant)
+	# 			paralog_line = line.split("PARALOGS->")[1].rstrip()
+	# 			paralog_line = paralog_line.split("|&")[1]
+	# 			paralog_line = paralog_line.split("&")
+	# 			paralog_line = list(filter(None, paralog_line))
+	# 			print(paralog_line)
+	# 			out_file.write(str(paralog_line)+";")
+	# 			for paralog in paralog_line:
+	# 				if not paralog == "":
+	# 					print(paralog)
+	# 					location = paralog.split(":")[1]
+	# 					chromosome = location.split("_")[0].lstrip("chr")
+	# 					position = location.split("_")[1]
+	# 					position1 = int(position.split("-")[0])
+	# 					position2 = int(position.split("-")[1])
+	# 					positions = list(range(position1,position2+1))
+	# 					print(chromosome, type(positions), positions)
+	# 					# p = re.compile(r"^"+str(chromosome)+r"\t"+positions+r"\t")
+	# 					for pos in positions:
+	# 						s = re.findall("^"+str(chromosome)+"\t"+str(pos)+"\s.*$",text_list, re.MULTILINE)
+	# 						if s:
+	# 							print(s)
+	# 							out_file.write(str(s)+";")
+	# 			out_file.write("\n")
+	# out_file.close()
+	# #################################################
 	
 # VEP_Plugin_run(2, "/data/Share/nick/Paralog_Anno/data_files", "new_extracted_clinvar_cm_intepretated_raw_variants_2.vcf", "38", 87)
 
 
-flavour = int(sys.argv[1])	#0(no plugin), 1(variants), or 2(paraloc)
+flavour = int(sys.argv[1])	#0(no plugin), 1(variants), 2(paraloc),
 input_dir = sys.argv[2]	#input directory
 input_file = sys.argv[3]	#name of input file
 genome_build = str(sys.argv[4]) #37, 38
 VEPversion = int(sys.argv[5]) #83, 87, 90
 VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion)
-
 ```
+
+An intermediate python script was used to prep the results into R friendly data. Furthermore it could also be used to perform pairwise and family QC. Incidentally, the pairwise QC could be performed directly in R after the raw results are processed by __tableize_vcf.py__ and tabulated (see below).
+
+As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using __tableize_vcf.py__.
+__/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py__ was used to format the VEP output into table format for R processing. For example:
+```{bash}
+python /data/Install/LOFTEE/loftee-master/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info Amino_acids,Codons,Paralogue_Vars
+```
+
 
 #### Benchmarking performance of the plugin
 
@@ -311,23 +431,10 @@ con_table = matrix(c(ptop.num_of_paralog_anno, ptob.num_of_paralog_anno, btop.nu
 #fisher.test(matrix(c(50425,308,34843,219), ncol = 2))
 ```
 
-__/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py__was used to format the VEP output into table format for R processing. For example:
-```{bash}
-python /data/Install/LOFTEE/loftee-master/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info Amino_acids,Codons,Paralogue_Vars
-```
 
 
 
-Cannot QC for alt allele when using "paraloc" mode as it does not return alt allele. Have to use CSQ info from vanilla VEP output. Tableized the info, but note that there seems to be a bug with tableize:
-`Traceback (most recent call last):
- File "/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py", line 396, in <module>
-   main(args)
- File "/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py", line 346, in main
-   raise e
-KeyError: 'start_retained_variant'`
-For example the variant with ID 10324 is not returned after using tableized even though is should be.
 
-Doing so only returns 3343 patho to patho alignments instead of the previous 4819.
 
 
 Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 642 individual pairwise alignments. The number of actual unique variants this equates to is less - 418.
