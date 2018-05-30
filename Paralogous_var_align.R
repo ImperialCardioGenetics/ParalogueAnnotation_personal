@@ -7,26 +7,62 @@ lapply(Packages, library, character.only = TRUE)
 ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
 
 #Pathogenic
+
+#python processed files
 p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 
-p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE)
+#tableized files
+p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
-# p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT")]
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],unlist)
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],unlist)
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+
+p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons","Paralogue_Vars")]
+
+# p.tableized_data = p.tableized_data[!is.na(p.tableized_data[,"Paralogue_Vars"]),]
+p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
+
+# p.tableized_data$Paralogue_Vars = lapply(p.tableized_data[,"Paralogue_Vars"],strsplit,"&")
+# p.tableized_data$Paralogue_Vars = lapply(p.tableized_data[,"Paralogue_Vars"],unlist)
+# p.tableized_data$Paralogue_Vars = lapply(p.tableized_data[,"Paralogue_Vars"],function(x) x[-1])
+# p.tableized_data$Paralogue_Vars = lapply(p.tableized_data$Paralogue_Vars,function(x) lapply(x,strsplit,"_"))
+# p.tableized_data$Paralogue_Vars = lapply(p.tableized_data[,"Paralogue_Vars"],unlist)
+# p.tableized_data$Paralogue_Vars = lapply(p.tableized_data[,"Paralogue_Vars"],function(x) x[2])
+
 p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
 
-p.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
-
+# p.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
+# p.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.vcf_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+# p.ref_data$Variant_pos = paste(p.ref_data$CHROM,p.ref_data$POS, sep = " ")
+# p.ref_data = p.ref_data[,c("Variant_pos","ID","REF","ALT")]
+p.ref_data = p.tableized_data
 
 p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
-ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+ptop.Total_paralog_annotations[is.na(ptop.Total_paralog_annotations)] = 0
+ptop.num_of_paralog_anno = sum(ptop.Total_paralog_annotations$ID.y!=0)
+
+#Alt alleles
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$ALT_Amino_acids.x==ptop.Total_paralog_annotations$ALT_Amino_acids.y,]
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[!duplicated(ptop.Total_paralog_annotations$ID.x),]
+ptop.Total_paralog_annotations[is.na(ptop.Total_paralog_annotations)] = 0
+ptop.num_of_paralog_anno = sum(ptop.Total_paralog_annotations$ID.y!=0)
+#Ref alleles
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$REF_Amino_acids.x==ptop.Total_paralog_annotations$REF_Amino_acids.y,]
+
 
 ptoa.Total_paralog_annotations = left_join(p.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
 ptoa.num_of_paralog_anno = sum(!is.na(ptoa.Total_paralog_annotations$ID.y))
 
 p.num_interactions_per_annotated_var = ptop.num_of_paralog_anno/length(p.paralog_data$Variant_pos)
+
+
 
 #Benign
 b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
