@@ -419,7 +419,7 @@ con_table = matrix(c(ptop.num_of_paralog_anno, ptob.num_of_paralog_anno, btop.nu
 #fisher.test(matrix(c(50425,308,34843,219), ncol = 2))
 ```
 
-Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 642 individual pairwise alignments. The number of actual unique variants this equates to is less - 418.
+Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 1115 individual pairwise alignments. The number of actual unique variants this equates to is less - 825.
 
 #### Paralogue stats
 According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues
