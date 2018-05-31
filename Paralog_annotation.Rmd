@@ -32,7 +32,7 @@ The majority of the time ```paraloc``` mode is used.
 
 The Ensembl team have touched up Erica's plugin and decrease runtime. The plugin is now called __ParalogueAnnotation.pm__
 
-The initial output by VEP and the Plugin (VEP+Plugin) is not reader friendly for either the user nor if you want to parse informations. So a python wrapper, shwon below, for the VEP+Plugin was written to automatically parse the results, namely the paralogous variant information - __VEP_ParalogAnno.py___(Note the code below is not polished for release and is a WIP).
+The initial output by VEP and the Plugin (VEP+Plugin) is not reader friendly for either the user nor if you want to parse informations. So a python wrapper, shwon below, for the VEP+Plugin was written to automatically parse the results, namely the paralogous variant information - __/data/Share/nick/Paralog_Anno/VEP_ParalogAnno.py__(Note the code below is not polished for release and is a WIP).
 ```{python eval = FALSE, include = FALSE}
 import  os, sys, subprocess, re
 import shlex, subprocess
@@ -259,14 +259,142 @@ VEPversion = int(sys.argv[5]) #83, 87, 90
 VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion)
 ```
 
-An intermediate python script (__/data/Share/nick/Paralog_Anno/File_prep_for_R.py__) was used to prep the results into R friendly data. Furthermore it could also be used to perform pairwise and family QC. Incidentally, the pairwise QC could be performed directly in R after the raw results are processed by __tableize_vcf.py__ and tabulated (see below).
+An intermediate python script (__File_prep_for_R.py__) was used to prep the results into R friendly data. Furthermore it could also be used to perform pairwise and family QC. Incidentally, the pairwise QC could be performed directly in R after the raw results are processed by __tableize_vcf.py__ and tabulated (see below).
 
-As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using __tableize_vcf.py__.
-__/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py__ was used to format the VEP output into table format for R processing. For example:
-```{bash eval = FALSE, include = FALSE}
-python /data/Install/LOFTEE/loftee-master/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info Amino_acids,Codons,Paralogue_Vars
+__/data/Share/nick/Paralog_Anno/File_prep_for_R.py__ - formats results from __VEP_ParalogAnno.py__ into tabulated format ready for R processing
+```{python eval = FALSE, include = FALSE}
+import  os, sys, subprocess, re
+
+#SCRIPT FOR SEPARATING EACH LINE IN VCF OUTPUT FROM VEP_PARALOGANNO.PY INTO TAB SEP FILE READY FOR JOIN IN R
+#don't use if VEP_ParalogAnno.py has been edited to already do this, check to see if same code exists in that script
+###BELOW ONLY WORKS FOR CLINVAR VCF FILES (EXAC HAS NO INFO IN ID VARIABLE)
+
+input_file = sys.argv[1]	#path of VEP_ParalogAnno.py paralogs output file
+dir1 = input_file.rsplit("/", 1)[0]
+input_file2 = sys.argv[2]	#path of vcf file containing only orginal query variants list used as input for VEP_ParalogAnno.py. I.e. the very first input file!
+refid_flavour = sys.argv[3] #whether to consider refID or not. 0: not, 1: only consider paralogous pair alignments where refID = 1, 2: only consider total gene family paralogous alignments where all refID in that family = 1
+
+if refid_flavour == "noQC":
+	out_file = open(input_file+"2.noQC", "w")
+elif refid_flavour == "para_con":
+	out_file = open(input_file+"2.para_con", "w")
+elif refid_flavour == "all_con":
+	out_file = open(input_file+"2.all_con", "w")
+
+max_split = 0	#check to see max number of columns for R import as wide format
+max_paralog_codons = ""
+with open(input_file, "r") as f:
+	for line in f:
+		if line != "\n":
+			# print(line)
+			chrom = line.split()[0]
+			position = line.split()[1]
+			ID = line.split()[2]
+			print(chrom+" "+position+"\t"+str(ID)+"\t")
+
+			out_file.write(str(chrom)+" "+str(position)+"\t"+str(ID)+"\t")
+			
+			line = line.rstrip()
+			paralog_codons = line.split("PARALOGS->")[1]
+			paralog_codons = paralog_codons.split("|&")[1]
+			paralog_codons = paralog_codons.split("&")
+			# paralog_codons.pop(0)
+			paralog_codons.remove("")
+			print(paralog_codons)
+			refid_flav2_check = 0
+			if refid_flavour == "all_con":
+				if all(refids.endswith("REFID=1") for refids in paralog_codons) == True:
+					refid_flav2_check = 1
+
+			for codon in paralog_codons:
+				print(codon)
+
+				if refid_flavour == "noQC" or refid_flav2_check == 1:
+					refID = codon.split(":")[-1]
+					print(refID)
+					codon = codon.split(":")[1]
+					paralog_chrom = codon.split("_")[0].lstrip("chr")
+					paralog_position = int(codon.split("-")[1])
+					print(
+						str(paralog_chrom)+" "+str(paralog_position-2)+"\t"+
+						str(paralog_chrom)+" "+str(paralog_position-1)+"\t"+
+						str(paralog_chrom)+" "+str(paralog_position)+"\t"
+						)
+
+					out_file.write(
+						str(paralog_chrom)+" "+str(paralog_position-2)+"\t"+
+						str(paralog_chrom)+" "+str(paralog_position-1)+"\t"+
+						str(paralog_chrom)+" "+str(paralog_position)+"\t"
+						)
+
+				if refid_flavour == "para_con":
+					refID = codon.split(":")[-1]
+					if refID == "REFID=1":
+						print(refID)
+						codon = codon.split(":")[1]
+						paralog_chrom = codon.split("_")[0].lstrip("chr")
+						paralog_position = int(codon.split("-")[1])
+						print(
+							str(paralog_chrom)+" "+str(paralog_position-2)+"\t"+
+							str(paralog_chrom)+" "+str(paralog_position-1)+"\t"+
+							str(paralog_chrom)+" "+str(paralog_position)+"\t"
+							)
+
+						out_file.write(
+							str(paralog_chrom)+" "+str(paralog_position-2)+"\t"+
+							str(paralog_chrom)+" "+str(paralog_position-1)+"\t"+
+							str(paralog_chrom)+" "+str(paralog_position)+"\t"
+							)
+
+				# if refid_flavour == 2:
+				# 	refID = 
+
+			out_file.write("\n")
+
+			if len(paralog_codons)*3 + 2 > max_split:
+				max_split = len(paralog_codons)*3 + 2
+				# print(len(paralog_codons))
+				# print(paralog_codons)
+				max_paralog_codons = paralog_codons
+			# newline[1] = "\t".join(newline[1])
+			# newline = "\t".join(newline)
+			# out_file.write(newline)
+	print(max_split, max_paralog_codons)	#number of columns for dataframe in R; + 2 for (chrom poistion) and (ID)
+out_file.close()
+
+if input_file2 != "null":
+	if input_file2.endswith(".vcf"):
+		out_file2 = open(input_file2+"_onlyVariantslist", "w")
+		with open(input_file2, "r") as f:
+			for line in f:
+				if not line.startswith("#"):
+					chrom = line.split()[0]
+					position = line.split()[1]
+					ID = line.split()[2]
+					out_file2.write(str(chrom)+" "+str(position)+"\t"+str(ID)+"\n")
+	# elif input_file2.endswith("out_paraloc"):
+	# 	out_file2 = open(input_file2+"_onlyVariantslist", "w")
+	# 	with open(input_file2, "r") as f:
+	# 		for line in f:
+	# 			if not line.startswith("#"):
+	# 				chrom = line.split()[0]
+	# 				position = line.split()[1]
+	# 				ID = line.split()[2]
+	# 				amino_acids = line.split("CSQ=")[1]
+
+	# 				out_file2.write(str(chrom)+" "+str(position)+"\t"+str(ID)+"\n")
+	out_file2.close()
 ```
 
+As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using __tableize_vcf.py__.
+__/data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py__ was used to format the VEP output into table format for R processing. For example:
+```{bash eval = FALSE, include = TRUE}
+python /data/Install/LOFTEE/loftee-master/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info Amino_acids,Codons,Paralogue_Vars
+```
+However, a python wrapper plus additional formatting (__/data/Share/nick/Paralog_Anno/Tableize_wrapper.py__) that tableize couldn't do, i.e. separate variants that had multiple REF and ALT alleles was used instead to prepare the data for R.
+```{python eval = FALSE, include = FALSE}
+
+```
 
 #### Benchmarking performance of the plugin
 
@@ -362,6 +490,12 @@ plt.gcf().clear()
 #### Annotation of Clinvar
 The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/. Note that since the initial look at what was available there's been updated Clinvar files. 
 
+NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. For exmaple:
+Looking at variant ID 101429 (located at chr 2 position 189007510) and its paralogous variant ID 444000 (located at chr 17 position 50187974), according to VEP 101429 ref amino acid is G and 444000 ref amino acid is Q.But the plugin still gives a REFID=1
+```
+
+```
+
 ```{r eval = FALSE, include = FALSE}
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
 lapply(Packages, library, character.only = TRUE)
@@ -370,6 +504,25 @@ lapply(Packages, library, character.only = TRUE)
 #python processed files
 p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 
+#tableized files
+p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],unlist)
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],unlist)
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+
+p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
+
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+
+p.ref_data = p.tableized_data
+
+p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptop.Total_paralog_annotations[is.na(ptop.Total_paralog_annotations)] = 0
 ```
 
 Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 1115 individual pairwise alignments. The number of actual unique variants this equates to is less - 825.
