@@ -32,10 +32,8 @@ The majority of the time ```paraloc``` mode is used.
 
 The Ensembl team have touched up Erica's plugin and decrease runtime. The plugin is now called __ParalogueAnnotation.pm__
 
-The initial output by VEP and the Plugin (VEP+Plugin) is not reader friendly for either the user nor if you want to parse informations. So a python wrapper, shwon below, for the VEP+Plugin was written to automatically parse the results, namely the paralogous variant information.
-
-__VEP_ParalogAnno.py___(Note the code below is not polished for release and is a WIP)
-```{python eval = 0}
+The initial output by VEP and the Plugin (VEP+Plugin) is not reader friendly for either the user nor if you want to parse informations. So a python wrapper, shwon below, for the VEP+Plugin was written to automatically parse the results, namely the paralogous variant information - __VEP_ParalogAnno.py___(Note the code below is not polished for release and is a WIP).
+```{python eval = 0, include = 0}
 import  os, sys, subprocess, re
 import shlex, subprocess
 
@@ -265,15 +263,15 @@ An intermediate python script was used to prep the results into R friendly data.
 
 As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using __tableize_vcf.py__.
 __/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py__ was used to format the VEP output into table format for R processing. For example:
-```{bash eval = 0}
+```{bash eval = 0, include = 0}
 python /data/Install/LOFTEE/loftee-master/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info Amino_acids,Codons,Paralogue_Vars
 ```
 
 
 #### Benchmarking performance of the plugin
 
-To demonstrate speed at which VEP+Plugin takes to run
-```{python eval = 0 }
+__/data/Share/nick/Paralog_Anno/multi_vcf_extractor_benchmark.py__ is used to demonstrate speed at which VEP+Plugin takes to run
+```{python eval = 0, incliude = 0}
 #Script for benchmarking VEP with different flavours by auto extracting set number of variants and running them
 
 import os, sys, subprocess, re
@@ -364,10 +362,10 @@ plt.gcf().clear()
 #### Annotation of Clinvar
 The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/. Note that since the initial look at what was available there's been updated Clinvar files. 
 
-```{r eval = 0}
-library(tidyverse)
-library(dplyr)
-library(ggplot2)
+```{r eval = 0, include = 0}
+Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
+lapply(Packages, library, character.only = TRUE)
+
 ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
 
 #Pathogenic
@@ -441,7 +439,7 @@ Paralog Conserved|     |             |
 All Conserved    |     |             |
                  |     |             |
                  
-```{r include = TRUE, eval = TRUE}
+```{r include = TRUE, eval = 0}
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity")
 Total = c("","","NA","NA")
 Paralogue_Annotation_no_QC = c("","","","")
