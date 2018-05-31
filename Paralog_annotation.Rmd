@@ -6,13 +6,13 @@ output:
 ---
 ### Aims
 * Apply Paralogue annotation on other datasets
-  + "Genome Wide" - Clinvar dataset
-  + Cardiomyopathy genes - [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1]
-  + Channelopathy genes - [KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2]
+    + "Genome Wide" - Clinvar dataset
+    + Cardiomyopathy genes - [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1]
+    + Channelopathy genes - [KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2]
 * Improve precision via increasing conservation of ref/alt alleles
-  + pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
-  + pairwise QC and family QC - ignore entire alignment columns if the entire family ref alleles are not conserved; NB analogous to para z scores
-  + pairwise QC and family QC and alt allele QC - ignore entire alignment columns if family ref allele and alt allele isn't conserved
+    + pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
+    + pairwise QC and family QC - ignore entire alignment columns if the entire family ref alleles are not conserved; NB analogous to para z scores
+    + pairwise QC and family QC and alt allele QC - ignore entire alignment columns if family ref allele and alt allele isn't conserved
 * investigate para z scores
 * investigate pfam meta domains
 
@@ -33,7 +33,7 @@ The majority of the time ```paraloc``` mode is used.
 The Ensembl team have touched up Erica's plugin and decrease runtime. The plugin is now called __ParalogueAnnotation.pm__
 
 The initial output by VEP and the Plugin (VEP+Plugin) is not reader friendly for either the user nor if you want to parse informations. So a python wrapper, shwon below, for the VEP+Plugin was written to automatically parse the results, namely the paralogous variant information - __VEP_ParalogAnno.py___(Note the code below is not polished for release and is a WIP).
-```{python eval = 0, include = 0}
+```{python eval = FALSE, include = FALSE}
 import  os, sys, subprocess, re
 import shlex, subprocess
 
@@ -259,11 +259,11 @@ VEPversion = int(sys.argv[5]) #83, 87, 90
 VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion)
 ```
 
-An intermediate python script was used to prep the results into R friendly data. Furthermore it could also be used to perform pairwise and family QC. Incidentally, the pairwise QC could be performed directly in R after the raw results are processed by __tableize_vcf.py__ and tabulated (see below).
+An intermediate python script (__/data/Share/nick/Paralog_Anno/File_prep_for_R.py__) was used to prep the results into R friendly data. Furthermore it could also be used to perform pairwise and family QC. Incidentally, the pairwise QC could be performed directly in R after the raw results are processed by __tableize_vcf.py__ and tabulated (see below).
 
 As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using __tableize_vcf.py__.
 __/data/Install/LOFTEE/loftee-master/src/tableize_vcf.py__ was used to format the VEP output into table format for R processing. For example:
-```{bash eval = 0, include = 0}
+```{bash eval = FALSE, include = FALSE}
 python /data/Install/LOFTEE/loftee-master/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info Amino_acids,Codons,Paralogue_Vars
 ```
 
@@ -271,7 +271,7 @@ python /data/Install/LOFTEE/loftee-master/src/tableize_vcf.py --vcf /data/Share/
 #### Benchmarking performance of the plugin
 
 __/data/Share/nick/Paralog_Anno/multi_vcf_extractor_benchmark.py__ is used to demonstrate speed at which VEP+Plugin takes to run
-```{python eval = 0, incliude = 0}
+```{python eval = FALSE, include = FALSE}
 #Script for benchmarking VEP with different flavours by auto extracting set number of variants and running them
 
 import os, sys, subprocess, re
@@ -362,60 +362,14 @@ plt.gcf().clear()
 #### Annotation of Clinvar
 The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/. Note that since the initial look at what was available there's been updated Clinvar files. 
 
-```{r eval = 0, include = 0}
+```{r eval = FALSE, include = FALSE}
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
 lapply(Packages, library, character.only = TRUE)
 
-ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
-
-#Pathogenic
+#Pathogenic variants
+#python processed files
 p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
-p.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
-# paralog_data = unite(paralog_data, Coord_info, V1, V2, V3, V4, V5, V6, V7, sep = "\t")
-# paralog_data$V8=sapply(as.character(paralog_data$V8), strsplit, split = "&")
-# paralog_data$V8=sapply(paralog_data$V8, unlist)
-# paralog_data = separate(paralog_data, V8, into = c("additional_info", "paralogs"), sep = "PARALOGS->")
-# max_sep = 0
-# for (i in paralog_data$paralogs){
-#   
-# }
-# paralog_data = separate(paralog_data, paralogs, into = c("VEP_annotation", "paralogs"), sep = "&", extra = "merge")
 
-
-p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
-ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
-ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
-
-ptoa.Total_paralog_annotations = left_join(p.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
-ptoa.num_of_paralog_anno = sum(!is.na(ptoa.Total_paralog_annotations$ID.y))
-
-p.num_interactions_per_annotated_var = ptop.num_of_paralog_anno/length(p.paralog_data$Variant_pos)
-
-#Benign
-b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
-b.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
-
-b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
-btob.Total_paralog_annotations = left_join(b.gathered_paralog_data,b.ref_data, by = c("paralog_pos" = "Variant_pos"))
-btob.num_of_paralog_anno = sum(!is.na(btob.Total_paralog_annotations$ID.y))
-
-btoa.Total_paralog_annotations = left_join(b.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
-btoa.num_of_paralog_anno = sum(!is.na(btoa.Total_paralog_annotations$ID.y))
-
-b.num_interactions_per_annotated_var = btob.num_of_paralog_anno/length(b.paralog_data$Variant_pos)
-
-#Pathogenic to Benign
-ptob.Total_paralog_annotations = left_join(p.gathered_paralog_data, b.ref_data, by = c("paralog_pos" = "Variant_pos"))
-ptob.num_of_paralog_anno = sum(!is.na(ptob.Total_paralog_annotations$ID.y))
-
-#Benign to Pathogenic
-btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
-btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
-
-#contingency table
-con_table = matrix(c(ptop.num_of_paralog_anno, ptob.num_of_paralog_anno, btop.num_of_paralog_anno, btob.num_of_paralog_anno),ncol = 2)
-#fisher.test(matrix(c(50425,4819,34843,196), ncol = 2))
-#fisher.test(matrix(c(50425,308,34843,219), ncol = 2))
 ```
 
 Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 1115 individual pairwise alignments. The number of actual unique variants this equates to is less - 825.
@@ -439,16 +393,16 @@ Paralog Conserved|     |             |
 All Conserved    |     |             |
                  |     |             |
                  
-```{r include = TRUE, eval = 0}
-Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity")
-Total = c("","","NA","NA")
-Paralogue_Annotation_no_QC = c("","","","")
-Variants_remaining_after_PA_QC1 = c("","","","")
-Variants_removed_after_PA_QC1 = c("","","","NA")
-Variants_remaining_after_PA_QC2 = c("","","","")
-Variants_removed_after_PA_QC2 = c("","","","NA")
-Variants_remaining_after_PA_QC3 = c("","","","")
-Variants_removed_after_PA_QC3 = c("","","","NA")
+```{r include = TRUE, eval = FALSE}
+Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
+Total = c("","","NA","NA","")
+Paralogue_Annotation_no_QC = c("","","","","")
+Variants_remaining_after_PA_QC1 = c("","","","","")
+Variants_removed_after_PA_QC1 = c("","","","NA","")
+Variants_remaining_after_PA_QC2 = c("","","","","")
+Variants_removed_after_PA_QC2 = c("","","","NA","")
+Variants_remaining_after_PA_QC3 = c("","","","","")
+Variants_removed_after_PA_QC3 = c("","","","NA","")
 
 Whole_clinvar_set = data.frame(Variant,
                                Total,
