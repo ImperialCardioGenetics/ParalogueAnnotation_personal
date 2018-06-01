@@ -9,8 +9,8 @@ ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data
 #Pathogenic
 
 #python processed files
-# p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
-p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+# p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 # p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 # p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
@@ -61,8 +61,8 @@ ptop.Total_paralog_annotations[is.na(ptop.Total_paralog_annotations)] = 0
 ptop.num_of_paralog_anno = sum(ptop.Total_paralog_annotations$ID.y!=0)
 
 
-ptoa.Total_paralog_annotations = left_join(p.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
-ptoa.num_of_paralog_anno = sum(!is.na(ptoa.Total_paralog_annotations$ID.y))
+# ptoa.Total_paralog_annotations = left_join(p.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
+# ptoa.num_of_paralog_anno = sum(!is.na(ptoa.Total_paralog_annotations$ID.y))
 
 p.num_interactions_per_annotated_var = ptop.num_of_paralog_anno/length(p.paralog_data$Variant_pos)
 
@@ -74,14 +74,30 @@ b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogue
 #b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 
-b.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
+b.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+b.tableized_data$Variant_pos = paste(b.tableized_data$CHROM,b.tableized_data$POS, sep = " ")
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],unlist)
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],unlist)
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+
+b.tableized_data = b.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
+
+b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+
+# b.ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.vcf_onlyVariantslist", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID"))
+b.ref_data = b.tableized_data
 
 b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 btob.Total_paralog_annotations = left_join(b.gathered_paralog_data,b.ref_data, by = c("paralog_pos" = "Variant_pos"))
-btob.num_of_paralog_anno = sum(!is.na(btob.Total_paralog_annotations$ID.y))
+btob.Total_paralog_annotations[is.na(btob.Total_paralog_annotations)] = 0
+# btob.num_of_paralog_anno = sum(!is.na(btob.Total_paralog_annotations$ID.y))
+btob.num_of_paralog_anno = sum(btob.Total_paralog_annotations$ID.y!=0)
 
-btoa.Total_paralog_annotations = left_join(b.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
-btoa.num_of_paralog_anno = sum(!is.na(btoa.Total_paralog_annotations$ID.y))
+# btoa.Total_paralog_annotations = left_join(b.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
+# btoa.num_of_paralog_anno = sum(!is.na(btoa.Total_paralog_annotations$ID.y))
 
 b.num_interactions_per_annotated_var = btob.num_of_paralog_anno/length(b.paralog_data$Variant_pos)
 
