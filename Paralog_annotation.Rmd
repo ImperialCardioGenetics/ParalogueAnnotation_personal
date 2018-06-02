@@ -389,11 +389,29 @@ if input_file2 != "null":
 As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using __tableize_vcf.py__.
 __/data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py__ was used to format the VEP output into table format for R processing. For example:
 ```{bash eval = FALSE, include = TRUE}
-python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info Amino_acids,Codons,Paralogue_Vars
+python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info SYMBOL,Amino_acids,Codons,Paralogue_Vars
 ```
 However, a python wrapper plus additional formatting (__/data/Share/nick/Paralog_Anno/Tableize_wrapper.py__) that tableize couldn't do, i.e. separate variants that had multiple REF and ALT alleles was used instead to prepare the data for R.
 ```{python eval = FALSE, include = FALSE}
+import  os, sys, subprocess, re
 
+#Tableize.py wrapper plus additional formatting that can't be done in tableize
+
+input_file = sys.argv[1]	#path of paraloc file e.g. /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc
+dir1 = input_file.rsplit("/", 1)[0]
+
+os.system("python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf " + input_file + " --out " + input_file + "_tableized --do_not_minrep --include_id --vep_info SYMBOL,Amino_acids,Codons,Paralogue_Vars")
+
+out_file = open(input_file + "_tableized_temp", "w")
+with open(input_file + "_tableized") as f:
+	for line in f:
+		line = line.split()
+		AAs = line[7].split(",")
+		for column in AAs:
+			out_file.write(line[0] + "\t" + line[1] +"\t" +line[2] +"\t" + line[3] +"\t" +line[4] +"\t" +line[5] +"\t" + line[6] + "\t" + column + "\t" + line[8] + "\t" + line[9] + "\n")
+out_file.close()
+
+os.system("mv " + input_file + "_tableized_temp " + input_file + "_tableized")
 ```
 
 #### Benchmarking performance of the plugin
@@ -490,21 +508,15 @@ plt.gcf().clear()
 #### Annotation of Clinvar
 The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/. Note that since the initial look at what was available there's been updated Clinvar files. 
 
-NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. For exmaple:
-Looking at variant ID 101429 (located at chr 2 position 189007510) and its paralogous variant ID 444000 (located at chr 17 position 50187974), according to VEP 101429 ref amino acid is G and 444000 ref amino acid is Q.But the plugin still gives a REFID=1
-```
+NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. This is due to the fact that the paralogous variant VEP is referring to is simply not in the dataset that I am annotating back to. As a result, it is best to make sure that the ref alleles are indeed the same when processing in R.
 
-```
-
+The annotataion of the entire clinvar set as of 20171029:
 ```{r eval = FALSE, include = FALSE}
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
 lapply(Packages, library, character.only = TRUE)
-
-#Pathogenic variants
-#python processed files
-p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
-
-#tableized files
+#noQC
+#pathogenic to pathogenic
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
 p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
@@ -513,17 +525,432 @@ p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],f
 p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
 p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],unlist)
 p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
-
-p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
-
-p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
-
+# p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
 p.ref_data = p.tableized_data
-
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
 p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
-ptop.Total_paralog_annotations[is.na(ptop.Total_paralog_annotations)] = 0
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#benign to pathogenic
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+b.tableized_data$Variant_pos = paste(b.tableized_data$CHROM,b.tableized_data$POS, sep = " ")
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],unlist)
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],unlist)
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+# b.tableized_data = b.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
+b.ref_data = b.tableized_data
+b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+#stats
+con_table_TP = ptop.num_of_paralog_anno
+con_table_FP = btop.num_of_paralog_anno
+con_table_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+con_table_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+con_table_PPV = con_table_TP/(con_table_TP+con_table_FP)
+con_table_Sensitivty = con_table_TP/(con_table_TP+con_table_FN)
+con_table = matrix(
+  c(length(p.paralog_data$ID),
+    ptop.num_of_paralog_anno,
+    length(b.paralog_data$ID),
+    btop.num_of_paralog_anno
+  ), ncol = 2
+)
+colnames(con_table) = c("Pathogenic", "Benign")
+rownames(con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+con_table_p_value = fisher.test(con_table)
+
+#para_con
+#pathogenic to pathogenic
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$REF_Amino_acids.x==ptop.Total_paralog_annotations$REF_Amino_acids.y,]
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#benign to pathogenic
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+btop.Total_paralog_annotations = btop.Total_paralog_annotations[btop.Total_paralog_annotations$REF_Amino_acids.x==btop.Total_paralog_annotations$REF_Amino_acids.y,]
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+#stats
+con_table2_TP = ptop.num_of_paralog_anno
+con_table2_FP = btop.num_of_paralog_anno
+con_table2_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+con_table2_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+con_table2_PPV = con_table2_TP/(con_table2_TP+con_table2_FP)
+con_table2_Sensitivty = con_table2_TP/(con_table2_TP+con_table2_FN)
+con_table2 = matrix(
+  c(length(p.paralog_data$ID),
+    ptop.num_of_paralog_anno,
+    length(b.paralog_data$ID),
+    btop.num_of_paralog_anno
+  ), ncol = 2
+)
+colnames(con_table2) = c("Pathogenic", "Benign")
+rownames(con_table2) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+con_table2_p_value = fisher.test(con_table2)
+#Variants_removed_after_PA_QC1
+var_rem_para_con_TP = con_table[2]-con_table2[2]
+var_rem_para_con_FP = con_table[4]-con_table2[4]
+var_rem_para_con_FN = length(p.paralog_data$ID)-var_rem_para_con_TP
+var_rem_para_con_PPV = var_rem_para_con_TP/(var_rem_para_con_TP+var_rem_para_con_FP)
+var_rem_para_con_Sensitivity = var_rem_para_con_TP/(var_rem_para_con_TP+var_rem_para_con_FN)
+var_rem_para_con = matrix(
+  c(length(p.paralog_data$ID),
+    var_rem_para_con_TP,
+    length(b.paralog_data$ID),
+    var_rem_para_con_FP
+  ), ncol = 2
+)
+colnames(var_rem_para_con) = c("Pathogenic", "Benign")
+rownames(var_rem_para_con) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+var_rem_para_con_p_value = fisher.test(var_rem_para_con)
+
+#all_con
+#pathogenic to pathogenic
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$REF_Amino_acids.x==ptop.Total_paralog_annotations$REF_Amino_acids.y,]
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#benign to pathogenic
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+btop.Total_paralog_annotations = btop.Total_paralog_annotations[btop.Total_paralog_annotations$REF_Amino_acids.x==btop.Total_paralog_annotations$REF_Amino_acids.y,]
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+#stats
+con_table3_TP = ptop.num_of_paralog_anno
+con_table3_FP = btop.num_of_paralog_anno
+con_table3_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+con_table3_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+con_table3_PPV = con_table3_TP/(con_table3_TP+con_table3_FP)
+con_table3_Sensitivty = con_table3_TP/(con_table3_TP+con_table3_FN)
+con_table3 = matrix(
+  c(length(p.paralog_data$ID),
+    ptop.num_of_paralog_anno,
+    length(b.paralog_data$ID),
+    btop.num_of_paralog_anno
+  ), ncol = 2
+)
+colnames(con_table3) = c("Pathogenic", "Benign")
+rownames(con_table3) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+con_table3_p_value = fisher.test(con_table3)
+#Variants_removed_after_PA_QC2
+var_rem_all_con_TP = con_table2[2]-con_table3[2]
+var_rem_all_con_FP = con_table2[4]-con_table3[4]
+var_rem_all_con_FN = length(p.paralog_data$ID)-var_rem_all_con_TP
+var_rem_all_con_PPV = var_rem_all_con_TP/(var_rem_all_con_TP+var_rem_all_con_FP)
+var_rem_all_con_Sensitivity = var_rem_all_con_TP/(var_rem_all_con_TP+var_rem_all_con_FN)
+var_rem_all_con = matrix(
+  c(length(p.paralog_data$ID),
+    var_rem_all_con_TP,
+    length(b.paralog_data$ID),
+    var_rem_all_con_FP
+  ), ncol = 2
+)
+colnames(var_rem_all_con) = c("Pathogenic", "Benign")
+rownames(var_rem_all_con) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+var_rem_all_con_p_value = fisher.test(var_rem_all_con)
+
+#alt_con
+#pathogenic to pathogenic
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$ALT_Amino_acids.x==ptop.Total_paralog_annotations$ALT_Amino_acids.y,]
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[!duplicated(ptop.Total_paralog_annotations$ID.x),]
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#benign to pathogenic
+btop.Total_paralog_annotations = btop.Total_paralog_annotations[btop.Total_paralog_annotations$ALT_Amino_acids.x==btop.Total_paralog_annotations$ALT_Amino_acids.y,]
+btop.Total_paralog_annotations = btop.Total_paralog_annotations[!duplicated(btop.Total_paralog_annotations$ID.x),]
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+#stats
+con_table4_TP = ptop.num_of_paralog_anno
+con_table4_FP = btop.num_of_paralog_anno
+con_table4_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+con_table4_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+con_table4_PPV = con_table4_TP/(con_table4_TP+con_table4_FP)
+con_table4_Sensitivty = con_table4_TP/(con_table4_TP+con_table4_FN)
+con_table4 = matrix(
+  c(length(p.paralog_data$ID),
+    ptop.num_of_paralog_anno,
+    length(b.paralog_data$ID),
+    btop.num_of_paralog_anno
+  ), ncol = 2
+)
+colnames(con_table4) = c("Pathogenic", "Benign")
+rownames(con_table4) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+con_table4_p_value = fisher.test(con_table4)
+#Variants_removed_after_PA_QC3
+var_rem_alt_con_TP = con_table3[2]-con_table4[2]
+var_rem_alt_con_FP = con_table3[4]-con_table4[4]
+var_rem_alt_con_FN = length(p.paralog_data$ID)-var_rem_alt_con_TP
+var_rem_alt_con_PPV = var_rem_alt_con_TP/(var_rem_alt_con_TP+var_rem_alt_con_FP)
+var_rem_alt_con_Sensitivity = var_rem_alt_con_TP/(var_rem_alt_con_TP+var_rem_alt_con_FN)
+var_rem_alt_con = matrix(
+  c(length(p.paralog_data$ID),
+    var_rem_alt_con_TP,
+    length(b.paralog_data$ID),
+    var_rem_alt_con_FP
+  ), ncol = 2
+)
+colnames(var_rem_alt_con) = c("Pathogenic", "Benign")
+rownames(var_rem_alt_con) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+var_rem_alt_con_p_value = fisher.test(var_rem_alt_con)
+
+#Overall_table
+Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
+Total = c(length(p.paralog_data$ID),length(b.paralog_data$ID),"NA","NA","NA")
+Paralogue_Annotation_no_QC = c(format(con_table[2], scientific = FALSE),format(con_table[4], scientific = FALSE),con_table2_PPV,con_table_Sensitivty,con_table_p_value$p.value)
+Variants_remaining_after_PA_QC1 = c(format(con_table2[2], scientific = FALSE),format(con_table2[4], scientific = FALSE),con_table2_PPV,con_table2_Sensitivty,con_table2_p_value$p.value)
+Variants_removed_after_PA_QC1 = c(var_rem_para_con[2],var_rem_para_con[4],var_rem_para_con_PPV,"NA",var_rem_para_con_p_value$p.value)
+Variants_remaining_after_PA_QC2 = c(format(con_table3[2], scientific = FALSE),format(con_table3[4], scientific = FALSE),con_table3_PPV,con_table3_Sensitivty,con_table3_p_value$p.value)
+Variants_removed_after_PA_QC2 = c(var_rem_all_con[2],var_rem_all_con[4],var_rem_all_con_PPV,"NA",var_rem_all_con_p_value$p.value)
+Variants_remaining_after_PA_QC3 = c(format(con_table4[2], scientific = FALSE),format(con_table4[4], scientific = FALSE),con_table4_PPV,con_table4_Sensitivty,con_table4_p_value$p.value)
+Variants_removed_after_PA_QC3 = c(var_rem_alt_con[2],var_rem_alt_con[4],var_rem_alt_con_PPV,"NA",var_rem_alt_con_p_value$p.value)
+
+Whole_clinvar_set = data.frame(Variant,
+                               Total,
+                               Paralogue_Annotation_no_QC,
+                               Variants_remaining_after_PA_QC1,
+                               Variants_removed_after_PA_QC1,
+                               Variants_remaining_after_PA_QC2,
+                               Variants_removed_after_PA_QC2,
+                               Variants_remaining_after_PA_QC3,
+                               Variants_removed_after_PA_QC3
+                               )
+
 ```
+
+Taking only the 8 sarcomeric genes:
+```{r eval = FALSE, include = FALSE}
+Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
+lapply(Packages, library, character.only = TRUE)
+#noQC
+#pathogenic to pathogenic
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+
+p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],unlist)
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],unlist)
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+# p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
+p.ref_data = p.tableized_data
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#benign to pathogenic
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+b.tableized_data$Variant_pos = paste(b.tableized_data$CHROM,b.tableized_data$POS, sep = " ")
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],unlist)
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],unlist)
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+# b.tableized_data = b.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
+b.ref_data = b.tableized_data
+b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+#stats
+con_table_TP = ptop.num_of_paralog_anno
+con_table_FP = btop.num_of_paralog_anno
+con_table_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+con_table_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+con_table_PPV = con_table_TP/(con_table_TP+con_table_FP)
+con_table_Sensitivty = con_table_TP/(con_table_TP+con_table_FN)
+con_table = matrix(
+  c(length(p.paralog_data$ID),
+    ptop.num_of_paralog_anno,
+    length(b.paralog_data$ID),
+    btop.num_of_paralog_anno
+  ), ncol = 2
+)
+colnames(con_table) = c("Pathogenic", "Benign")
+rownames(con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+con_table_p_value = fisher.test(con_table)
+
+#para_con
+#pathogenic to pathogenic
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$REF_Amino_acids.x==ptop.Total_paralog_annotations$REF_Amino_acids.y,]
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#benign to pathogenic
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+btop.Total_paralog_annotations = btop.Total_paralog_annotations[btop.Total_paralog_annotations$REF_Amino_acids.x==btop.Total_paralog_annotations$REF_Amino_acids.y,]
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+#stats
+con_table2_TP = ptop.num_of_paralog_anno
+con_table2_FP = btop.num_of_paralog_anno
+con_table2_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+con_table2_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+con_table2_PPV = con_table2_TP/(con_table2_TP+con_table2_FP)
+con_table2_Sensitivty = con_table2_TP/(con_table2_TP+con_table2_FN)
+con_table2 = matrix(
+  c(length(p.paralog_data$ID),
+    ptop.num_of_paralog_anno,
+    length(b.paralog_data$ID),
+    btop.num_of_paralog_anno
+  ), ncol = 2
+)
+colnames(con_table2) = c("Pathogenic", "Benign")
+rownames(con_table2) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+con_table2_p_value = fisher.test(con_table2)
+#Variants_removed_after_PA_QC1
+var_rem_para_con_TP = con_table[2]-con_table2[2]
+var_rem_para_con_FP = con_table[4]-con_table2[4]
+var_rem_para_con_FN = length(p.paralog_data$ID)-var_rem_para_con_TP
+var_rem_para_con_PPV = var_rem_para_con_TP/(var_rem_para_con_TP+var_rem_para_con_FP)
+var_rem_para_con_Sensitivity = var_rem_para_con_TP/(var_rem_para_con_TP+var_rem_para_con_FN)
+var_rem_para_con = matrix(
+  c(length(p.paralog_data$ID),
+    var_rem_para_con_TP,
+    length(b.paralog_data$ID),
+    var_rem_para_con_FP
+  ), ncol = 2
+)
+colnames(var_rem_para_con) = c("Pathogenic", "Benign")
+rownames(var_rem_para_con) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+var_rem_para_con_p_value = fisher.test(var_rem_para_con)
+
+#all_con
+#pathogenic to pathogenic
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$REF_Amino_acids.x==ptop.Total_paralog_annotations$REF_Amino_acids.y,]
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#benign to pathogenic
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+btop.Total_paralog_annotations = btop.Total_paralog_annotations[btop.Total_paralog_annotations$REF_Amino_acids.x==btop.Total_paralog_annotations$REF_Amino_acids.y,]
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+#stats
+con_table3_TP = ptop.num_of_paralog_anno
+con_table3_FP = btop.num_of_paralog_anno
+con_table3_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+con_table3_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+con_table3_PPV = con_table3_TP/(con_table3_TP+con_table3_FP)
+con_table3_Sensitivty = con_table3_TP/(con_table3_TP+con_table3_FN)
+con_table3 = matrix(
+  c(length(p.paralog_data$ID),
+    ptop.num_of_paralog_anno,
+    length(b.paralog_data$ID),
+    btop.num_of_paralog_anno
+  ), ncol = 2
+)
+colnames(con_table3) = c("Pathogenic", "Benign")
+rownames(con_table3) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+con_table3_p_value = fisher.test(con_table3)
+#Variants_removed_after_PA_QC2
+var_rem_all_con_TP = con_table2[2]-con_table3[2]
+var_rem_all_con_FP = con_table2[4]-con_table3[4]
+var_rem_all_con_FN = length(p.paralog_data$ID)-var_rem_all_con_TP
+var_rem_all_con_PPV = var_rem_all_con_TP/(var_rem_all_con_TP+var_rem_all_con_FP)
+var_rem_all_con_Sensitivity = var_rem_all_con_TP/(var_rem_all_con_TP+var_rem_all_con_FN)
+var_rem_all_con = matrix(
+  c(length(p.paralog_data$ID),
+    var_rem_all_con_TP,
+    length(b.paralog_data$ID),
+    var_rem_all_con_FP
+  ), ncol = 2
+)
+colnames(var_rem_all_con) = c("Pathogenic", "Benign")
+rownames(var_rem_all_con) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+var_rem_all_con_p_value = fisher.test(var_rem_all_con)
+
+#alt_con
+#pathogenic to pathogenic
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$ALT_Amino_acids.x==ptop.Total_paralog_annotations$ALT_Amino_acids.y,]
+ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[!duplicated(ptop.Total_paralog_annotations$ID.x),]
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#benign to pathogenic
+btop.Total_paralog_annotations = btop.Total_paralog_annotations[btop.Total_paralog_annotations$ALT_Amino_acids.x==btop.Total_paralog_annotations$ALT_Amino_acids.y,]
+btop.Total_paralog_annotations = btop.Total_paralog_annotations[!duplicated(btop.Total_paralog_annotations$ID.x),]
+btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+#stats
+con_table4_TP = ptop.num_of_paralog_anno
+con_table4_FP = btop.num_of_paralog_anno
+con_table4_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+con_table4_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+con_table4_PPV = con_table4_TP/(con_table4_TP+con_table4_FP)
+con_table4_Sensitivty = con_table4_TP/(con_table4_TP+con_table4_FN)
+con_table4 = matrix(
+  c(length(p.paralog_data$ID),
+    ptop.num_of_paralog_anno,
+    length(b.paralog_data$ID),
+    btop.num_of_paralog_anno
+  ), ncol = 2
+)
+colnames(con_table4) = c("Pathogenic", "Benign")
+rownames(con_table4) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+con_table4_p_value = fisher.test(con_table4)
+#Variants_removed_after_PA_QC3
+var_rem_alt_con_TP = con_table3[2]-con_table4[2]
+var_rem_alt_con_FP = con_table3[4]-con_table4[4]
+var_rem_alt_con_FN = length(p.paralog_data$ID)-var_rem_alt_con_TP
+var_rem_alt_con_PPV = var_rem_alt_con_TP/(var_rem_alt_con_TP+var_rem_alt_con_FP)
+var_rem_alt_con_Sensitivity = var_rem_alt_con_TP/(var_rem_alt_con_TP+var_rem_alt_con_FN)
+var_rem_alt_con = matrix(
+  c(length(p.paralog_data$ID),
+    var_rem_alt_con_TP,
+    length(b.paralog_data$ID),
+    var_rem_alt_con_FP
+  ), ncol = 2
+)
+colnames(var_rem_alt_con) = c("Pathogenic", "Benign")
+rownames(var_rem_alt_con) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+var_rem_alt_con_p_value = fisher.test(var_rem_alt_con)
+
+#Overall_table
+Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
+Total = c(length(p.paralog_data$ID),length(b.paralog_data$ID),"NA","NA","NA")
+Paralogue_Annotation_no_QC = c(format(con_table[2], scientific = FALSE),format(con_table[4], scientific = FALSE),con_table2_PPV,con_table_Sensitivty,con_table_p_value$p.value)
+Variants_remaining_after_PA_QC1 = c(format(con_table2[2], scientific = FALSE),format(con_table2[4], scientific = FALSE),con_table2_PPV,con_table2_Sensitivty,con_table2_p_value$p.value)
+Variants_removed_after_PA_QC1 = c(var_rem_para_con[2],var_rem_para_con[4],var_rem_para_con_PPV,"NA",var_rem_para_con_p_value$p.value)
+Variants_remaining_after_PA_QC2 = c(format(con_table3[2], scientific = FALSE),format(con_table3[4], scientific = FALSE),con_table3_PPV,con_table3_Sensitivty,con_table3_p_value$p.value)
+Variants_removed_after_PA_QC2 = c(var_rem_all_con[2],var_rem_all_con[4],var_rem_all_con_PPV,"NA",var_rem_all_con_p_value$p.value)
+Variants_remaining_after_PA_QC3 = c(format(con_table4[2], scientific = FALSE),format(con_table4[4], scientific = FALSE),con_table4_PPV,con_table4_Sensitivty,con_table4_p_value$p.value)
+Variants_removed_after_PA_QC3 = c(var_rem_alt_con[2],var_rem_alt_con[4],var_rem_alt_con_PPV,"NA",var_rem_alt_con_p_value$p.value)
+
+sarcomeric_set = data.frame(Variant,
+                               Total,
+                               Paralogue_Annotation_no_QC,
+                               Variants_remaining_after_PA_QC1,
+                               Variants_removed_after_PA_QC1,
+                               Variants_remaining_after_PA_QC2,
+                               Variants_removed_after_PA_QC2,
+                               Variants_remaining_after_PA_QC3,
+                               Variants_removed_after_PA_QC3
+                               )
+
+```
+
 
 Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 1115 individual pairwise alignments. The number of actual unique variants this equates to is less - 825.
 
@@ -546,26 +973,3 @@ Paralog Conserved|     |             |
 All Conserved    |     |             |
                  |     |             |
                  
-```{r include = TRUE, eval = FALSE}
-Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
-Total = c("","","NA","NA","")
-Paralogue_Annotation_no_QC = c("","","","","")
-Variants_remaining_after_PA_QC1 = c("","","","","")
-Variants_removed_after_PA_QC1 = c("","","","NA","")
-Variants_remaining_after_PA_QC2 = c("","","","","")
-Variants_removed_after_PA_QC2 = c("","","","NA","")
-Variants_remaining_after_PA_QC3 = c("","","","","")
-Variants_removed_after_PA_QC3 = c("","","","NA","")
-
-Whole_clinvar_set = data.frame(Variant,
-                               Total,
-                               Paralogue_Annotation_no_QC,
-                               Variants_remaining_after_PA_QC1,
-                               Variants_removed_after_PA_QC1,
-                               Variants_remaining_after_PA_QC2,
-                               Variants_removed_after_PA_QC2,
-                               Variants_remaining_after_PA_QC3,
-                               Variants_removed_after_PA_QC3
-                               )
-
-```
