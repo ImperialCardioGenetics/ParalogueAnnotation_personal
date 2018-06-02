@@ -9,11 +9,17 @@ ref_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data
 #Pathogenic
 
 #python processed files
-p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+# p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 # p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+# p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 # p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 # p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+#for specific genes
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene",paste("paralog", 1:132, sep = "")))
+channelopathy_gene = c("KCNQ1","KCNH2","SCN5A","KCNE1","KCNE2","RYR2")
+sarcomeric_gene = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
+p.paralog_data = dplyr::filter(p.paralog_data, Gene %in% sarcomeric_gene)
 
 #tableized files
 p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
@@ -47,12 +53,11 @@ p.ref_data = p.tableized_data
 
 p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
-ptop.Total_paralog_annotations[is.na(ptop.Total_paralog_annotations)] = 0
-ptop.num_of_paralog_anno = sum(ptop.Total_paralog_annotations$ID.y!=0)
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
 
 #Ref alleles
 ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$REF_Amino_acids.x==ptop.Total_paralog_annotations$REF_Amino_acids.y,]
-ptop.num_of_paralog_anno = sum(ptop.Total_paralog_annotations$ID.y!=0)
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
 
 #Alt alleles
 ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$ALT_Amino_acids.x==ptop.Total_paralog_annotations$ALT_Amino_acids.y,]
@@ -64,15 +69,22 @@ ptop.num_of_paralog_anno = sum(ptop.Total_paralog_annotations$ID.y!=0)
 # ptoa.Total_paralog_annotations = left_join(p.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
 # ptoa.num_of_paralog_anno = sum(!is.na(ptoa.Total_paralog_annotations$ID.y))
 
-p.num_interactions_per_annotated_var = ptop.num_of_paralog_anno/length(p.paralog_data$Variant_pos)
+# p.num_interactions_per_annotated_var = ptop.num_of_paralog_anno/length(p.paralog_data$Variant_pos)
 
 
 
 #Benign
-b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+# b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+# b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 # b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.1", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
 #b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.2", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+#for specific genes
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene",paste("paralog", 1:132, sep = "")))
+channelopathy_gene = c("KCNQ1","KCNH2","SCN5A","KCNE1","KCNE2","RYR2")
+b.paralog_data = dplyr::filter(b.paralog_data, Gene %in% channelopathy_gene)
+
 
 b.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 b.tableized_data$Variant_pos = paste(b.tableized_data$CHROM,b.tableized_data$POS, sep = " ")
@@ -92,14 +104,14 @@ b.ref_data = b.tableized_data
 
 b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 btob.Total_paralog_annotations = left_join(b.gathered_paralog_data,b.ref_data, by = c("paralog_pos" = "Variant_pos"))
-btob.Total_paralog_annotations[is.na(btob.Total_paralog_annotations)] = 0
-# btob.num_of_paralog_anno = sum(!is.na(btob.Total_paralog_annotations$ID.y))
-btob.num_of_paralog_anno = sum(btob.Total_paralog_annotations$ID.y!=0)
+btob.num_of_paralog_anno = sum(!is.na(btob.Total_paralog_annotations$ID.y))
+# btob.Total_paralog_annotations[is.na(btob.Total_paralog_annotations)] = 0
+# btob.num_of_paralog_anno = sum(btob.Total_paralog_annotations$ID.y!=0)
 
 # btoa.Total_paralog_annotations = left_join(b.gathered_paralog_data,ref_data, by = c("paralog_pos" = "Variant_pos"))
 # btoa.num_of_paralog_anno = sum(!is.na(btoa.Total_paralog_annotations$ID.y))
 
-b.num_interactions_per_annotated_var = btob.num_of_paralog_anno/length(b.paralog_data$Variant_pos)
+# b.num_interactions_per_annotated_var = btob.num_of_paralog_anno/length(b.paralog_data$Variant_pos)
 
 #Pathogenic to Benign
 ptob.Total_paralog_annotations = left_join(p.gathered_paralog_data, b.ref_data, by = c("paralog_pos" = "Variant_pos"))
@@ -168,6 +180,64 @@ con_table3_FN = length(b.paralog_data$ID)-btob.num_of_paralog_anno
 con_table3_PPV = con_table3_TP/(con_table3_TP+con_table3_FP)
 con_table3_Sensitivty = con_table3_TP/(con_table3_TP+con_table3_FN)
 con_table3_FPR = con_table3_FP/(con_table3_FP+con_table3_TN)
+
+#Functions to do all of above
+para_align = function(p.paralog_data,p.tableized_data,b.paralog_data,b.tableized_data,conservation=0){ #conservation - 0=noQC;1=para_con;2=all_con;3=alt_con
+  if (conservation==0){
+    #pathogenic to pathogenic
+    p.paralog_data = read.csv(file=p.paralog_data, sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+    p.tableized_data = read.csv(file=p.tableized_data, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+    p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
+    p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+    p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],unlist)
+    p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+    p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+    p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],unlist)
+    p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+    p.tableized_data = p.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
+    p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+    p.ref_data = p.tableized_data
+    p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+    ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+    ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+    #benign to pathogenic
+    b.paralog_data = read.csv(file=b.paralog_data, sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+    b.tableized_data = read.csv(file=b.tableized_data, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+    b.tableized_data$Variant_pos = paste(b.tableized_data$CHROM,b.tableized_data$POS, sep = " ")
+    b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+    b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],unlist)
+    b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+    b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+    b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],unlist)
+    b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+    b.tableized_data = b.tableized_data[,c("Variant_pos","ID","REF","ALT","REF_Amino_acids","ALT_Amino_acids","Codons")]
+    b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+    b.ref_data = b.tableized_data
+    b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+    btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+    btop.num_of_paralog_anno = sum(!is.na(btop.Total_paralog_annotations$ID.y))
+    #stats
+    con_table_TP = ptop.num_of_paralog_anno
+    con_table_FP = btop.num_of_paralog_anno
+    con_table_TN = length(b.paralog_data$ID)-btop.num_of_paralog_anno
+    con_table_FN = length(p.paralog_data$ID)-ptop.num_of_paralog_anno
+    con_table_PPV = con_table_TP/(con_table_TP+con_table_FP)
+    con_table_Sensitivty = con_table_TP/(con_table_TP+con_table_FN)
+    con_table = matrix(
+      c(length(b.paralog_data$ID),
+        length(p.paralog_data$ID),
+        btop.num_of_paralog_anno,
+        ptop.num_of_paralog_anno
+      ), ncol = 2
+    )
+    colnames(con_table) = c("Number of variants in genes with paralogs", "Number of variants aligned to other pathogenic variants")
+    rownames(con_table) = c("benign", "pathognic")
+  }
+}
+
+
+
+
 ##graphs
 #barplot
 # x_vars = c(
