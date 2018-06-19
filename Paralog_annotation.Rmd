@@ -4,6 +4,27 @@ output:
   html_document:
     df_print: paged
 ---
+### Manuscript Plan
+* New tool to show (more likely Erica will write up)
+* Contrast to previous studies, is genome wide validated
+* Describe implementation and how to use
+    + vep plugin lib
+* Provide additional descriptive statistics of input (clinvar) data, e.g. number of genes with paralogues, number of disease genes etc.
+* Paralogue annotate P/LP with P/LP; paralogue annotate B/LB with P/LP
+    + generate confusion matrices for above
+* can PA also predict benign variants as well as pathogenic?
+* does paraZ score add additional benefit
+* additional test/validation dataset
+    + disease
+    + ExAC
+* ICC genes - EFs 
+* Distributability 
+    + plugin
+    + R shiny - vep web tool; integrated browser
+    + integrated into gnomad
+* Pfam domains
+          
+
 ### Aims
 * Apply Paralogue annotation on other datasets
     + "Genome Wide" - Clinvar dataset
@@ -1209,8 +1230,31 @@ lapply(Packages, library, character.only = TRUE)
 #noQC
 #all missense variants join to cases
 p.paralog_data = file("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC")
-p.paralog_data = read.csv(file"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC", header = FALSE, sep = "\t", col.names = )
-#all missense variatns join to controls
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC", header = FALSE, sep = "\t", col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:(max(count.fields(p.paralog_data, sep = "\t"))-4), sep = "")))
+p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/HCM_missense_LMM_OMGL_chr.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],unlist)
+p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],unlist)
+p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+p.ref_data = p.tableized_data
+p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+#all missense variants join to controls
+b.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/ExAC_missense_sarcomeric_chr.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+b.tableized_data$Variant_pos = paste(b.tableized_data$CHROM,b.tableized_data$POS, sep = " ")
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],unlist)
+b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],unlist)
+b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+b.ref_data = b.tableized_data
+
 ```
 
 #### Paralogue stats
