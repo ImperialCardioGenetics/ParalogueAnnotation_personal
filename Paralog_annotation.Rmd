@@ -520,7 +520,7 @@ Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
 lapply(Packages, library, character.only = TRUE)
 #noQC
 #pathogenic to pathogenic
-p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:132, sep = "")))
 p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
 p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
@@ -536,7 +536,7 @@ p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, pa
 ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
 ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
 #benign to pathogenic
-b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:132, sep = "")))
 b.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 b.tableized_data$Variant_pos = paste(b.tableized_data$CHROM,b.tableized_data$POS, sep = " ")
 b.tableized_data$REF_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsplit, "/")
@@ -571,14 +571,14 @@ con_table_p_value = fisher.test(con_table)
 
 #para_con
 #pathogenic to pathogenic
-p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:132, sep = "")))
 p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
 p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
 ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$REF_Amino_acids.x==ptop.Total_paralog_annotations$REF_Amino_acids.y,]
 ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
 #benign to pathogenic
-b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.para_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:132, sep = "")))
 b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
 b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
@@ -620,14 +620,14 @@ var_rem_para_con_p_value = fisher.test(var_rem_para_con)
 
 #all_con
 #pathogenic to pathogenic
-p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:132, sep = "")))
 p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
 p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
 ptop.Total_paralog_annotations = ptop.Total_paralog_annotations[ptop.Total_paralog_annotations$REF_Amino_acids.x==ptop.Total_paralog_annotations$REF_Amino_acids.y,]
 ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
 #benign to pathogenic
-b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", paste("paralog", 1:132, sep = "")))
+b.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyBenign.out_paraloc_paralogs2.all_con", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:132, sep = "")))
 b.paralog_data = left_join(b.paralog_data,b.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
 b.gathered_paralog_data = filter(gather(b.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
 btop.Total_paralog_annotations = left_join(b.gathered_paralog_data, p.ref_data, by = c("paralog_pos" = "Variant_pos"))
@@ -1208,7 +1208,8 @@ Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
 lapply(Packages, library, character.only = TRUE)
 #noQC
 #all missense variants join to cases
-
+p.paralog_data = file("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC")
+p.paralog_data = read.csv(file"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC", header = FALSE, sep = "\t", col.names = )
 #all missense variatns join to controls
 ```
 
