@@ -1,8 +1,6 @@
 ---
 title: "Paralog Annotation Notes"
-output:
-  html_document:
-    df_print: paged
+output: rmarkdown::github_document
 ---
 ### Manuscript Plan
 * New tool to show (more likely Erica will write up)
