@@ -2,6 +2,19 @@
 title: "Paralog Annotation Notes"
 output: rmarkdown::github_document
 ---
+
+### Aims
+* Apply Paralogue annotation on other datasets
+    + "Genome Wide" - Clinvar dataset
+    + Cardiomyopathy genes - [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1]
+    + Channelopathy genes - [KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2]
+* Improve precision via increasing conservation of ref/alt alleles
+    + pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
+    + pairwise QC and family QC - ignore entire alignment columns if the entire family ref alleles are not conserved; NB analogous to para z scores
+    + pairwise QC and family QC and alt allele QC - ignore entire alignment columns if family ref allele and alt allele isn't conserved
+* investigate para z scores
+* investigate pfam meta domains
+
 ### Manuscript Plan
 * New tool to show (more likely Erica will write up)
 * Contrast to previous studies, is genome wide validated
@@ -21,19 +34,9 @@ output: rmarkdown::github_document
     + R shiny - vep web tool; integrated browser
     + integrated into gnomad
 * Pfam domains
-          
 
-### Aims
-* Apply Paralogue annotation on other datasets
-    + "Genome Wide" - Clinvar dataset
-    + Cardiomyopathy genes - [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1]
-    + Channelopathy genes - [KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2]
-* Improve precision via increasing conservation of ref/alt alleles
-    + pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
-    + pairwise QC and family QC - ignore entire alignment columns if the entire family ref alleles are not conserved; NB analogous to para z scores
-    + pairwise QC and family QC and alt allele QC - ignore entire alignment columns if family ref allele and alt allele isn't conserved
-* investigate para z scores
-* investigate pfam meta domains
+### Introduction
+
 
 ### Material and Methods Notes
 
@@ -526,7 +529,12 @@ plt.gcf().clear()
 
 #### Scripts pipeline
 vcf input file -> VEP_ParalogAnno.py -> File_prep_for_R.py -> Paralogous_var_align.R
-vcf input file -> VEP_ParalogAnno.py -> paraloc file -> tableize_vcf.py -> Paralogous_var_align.R
+vcf input file -> VEP_ParalogAnno.py -> paraloc file -> tableize_vcf.py (Tableize_wrapper.py) -> Paralogous_var_align.R
+
+#### Statistical terms
+In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
+
+Likewise for a benign paralogous alignment, a TP = benign query variant with a paralogous benign hit; FP = pathogenic query variant with a paralogous benign hit; FN = benign query variant with no paralogous benign hit; and TN = pathogenic query variant with no paralogous benign hit.
 
 #### Annotation of Clinvar
 The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/. Note that since the initial look at what was available there's been updated Clinvar files. 
@@ -985,6 +993,8 @@ sarcomeric_set = data.frame(Variant,
 
 ```
 
+Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
+
 Taking only the 5 channelopathy genes:
 ```{r eval = FALSE, include = FALSE}
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
@@ -1217,31 +1227,57 @@ channelopathy_set = data.frame(Variant,
 
 ```
 
+On the other hand, channelopathy genes did annotate well suggesting that their paralogues are involved in disease. 
 
 Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 1115 individual pairwise alignments. The number of actual unique variants this equates to is less - 825.
 
 #### Annotation of all possible missense variations in the 8 sarcomeric genes and calculation of EF
+
+For calculating the EFs, run the all possible missense variants through VEP+plugin and return paraloc locations. Then join those locations with pathogenic clinvar variants as before. This indicates which variants from all possible missense variants are likely to be pathogenic. Then we check to see if any of these variants are present in the cases and controls. Hopefully the controls will be less but there is more control data than cases bare in mind.
 
 ```{r eval = FALSE, include = FALSE}
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
 lapply(Packages, library, character.only = TRUE)
 #noQC
 #all missense variants join to cases
-p.paralog_data = file("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC")
-p.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC", header = FALSE, sep = "\t", col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:(max(count.fields(p.paralog_data, sep = "\t"))-4), sep = "")))
-p.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/HCM_missense_LMM_OMGL_chr.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-p.tableized_data$Variant_pos = paste(p.tableized_data$CHROM,p.tableized_data$POS, sep = " ")
-p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
-p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],unlist)
-p.tableized_data$REF_Amino_acids = sapply(p.tableized_data[,"REF_Amino_acids"],function(x) x[1])
-p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"Amino_acids"],strsplit, "/")
-p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],unlist)
-p.tableized_data$ALT_Amino_acids = sapply(p.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
-p.ref_data = p.tableized_data
-p.paralog_data = left_join(p.paralog_data,p.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
-p.gathered_paralog_data = filter(gather(p.paralog_data, paralog, paralog_pos, paste("paralog", 1:132, sep = ""), factor_key = TRUE), paralog_pos != "")
+#all missense data
+art.paralog_data = file("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC")
+max_no_col = (max(count.fields(art.paralog_data, sep = "\t"))-4)
+art.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC", header = FALSE, sep = "\t", col.names = c("Variant_pos", "ID", "Gene", paste("paralog", 1:max_no_col, sep = "")))
+art.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/cm_mutation_vep_canon.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+art.tableized_data$Variant_pos = paste(art.tableized_data$CHROM,art.tableized_data$POS, sep = " ")
+art.tableized_data$REF_Amino_acids = sapply(art.tableized_data[,"Amino_acids"],strsplit, "/")
+art.tableized_data$REF_Amino_acids = sapply(art.tableized_data[,"REF_Amino_acids"],unlist)
+art.tableized_data$REF_Amino_acids = sapply(art.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+art.tableized_data$ALT_Amino_acids = sapply(art.tableized_data[,"Amino_acids"],strsplit, "/")
+art.tableized_data$ALT_Amino_acids = sapply(art.tableized_data[,"ALT_Amino_acids"],unlist)
+art.tableized_data$ALT_Amino_acids = sapply(art.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+art.ref_data = art.tableized_data
+art.paralog_data = left_join(art.paralog_data,art.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+art.gathered_paralog_data = filter(gather(art.paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
+#case data
+case.paralog_data = file("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/HCM_missense_LMM_OMGL_chr.out_paraloc_paralogs2.noQC")
+max_no_col = (max(count.fields(case.paralog_data, sep = "\t"))-4)
+case.paralog_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/HCM_missense_LMM_OMGL_chr.out_paraloc_paralogs2.noQC", header = FALSE, sep = "\t", col.names =  c("Variant_pos", "ID", "Gene", paste("paralog", 1:max_no_col, sep = "")))
+case.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/HCM_missense_LMM_OMGL_chr.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors = FALSE)
+case.tableized_data$Variant_pos = paste(case.tableized_data$CHROM,case.tableized_data$POS, sep = " ")
+case.tableized_data$REF_Amino_acids = sapply(case.tableized_data[,"Amino_acids"],strsplit, "/")
+case.tableized_data$REF_Amino_acids = sapply(case.tableized_data[,"REF_Amino_acids"],unlist)
+case.tableized_data$REF_Amino_acids = sapply(case.tableized_data[,"REF_Amino_acids"],function(x) x[1])
+case.tableized_data$ALT_Amino_acids = sapply(case.tableized_data[,"Amino_acids"],strsplit, "/")
+case.tableized_data$ALT_Amino_acids = sapply(case.tableized_data[,"ALT_Amino_acids"],unlist)
+case.tableized_data$ALT_Amino_acids = sapply(case.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+case.ref_data = case.tableized_data
+case.paralog_data = left_join(case.paralog_data,case.tableized_data, by = c("Variant_pos" = "Variant_pos", "ID" = "ID"))
+case.gathered_paralog_data = filter(gather(case.paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
+#all missense to case
+arttocase.Total_paralog_annotations = left_join(art.gathered_paralog_data,case.ref_data, by = c("paralog_pos" = "Variant_pos"))
+arttocase.num_of_paralog_anno = sum(!is.na(arttocase.Total_paralog_annotations$ID.y))
+
+
 ptop.Total_paralog_annotations = left_join(p.gathered_paralog_data,p.ref_data, by = c("paralog_pos" = "Variant_pos"))
 ptop.num_of_paralog_anno = sum(!is.na(ptop.Total_paralog_annotations$ID.y))
+
 #all missense variants join to controls
 b.tableized_data = read.csv(file="/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/ExAC_missense_sarcomeric_chr.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 b.tableized_data$Variant_pos = paste(b.tableized_data$CHROM,b.tableized_data$POS, sep = " ")
@@ -1252,6 +1288,9 @@ b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"Amino_acids"],strsp
 b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],unlist)
 b.tableized_data$ALT_Amino_acids = sapply(b.tableized_data[,"ALT_Amino_acids"],function(x) x[2])
 b.ref_data = b.tableized_data
+ptob.Total_paralog_annotations = left_join(p.gathered_paralog_data,b.ref_data, by = c("paralog_pos" = "Variant_pos"))
+ptob.num_of_paralog_anno = sum(!is.na(ptob.Total_paralog_annotations$ID.y))
+
 
 ```
 
