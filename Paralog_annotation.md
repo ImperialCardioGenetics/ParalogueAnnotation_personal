@@ -1,6 +1,20 @@
 Paralog Annotation Notes
 ================
 
+<!--Load Packages and function-->
+### Aims
+
+-   Apply Paralogue annotation on other datasets
+    -   "Genome Wide" - Clinvar dataset
+    -   Cardiomyopathy genes - \[MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1\]
+    -   Channelopathy genes - \[KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2\]
+-   Improve precision via increasing conservation of ref/alt alleles
+    -   pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
+    -   pairwise QC and family QC - ignore entire alignment columns if the entire family ref alleles are not conserved; NB analogous to para z scores
+    -   pairwise QC and family QC and alt allele QC - ignore entire alignment columns if family ref allele and alt allele isn't conserved
+-   investigate para z scores
+-   investigate pfam meta domains
+
 ### Manuscript Plan
 
 -   New tool to show (more likely Erica will write up)
@@ -22,18 +36,7 @@ Paralog Annotation Notes
     -   integrated into gnomad
 -   Pfam domains
 
-### Aims
-
--   Apply Paralogue annotation on other datasets
-    -   "Genome Wide" - Clinvar dataset
-    -   Cardiomyopathy genes - \[MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1\]
-    -   Channelopathy genes - \[KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2\]
--   Improve precision via increasing conservation of ref/alt alleles
-    -   pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
-    -   pairwise QC and family QC - ignore entire alignment columns if the entire family ref alleles are not conserved; NB analogous to para z scores
-    -   pairwise QC and family QC and alt allele QC - ignore entire alignment columns if family ref allele and alt allele isn't conserved
--   investigate para z scores
--   investigate pfam meta domains
+### Introduction
 
 ### Material and Methods Notes
 
@@ -59,10 +62,10 @@ An intermediate python script (**File\_prep\_for\_R.py**) was used to prep the r
 As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using **tableize\_vcf.py**. **/data/Share/nick/Paralog\_Anno/loftee/src/tableize\_vcf.py** was used to format the VEP output into table format for R processing. For example:
 
 ``` bash
-python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info SYMBOL,Amino_acids,Codons,Paralogue_Vars
+python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info SYMBOL,Amino_acids,Codons,Paralogue_Vars --split_by_transcript --canonical_only
 ```
 
-However, a python wrapper plus additional formatting (**/data/Share/nick/Paralog\_Anno/Tableize\_wrapper.py**) that tableize couldn't do, i.e. separate variants that had multiple REF and ALT alleles was used instead to prepare the data for R.
+If **--split\_by\_transcript** is used then the code above is sufficient. Otherwise a python wrapper that includes additional formatting (**/data/Share/nick/Paralog\_Anno/Tableize\_wrapper.py**) that tableize couldn't do, i.e. separate variants that had multiple REF and ALT alleles was used to prepare the data for R.
 
 #### Benchmarking performance of the plugin
 
@@ -70,7 +73,13 @@ However, a python wrapper plus additional formatting (**/data/Share/nick/Paralog
 
 #### Scripts pipeline
 
-vcf input file -&gt; VEP\_ParalogAnno.py -&gt; File\_prep\_for\_R.py -&gt; Paralogous\_var\_align.R vcf input file -&gt; VEP\_ParalogAnno.py -&gt; paraloc file -&gt; tableize\_vcf.py -&gt; Paralogous\_var\_align.R
+vcf input file -&gt; VEP\_ParalogAnno.py -&gt; File\_prep\_for\_R.py -&gt; Paralogous\_var\_align.R vcf input file -&gt; VEP\_ParalogAnno.py -&gt; paraloc file -&gt; tableize\_vcf.py (Tableize\_wrapper.py) -&gt; Paralogous\_var\_align.R
+
+#### Statistical terms
+
+In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
+
+Likewise for a benign paralogous alignment, a TP = benign query variant with a paralogous benign hit; FP = pathogenic query variant with a paralogous benign hit; FN = benign query variant with no paralogous benign hit; and TN = pathogenic query variant with no paralogous benign hit.
 
 #### Annotation of Clinvar
 
@@ -80,13 +89,22 @@ NOTE that I have noticed some descrepencies between the plugin annotations which
 
 The annotataion of the entire clinvar set as of 20171029:
 
+<!--Previous old code below, remove once above code works
+
+-->
 Taking only the 8 sarcomeric genes:
 
+Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
+
 Taking only the 5 channelopathy genes:
+
+On the other hand, channelopathy genes did annotate well suggesting that their paralogues are involved in disease.
 
 Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 1115 individual pairwise alignments. The number of actual unique variants this equates to is less - 825.
 
 #### Annotation of all possible missense variations in the 8 sarcomeric genes and calculation of EF
+
+For calculating the EFs, run the all possible missense variants through VEP+plugin and return paraloc locations. Then join those locations with pathogenic clinvar variants as before. This indicates which variants from all possible missense variants are likely to be pathogenic. Then we check to see if any of these variants are present in the cases and controls. Hopefully the controls will be less but there is more control data than cases bare in mind. Calculate the EFs using that. Remember though the EFs are based on how many times an allele is seen, not the number of different alleles by themselves.
 
 #### Paralogue stats
 
