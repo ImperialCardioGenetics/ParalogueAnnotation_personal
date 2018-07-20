@@ -5,7 +5,7 @@ Paralog Annotation Notes
 ### Aims
 
 -   Apply Paralogue annotation on other datasets
-    -   "Genome Wide" - Clinvar dataset
+    -   "Genome Wide" - Clinvar dataset and ALL possible exome variants (get from `/data/Mirror/ExAC_release/release0.3.1/manuscript_data/all_possible_variants`)
     -   Cardiomyopathy genes - \[MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1\]
     -   Channelopathy genes - \[KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2\]
 -   Improve precision via increasing conservation of ref/alt alleles
@@ -37,6 +37,8 @@ Paralog Annotation Notes
 -   Pfam domains
 
 ### Introduction
+
+With the advancements of sequen
 
 ### Material and Methods Notes
 
@@ -87,11 +89,11 @@ The Clinvar file **clinvar\_20171029.vcf** was downloaded from <ftp://ftp.ncbi.n
 
 NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. This is due to the fact that the paralogous variant VEP is referring to is simply not in the dataset that I am annotating back to. As a result, it is best to make sure that the ref alleles are indeed the same when processing in R.
 
+The annotataion of the entire clinvar set as of 2018:
+
+<!--Previous old code below, remove once above code works-->
 The annotataion of the entire clinvar set as of 20171029:
 
-<!--Previous old code below, remove once above code works
-
--->
 Taking only the 8 sarcomeric genes:
 
 Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
@@ -106,6 +108,9 @@ Looking at alt alleles. Taking only pairwise alignments where the alt allele is 
 
 For calculating the EFs, run the all possible missense variants through VEP+plugin and return paraloc locations. Then join those locations with pathogenic clinvar variants as before. This indicates which variants from all possible missense variants are likely to be pathogenic. Then we check to see if any of these variants are present in the cases and controls. Hopefully the controls will be less but there is more control data than cases bare in mind. Calculate the EFs using that. Remember though the EFs are based on how many times an allele is seen, not the number of different alleles by themselves.
 
+<!--
+
+-->
 #### Paralogue stats
 
 According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues
@@ -125,3 +130,7 @@ According to ensembl, 92096 protein coding genes are defined to have paralogues.
 |                   |       |               |
 | All Conserved     |       |               |               |
 |                   |       |               |
+
+#### Para-Z scores
+
+For the para-z scores, will need to extract amino acid position from VEP output as well. Then look up the gene in question in para-z score folder, and using the position identify the para-z score. From my understanding, the para-z score is the same across aligned amino acids in the same gene family. Therefore, we could use a cut-off threshold to further improve our confidence in calling variants pathogenic etc. We could also then calculate ROC curves by altering the cut-off to see how that affects sensitivity/PPV.
