@@ -6,7 +6,7 @@ Paralog Annotation Notes
 
 -   Apply Paralogue annotation on other datasets
     -   "Genome Wide" - Clinvar dataset and ALL possible exome variants (get from `/data/Mirror/ExAC_release/release0.3.1/manuscript_data/all_possible_variants`)
-    -   Cardiomyopathy genes - \[MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1\]
+    -   Cardiomyopathy genes - \[MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1\] -CHECK CODE TO SEE IF ALL MISSENSE CM VARIANTS REALLY DO NOT APPEAR IN ANY OF THESE GENES AS EG. MYH6 SHOULD HAVE SOME
     -   Channelopathy genes - \[KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2\]
 -   Improve precision via increasing conservation of ref/alt alleles
     -   pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
@@ -38,7 +38,7 @@ Paralog Annotation Notes
 
 ### Introduction
 
-With the advancements of sequen
+With the advancements of sequencing technology, new potential variants are being identified constantly. Previously (Walsh et al. 2014)
 
 ### Material and Methods Notes
 
@@ -75,8 +75,31 @@ If **--split\_by\_transcript** is used then the code above is sufficient. Otherw
 
 #### Scripts pipeline
 
-vcf input file -&gt; VEP\_ParalogAnno.py -&gt; File\_prep\_for\_R.py -&gt; Paralogous\_var\_align.R vcf input file -&gt; VEP\_ParalogAnno.py -&gt; paraloc file -&gt; tableize\_vcf.py (Tableize\_wrapper.py) -&gt; Paralogous\_var\_align.R
+<!-- old
+vcf input file -> VEP_ParalogAnno.py -> File_prep_for_R.py -> Paralogous_var_align.R
+vcf input file -> VEP_ParalogAnno.py -> paraloc file -> tableize_vcf.py (Tableize_wrapper.py) -> Paralogous_var_align.R
+-->
+``` r
+library(DiagrammeR)
+grViz("
+digraph boxes_and_circles {
+graph [overlap = true, fontsize = 10]
 
+node [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]
+'VEP_ParalogAnno.py'; 'File_prep_for_R.py'; 'Tableize_wrapper.py'; 'R markdown'
+
+node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
+'vcf input file'; 'paralogs file'; 'paraloc file'; 'paralogs2 file'; 'paraloc_tableized file'
+
+'vcf input file' -> 'VEP_ParalogAnno.py'; 'VEP_ParalogAnno.py' -> 'paralogs file'; 'VEP_ParalogAnno.py' -> 'paraloc file'; 'paralogs file' -> 'File_prep_for_R.py'; 'paraloc file' -> 'Tableize_wrapper.py'; 'File_prep_for_R.py' -> 'paralogs2 file'; 'Tableize_wrapper.py' -> 'paraloc_tableized file'; 'paralogs2 file' -> 'R markdown'; 'paraloc_tableized file' -> 'R markdown'
+
+}")
+```
+
+<!--html_preserve-->
+
+<script type="application/json" data-for="htmlwidget-4159ebc4820b45d7e5ec">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<!--/html_preserve-->
 #### Statistical terms
 
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
@@ -96,6 +119,7 @@ The annotataion of the entire clinvar set as of 20171029:
 
 Taking only the 8 sarcomeric genes:
 
+<!-- Old code below -->
 Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 
 Taking only the 5 channelopathy genes:
@@ -111,6 +135,12 @@ For calculating the EFs, run the all possible missense variants through VEP+plug
 <!--
 
 -->
+Total cases: 41443 number of affected cases: 39
+
+Total controls: 456393 number of affected controls: 28
+
+Odds ratio 15.3524 95 % CI: 9.4468 to 24.9499 z statistic 11.024 Significance level P &lt; 0.0001
+
 #### Paralogue stats
 
 According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues
@@ -134,3 +164,5 @@ According to ensembl, 92096 protein coding genes are defined to have paralogues.
 #### Para-Z scores
 
 For the para-z scores, will need to extract amino acid position from VEP output as well. Then look up the gene in question in para-z score folder, and using the position identify the para-z score. From my understanding, the para-z score is the same across aligned amino acids in the same gene family. Therefore, we could use a cut-off threshold to further improve our confidence in calling variants pathogenic etc. We could also then calculate ROC curves by altering the cut-off to see how that affects sensitivity/PPV.
+
+Walsh, R., N. S. Peters, S. A. Cook, and J. S. Ware. 2014. “Paralogue Annotation Identifies Novel Pathogenic Variants in Patients with Brugada Syndrome and Catecholaminergic Polymorphic Ventricular Tachycardia.” *Journal of Medical Genetics* 51 (1): 35–44.
