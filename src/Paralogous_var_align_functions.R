@@ -2,7 +2,7 @@ Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
 lapply(Packages, library, character.only = TRUE)
 
 Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations
-  system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
+  # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
   paralog_data = file(paralogs2_file)
   max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
   paralog_data = read.csv(file=paralogs2_file, sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")))
@@ -37,7 +37,7 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
 }
 
 Subset_var_align = function(gene_subset, paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations
-  system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
+  # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
   paralog_data = file(paralogs2_file)
   max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
   paralog_data = read.csv(file=paralogs2_file, sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")))
@@ -75,7 +75,7 @@ Subset_var_align = function(gene_subset, paralogs2_file, paralog_tableized_file,
 }
 
 ParaZ_var_align = function(paraz_cutoff,paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations with Para Z scores
-  system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
+  # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
   paralog_data = file(paralogs2_file)
   max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
   paralog_data = read.csv(file=paralogs2_file, sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")))
