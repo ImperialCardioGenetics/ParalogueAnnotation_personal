@@ -1,8 +1,12 @@
 ---
 title: "Paralog Annotation Notes"
-output: rmarkdown::github_document
+# output: rmarkdown::github_document
+output: 
+  html_document:
+    keep_md: true
+
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 bibliography: bibliography.bib
 always_allow_html: yes
 ---
@@ -45,7 +49,10 @@ source("src/Paralogous_var_align_functions.R")
 * Pfam domains
 
 ### Introduction
-With the advancements of sequencing technology, new potential variants are being identified constantly. Previously [@Walsh2014]
+With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
+Previously Ware *et al.* have developed **Paralogue Annotation** [@Ware2012; @Walsh2014], which utilizes information from paralogues (evolutionarily related genes from the same species) to help classify pathogenic variants. They verified its use in LQTS genes on variants acquired from patient cohorts.
+
+Here **Paralogue Annotation** is tested further on a (Likely) Pathogenic/Benign varaint dataset from Clinvar.
 
 ### Material and Methods Notes
 
@@ -446,6 +453,9 @@ out_file.close()
 os.system("mv " + input_file + "_tableized_temp " + input_file + "_tableized")
 ```
 
+#### Datasets
+Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. 
+
 #### Benchmarking performance of the plugin
 
 __/data/Share/nick/Paralog_Anno/multi_vcf_extractor_benchmark.py__ is used to demonstrate speed at which VEP+Plugin takes to run
@@ -544,7 +554,7 @@ vcf input file -> VEP_ParalogAnno.py -> paraloc file -> tableize_vcf.py (Tableiz
 -->
 ```{r}
 library(DiagrammeR)
-grViz("
+pipeline = DiagrammeR::grViz("
 digraph boxes_and_circles {
 graph [overlap = true, fontsize = 10]
 
@@ -557,6 +567,7 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 'vcf input file' -> 'VEP_ParalogAnno.py'; 'VEP_ParalogAnno.py' -> 'paralogs file'; 'VEP_ParalogAnno.py' -> 'paraloc file'; 'paralogs file' -> 'File_prep_for_R.py'; 'paraloc file' -> 'Tableize_wrapper.py'; 'File_prep_for_R.py' -> 'paralogs2 file'; 'Tableize_wrapper.py' -> 'paraloc_tableized file'; 'paralogs2 file' -> 'R markdown'; 'paraloc_tableized file' -> 'R markdown'
 
 }")
+pipeline
 ```
 
 #### Statistical terms
@@ -874,6 +885,29 @@ b4.Total_paralog_annotations = b3.sarco_var_align$Total_paralog_annotations[b3.s
 b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
 
 conf4 = conf_matrix(p4.num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.num_of_paralog_anno, b3.sarco_var_align$paralog_data)
+
+#Overall_table
+Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
+Total = c(length(p.sarco_var_align$paralog_data$ID),length(b.sarco_var_align$paralog_data$ID),"NA","NA","NA")
+Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivty,conf$Pvalue$p.value)
+Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
+
+Variants_removed_after_PA_QC1 = c(var_rem_para_con[2],var_rem_para_con[4],var_rem_para_con_PPV,"NA",var_rem_para_con_p_value$p.value)
+Variants_remaining_after_PA_QC2 = c(format(con_table3[2], scientific = FALSE),format(con_table3[4], scientific = FALSE),con_table3_PPV,con_table3_Sensitivty,con_table3_p_value$p.value)
+Variants_removed_after_PA_QC2 = c(var_rem_all_con[2],var_rem_all_con[4],var_rem_all_con_PPV,"NA",var_rem_all_con_p_value$p.value)
+Variants_remaining_after_PA_QC3 = c(format(con_table4[2], scientific = FALSE),format(con_table4[4], scientific = FALSE),con_table4_PPV,con_table4_Sensitivty,con_table4_p_value$p.value)
+Variants_removed_after_PA_QC3 = c(var_rem_alt_con[2],var_rem_alt_con[4],var_rem_alt_con_PPV,"NA",var_rem_alt_con_p_value$p.value)
+
+sarcomeric_set = data.frame(Variant,
+                               Total,
+                               Paralogue_Annotation_no_QC,
+                               Variants_remaining_after_PA_QC1,
+                               Variants_removed_after_PA_QC1,
+                               Variants_remaining_after_PA_QC2,
+                               Variants_removed_after_PA_QC2,
+                               Variants_remaining_after_PA_QC3,
+                               Variants_removed_after_PA_QC3
+                               )
 ```
 <!-- Old code below -->
 ```{r eval = FALSE, include = FALSE}
@@ -1377,12 +1411,22 @@ patho_control.data = control.data[control.data$Variant_pos %in% patho_art_var$Va
 case.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_case_var = case.paralogous_var_align$Total_paralog_annotations[!is.na(case.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_case_var_IDs = patho_case_var$ID.x
-write(patho_case_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_case_var_IDs.txt", sep = "\t", ncolumns = 1)
+# write(patho_case_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_case_var_IDs.txt", sep = "\t", ncolumns = 1)
+case.data = read.csv("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/HCM_missense_LMM_OMGL_chr.csv", sep = ",")
+patho_case.data = case.data[case.data$mut_id %in% patho_case_var_IDs,]
+case_cases = sum(patho_case.data$sum.vs_case_count.)
+Total_case_cases = sum(case.data$sum.vs_case_count.)
+
 #control data VEP
 control.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_control_var = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_control_var_IDs = patho_control_var$ID.x
-write(patho_control_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_control_var_IDs.txt", sep = "\t", ncolumns = 1)
+# write(patho_control_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_control_var_IDs.txt", sep = "\t", ncolumns = 1)
+control.data = read.csv("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/ExAC_missense_sarcomeric_chr.csv", sep = ",")
+patho_control.data = control.data[control.data$mut_id %in% patho_control_var_IDs,]
+control_cases = sum(patho_control.data$mut_exac_count)
+Total_control_cases = sum(control.data$mut_exac_count)
+
 ```
 <!--
 ```{r eval = FALSE, include = FALSE}
@@ -1448,16 +1492,18 @@ ptob.num_of_paralog_anno = sum(!is.na(ptob.Total_paralog_annotations$ID.y))
 ```
 -->
 
-Total cases: 41443
+Total cases: 6140
 number of affected cases: 39
 
-Total controls: 456393
+Total controls: 60678
 number of affected controls: 28
 
-Odds ratio 	15.3524
-95 % CI:	9.4468 to 24.9499
-z statistic	11.024
+Odds ratio 	13.7648
+95 % CI:	8.4648 to 22.3833
+z statistic	10.570
 Significance level	P < 0.0001
+Attributable Risk Percent: 92.7% 
+95 % CI: 79.6 to 100
 
 #### Paralogue stats
 According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues
