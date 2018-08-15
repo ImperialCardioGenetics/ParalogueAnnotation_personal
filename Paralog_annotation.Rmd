@@ -50,6 +50,7 @@ source("src/Paralogous_var_align_functions.R")
 
 ### Some interesting things to look at maybe
 * "Ohnologs"
+* Perform PA on paralogs from CPG (from [@Modos2016]) and non-CPG and see difference? 
 * Integrating ortholog data to increase confidence calling 
 
 ### Introduction

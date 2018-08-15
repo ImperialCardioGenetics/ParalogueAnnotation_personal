@@ -184,6 +184,7 @@ $(document).ready(function () {
 <h3>Some interesting things to look at maybe</h3>
 <ul>
 <li>“Ohnologs”</li>
+<li>Perform PA on paralogs from CPG (from <span class="citation">(Modos et al. 2016)</span>) and non-CPG and see difference?</li>
 <li>Integrating ortholog data to increase confidence calling</li>
 </ul>
 </div>
@@ -244,8 +245,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 
 }&quot;)
 pipeline</code></pre>
-<div id="htmlwidget-5c83d77a24fc2072ea61" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5c83d77a24fc2072ea61">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-b4a60e6f2085222fa9f9" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b4a60e6f2085222fa9f9">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-terms" class="section level4">
 <h4>Statistical terms</h4>
@@ -361,10 +362,16 @@ pipeline</code></pre>
 </div>
 <div id="ohnologs" class="section level4">
 <h4>Ohnologs</h4>
-<p>The “2R”&quot; hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)<span class="citation">(Ohno, Wolf, and Atkin 1968)</span>. Paralogues that arose from this WGD are known as ohnologs.</p>
+<p>The “2R”&quot; hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)<span class="citation">(Ohno, Wolf, and Atkin 1968)</span>. Paralogues that arose from this WGD are known as ohnologs. <span class="citation">Singh et al. (2014)</span> showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.</p>
 <div id="refs" class="references">
+<div id="ref-Modos2016">
+<p>Modos, Dezso, Johanne Brooks, David Fazekas, Eszter Ari, Tibor Vellai, Peter Csermely, Tamas Korcsmaros, and Katalin Lenti. 2016. “Identification of Critical Paralog Groups with Indispensable Roles in the Regulation of Signaling Flow.” <em>Scientific Reports</em> 6: 38588.</p>
+</div>
 <div id="ref-Ohno1968">
 <p>Ohno, Susumu, Ulrich Wolf, and Niels B. Atkin. 1968. “Evolution from Fish to Mammals by Gene Duplication.” <em>Hereditas</em> 59 (1): 169–87.</p>
+</div>
+<div id="ref-Singh2014">
+<p>Singh, Param P., Severine Affeldt, Giulia Malaguti, and Herve Isambert. 2014. “Human Dominant Disease Genes Are Enriched in Paralogs Originating from Whole Genome Duplication.” <em>PLoS Computational Biology</em> 10 (7): e1003754.</p>
 </div>
 <div id="ref-Walsh2014">
 <p>Walsh, R., N. S. Peters, S. A. Cook, and J. S. Ware. 2014. “Paralogue Annotation Identifies Novel Pathogenic Variants in Patients with Brugada Syndrome and Catecholaminergic Polymorphic Ventricular Tachycardia.” <em>Journal of Medical Genetics</em> 51 (1): 35–44.</p>
