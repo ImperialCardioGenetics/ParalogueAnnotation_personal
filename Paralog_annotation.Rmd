@@ -48,11 +48,17 @@ source("src/Paralogous_var_align_functions.R")
     + integrated into gnomad
 * Pfam domains
 
+### Some interesting things to look at maybe
+* "Ohnologs"
+* Integrating ortholog data to increase confidence calling 
+
 ### Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
 Previously Ware *et al.* have developed **Paralogue Annotation** [@Ware2012; @Walsh2014], which utilizes information from paralogues (evolutionarily related genes from the same species) to help classify pathogenic variants. They verified its use in LQTS genes on variants acquired from patient cohorts.
 
 Here **Paralogue Annotation** is tested further on a (Likely) Pathogenic/Benign varaint dataset from Clinvar.
+
+
 
 ### Material and Methods Notes
 
@@ -1548,3 +1554,6 @@ gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 
 gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.25) + ylim(0.7,1)
 ```
+
+#### Ohnologs
+The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication[@Ohno1968]. 
