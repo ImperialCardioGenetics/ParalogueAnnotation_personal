@@ -1,4 +1,4 @@
-Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
+Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif")
 lapply(Packages, library, character.only = TRUE)
 # library(tidyverse)
 # library(dplyr)
