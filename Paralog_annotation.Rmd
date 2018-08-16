@@ -59,6 +59,7 @@ Previously Ware *et al.* have developed **Paralogue Annotation** [@Ware2012; @Wa
 
 Here **Paralogue Annotation** is tested further on a (Likely) Pathogenic/Benign varaint dataset from Clinvar.
 
+<span style="color:red">Also have a look at @Barshir2018 for more info about paralogs in diseases.</span>
 
 
 ### Material and Methods Notes
