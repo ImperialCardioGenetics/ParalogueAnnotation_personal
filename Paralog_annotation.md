@@ -57,6 +57,7 @@ Previously Ware *et al.* have developed **Paralogue Annotation** [@Ware2012; @Wa
 
 Here **Paralogue Annotation** is tested further on a (Likely) Pathogenic/Benign varaint dataset from Clinvar.
 
+<span style="color:red">Also have a look at @Barshir2018 for more info about paralogs in diseases.</span>
 
 
 ### Material and Methods Notes
@@ -125,8 +126,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 pipeline
 ```
 
-<!--html_preserve--><div id="htmlwidget-bb012f1c5951f59d0585" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-bb012f1c5951f59d0585">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-0083cc5a34b8ea3d92c5" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0083cc5a34b8ea3d92c5">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
