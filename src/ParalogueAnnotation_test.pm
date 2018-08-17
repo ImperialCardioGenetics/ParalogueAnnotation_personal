@@ -50,8 +50,9 @@ sub new {
     $self->{output} = $params->[1] || 'damaging';
     $self->{file} = $params->[2];
     print "SELF:" . %$self . "\n";
+    print Dumper($self);
 	my $config = $self->{config};
-
+	print Dumper($config);
    	my $reg = 'Bio::EnsEMBL::Registry';
 
     if($config->{host}) {
