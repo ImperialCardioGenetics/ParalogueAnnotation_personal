@@ -41,11 +41,14 @@ sub new {
     print "SELF:" . %$self . "\n";
     my $params = $self->params;
    	print "PARAMS:" . @$params . " " . $params->[0] . "\n";
+
+   	#If $params->[0] is TRUE and is equal to 1 then return 1
     shift @$params if $params->[0] && $params->[0] eq '1';  # REST API passes 1 as first param
 
 	$self->{run} = $params->[0] || 'variants';
     $self->{output} = $params->[1] || 'damaging';
     $self->{file} = $params->[2];
+    print "SELF:" . %$self . "\n";
 	my $config = $self->{config};
 
    	my $reg = 'Bio::EnsEMBL::Registry';
