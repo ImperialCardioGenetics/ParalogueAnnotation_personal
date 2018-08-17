@@ -38,9 +38,9 @@ sub new {
     my $class = shift;
     print "CLASS:" . $class . "\n";
     my $self = $class->SUPER::new(@_);
-    print "SELF:" . $self . "\n";
+    print "SELF:" . %$self . "\n";
     my $params = $self->params;
-   	print "PARAMS:" . @$params . "\n";
+   	print "PARAMS:" . @$params . " " . $params->[0] . "\n";
     shift @$params if $params->[0] && $params->[0] eq '1';  # REST API passes 1 as first param
 
 	$self->{run} = $params->[0] || 'variants';
