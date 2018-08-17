@@ -39,7 +39,7 @@ sub new {
     print "CLASS:" . $class . "\n";
     my $self = $class->SUPER::new(@_);
     print "SELF:" . %$self . "\n";
-    print Dumper(\$self)
+    print Dumper(\$self);
     my $params = $self->params;
    	print "PARAMS:" . @$params . "\n";
 
