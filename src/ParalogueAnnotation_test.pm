@@ -40,7 +40,7 @@ sub new {
     my $self = $class->SUPER::new(@_);
     print "SELF:" . %$self . "\n";
     my $params = $self->params;
-   	print "PARAMS:" . @$params . " " . $params->[0] . "\n";
+   	print "PARAMS:" . @$params . "\n";
 
    	#If $params->[0] is TRUE and is equal to 1 then return 1
     shift @$params if $params->[0] && $params->[0] eq '1';  # REST API passes 1 as first param
