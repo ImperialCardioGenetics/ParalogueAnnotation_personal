@@ -9,7 +9,7 @@ package ParalogueAnnotation_test;
 
 use strict;
 use warnings;
-
+use Data::Dumper;
 use Bio::EnsEMBL::Registry;
 Bio::EnsEMBL::Registry->set_reconnect_when_lost();
 use Bio::LocatableSeq;
@@ -39,6 +39,7 @@ sub new {
     print "CLASS:" . $class . "\n";
     my $self = $class->SUPER::new(@_);
     print "SELF:" . %$self . "\n";
+    print Dumper(\$self)
     my $params = $self->params;
    	print "PARAMS:" . @$params . "\n";
 
