@@ -36,12 +36,12 @@ sub get_header_info {
 
 sub new {
     my $class = shift;
-    print "CLASS:" . $class . "\n";
+    # print "CLASS:" . $class . "\n";
     my $self = $class->SUPER::new(@_);
-    print "SELF:" . %$self . "\n";
-    print Dumper($self);
+    # print "SELF:" . %$self . "\n";
+    # print Dumper($self);
     my $params = $self->params;
-   	print "PARAMS:" . @$params . "\n";
+   	# print "PARAMS:" . @$params . "\n";
 
    	#If $params->[0] is TRUE and is equal to 1 then return 1
     shift @$params if $params->[0] && $params->[0] eq '1';  # REST API passes 1 as first param
@@ -49,13 +49,14 @@ sub new {
 	$self->{run} = $params->[0] || 'variants';
     $self->{output} = $params->[1] || 'damaging';
     $self->{file} = $params->[2];
-    print "SELF:" . %$self . "\n";
-    print Dumper($self);
+    # print "SELF:" . %$self . "\n";
+    print "SELF" . Dumper($self);
 	my $config = $self->{config};
-	print Dumper($config);
+	print "CONFIG" . Dumper($config);
    	my $reg = 'Bio::EnsEMBL::Registry';
-
+   	# print Dumper($config->{host});
     if($config->{host}) {
+    	print "IM HERE! TRUE!\n";
         $reg->load_registry_from_db(
             -host       => $config->{host},
             -user       => $config->{user},
@@ -64,6 +65,15 @@ sub new {
             -db_version => $config->{db_version},
             -no_cache   => $config->{no_slice_cache},
         );
+        print Dumper($reg);
+        print Dumper($config->{host});
+        print Dumper($config->{user});
+        print Dumper($config->{password});
+        print Dumper($config->{port});
+        print Dumper($config->{db_version});
+        print Dumper($config->{no_slice_cache});
+    } else {
+    	print "NOPE! FALSE\n";
     }
 
 #COMMENT ENSEMBL: cache adaptors and save some time by no regenerating them
