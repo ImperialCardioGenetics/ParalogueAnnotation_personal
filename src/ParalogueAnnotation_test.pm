@@ -25,8 +25,11 @@ sub feature_types {
 }
 
 sub variant_feature_types {
-    return ['VariationFeature'];
+    return ['VariationFeature']; #This is object that is retrieving all the information that we are using in this plugin. Taken from Bio::EnsEMBL::Variation::TranscriptVariationAllele::variation_feature	(		)	
+
 }
+
+#So the above 2 subroutines are what we use to retrieve the info we want and are parsed to @_
 
 sub get_header_info {
 	return {
@@ -38,6 +41,7 @@ sub new {
     my $class = shift;
     # print "CLASS:" . $class . "\n";
     my $self = $class->SUPER::new(@_);
+    # print Dumper(@_);
     # print "SELF:" . %$self . "\n";
     # print Dumper($self);
     my $params = $self->params;
@@ -50,14 +54,14 @@ sub new {
     $self->{output} = $params->[1] || 'damaging';
     $self->{file} = $params->[2];
     # print "SELF:" . %$self . "\n";
-    print "SELF" . Dumper($self);
+    # print "SELF" . Dumper($self);
 	my $config = $self->{config};
-	print "CONFIG" . Dumper($config);
+	# print "CONFIG" . Dumper($config);
    	my $reg = 'Bio::EnsEMBL::Registry';
    	# print Dumper($config->{host});
     if($config->{host}) {
-    	print "IM HERE! TRUE!\n";
-        $reg->load_registry_from_db(
+    	# print "IM HERE! TRUE!\n";
+        $reg->load_registry_from_db( #Parse whatever connection info VEP is using to this plugin, so use same info
             -host       => $config->{host},
             -user       => $config->{user},
             -pass       => $config->{password},
@@ -65,13 +69,13 @@ sub new {
             -db_version => $config->{db_version},
             -no_cache   => $config->{no_slice_cache},
         );
-        print Dumper($reg);
-        print Dumper($config->{host});
-        print Dumper($config->{user});
-        print Dumper($config->{password});
-        print Dumper($config->{port});
-        print Dumper($config->{db_version});
-        print Dumper($config->{no_slice_cache});
+        # print Dumper($reg);
+        # print Dumper($config->{host});
+        # print Dumper($config->{user});
+        # print Dumper($config->{password});
+        # print Dumper($config->{port});
+        # print Dumper($config->{db_version});
+        # print Dumper($config->{no_slice_cache});
     } else {
     	print "NOPE! FALSE\n";
     }
@@ -86,23 +90,35 @@ sub new {
 	$self->{config}->{transcriptvariation_adaptor} = $reg->get_adaptor("Human", "Variation", "TranscriptVariation");
 	$self->{config}->{genemember_adaptor} = $reg->get_adaptor("Multi", "compara", "GeneMember");
 	$self->{config}->{homology_adaptor} = $reg->get_adaptor('Multi', 'compara', 'Homology');
+    # print Dumper($self);
     return $self;
+
 }
 
 
-sub run {
+sub run {#this is where most of the plugin logic should reside. When the VEP is about to finish one line of output (for a given variation-allele-feature combination) it will call this method
 
-	my ($self, $tva) = @_;
+	my ($self, $tva) = @_; 
+	if ($self == $tva) {
+		print "YES!";
+	}
+	print Dumper($self);
+	<STDIN>;
 	my $result = "";
- 	return {} unless grep {$_->SO_term eq 'missense_variant'} @{$tva->get_all_OverlapConsequences};
-	
+	# print Dumper($tva->get_all_OverlapConsequences);
+ 	return {} unless grep {$_->SO_term eq 'missense_variant'} @{$tva->get_all_OverlapConsequences}; #return nothing? unless a variable in the list "$tva->get_all_OverlapConsequences" has a string equal to 'missense_variant', if so assign to list "$_->SO_term"
+	#return nothing - acts as a break
+
 	my $btv = $tva->base_transcript_variation();
 	my $tv = $tva->transcript_variation;
 	my $vf = $btv->variation_feature;
 	my $basepepchange = $tv->pep_allele_string;
 	my $lineid = ${$btv->transcript}{"stable_id"}; 
+	# print Dumper($btv->transcript);
+	# print "Press ENTER to exit:";
+	# <STDIN>;
 
-	#Define adaptors
+	#Define adaptors #Is this necessary after caching the adaptors above?
     my $genome_db_adaptor = $self->{config}->{genome_db_adaptor};
   	my $hg_adaptor = $self->{config}->{hg_adaptor}; 
 	my $slice_adaptor = $self->{config}->{slice_adaptor};
@@ -157,7 +173,7 @@ sub run {
 
     if ($self->{config}->{$basegene} && $self->{config}->{$basegene}->{transcript}) {
     	if ($self->{config}->{$basegene}->{transcript} ne $lineid) {
-    		return {};
+    		return {}; #again just returning nothing to break this block of code
       }
     }	
 
