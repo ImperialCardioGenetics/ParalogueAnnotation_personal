@@ -7,12 +7,13 @@ package ParalogueAnnotation_test;
 #   third input vcf file to search
 
 
+#IF YOU EVER NEED TO LOOK UP DOCUMENTATION LOOK FOR Bio::EnsEMBL::Compara::Homology Class Reference AS THE TOP LEVEL
 use strict;
 use warnings;
 use Data::Dumper;
 use Bio::EnsEMBL::Registry;
 Bio::EnsEMBL::Registry->set_reconnect_when_lost();
-use Bio::LocatableSeq;
+use Bio::LocatableSeq; #BIO PERL - SOME OF THESE FUNCTION AND METHODS FROM BIO PERL. ENSEMBL'S OWN METHODS ARE A SUBSET OF BIO PERL.
 use Bio::EnsEMBL::TranscriptMapper;	
 
 
@@ -180,13 +181,15 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 		#Fetch all homologies
 #COMMENT ENSEMBL: Only compute paralogues
     my $homologies = $self->{config}->{$basegene}->{homologies};
-    if (!$self->{config}->{$basegene} ||  !$self->{config}->{$basegene}->{homologies}) {
-    	my $gene_member = $genemember_adaptor->fetch_by_stable_id($base_Gid);
+    if (!$self->{config}->{$basegene} || !$self->{config}->{$basegene}->{homologies}) {
+    	my $gene_member = $genemember_adaptor->fetch_by_stable_id($base_Gid); #fetch whole gene object from ensembl
     	$homologies = $homology_adaptor->fetch_all_by_Member($gene_member, 'ENSEMBL_PARALOGUES');
-    	$self->{config}->{$basegene}->{homologies} = $homologies;
+    	$self->{config}->{$basegene}->{homologies} = $homologies;	#$homologies is hash of all the pairwise paralogue alignment for the current gene the variant we're iterating through is currently in; it contains info on query gene, the paralouge gene, and the alignment.
     }
 
-    foreach my $homology (@{$homologies}) {
+    #each pairwise object has info on the alignment, the pair of genes, etc.
+
+    foreach my $homology (@{$homologies}) {	#iterating through each pairwise object
     	my @members = (@{$homology->get_all_Members});
 		#Define hashes
 		my %ENSPid = ();
@@ -212,15 +215,15 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 		#For homologies with two human genes, set basegene and para_gene
 			
 		if ($hgmembercount == 2) {
-			foreach my $member (@members) {
+			foreach my $member (@members) {	#iterating through the pairwise object, 2 genes in this object
 				my $ENSP = $member->stable_id; #confirm using longest trans for all
           		my $gene =  $self->{config}->{$ENSP};
           		if (! defined $gene) {
 					$gene = $hg_adaptor->fetch_by_translation_stable_id($ENSP);					
             		$self->{config}->{$ENSP} = $gene;
           		}
-				if ($gene->external_name eq $basegene) {
-            		if (!$ENSPid{$ENSP}) {
+				if ($gene->external_name eq $basegene) {	
+            		if (!$ENSPid{$ENSP}) {#if current iterating element in pairwise object is query gene, assign it here
 						$ENSPid{$basegene}=$member->stable_id;
 						$genename{$basegene}=$gene->external_name;
 						$trans{$basegene}=$member->get_Transcript;
@@ -228,7 +231,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 						$ENSTid{$basegene} = $trans{$basegene}->display_id;
 						$trmapper{$basegene} = Bio::EnsEMBL::TranscriptMapper->new($trans{$basegene});  
             		}
-				} else {
+				} else {#if current iterating element in pairwise object is paralogue, assign that here
 					$para_gene=$gene->external_name;
 					$ENSPid{$para_gene}=$member->stable_id;
 					$genename{$para_gene}=$gene->external_name;
@@ -242,41 +245,51 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 #COMMENT ENSEMBL: cache the transcript which is used for paralogue computation
 #we only need to run the the plugin for an input of variant and transcript if the transcript is used for paralogue computation
 	          	$self->{config}->{$basegene}->{transcript} = $lineid;
-	          	my $simplealign = $self->{config}->{$basegene}->{$para_gene};
+	          	my $simplealign = $self->{config}->{$basegene}->{$para_gene}; 
 	          	if (! defined $simplealign) {
-					$simplealign = $homology->get_SimpleAlign();
+					$simplealign = $homology->get_SimpleAlign(); #get the alignment
 	            	$self->{config}->{$basegene}->{$para_gene} = $simplealign;
 	          	}   
-				$fullseq{$basegene} = $simplealign->get_seq_by_id($ENSPid{$basegene});
+				$fullseq{$basegene} = $simplealign->get_seq_by_id($ENSPid{$basegene}); #in the homology object; the third element is the alignment object
 				$fullseq{$para_gene} = $simplealign->get_seq_by_id($ENSPid{$para_gene});	
 				my ($coord) = $trmapper{$basegene}->genomic2pep($bp_input, $bp_input, $strand{$basegene}); #when list has one element how to extract?
 				$peptide{$basegene} = $coord->start;
 	          	my $num_residues = $simplealign->num_residues;
 	          	next if ($peptide{$basegene} > $num_residues);
 	 			$col = $simplealign->column_from_residue_number($ENSPid{$basegene}, $peptide{$basegene});
-	          	next if (!$col);
+				next if (!$col);
 				$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);	
-				$peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
-				my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
-				my $codon_start = $var->start;
-				my $codon_end = $var->end; 		
-				$transslice{$para_gene} = $slice_adaptor->fetch_by_transcript_stable_id($ENSTid{$para_gene});
-				my $slice2_chr = $transslice{$para_gene}->seq_region_name(); 					
-				my $codon_slice2 = $slice_adaptor->fetch_by_region('chromosome', $slice2_chr, $codon_start, $codon_end);
-				$REFresatlocation{$basegene} = $fullseq{$basegene}->subseq($col, $col);
-				$REFresatlocation{$para_gene} = $fullseq{$para_gene}->subseq($col, $col); 
-				my %REFid = ();
-				if ($REFresatlocation{$basegene} eq $REFresatlocation{$para_gene}) {
-					$REFid{$para_gene} = 1;
+				if (! defined $peptide_coord{$para_gene}) {
+					if ($self->{run} eq "paraloc") {
+						REFresatlocation{para_gene} = "-";
+						REFid{$para_gene} = 0;
+						$result .= "|$para_gene:chr$slice2_chr" . "_$codon_start-$codon_end:$REFresatlocation{$basegene}:$REFresatlocation{$para_gene}:REFID=$REFid{$para_gene}";						
+						next;
+					}
 				} else {
-					$REFid{$para_gene} = 0;
+					$peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
+					my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
+					my $codon_start = $var->start;
+					my $codon_end = $var->end; 		
+					$transslice{$para_gene} = $slice_adaptor->fetch_by_transcript_stable_id($ENSTid{$para_gene});
+					my $slice2_chr = $transslice{$para_gene}->seq_region_name(); 					
+					my $codon_slice2 = $slice_adaptor->fetch_by_region('chromosome', $slice2_chr, $codon_start, $codon_end);
+					$REFresatlocation{$basegene} = $fullseq{$basegene}->subseq($col, $col);
+					$REFresatlocation{$para_gene} = $fullseq{$para_gene}->subseq($col, $col); 
+					my %REFid = ();
+					if ($REFresatlocation{$basegene} eq $REFresatlocation{$para_gene}) {
+						$REFid{$para_gene} = 1;
+					} else {
+						$REFid{$para_gene} = 0;
+					}
+		 					
+					if ($self->{run} eq "paraloc") { 
+						$result .= "|$para_gene:chr$slice2_chr" . "_$codon_start-$codon_end:$REFresatlocation{$basegene}:$REFresatlocation{$para_gene}:REFID=$REFid{$para_gene}";					
+						next;	
+					}
 				}
-	 					
-				if ($self->{run} eq "paraloc") { 
-					$result .= "|$para_gene:chr$slice2_chr" . "_$codon_start-$codon_end:$REFresatlocation{$basegene}:$REFresatlocation{$para_gene}:REFID=$REFid{$para_gene}";					
-					next;	
-				}
-	 					
+	 			
+	 			#VARIANT MODE CODE BELOW		
 	 			foreach my $vf ( @{ $variationfeature_adaptor->fetch_all_by_Slice_SO_terms($codon_slice2) } ) {
 					my @csstates = @{$vf->get_all_clinical_significance_states};
 					my $path = 0;
