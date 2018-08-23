@@ -100,11 +100,11 @@ sub new {
 sub run {#this is where most of the plugin logic should reside. When the VEP is about to finish one line of output (for a given variation-allele-feature combination) it will call this method
 
 	my ($self, $tva) = @_; 
-	if ($self == $tva) {
-		print "YES!";
-	}
-	print Dumper($self);
-	<STDIN>;
+	# if ($self == $tva) {
+	# 	print "YES!";
+	# }
+	# print Dumper($self);
+	# <STDIN>;
 	my $result = "";
 	# print Dumper($tva->get_all_OverlapConsequences);
  	return {} unless grep {$_->SO_term eq 'missense_variant'} @{$tva->get_all_OverlapConsequences}; #return nothing? unless a variable in the list "$tva->get_all_OverlapConsequences" has a string equal to 'missense_variant', if so assign to list "$_->SO_term"
