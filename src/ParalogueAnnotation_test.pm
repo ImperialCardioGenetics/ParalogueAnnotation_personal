@@ -259,6 +259,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 	 			$col = $simplealign->column_from_residue_number($ENSPid{$basegene}, $peptide{$basegene});
 				print Dumper($col);
 				next if (!$col);
+				next if (! defined $col);
 				$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);	
 				$peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
 				my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
