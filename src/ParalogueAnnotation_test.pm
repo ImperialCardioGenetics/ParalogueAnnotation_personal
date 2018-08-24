@@ -258,6 +258,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 	          	next if ($peptide{$basegene} > $num_residues);
 	 			$col = $simplealign->column_from_residue_number($ENSPid{$basegene}, $peptide{$basegene});
 				next if (!$col);
+				print Dumper($col);
 				$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);	
 				$peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
 				my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
@@ -267,8 +268,10 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 				my $slice2_chr = $transslice{$para_gene}->seq_region_name(); 					
 				my $codon_slice2 = $slice_adaptor->fetch_by_region('chromosome', $slice2_chr, $codon_start, $codon_end); 
 				my %REFid = ();
+				print Dumper($peptide_coord{$para_gene});
 				if (! defined $peptide_coord{$para_gene}) {
 					if ($self->{run} eq "paraloc") {
+						print Dumper("HERE!");
 						REFresatlocation{$para_gene} = "-";
 						REFid{$para_gene} = 0;
 						$result .= "|$para_gene:chr$slice2_chr" . "_$codon_start-$codon_end:$REFresatlocation{$basegene}:$REFresatlocation{$para_gene}:REFID=$REFid{$para_gene}";						
