@@ -283,18 +283,25 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 				$transslice{$para_gene} = $slice_adaptor->fetch_by_transcript_stable_id($ENSTid{$para_gene});
 				my $slice2_chr = $transslice{$para_gene}->seq_region_name(); 					
 				my $codon_slice2 = $slice_adaptor->fetch_by_region('chromosome', $slice2_chr, $codon_start, $codon_end); 
+				$REFresatlocation{$basegene} = $fullseq{$basegene}->subseq($col, $col);
 				my %REFid = ();
-				print "peptide: ";
-				print Dumper($peptide{$para_gene});
-				if (! defined $peptide_coord{$para_gene} || !$peptide_coord{$para_gene}) {
+
+				if ($peptide_coord{$para_gene} -> {_location_type} eq 'IN-BETWEEN') {
+					print "Location type is IN-BETWEEN!\n";
 					if ($self->{run} eq "paraloc") {
 						print "HERE!\n";
-						REFresatlocation{$para_gene} = "-";
-						REFid{$para_gene} = 0;
+						$REFresatlocation{$para_gene} = "-";
+						$REFid{$para_gene} = 0;
 						$result .= "|$para_gene:chr$slice2_chr" . "_$codon_start-$codon_end:$REFresatlocation{$basegene}:$REFresatlocation{$para_gene}:REFID=$REFid{$para_gene}";						
 						next;
 					}
-				} else {
+				}
+
+				print "peptide: ";
+				print Dumper($peptide{$para_gene});
+				# if (! defined $peptide_coord{$para_gene} || !$peptide_coord{$para_gene}) {
+					
+				# } else {
 					# $peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
 					# my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
 					# my $codon_start = $var->start;
@@ -302,7 +309,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 					# $transslice{$para_gene} = $slice_adaptor->fetch_by_transcript_stable_id($ENSTid{$para_gene});
 					# my $slice2_chr = $transslice{$para_gene}->seq_region_name(); 					
 					# my $codon_slice2 = $slice_adaptor->fetch_by_region('chromosome', $slice2_chr, $codon_start, $codon_end);
-					$REFresatlocation{$basegene} = $fullseq{$basegene}->subseq($col, $col);
+					# $REFresatlocation{$basegene} = $fullseq{$basegene}->subseq($col, $col);
 					$REFresatlocation{$para_gene} = $fullseq{$para_gene}->subseq($col, $col); 
 					# my %REFid = ();
 					if ($REFresatlocation{$basegene} eq $REFresatlocation{$para_gene}) {
@@ -315,7 +322,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 						$result .= "|$para_gene:chr$slice2_chr" . "_$codon_start-$codon_end:$REFresatlocation{$basegene}:$REFresatlocation{$para_gene}:REFID=$REFid{$para_gene}";					
 						next;	
 					}
-				}
+				# }
 	 			
 	 			#VARIANT MODE CODE BELOW		
 	 			foreach my $vf ( @{ $variationfeature_adaptor->fetch_all_by_Slice_SO_terms($codon_slice2) } ) {
