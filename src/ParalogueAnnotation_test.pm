@@ -273,6 +273,8 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 					print "col is not defined!\n";
 					next;
 				}
+				print "fullseq: ";
+				print Dumper(%fullseq);
 				$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);	
 				print "para_peptide_coord: ";
 				print Dumper($peptide_coord{$para_gene});
