@@ -277,7 +277,8 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 				print Dumper(%fullseq);
 				$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);	
 				print "para_peptide_coord: ";
-				print Dumper($peptide_coord{$para_gene});
+				print Dumper(%peptide_coord);
+				# print Dumper($peptide_coord{$para_gene});
 				$peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
 				my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
 				my $codon_start = $var->start;
@@ -295,7 +296,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 						$REFresatlocation{$para_gene} = "-";
 						$REFid{$para_gene} = 0;
 						$result .= "|$para_gene:chr$slice2_chr" . "_$codon_start-$codon_end:$REFresatlocation{$basegene}:$REFresatlocation{$para_gene}:REFID=$REFid{$para_gene}";						
-						next;
+						# next;
 					}
 				}
 
