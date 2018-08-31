@@ -275,6 +275,14 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 				}
 				print "fullseq: ";
 				print Dumper(%fullseq);
+
+				print "fullseq_para_gene: ";
+				print Dumper($fullseq{$para_gene});
+
+				if (defined $fullseq{$para_gene}) {
+					print "fullseq_para_gene not defined\n";
+				}
+
 				$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);	
 				print "para_peptide_coord: ";
 				print Dumper(%peptide_coord);
@@ -296,7 +304,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 						$REFresatlocation{$para_gene} = "-";
 						$REFid{$para_gene} = 0;
 						$result .= "|$para_gene:chr$slice2_chr" . "_$codon_start-$codon_end:$REFresatlocation{$basegene}:$REFresatlocation{$para_gene}:REFID=$REFid{$para_gene}";						
-						# next;
+						next;
 					}
 				}
 
