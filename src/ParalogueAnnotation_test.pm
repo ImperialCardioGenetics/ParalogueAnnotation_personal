@@ -269,7 +269,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 					print "col does not exist!\n";
 					next;
 				}
-				if (! defined $col) {
+				if (!defined $col) {
 					print "col is not defined!\n";
 					next;
 				}
@@ -279,13 +279,23 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 				print "fullseq_para_gene: ";
 				print Dumper($fullseq{$para_gene});
 
-				if (defined $fullseq{$para_gene}) {
+				if (! defined $fullseq{$para_gene}) {
 					print "fullseq_para_gene not defined\n";
+					next;
 				}
 
 				$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);	
-				print "para_peptide_coord: ";
+				print "peptide_coord: ";
 				print Dumper(%peptide_coord);
+		
+				print "para_peptide_coord: ";
+				print Dumper($peptide_coord{$para_gene});
+
+				if (!defined $peptide_coord{$para_gene}) {
+					print "para_peptide_coord not defined\n";
+					next;
+				}
+
 				# print Dumper($peptide_coord{$para_gene});
 				$peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
 				my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
