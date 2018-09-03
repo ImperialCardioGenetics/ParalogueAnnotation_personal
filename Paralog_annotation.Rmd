@@ -55,8 +55,14 @@ source("src/Paralogous_var_align_functions.R")
 
 ### OBSTACLES TO GET DONE:
 * Debugging plugin
-* Data from denis
+    + Have fixed "Can't call methods: start/location_from_column" by implementing `if` loops to catch errors
+    + BUT still getting DBSQL connection errors. Suspect that it is indeed due to size of input vcf. Specifically not raw number of variants in vcf, but number of specific variants (maybe number of variants from same gene?)
+    + Seems to affect all missense artificial vcf only so far (limit is 10,000 variants?)
+    + The clinvar vcf (60,000+ variants) did not have this problem!!!
+* Data from denis 
+    + DONE - denis says that data I have is most up to date
 * Data from henrike
+    + waiting, will send me data when ready
 
 ### Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
