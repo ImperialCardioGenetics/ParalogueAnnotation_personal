@@ -62,6 +62,7 @@ source("src/Paralogous_var_align_functions.R")
         - BUT a 12850 variants vcf containing only MYH7 variants throws no error at all....WHAT?!?!
         - possibly an issue with the system cluster
     + The clinvar vcf (60,000+ variants) did not have this problem!!!
+    + Following chat with Erica, email Emily with what was discussed.
 * Data from denis 
     + DONE - denis says that data I have is most up to date
 * Data from henrike
