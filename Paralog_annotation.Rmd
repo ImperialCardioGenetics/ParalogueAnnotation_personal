@@ -57,7 +57,10 @@ source("src/Paralogous_var_align_functions.R")
 * Debugging plugin
     + Have fixed "Can't call methods: start/location_from_column" by implementing `if` loops to catch errors
     + BUT still getting DBSQL connection errors. Suspect that it is indeed due to size of input vcf. Specifically not raw number of variants in vcf, but number of specific variants (maybe number of variants from same gene?)
-    + Seems to affect all missense artificial vcf only so far (limit is 9965 variants?)
+    + Seems to affect all missense artificial vcf only so far
+        - a 9965 variants vcf containing 6333 MYH7 variants and 3632 MYBPC3 variants throws a SQL connection error starting at variant postion 14 23425730
+        - BUT a 12850 variants vcf containing only MYH7 variants throws no error at all....WHAT?!?!
+        - possibly an issue with the system cluster
     + The clinvar vcf (60,000+ variants) did not have this problem!!!
 * Data from denis 
     + DONE - denis says that data I have is most up to date
