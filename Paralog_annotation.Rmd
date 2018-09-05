@@ -67,9 +67,13 @@ source("src/Paralogous_var_align_functions.R")
         - possibly an issue with the system cluster - TRY RUNNING ON IMPERIAL HPC
     + The clinvar vcf (60,000+ variants) did not have this problem!!!
     + Before sending Emily email:
-        - move variant 14 23425730 down a few places and see if still consistently throwing SQL error
-        
-    + Following chat with Erica, before emailling Emily with what was discussed.
+        - move variant 14 23425730 down a few places and see if still consistently throws SQL error
+        - keep same number of variants (9965) but move that particular variant of interest
+    + Following chat with Erica, email Emily with:
+        - 1 vcf with both genes and variant of interest
+        - 1 vcf with both genes without variant of interest
+        - 1 vcf with all MYH7 variants
+        - ask about MART3...
 * All possible missense vcf for exome
     + double check source (xiaolei?)
         - be clear - contains all possible amino acid substitution but NOT all possible nucleotide substitution - why?
