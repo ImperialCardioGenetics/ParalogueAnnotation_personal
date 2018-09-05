@@ -56,17 +56,32 @@ source("src/Paralogous_var_align_functions.R")
 ### OBSTACLES TO GET DONE:
 * Debugging plugin
     + Have fixed "Can't call methods: start/location_from_column" by implementing `if` loops to catch errors
+        - check out RBM20 and its "2" paralogues (MATR3 and MATR3...) that were example of genes which variants were causing these problems.
+        - apparently there are other genes that have this same pattern where there are multiple genes with the same gene symbol but different IDs - James believes there exists a list of these genes somewhere (maybe ask Emily?)
+        - see if can get a list of consistent variants that cause these specific issues for Erica.
     + BUT still getting DBSQL connection errors. Suspect that it is indeed due to size of input vcf. Specifically not raw number of variants in vcf, but number of specific variants (maybe number of variants from same gene?)
     + Seems to affect all missense artificial vcf only so far
         - a 9965 variants vcf containing 6333 MYH7 variants and 3632 MYBPC3 variants throws a SQL connection error starting at variant postion 14 23425730
+        - removing one variant (9964) fixes this problem - runs fine
         - BUT a 12850 variants vcf containing only MYH7 variants throws no error at all....WHAT?!?!
-        - possibly an issue with the system cluster
+        - possibly an issue with the system cluster - TRY RUNNING ON IMPERIAL HPC
     + The clinvar vcf (60,000+ variants) did not have this problem!!!
-    + Following chat with Erica, email Emily with what was discussed.
-* Data from denis 
+    + Before sending Emily email:
+        - move variant 14 23425730 down a few places and see if still consistently throwing SQL error
+        
+    + Following chat with Erica, before emailling Emily with what was discussed.
+* All possible missense vcf for exome
+    + double check source (xiaolei?)
+        - be clear - contains all possible amino acid substitution but NOT all possible nucleotide substitution - why?
+        - would be good to also write up stat for how many aa sub there is for every nt sub in report
+* Need to get all possible missense for genome as well, I.e. get a vcf containing all possible nt sub, not just all possible aa sub! 
+* ~~Data from denis~~ 
     + DONE - denis says that data I have is most up to date
 * Data from henrike
     + waiting, will send me data when ready
+* Web tool
+    + Keep design simple
+    + Ask Mark
 
 ### Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
