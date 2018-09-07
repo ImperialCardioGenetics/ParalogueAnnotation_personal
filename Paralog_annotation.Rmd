@@ -75,6 +75,7 @@ source("src/Paralogous_var_align_functions.R")
         - be clear - contains all possible amino acid substitution but NOT all possible nucleotide substitution - why?
         - would be good to also write up stat for how many aa sub there is for every nt sub in report
 * Need to get all possible missense for genome as well, I.e. get a vcf containing all possible nt sub, not just all possible aa sub! 
+    + NEED TO MAKE MY OWN
 * ~~Data from denis~~ 
     + DONE - denis says that data I have is most up to date
 * Data from henrike
