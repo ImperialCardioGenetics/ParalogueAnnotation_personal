@@ -66,14 +66,10 @@ source("src/Paralogous_var_align_functions.R")
         - BUT a 12850 variants vcf containing only MYH7 variants throws no error at all....WHAT?!?!
         - possibly an issue with the system cluster - TRY RUNNING ON IMPERIAL HPC
     + The clinvar vcf (60,000+ variants) did not have this problem!!!
-    + Before sending Emily email:
-        - move variant 14 23425730 down a few places and see if still consistently throws SQL error
-        - keep same number of variants (9965) but move that particular variant of interest
-    + Following chat with Erica, email Emily with:
-        - 1 vcf with both genes and variant of interest
-        - 1 vcf with both genes without variant of interest
-        - 1 vcf with all MYH7 variants
-        - ask about MART3...
+    + Have sent email to emily:
+        - actual plugin seems to be able to handle more variants than test plugin as the extra print statements seem to cause the sql error earlier...DON'T KNOW WHY!! Will ignore for now as not main priority.
+        - sent emily the actual plugin with example that doesn't work.
+    + ask emily about MART3...?
 * All possible missense vcf for exome
     + double check source (xiaolei?)
         - be clear - contains all possible amino acid substitution but NOT all possible nucleotide substitution - why?
