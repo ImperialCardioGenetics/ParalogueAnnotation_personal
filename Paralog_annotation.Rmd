@@ -59,20 +59,9 @@ source("src/Paralogous_var_align_functions.R")
         - check out RBM20 and its "2" paralogues (MATR3 and MATR3...) that were example of genes which variants were causing these problems.
         - apparently there are other genes that have this same pattern where there are multiple genes with the same gene symbol but different IDs - James believes there exists a list of these genes somewhere (maybe ask Emily?)
         - see if can get a list of consistent variants that cause these specific issues for Erica.
-    + ~~BUT still getting DBSQL connection errors. Suspect that it is indeed due to size of input vcf. Specifically not raw number of variants in vcf, but number of specific variants (maybe number of variants from same gene?)~~
-    + ~~Seems to affect all missense artificial vcf only so far~~
-        - ~~a 9965 variants vcf containing 6333 MYH7 variants and 3632 MYBPC3 variants throws a SQL connection error starting at variant postion 14 23425730~~
-        - ~~removing one variant (9964) fixes this problem - runs fine~~
-        - ~~BUT a 12850 variants vcf containing only MYH7 variants throws no error at all....WHAT?!?!~~
-        - ~~possibly an issue with the system cluster - TRY RUNNING ON IMPERIAL HPC~~
-    + ~~The clinvar vcf (60,000+ variants) did not have this problem!!!~~
-    + ~~Have sent email to emily:~~
-        - ~~actual plugin seems to be able to handle more variants than test plugin as the extra print statements seem to cause the sql error earlier...DON'T KNOW WHY!! Will ignore for now as not main priority.~~
-        - ~~sent emily the actual plugin with example that doesn't work.~~
-    + ~~"MySQL error has gone away" error seems to now have been fixed with the help from emily~~
+    + "MySQL error has gone away" error seems to now have been fixed with the help from emily
         - issues seem to be due to server timeouts from running long jobs
         - sent me https://www.ensembl.org/Help/Faq?id=567 for help
-        - FIXED
     + ask emily about MART3...?
 * All possible missense vcf for exome
     + be clear between all possible amino acid substitution and all possible nucleotide substitution
@@ -83,6 +72,7 @@ source("src/Paralogous_var_align_functions.R")
     + NEED TO MAKE MY OWN
 * ~~Data from denis~~ 
     + DONE - denis says that data I have is most up to date
+    + Convert Para Z scores to 1 file for faster lookup and addition to tableize data.
 * Data from henrike
     + waiting, will send me data when ready
 * Web tool
