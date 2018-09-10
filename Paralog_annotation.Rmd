@@ -69,9 +69,10 @@ source("src/Paralogous_var_align_functions.R")
     + ~~Have sent email to emily:~~
         - ~~actual plugin seems to be able to handle more variants than test plugin as the extra print statements seem to cause the sql error earlier...DON'T KNOW WHY!! Will ignore for now as not main priority.~~
         - ~~sent emily the actual plugin with example that doesn't work.~~
-    + "MySQL error has gone away" error seems to now have been fixed with the help from emily
+    + ~~"MySQL error has gone away" error seems to now have been fixed with the help from emily~~
         - issues seem to be due to server timeouts from running long jobs
         - sent me https://www.ensembl.org/Help/Faq?id=567 for help
+        - FIXED
     + ask emily about MART3...?
 * All possible missense vcf for exome
     + be clear between all possible amino acid substitution and all possible nucleotide substitution
