@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Data::Dumper;
 use Bio::EnsEMBL::Registry;
-Bio::EnsEMBL::Registry->set_reconnect_when_lost();
+Bio::EnsEMBL::Registry->set_reconnect_when_lost(1);
 use Bio::LocatableSeq; #BIO PERL - SOME OF THESE FUNCTION AND METHODS FROM BIO PERL. ENSEMBL'S OWN METHODS ARE A SUBSET OF BIO PERL.
 use Bio::EnsEMBL::TranscriptMapper;	
 
@@ -98,7 +98,7 @@ sub new {
 
 
 sub run {#this is where most of the plugin logic should reside. When the VEP is about to finish one line of output (for a given variation-allele-feature combination) it will call this method
-	print "NEXT VARIANT!\n";
+	# print "NEXT VARIANT!\n";
 	my ($self, $tva) = @_; 
 	# if ($self == $tva) {
 	# 	print "YES!";
@@ -124,11 +124,16 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
   	my $hg_adaptor = $self->{config}->{hg_adaptor}; 
   	$hg_adaptor->dbc->disconnect_if_idle;
 	my $slice_adaptor = $self->{config}->{slice_adaptor};
+	$slice_adaptor->dbc->disconnect_if_idle;
 	my $transcript_adaptor = $self->{config}->{transcript_adaptor};
 	my $variationfeature_adaptor = $self->{config}->{variationfeature_adaptor};
+	$variationfeature_adaptor->dbc->disconnect_if_idle;
 	my $transcriptvariation_adaptor = $self->{config}->{transcriptvariation_adaptor};
+	$transcriptvariation_adaptor->dbc->disconnect_if_idle;
     my $genemember_adaptor = $self->{config}->{genemember_adaptor};
+    $genemember_adaptor->dbc->disconnect_if_idle;
     my $homology_adaptor = $self->{config}->{homology_adaptor};
+    $homology_adaptor->dbc->disconnect_if_idle;
 
 	#Define arrays and hashes
 	my @variants = ();
@@ -257,13 +262,13 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 				$peptide{$basegene} = $coord->start;
 	          	my $num_residues = $simplealign->num_residues;
 	          	next if ($peptide{$basegene} > $num_residues);
-	          	print "Basegene: ";
-	          	print Dumper($genename{$basegene});
-	 			print "Paragene: ";
-	 			print Dumper($genename{$para_gene});
+	    #       	print "Basegene: ";
+	    #       	print Dumper($genename{$basegene});
+	 			# print "Paragene: ";
+	 			# print Dumper($genename{$para_gene});
 	 			$col = $simplealign->column_from_residue_number($ENSPid{$basegene}, $peptide{$basegene});
-				print "col: ";
-				print Dumper($col);
+				# print "col: ";
+				# print Dumper($col);
 				# next if (!$col);
 				# next if (! defined $col);
 				if (!$col) {
@@ -274,11 +279,11 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 					print "col is not defined!\n";
 					next;
 				}
-				print "fullseq: ";
-				print Dumper(%fullseq);
+				# print "fullseq: ";
+				# print Dumper(%fullseq);
 
-				print "fullseq_para_gene: ";
-				print Dumper($fullseq{$para_gene});
+				# print "fullseq_para_gene: ";
+				# print Dumper($fullseq{$para_gene});
 
 				if (! defined $fullseq{$para_gene}) {
 					print "fullseq_para_gene not defined\n";
@@ -286,11 +291,11 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 				}
 
 				$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);	
-				print "peptide_coord: ";
-				print Dumper(%peptide_coord);
+				# print "peptide_coord: ";
+				# print Dumper(%peptide_coord);
 		
-				print "para_peptide_coord: ";
-				print Dumper($peptide_coord{$para_gene});
+				# print "para_peptide_coord: ";
+				# print Dumper($peptide_coord{$para_gene});
 
 				if (!defined $peptide_coord{$para_gene}) {
 					print "para_peptide_coord not defined\n";
@@ -319,8 +324,8 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 					}
 				}
 
-				print "peptide: ";
-				print Dumper($peptide{$para_gene});
+				# print "peptide: ";
+				# print Dumper($peptide{$para_gene});
 				# if (! defined $peptide_coord{$para_gene} || !$peptide_coord{$para_gene}) {
 					
 				# } else {
