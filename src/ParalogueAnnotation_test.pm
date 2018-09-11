@@ -122,6 +122,7 @@ sub run {#this is where most of the plugin logic should reside. When the VEP is 
 	#Define adaptors #Is this necessary after caching the adaptors above?
     my $genome_db_adaptor = $self->{config}->{genome_db_adaptor};
   	my $hg_adaptor = $self->{config}->{hg_adaptor}; 
+  	$hg_adaptor->dbc->disconnect_if_idle;
 	my $slice_adaptor = $self->{config}->{slice_adaptor};
 	my $transcript_adaptor = $self->{config}->{transcript_adaptor};
 	my $variationfeature_adaptor = $self->{config}->{variationfeature_adaptor};
