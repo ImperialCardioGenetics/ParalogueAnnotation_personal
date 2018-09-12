@@ -9,7 +9,7 @@ package ParalogueAnnotation_test;
 
 use strict;
 use warnings;
-
+use Data::Dumper;
 use Bio::EnsEMBL::Registry;
 Bio::EnsEMBL::Registry->set_reconnect_when_lost(1);
 use Bio::LocatableSeq;
@@ -232,8 +232,15 @@ sub run {
          			next if (!$col);
          			next if (!defined $col);
           			# next if (!defined $fullseq{$para_gene});
+          			print "fullseq: ";
+					print Dumper(%fullseq);
+
+					print "fullseq_para_gene: ";
+					print Dumper($fullseq{$para_gene});
  					$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);
  					# next if (!defined $peptide_coord{$para_gene});
+ 					print "peptide_coord: ";
+					print Dumper(%peptide_coord);
  					$peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
  					my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
  					my $codon_start = $var->start;
