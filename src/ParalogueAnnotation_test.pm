@@ -1,4 +1,4 @@
-package ParalogueAnnotation;
+package ParalogueAnnotation_test;
 #APIs installed this way will automatically be on the release/78 branch.
 #how to look at only missense?
 #test that all variables are actually used
