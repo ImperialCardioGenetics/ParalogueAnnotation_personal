@@ -231,9 +231,9 @@ sub run {
  					$col = $simplealign->column_from_residue_number($ENSPid{$basegene}, $peptide{$basegene});
          			next if (!$col);
          			next if (!defined $col);
-          			next if (!defined $fullseq{$para_gene});
+          			# next if (!defined $fullseq{$para_gene});
  					$peptide_coord{$para_gene} = $fullseq{$para_gene}->location_from_column($col);
- 					next if (!defined $peptide_coord{$para_gene});
+ 					# next if (!defined $peptide_coord{$para_gene});
  					$peptide{$para_gene} = $peptide_coord{$para_gene}->start; 
  					my ($var) = $trmapper{$para_gene}->pep2genomic($peptide{$para_gene}, $peptide{$para_gene});
  					my $codon_start = $var->start;
