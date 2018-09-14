@@ -28,26 +28,6 @@ source("src/Paralogous_var_align_functions.R")
 * investigate para z scores
 * investigate pfam meta domains
 
-### Manuscript Plan
-* New tool to show (more likely Erica will write up)
-* Contrast to previous studies, is genome wide validated
-* Describe implementation and how to use
-    + vep plugin lib
-* Provide additional descriptive statistics of input (clinvar) data, e.g. number of genes with paralogues, number of disease genes etc.
-* Paralogue annotate P/LP with P/LP; paralogue annotate B/LB with P/LP
-    + generate confusion matrices for above
-* can PA also predict benign variants as well as pathogenic?
-* does paraZ score add additional benefit
-* additional test/validation dataset
-    + disease
-    + ExAC
-* ICC genes - EFs 
-* Distributability 
-    + plugin
-    + R shiny - vep web tool; integrated browser
-    + integrated into gnomad
-* Pfam domains
-
 ### Some interesting things to look at maybe
 * "Ohnologs"
 * Perform PA on paralogs from CPG (from @Modos2016) and non-CPG and see difference? 
@@ -81,6 +61,27 @@ source("src/Paralogous_var_align_functions.R")
 * Web tool
     + Keep design simple
     + Ask Mark
+* Make an experiment plan for transfering the framework over to structure space from sequence space
+
+### Manuscript Plan
+* New tool to show (more likely Erica will write up)
+* Contrast to previous studies, is genome wide validated
+* Describe implementation and how to use
+    + vep plugin lib
+* Provide additional descriptive statistics of input (clinvar) data, e.g. number of genes with paralogues, number of disease genes etc.
+* Paralogue annotate P/LP with P/LP; paralogue annotate B/LB with P/LP
+    + generate confusion matrices for above
+* can PA also predict benign variants as well as pathogenic?
+* does paraZ score add additional benefit
+* additional test/validation dataset
+    + disease
+    + ExAC
+* ICC genes - EFs 
+* Distributability 
+    + plugin
+    + R shiny - vep web tool; integrated browser
+    + integrated into gnomad
+* Pfam domains
 
 ### Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
