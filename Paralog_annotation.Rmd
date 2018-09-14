@@ -43,6 +43,8 @@ source("src/Paralogous_var_align_functions.R")
         - issues seem to be due to server timeouts from running long jobs
         - sent me https://www.ensembl.org/Help/Faq?id=567 for help
     + ask emily about MART3...?
+* Test if plugin works with build37 coords - would save effort in lift overs
+    + if not ask emily in same email
 * Make a list and write down overlapping genes that cause an issue like MART3, where only one of the overlapping genes has info reported back. Write it as an appendix.
     + Either report back in output file as special results or maybe TAKE OUT error catching for "Can't call methods: start/location_from_column" errors and see if server still times out. That way warnings will be reported.
 * All possible missense vcf for exome
@@ -53,6 +55,7 @@ source("src/Paralogous_var_align_functions.R")
 * Need to get all possible missense for genome as well, I.e. get a vcf containing all possible nt sub, not just all possible aa sub! 
     + NEED TO MAKE MY OWN
 * Rebenchmark with bigger test set (up to 100,000?)
+* Get setup on imperial hpc
 * ~~Data from denis~~ 
     + DONE - denis says that data I have is most up to date
     + Convert Para Z scores to 1 file for faster lookup and addition to tableize data.
