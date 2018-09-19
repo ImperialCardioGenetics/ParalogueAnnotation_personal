@@ -58,8 +58,9 @@ source("src/Paralogous_var_align_functions.R")
 * Rebenchmark with bigger test set (up to 100,000?)
     + edit the benchmarking script and rerun
 * Get setup on imperial hpc and make sure plugin works
-    + setup perl api installation and make sure $PERL5LIB is correct; check erica chat history 
-    + right installation instructions in github probably
+    + ~~setup perl api installation and make sure $PERL5LIB is correct; check erica chat history~~
+    + ~~right installation instructions in github probably~~
+    + check how to run qsub on hpc
 * ~~Data from denis~~ 
     + DONE - denis says that data I have is most up to date
     + Convert Para Z scores to 1 file for faster lookup and addition to tableize data.

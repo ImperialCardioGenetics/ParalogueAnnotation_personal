@@ -149,6 +149,80 @@ $(document).ready(function () {
 <li>investigate pfam meta domains</li>
 </ul>
 </div>
+<div id="some-interesting-things-to-look-at-maybe" class="section level3">
+<h3>Some interesting things to look at maybe</h3>
+<ul>
+<li>“Ohnologs”</li>
+<li>Perform PA on paralogs from CPG (from <span class="citation">Modos et al. (2016)</span>) and non-CPG and see difference?</li>
+<li>Integrating ortholog data to increase confidence calling</li>
+</ul>
+</div>
+<div id="obstacles-to-get-done" class="section level3">
+<h3>OBSTACLES TO GET DONE:</h3>
+<ul>
+<li>Debugging plugin
+<ul>
+<li>Have fixed “Can’t call methods: start/location_from_column” by implementing <code>if</code> loops to catch errors
+<ul>
+<li>check out RBM20 and its “2” paralogues (MATR3 and MATR3…) that were example of genes which variants were causing these problems.</li>
+<li>apparently there are other genes that have this same pattern where there are multiple genes with the same gene symbol but different IDs - James believes there exists a list of these genes somewhere (maybe ask Emily?)</li>
+<li>see if can get a list of consistent variants that cause these specific issues for Erica.</li>
+</ul></li>
+<li>“MySQL error has gone away” error seems to now have been fixed with the help from emily
+<ul>
+<li>issues seem to be due to server timeouts from running long jobs</li>
+<li>sent me <a href="https://www.ensembl.org/Help/Faq?id=567" class="uri">https://www.ensembl.org/Help/Faq?id=567</a> for help</li>
+</ul></li>
+<li>ask emily about MART3…?</li>
+</ul></li>
+<li>Test if plugin works with build37 coords - would save effort in lift overs
+<ul>
+<li>NOTE IT DOES NOT WORK FOR BUILD 37 COORDS</li>
+<li>if not ask emily in same email</li>
+</ul></li>
+<li>Make a list and write down overlapping genes that cause an issue like MART3, where only one of the overlapping genes has info reported back. Write it as an appendix.
+<ul>
+<li>Either report back in output file as special results or maybe TAKE OUT error catching for “Can’t call methods: start/location_from_column” errors and see if server still times out. That way warnings will be reported.</li>
+</ul></li>
+<li>All possible missense vcf for exome
+<ul>
+<li>be clear between all possible amino acid substitution and all possible nucleotide substitution
+<ul>
+<li>the sythetic exome from ExAC should contain all possible SNV</li>
+</ul></li>
+<li>would be good to also write up stat for how many aa sub there is for every nt sub in report</li>
+</ul></li>
+<li>Xiaolei’s all possible missense cm vcf does not contain all possible snv</li>
+<li>Need to get all possible missense for genome as well, I.e. get a vcf containing all possible nt sub, not just all possible aa sub!
+<ul>
+<li>NEED TO MAKE MY OWN</li>
+</ul></li>
+<li>Rebenchmark with bigger test set (up to 100,000?)
+<ul>
+<li>edit the benchmarking script and rerun</li>
+</ul></li>
+<li>Get setup on imperial hpc and make sure plugin works
+<ul>
+<li>setup perl api installation and make sure $PERL5LIB is correct; check erica chat history</li>
+<li>right installation instructions in github probably</li>
+</ul></li>
+<li><del>Data from denis</del>
+<ul>
+<li>DONE - denis says that data I have is most up to date</li>
+<li>Convert Para Z scores to 1 file for faster lookup and addition to tableize data.</li>
+</ul></li>
+<li>Data from henrike
+<ul>
+<li>waiting, will send me data when ready</li>
+</ul></li>
+<li>Web tool
+<ul>
+<li>Keep design simple</li>
+<li>Ask Mark</li>
+</ul></li>
+<li>Make an experiment plan for transfering the framework over to structure space from sequence space</li>
+</ul>
+</div>
 <div id="manuscript-plan" class="section level3">
 <h3>Manuscript Plan</h3>
 <ul>
@@ -178,74 +252,6 @@ $(document).ready(function () {
 <li>integrated into gnomad</li>
 </ul></li>
 <li>Pfam domains</li>
-</ul>
-</div>
-<div id="some-interesting-things-to-look-at-maybe" class="section level3">
-<h3>Some interesting things to look at maybe</h3>
-<ul>
-<li>“Ohnologs”</li>
-<li>Perform PA on paralogs from CPG (from <span class="citation">Modos et al. (2016)</span>) and non-CPG and see difference?</li>
-<li>Integrating ortholog data to increase confidence calling</li>
-</ul>
-</div>
-<div id="obstacles-to-get-done" class="section level3">
-<h3>OBSTACLES TO GET DONE:</h3>
-<ul>
-<li>Debugging plugin
-<ul>
-<li>Have fixed “Can’t call methods: start/location_from_column” by implementing <code>if</code> loops to catch errors
-<ul>
-<li>check out RBM20 and its “2” paralogues (MATR3 and MATR3…) that were example of genes which variants were causing these problems.</li>
-<li>apparently there are other genes that have this same pattern where there are multiple genes with the same gene symbol but different IDs - James believes there exists a list of these genes somewhere (maybe ask Emily?)</li>
-<li>see if can get a list of consistent variants that cause these specific issues for Erica.</li>
-</ul></li>
-<li><del>BUT still getting DBSQL connection errors. Suspect that it is indeed due to size of input vcf. Specifically not raw number of variants in vcf, but number of specific variants (maybe number of variants from same gene?)</del></li>
-<li><del>Seems to affect all missense artificial vcf only so far</del>
-<ul>
-<li><del>a 9965 variants vcf containing 6333 MYH7 variants and 3632 MYBPC3 variants throws a SQL connection error starting at variant postion 14 23425730</del></li>
-<li><del>removing one variant (9964) fixes this problem - runs fine</del></li>
-<li><del>BUT a 12850 variants vcf containing only MYH7 variants throws no error at all….WHAT?!?!</del></li>
-<li><del>possibly an issue with the system cluster - TRY RUNNING ON IMPERIAL HPC</del></li>
-</ul></li>
-<li><del>The clinvar vcf (60,000+ variants) did not have this problem!!!</del></li>
-<li><del>Have sent email to emily:</del>
-<ul>
-<li><del>actual plugin seems to be able to handle more variants than test plugin as the extra print statements seem to cause the sql error earlier…DON’T KNOW WHY!! Will ignore for now as not main priority.</del></li>
-<li><del>sent emily the actual plugin with example that doesn’t work.</del></li>
-</ul></li>
-<li>“MySQL error has gone away” error seems to now have been fixed with the help from emily
-<ul>
-<li>issues seem to be due to server timeouts from running long jobs</li>
-<li>sent me <a href="https://www.ensembl.org/Help/Faq?id=567" class="uri">https://www.ensembl.org/Help/Faq?id=567</a> for help</li>
-</ul></li>
-<li>ask emily about MART3…?</li>
-</ul></li>
-<li>All possible missense vcf for exome
-<ul>
-<li>be clear between all possible amino acid substitution and all possible nucleotide substitution
-<ul>
-<li>the sythetic exome from ExAC should contain all possible SNV</li>
-</ul></li>
-<li>would be good to also write up stat for how many aa sub there is for every nt sub in report</li>
-</ul></li>
-<li>Xiaolei’s all possible missense cm vcf does not contain all possible snv</li>
-<li>Need to get all possible missense for genome as well, I.e. get a vcf containing all possible nt sub, not just all possible aa sub!
-<ul>
-<li>NEED TO MAKE MY OWN</li>
-</ul></li>
-<li><del>Data from denis</del>
-<ul>
-<li>DONE - denis says that data I have is most up to date</li>
-</ul></li>
-<li>Data from henrike
-<ul>
-<li>waiting, will send me data when ready</li>
-</ul></li>
-<li>Web tool
-<ul>
-<li>Keep design simple</li>
-<li>Ask Mark</li>
-</ul></li>
 </ul>
 </div>
 <div id="introduction" class="section level3">
@@ -306,8 +312,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 
 }&quot;)
 pipeline</code></pre>
-<div id="htmlwidget-6eaf9bd66c428a6888d7" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6eaf9bd66c428a6888d7">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-11306d13e0fe3134ddb3" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-11306d13e0fe3134ddb3">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-terms" class="section level4">
 <h4>Statistical terms</h4>
