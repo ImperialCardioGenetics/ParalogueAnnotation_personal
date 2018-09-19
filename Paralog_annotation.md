@@ -26,6 +26,48 @@ always_allow_html: yes
 * investigate para z scores
 * investigate pfam meta domains
 
+### Some interesting things to look at maybe
+* "Ohnologs"
+* Perform PA on paralogs from CPG (from @Modos2016) and non-CPG and see difference? 
+* Integrating ortholog data to increase confidence calling 
+
+### OBSTACLES TO GET DONE:
+* Debugging plugin
+    + Have fixed "Can't call methods: start/location_from_column" by implementing `if` loops to catch errors
+        - check out RBM20 and its "2" paralogues (MATR3 and MATR3...) that were example of genes which variants were causing these problems.
+        - apparently there are other genes that have this same pattern where there are multiple genes with the same gene symbol but different IDs - James believes there exists a list of these genes somewhere (maybe ask Emily?)
+        - see if can get a list of consistent variants that cause these specific issues for Erica.
+    + "MySQL error has gone away" error seems to now have been fixed with the help from emily
+        - issues seem to be due to server timeouts from running long jobs
+        - sent me https://www.ensembl.org/Help/Faq?id=567 for help
+    + ask emily about MART3...?
+* Test if plugin works with build37 coords - would save effort in lift overs
+    + NOTE IT DOES NOT WORK FOR BUILD 37 COORDS
+    + if not ask emily in same email
+* Make a list and write down overlapping genes that cause an issue like MART3, where only one of the overlapping genes has info reported back. Write it as an appendix.
+    + Either report back in output file as special results or maybe TAKE OUT error catching for "Can't call methods: start/location_from_column" errors and see if server still times out. That way warnings will be reported.
+* All possible missense vcf for exome
+    + be clear between all possible amino acid substitution and all possible nucleotide substitution
+        - the sythetic exome from ExAC should contain all possible SNV
+    + would be good to also write up stat for how many aa sub there is for every nt sub in report
+* Xiaolei's all possible missense cm vcf does not contain all possible snv
+* Need to get all possible missense for genome as well, I.e. get a vcf containing all possible nt sub, not just all possible aa sub! 
+    + NEED TO MAKE MY OWN
+* Rebenchmark with bigger test set (up to 100,000?)
+    + edit the benchmarking script and rerun
+* Get setup on imperial hpc and make sure plugin works
+    + setup perl api installation and make sure $PERL5LIB is correct; check erica chat history 
+    + right installation instructions in github probably
+* ~~Data from denis~~ 
+    + DONE - denis says that data I have is most up to date
+    + Convert Para Z scores to 1 file for faster lookup and addition to tableize data.
+* Data from henrike
+    + waiting, will send me data when ready
+* Web tool
+    + Keep design simple
+    + Ask Mark
+* Make an experiment plan for transfering the framework over to structure space from sequence space
+
 ### Manuscript Plan
 * New tool to show (more likely Erica will write up)
 * Contrast to previous studies, is genome wide validated
@@ -45,46 +87,6 @@ always_allow_html: yes
     + R shiny - vep web tool; integrated browser
     + integrated into gnomad
 * Pfam domains
-
-### Some interesting things to look at maybe
-* "Ohnologs"
-* Perform PA on paralogs from CPG (from @Modos2016) and non-CPG and see difference? 
-* Integrating ortholog data to increase confidence calling 
-
-### OBSTACLES TO GET DONE:
-* Debugging plugin
-    + Have fixed "Can't call methods: start/location_from_column" by implementing `if` loops to catch errors
-        - check out RBM20 and its "2" paralogues (MATR3 and MATR3...) that were example of genes which variants were causing these problems.
-        - apparently there are other genes that have this same pattern where there are multiple genes with the same gene symbol but different IDs - James believes there exists a list of these genes somewhere (maybe ask Emily?)
-        - see if can get a list of consistent variants that cause these specific issues for Erica.
-    + ~~BUT still getting DBSQL connection errors. Suspect that it is indeed due to size of input vcf. Specifically not raw number of variants in vcf, but number of specific variants (maybe number of variants from same gene?)~~
-    + ~~Seems to affect all missense artificial vcf only so far~~
-        - ~~a 9965 variants vcf containing 6333 MYH7 variants and 3632 MYBPC3 variants throws a SQL connection error starting at variant postion 14 23425730~~
-        - ~~removing one variant (9964) fixes this problem - runs fine~~
-        - ~~BUT a 12850 variants vcf containing only MYH7 variants throws no error at all....WHAT?!?!~~
-        - ~~possibly an issue with the system cluster - TRY RUNNING ON IMPERIAL HPC~~
-    + ~~The clinvar vcf (60,000+ variants) did not have this problem!!!~~
-    + ~~Have sent email to emily:~~
-        - ~~actual plugin seems to be able to handle more variants than test plugin as the extra print statements seem to cause the sql error earlier...DON'T KNOW WHY!! Will ignore for now as not main priority.~~
-        - ~~sent emily the actual plugin with example that doesn't work.~~
-    + "MySQL error has gone away" error seems to now have been fixed with the help from emily
-        - issues seem to be due to server timeouts from running long jobs
-        - sent me https://www.ensembl.org/Help/Faq?id=567 for help
-    + ask emily about MART3...?
-* All possible missense vcf for exome
-    + be clear between all possible amino acid substitution and all possible nucleotide substitution
-        - the sythetic exome from ExAC should contain all possible SNV
-    + would be good to also write up stat for how many aa sub there is for every nt sub in report
-* Xiaolei's all possible missense cm vcf does not contain all possible snv
-* Need to get all possible missense for genome as well, I.e. get a vcf containing all possible nt sub, not just all possible aa sub! 
-    + NEED TO MAKE MY OWN
-* ~~Data from denis~~ 
-    + DONE - denis says that data I have is most up to date
-* Data from henrike
-    + waiting, will send me data when ready
-* Web tool
-    + Keep design simple
-    + Ask Mark
 
 ### Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
@@ -161,8 +163,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 pipeline
 ```
 
-<!--html_preserve--><div id="htmlwidget-6eaf9bd66c428a6888d7" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6eaf9bd66c428a6888d7">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-11306d13e0fe3134ddb3" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-11306d13e0fe3134ddb3">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
