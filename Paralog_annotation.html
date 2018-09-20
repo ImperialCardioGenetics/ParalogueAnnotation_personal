@@ -177,9 +177,9 @@ $(document).ready(function () {
 </ul></li>
 <li>Test if plugin works with build37 coords - would save effort in lift overs
 <ul>
-<li>NOTE IT DOES NOT WORK FOR BUILD 37 COORDS</li>
-<li>if not ask emily in same email</li>
+<li>try running vep with <code>--port 3337</code> from emily’s email to use build 37</li>
 </ul></li>
+<li>Take a look at forking option for VEP to run faster</li>
 <li>Make a list and write down overlapping genes that cause an issue like MART3, where only one of the overlapping genes has info reported back. Write it as an appendix.
 <ul>
 <li>Either report back in output file as special results or maybe TAKE OUT error catching for “Can’t call methods: start/location_from_column” errors and see if server still times out. That way warnings will be reported.</li>
@@ -203,8 +203,9 @@ $(document).ready(function () {
 </ul></li>
 <li>Get setup on imperial hpc and make sure plugin works
 <ul>
-<li>setup perl api installation and make sure $PERL5LIB is correct; check erica chat history</li>
-<li>right installation instructions in github probably</li>
+<li><del>setup perl api installation and make sure $PERL5LIB is correct; check erica chat history</del></li>
+<li><del>right installation instructions in github probably</del></li>
+<li>check how to run qsub on hpc</li>
 </ul></li>
 <li><del>Data from denis</del>
 <ul>
@@ -241,8 +242,9 @@ $(document).ready(function () {
 <li>does paraZ score add additional benefit</li>
 <li>additional test/validation dataset
 <ul>
-<li>disease</li>
-<li>ExAC</li>
+<li>disease - Henrike?</li>
+<li>ExAC/gnomad</li>
+<li>all possible snv - synthetic vcf</li>
 </ul></li>
 <li>ICC genes - EFs</li>
 <li>Distributability
@@ -251,8 +253,77 @@ $(document).ready(function () {
 <li>R shiny - vep web tool; integrated browser</li>
 <li>integrated into gnomad</li>
 </ul></li>
-<li>Pfam domains</li>
+<li>Pfam domains - separate paper?</li>
 </ul>
+<div id="paper-layout" class="section level4">
+<h4>Paper Layout</h4>
+<p><strong>Abstract</strong></p>
+<ul>
+<li><em>do last as usual…</em></li>
+</ul>
+<p><strong>Introduction</strong></p>
+<ul>
+<li>Ref previous papers and the work James/Roddy performed. Show</li>
+</ul>
+<p><strong>Material and Methods</strong></p>
+<ul>
+<li>Ref Ensembl and Erica’s paper for VEP+plugin</li>
+<li>Own pipeline (python/R)</li>
+<li>Data used
+<ul>
+<li>Ref clinvar</li>
+<li>Ref Para Z scores</li>
+<li>Ref Exac/Gnomad
+<ul>
+<li>all possible snv</li>
+</ul></li>
+<li>Ref own clinical case/control cohorts</li>
+</ul></li>
+<li>statistical calculations
+<ul>
+<li>Precision/Sensitivity</li>
+<li>EFs</li>
+</ul></li>
+<li>Webtool</li>
+</ul>
+<p><strong>Results and Discussion</strong></p>
+<ul>
+<li>Clinvar
+<ul>
+<li>pathogenic set
+<ul>
+<li>whole set; cardiomyopathy/channelopathy subset?</li>
+</ul></li>
+<li>benign set (doesn’t work)</li>
+</ul></li>
+<li>Gnomad/Exac
+<ul>
+<li>all possible snv</li>
+</ul></li>
+<li>additional descriptive statistics and background knowledge of above</li>
+<li>Own filtering and Para Z scores improve precisions</li>
+<li>Limitations
+<ul>
+<li>Quality of alignments</li>
+<li>relianace on paralogues
+<ul>
+<li>reliance on variants in paralogues</li>
+</ul></li>
+</ul></li>
+<li>Solutions/Future Work
+<ul>
+<li>Different alignment algorithms?</li>
+<li>Pfam meta domains</li>
+</ul></li>
+</ul>
+<p><strong>Conclusion</strong></p>
+<ul>
+<li>New variants being sequenced rapidly</li>
+<li>Concept of Paralogue Annotation works</li>
+<li>Novel idea of variant classification by homologous prediction</li>
+<li>Future work to be done</li>
+</ul>
+</div>
 </div>
 <div id="introduction" class="section level3">
 <h3>Introduction</h3>
@@ -312,8 +383,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 
 }&quot;)
 pipeline</code></pre>
-<div id="htmlwidget-11306d13e0fe3134ddb3" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-11306d13e0fe3134ddb3">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ce9d8b60e53c32b70ed2" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ce9d8b60e53c32b70ed2">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-terms" class="section level4">
 <h4>Statistical terms</h4>
