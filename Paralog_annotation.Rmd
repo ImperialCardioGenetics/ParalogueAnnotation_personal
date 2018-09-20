@@ -90,11 +90,56 @@ source("src/Paralogous_var_align_functions.R")
     + plugin
     + R shiny - vep web tool; integrated browser
     + integrated into gnomad
-* Pfam domains
+* Pfam domains - separate paper?
 
 #### Paper Layout 
 **Abstract**
 
+* *do last as usual...*
+
+**Introduction**
+
+* Ref previous papers and the work James/Roddy performed. Show 
+
+**Material and Methods**
+
+* Ref Ensembl and Erica's paper for VEP+plugin 
+* Own pipeline (python/R)
+* Data used
+    + Ref clinvar
+    + Ref Para Z scores
+    + Ref Exac/Gnomad
+        - all possible snv
+    + Ref own clinical case/control cohorts
+* statistical calculations
+    + Precision/Sensitivity
+    + EFs
+* Webtool
+
+**Results and Discussion**
+
+* Clinvar
+    + pathogenic set
+        - whole set; cardiomyopathy/channelopathy subset?
+    + benign set (doesn't work)
+* Gnomad/Exac
+    + all possible snv
+* additional descriptive statistics and background knowledge of above
+* Own filtering and Para Z scores improve precisions
+* Limitations
+    + Quality of alignments
+    + relianace on paralogues
+        - reliance on variants in paralogues
+* Solutions/Future Work
+    + Different alignment algorithms?
+    + Pfam meta domains
+
+**Conclusion**
+
+* New variants being sequenced rapidly
+* Concept of Paralogue Annotation works
+* Novel idea of variant classification by homologous prediction
+* Future work to be done
 
 ### Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
