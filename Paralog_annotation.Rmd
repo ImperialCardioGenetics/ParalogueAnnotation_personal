@@ -82,14 +82,19 @@ source("src/Paralogous_var_align_functions.R")
 * can PA also predict benign variants as well as pathogenic?
 * does paraZ score add additional benefit
 * additional test/validation dataset
-    + disease
-    + ExAC
+    + disease - Henrike?
+    + ExAC/gnomad
+    + all possible snv - synthetic vcf
 * ICC genes - EFs 
 * Distributability 
     + plugin
     + R shiny - vep web tool; integrated browser
     + integrated into gnomad
 * Pfam domains
+
+#### Paper Layout 
+**Abstract**
+
 
 ### Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
