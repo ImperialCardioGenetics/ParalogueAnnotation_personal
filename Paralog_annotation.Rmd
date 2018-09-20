@@ -99,7 +99,11 @@ source("src/Paralogous_var_align_functions.R")
 
 **Introduction**
 
-* Ref previous papers and the work James/Roddy performed. Show 
+* New variants are being rapidly discovered
+* Ref previous papers and the work James/Roddy performed 
+* Have developed a new tool for researchers to use - ref Erica's paper
+* Have expanded this to bigger data sets/genome wide
+* In this paper, will show how Paralogue Annotation can be used as a way of variant classification
 
 **Material and Methods**
 
