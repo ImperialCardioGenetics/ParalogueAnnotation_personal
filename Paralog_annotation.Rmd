@@ -571,12 +571,12 @@ digraph boxes_and_circles {
 graph [overlap = true, fontsize = 10]
 
 node [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]
-'RBH cluster: 9'; 'Imperial HPC'; 'CX2: 9'; 'CX1(array): 10'; 'AX4(array): 10'
+'RBH cluster: 9'; 'Imperial HPC: 29'; 'CX1(array): 19'; 'AX4(array): 10';
 
 node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 'Total 38'; '1-9'; '10-19'; '20-29'; '30-38'
 
-'Total 38' -> 'RBH cluster: 9'; 'Total 38' -> 'Imperial HPC'; 'RBH cluster: 9' -> '1-9'; 'Imperial HPC' -> 'CX1(array): 10'; 'CX1(array): 10' -> '10-19'; 'Imperial HPC' -> 'AX4(array): 10'; 'AX4(array): 10' -> '20-29'; 'Imperial HPC' -> 'CX2: 9'; 'CX2: 9' -> '30-38'
+'Total 38' -> 'RBH cluster: 9'; 'Total 38' -> 'Imperial HPC: 29'; 'RBH cluster: 9' -> '1-9'; 'Imperial HPC: 29' -> 'CX1(array): 19'; 'CX1(array): 19' -> '10-19'; 'Imperial HPC: 29' -> 'AX4(array): 10'; 'AX4(array): 10' -> '20-29'; 'CX1(array): 19' -> '30-38'
 
 }")
 Gnomad_dataset_split
@@ -1677,3 +1677,5 @@ gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point()
 
 #### Ohnologs
 The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
+
+#### References

@@ -373,17 +373,17 @@ digraph boxes_and_circles {
 graph [overlap = true, fontsize = 10]
 
 node [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]
-'RBH cluster: 9'; 'Imperial HPC'; 'CX2: 9'; 'CX1(array): 10'; 'AX4(array): 10'
+'RBH cluster: 9'; 'Imperial HPC: 29'; 'CX1(array): 19'; 'AX4(array): 10';
 
 node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 'Total 38'; '1-9'; '10-19'; '20-29'; '30-38'
 
-'Total 38' -&gt; 'RBH cluster: 9'; 'Total 38' -&gt; 'Imperial HPC'; 'RBH cluster: 9' -&gt; '1-9'; 'Imperial HPC' -&gt; 'CX1(array): 10'; 'CX1(array): 10' -&gt; '10-19'; 'Imperial HPC' -&gt; 'AX4(array): 10'; 'AX4(array): 10' -&gt; '20-29'; 'Imperial HPC' -&gt; 'CX2: 9'; 'CX2: 9' -&gt; '30-38'
+'Total 38' -&gt; 'RBH cluster: 9'; 'Total 38' -&gt; 'Imperial HPC: 29'; 'RBH cluster: 9' -&gt; '1-9'; 'Imperial HPC: 29' -&gt; 'CX1(array): 19'; 'CX1(array): 19' -&gt; '10-19'; 'Imperial HPC: 29' -&gt; 'AX4(array): 10'; 'AX4(array): 10' -&gt; '20-29'; 'CX1(array): 19' -&gt; '30-38'
 
 }&quot;)
 Gnomad_dataset_split</code></pre>
-<div id="htmlwidget-df5bbec3aee6b76711c0" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-df5bbec3aee6b76711c0">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH cluster: 9\"; \"Imperial HPC\"; \"CX2: 9\"; \"CX1(array): 10\"; \"AX4(array): 10\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH cluster: 9\"; \"Total 38\" -> \"Imperial HPC\"; \"RBH cluster: 9\" -> \"1-9\"; \"Imperial HPC\" -> \"CX1(array): 10\"; \"CX1(array): 10\" -> \"10-19\"; \"Imperial HPC\" -> \"AX4(array): 10\"; \"AX4(array): 10\" -> \"20-29\"; \"Imperial HPC\" -> \"CX2: 9\"; \"CX2: 9\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4b3de38524195a65e641" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4b3de38524195a65e641">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH cluster: 9\"; \"Imperial HPC: 29\"; \"CX1(array): 19\"; \"AX4(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH cluster: 9\"; \"Total 38\" -> \"Imperial HPC: 29\"; \"RBH cluster: 9\" -> \"1-9\"; \"Imperial HPC: 29\" -> \"CX1(array): 19\"; \"CX1(array): 19\" -> \"10-19\"; \"Imperial HPC: 29\" -> \"AX4(array): 10\"; \"AX4(array): 10\" -> \"20-29\"; \"CX1(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="benchmarking-performance-of-the-plugin" class="section level4">
 <h4>Benchmarking performance of the plugin</h4>
@@ -410,8 +410,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 
 }&quot;)
 pipeline</code></pre>
-<div id="htmlwidget-1e2ab2fcbf00f4ad0ca2" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1e2ab2fcbf00f4ad0ca2">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-13f1aec5d1447bc0e6b7" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-13f1aec5d1447bc0e6b7">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-terms" class="section level4">
 <h4>Statistical terms</h4>
@@ -528,6 +528,9 @@ pipeline</code></pre>
 <div id="ohnologs" class="section level4">
 <h4>Ohnologs</h4>
 <p>The “2R”&quot; hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)<span class="citation">(Ohno, Wolf, and Atkin 1968)</span>. Paralogues that arose from this WGD are known as ohnologs. <span class="citation">Singh et al. (2014)</span> showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.</p>
+</div>
+<div id="references" class="section level4 unnumbered">
+<h4>References</h4>
 <div id="refs" class="references">
 <div id="ref-Barshir2018">
 <p>Barshir, Ruth, Idan Hekselman, Netta Shemesh, Moran Sharon, Lena Novack, and Esti Yeger-Lotem. 2018. “Role of Duplicate Genes in Determining the Tissue-Selectivity of Hereditary Diseases.” <em>PLoS Genetics</em> 14 (5): e1007327.</p>
