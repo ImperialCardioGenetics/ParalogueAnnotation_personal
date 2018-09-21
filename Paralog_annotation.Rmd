@@ -70,6 +70,7 @@ source("src/Paralogous_var_align_functions.R")
     + Keep design simple
     + Ask Mark
 * Make an experiment plan for transfering the framework over to structure space from sequence space
+* Make all input data reproducible
 
 ### Manuscript Plan
 * New tool to show (more likely Erica will write up)
