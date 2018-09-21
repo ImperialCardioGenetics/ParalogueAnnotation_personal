@@ -222,6 +222,7 @@ $(document).ready(function () {
 <li>Ask Mark</li>
 </ul></li>
 <li>Make an experiment plan for transfering the framework over to structure space from sequence space</li>
+<li>Make all input data reproducible</li>
 </ul>
 </div>
 <div id="manuscript-plan" class="section level3">
@@ -293,7 +294,7 @@ $(document).ready(function () {
 <p><strong>Results and Discussion</strong></p>
 <ul>
 <li>additional descriptive statistics and background knowledge of below</li>
-<li>Clinvar validation
+<li>Analysis of Clinvar validation
 <ul>
 <li>pathogenic set
 <ul>
@@ -302,7 +303,7 @@ $(document).ready(function () {
 <li>benign set (doesn’t work)</li>
 <li>Own filtering and Para Z scores improve precisions</li>
 </ul></li>
-<li>EFs validation</li>
+<li>Analysis of EFs validation from OMIN data</li>
 <li>Gnomad/Exac
 <ul>
 <li>all possible snv</li>
@@ -319,7 +320,7 @@ $(document).ready(function () {
 <li>Solutions/Future Work
 <ul>
 <li>Different alignment algorithms?</li>
-<li>(Don’t mention Pfam meta domains specificallyl)</li>
+<li>(Don’t mention Pfam meta domains specifically, but something along the lines of finding “optimal” homology)</li>
 </ul></li>
 </ul>
 <p><strong>Conclusion</strong></p>
@@ -363,6 +364,26 @@ $(document).ready(function () {
 <div id="datasets" class="section level4">
 <h4>Datasets</h4>
 <p>Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang <em>et al.</em> <span class="citation">(Zhang et al. 2017)</span>.</p>
+<p>EFs calculated from OMGL and LMM datasets taken from previous <span class="citation">Walsh et al. (2017)</span> publication.</p>
+<p>Exac and Gnomad data from <span class="citation">Lek et al. (2016)</span>.</p>
+<p>For Gnomad run:</p>
+<pre class="r"><code>library(DiagrammeR)
+Gnomad_dataset_split = DiagrammeR::grViz(&quot;
+digraph boxes_and_circles {
+graph [overlap = true, fontsize = 10]
+
+node [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]
+'RBH cluster: 9'; 'Imperial HPC'; 'CX2: 9'; 'CX1(array): 10'; 'AX4(array): 10'
+
+node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
+'Total 38'; '1-9'; '10-19'; '20-29'; '30-38'
+
+'Total 38' -&gt; 'RBH cluster: 9'; 'Total 38' -&gt; 'Imperial HPC'; 'RBH cluster: 9' -&gt; '1-9'; 'Imperial HPC' -&gt; 'CX1(array): 10'; 'CX1(array): 10' -&gt; '10-19'; 'Imperial HPC' -&gt; 'AX4(array): 10'; 'AX4(array): 10' -&gt; '20-29'; 'Imperial HPC' -&gt; 'CX2: 9'; 'CX2: 9' -&gt; '30-38'
+
+}&quot;)
+Gnomad_dataset_split</code></pre>
+<div id="htmlwidget-df5bbec3aee6b76711c0" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-df5bbec3aee6b76711c0">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH cluster: 9\"; \"Imperial HPC\"; \"CX2: 9\"; \"CX1(array): 10\"; \"AX4(array): 10\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH cluster: 9\"; \"Total 38\" -> \"Imperial HPC\"; \"RBH cluster: 9\" -> \"1-9\"; \"Imperial HPC\" -> \"CX1(array): 10\"; \"CX1(array): 10\" -> \"10-19\"; \"Imperial HPC\" -> \"AX4(array): 10\"; \"AX4(array): 10\" -> \"20-29\"; \"Imperial HPC\" -> \"CX2: 9\"; \"CX2: 9\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="benchmarking-performance-of-the-plugin" class="section level4">
 <h4>Benchmarking performance of the plugin</h4>
@@ -389,8 +410,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 
 }&quot;)
 pipeline</code></pre>
-<div id="htmlwidget-649663005f7fb846b1db" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-649663005f7fb846b1db">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-1e2ab2fcbf00f4ad0ca2" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1e2ab2fcbf00f4ad0ca2">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-terms" class="section level4">
 <h4>Statistical terms</h4>
@@ -511,6 +532,9 @@ pipeline</code></pre>
 <div id="ref-Barshir2018">
 <p>Barshir, Ruth, Idan Hekselman, Netta Shemesh, Moran Sharon, Lena Novack, and Esti Yeger-Lotem. 2018. “Role of Duplicate Genes in Determining the Tissue-Selectivity of Hereditary Diseases.” <em>PLoS Genetics</em> 14 (5): e1007327.</p>
 </div>
+<div id="ref-Lek2016">
+<p>Lek, Monkol, Konrad J. Karczewski, Eric V. Minikel, Kaitlin E. Samocha, Eric Banks, Timothy Fennell, Anne H. O’Donnell-Luria, James S. Ware, Andrew J. Hill, and Beryl B. Cummings. 2016. “Analysis of Protein-Coding Genetic Variation in 60,706 Humans.” <em>Nature</em> 536 (7616): 285.</p>
+</div>
 <div id="ref-Modos2016">
 <p>Modos, Dezso, Johanne Brooks, David Fazekas, Eszter Ari, Tibor Vellai, Peter Csermely, Tamas Korcsmaros, and Katalin Lenti. 2016. “Identification of Critical Paralog Groups with Indispensable Roles in the Regulation of Signaling Flow.” <em>Scientific Reports</em> 6: 38588.</p>
 </div>
@@ -522,6 +546,9 @@ pipeline</code></pre>
 </div>
 <div id="ref-Walsh2014">
 <p>Walsh, R., N. S. Peters, S. A. Cook, and J. S. Ware. 2014. “Paralogue Annotation Identifies Novel Pathogenic Variants in Patients with Brugada Syndrome and Catecholaminergic Polymorphic Ventricular Tachycardia.” <em>Journal of Medical Genetics</em> 51 (1): 35–44.</p>
+</div>
+<div id="ref-Walsh2017">
+<p>Walsh, Roddy, Rachel Buchan, Alicja Wilk, Shibu John, Leanne E. Felkin, Kate L. Thomson, Tang H. Chiaw, Calvin C. W. Loong, Chee J. Pua, and Claire Raphael. 2017. “Defining the Genetic Architecture of Hypertrophic Cardiomyopathy: Re-Evaluating the Role of Non-Sarcomeric Genes.” <em>European Heart Journal</em> 38 (46): 3461–8.</p>
 </div>
 <div id="ref-Ware2012">
 <p>Ware, James S., Roddy Walsh, Fiona Cunningham, Ewan Birney, and Stuart A. Cook. 2012. “Paralogous Annotation of Disease‐causing Variants in Long Qt Syndrome Genes.” <em>Human Mutation</em> 33 (8): 1188–91.</p>
