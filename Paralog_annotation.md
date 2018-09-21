@@ -68,6 +68,7 @@ always_allow_html: yes
     + Keep design simple
     + Ask Mark
 * Make an experiment plan for transfering the framework over to structure space from sequence space
+* Make all input data reproducible
 
 ### Manuscript Plan
 * New tool to show (more likely Erica will write up)
@@ -121,12 +122,12 @@ always_allow_html: yes
 **Results and Discussion**
 
 * additional descriptive statistics and background knowledge of below
-* Clinvar validation
+* Analysis of Clinvar validation
     + pathogenic set
         - whole set; cardiomyopathy/channelopathy subset?
     + benign set (doesn't work)
     + Own filtering and Para Z scores improve precisions
-* EFs validation
+* Analysis of EFs validation from OMIN data
 * Gnomad/Exac
     + all possible snv
 * Webtool
@@ -136,7 +137,7 @@ always_allow_html: yes
         - reliance on variants in paralogues
 * Solutions/Future Work
     + Different alignment algorithms?
-    + (Don't mention Pfam meta domains specificallyl)
+    + (Don't mention Pfam meta domains specifically, but something along the lines of finding "optimal" homology)
 
 **Conclusion**
 
@@ -191,6 +192,33 @@ If __--split_by_transcript__ is used then the code above is sufficient. Otherwis
 #### Datasets
 Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. 
 
+EFs calculated from OMGL and LMM datasets taken from previous @Walsh2017 publication.
+
+Exac and Gnomad data from @Lek2016. 
+
+For Gnomad run: 
+
+```r
+library(DiagrammeR)
+Gnomad_dataset_split = DiagrammeR::grViz("
+digraph boxes_and_circles {
+graph [overlap = true, fontsize = 10]
+
+node [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]
+'RBH cluster: 9'; 'Imperial HPC'; 'CX2: 9'; 'CX1(array): 10'; 'AX4(array): 10'
+
+node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
+'Total 38'; '1-9'; '10-19'; '20-29'; '30-38'
+
+'Total 38' -> 'RBH cluster: 9'; 'Total 38' -> 'Imperial HPC'; 'RBH cluster: 9' -> '1-9'; 'Imperial HPC' -> 'CX1(array): 10'; 'CX1(array): 10' -> '10-19'; 'Imperial HPC' -> 'AX4(array): 10'; 'AX4(array): 10' -> '20-29'; 'Imperial HPC' -> 'CX2: 9'; 'CX2: 9' -> '30-38'
+
+}")
+Gnomad_dataset_split
+```
+
+<!--html_preserve--><div id="htmlwidget-df5bbec3aee6b76711c0" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-df5bbec3aee6b76711c0">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH cluster: 9\"; \"Imperial HPC\"; \"CX2: 9\"; \"CX1(array): 10\"; \"AX4(array): 10\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH cluster: 9\"; \"Total 38\" -> \"Imperial HPC\"; \"RBH cluster: 9\" -> \"1-9\"; \"Imperial HPC\" -> \"CX1(array): 10\"; \"CX1(array): 10\" -> \"10-19\"; \"Imperial HPC\" -> \"AX4(array): 10\"; \"AX4(array): 10\" -> \"20-29\"; \"Imperial HPC\" -> \"CX2: 9\"; \"CX2: 9\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+
 #### Benchmarking performance of the plugin
 
 __/data/Share/nick/Paralog_Anno/multi_vcf_extractor_benchmark.py__ is used to demonstrate speed at which VEP+Plugin takes to run
@@ -220,8 +248,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 pipeline
 ```
 
-<!--html_preserve--><div id="htmlwidget-649663005f7fb846b1db" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-649663005f7fb846b1db">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-1e2ab2fcbf00f4ad0ca2" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1e2ab2fcbf00f4ad0ca2">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.

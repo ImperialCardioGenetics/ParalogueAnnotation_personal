@@ -124,12 +124,12 @@ source("src/Paralogous_var_align_functions.R")
 **Results and Discussion**
 
 * additional descriptive statistics and background knowledge of below
-* Clinvar validation
+* Analysis of Clinvar validation
     + pathogenic set
         - whole set; cardiomyopathy/channelopathy subset?
     + benign set (doesn't work)
     + Own filtering and Para Z scores improve precisions
-* EFs validation
+* Analysis of EFs validation from OMIN data
 * Gnomad/Exac
     + all possible snv
 * Webtool
@@ -558,6 +558,29 @@ os.system("mv " + input_file + "_tableized_temp " + input_file + "_tableized")
 
 #### Datasets
 Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. 
+
+EFs calculated from OMGL and LMM datasets taken from previous @Walsh2017 publication.
+
+Exac and Gnomad data from @Lek2016. 
+
+For Gnomad run: 
+```{r}
+library(DiagrammeR)
+Gnomad_dataset_split = DiagrammeR::grViz("
+digraph boxes_and_circles {
+graph [overlap = true, fontsize = 10]
+
+node [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]
+'RBH cluster: 9'; 'Imperial HPC'; 'CX2: 9'; 'CX1(array): 10'; 'AX4(array): 10'
+
+node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
+'Total 38'; '1-9'; '10-19'; '20-29'; '30-38'
+
+'Total 38' -> 'RBH cluster: 9'; 'Total 38' -> 'Imperial HPC'; 'RBH cluster: 9' -> '1-9'; 'Imperial HPC' -> 'CX1(array): 10'; 'CX1(array): 10' -> '10-19'; 'Imperial HPC' -> 'AX4(array): 10'; 'AX4(array): 10' -> '20-29'; 'Imperial HPC' -> 'CX2: 9'; 'CX2: 9' -> '30-38'
+
+}")
+Gnomad_dataset_split
+```
 
 #### Benchmarking performance of the plugin
 
