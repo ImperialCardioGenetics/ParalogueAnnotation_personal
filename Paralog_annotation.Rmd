@@ -139,7 +139,7 @@ source("src/Paralogous_var_align_functions.R")
         - reliance on variants in paralogues
 * Solutions/Future Work
     + Different alignment algorithms?
-    + (Don't mention Pfam meta domains specificallyl)
+    + (Don't mention Pfam meta domains specifically, but something along the lines of finding "optimal" homology)
 
 **Conclusion**
 
