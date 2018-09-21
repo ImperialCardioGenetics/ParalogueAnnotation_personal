@@ -263,7 +263,11 @@ $(document).ready(function () {
 </ul>
 <p><strong>Introduction</strong></p>
 <ul>
-<li>Ref previous papers and the work James/Roddy performed. Show</li>
+<li>New variants are being rapidly discovered</li>
+<li>Ref previous papers and the work James/Roddy performed</li>
+<li>Have developed a new tool for researchers to use - ref Erica’s paper</li>
+<li>Have expanded this to bigger data sets/genome wide</li>
+<li>In this paper, will show how Paralogue Annotation can be used as a way of variant classification</li>
 </ul>
 <p><strong>Material and Methods</strong></p>
 <ul>
@@ -288,20 +292,22 @@ $(document).ready(function () {
 </ul>
 <p><strong>Results and Discussion</strong></p>
 <ul>
-<li>Clinvar
+<li>additional descriptive statistics and background knowledge of below</li>
+<li>Clinvar validation
 <ul>
 <li>pathogenic set
 <ul>
 <li>whole set; cardiomyopathy/channelopathy subset?</li>
 </ul></li>
 <li>benign set (doesn’t work)</li>
+<li>Own filtering and Para Z scores improve precisions</li>
 </ul></li>
+<li>EFs validation</li>
 <li>Gnomad/Exac
 <ul>
 <li>all possible snv</li>
 </ul></li>
-<li>additional descriptive statistics and background knowledge of above</li>
-<li>Own filtering and Para Z scores improve precisions</li>
+<li>Webtool</li>
 <li>Limitations
 <ul>
 <li>Quality of alignments</li>
@@ -313,7 +319,7 @@ $(document).ready(function () {
 <li>Solutions/Future Work
 <ul>
 <li>Different alignment algorithms?</li>
-<li>Pfam meta domains</li>
+<li>(Don’t mention Pfam meta domains specificallyl)</li>
 </ul></li>
 </ul>
 <p><strong>Conclusion</strong></p>
@@ -383,8 +389,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 
 }&quot;)
 pipeline</code></pre>
-<div id="htmlwidget-ce9d8b60e53c32b70ed2" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ce9d8b60e53c32b70ed2">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-649663005f7fb846b1db" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-649663005f7fb846b1db">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-terms" class="section level4">
 <h4>Statistical terms</h4>

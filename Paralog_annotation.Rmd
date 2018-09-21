@@ -122,21 +122,23 @@ source("src/Paralogous_var_align_functions.R")
 
 **Results and Discussion**
 
-* Clinvar
+* additional descriptive statistics and background knowledge of below
+* Clinvar validation
     + pathogenic set
         - whole set; cardiomyopathy/channelopathy subset?
     + benign set (doesn't work)
+    + Own filtering and Para Z scores improve precisions
+* EFs validation
 * Gnomad/Exac
     + all possible snv
-* additional descriptive statistics and background knowledge of above
-* Own filtering and Para Z scores improve precisions
+* Webtool
 * Limitations
     + Quality of alignments
     + relianace on paralogues
         - reliance on variants in paralogues
 * Solutions/Future Work
     + Different alignment algorithms?
-    + Pfam meta domains
+    + (Don't mention Pfam meta domains specificallyl)
 
 **Conclusion**
 
