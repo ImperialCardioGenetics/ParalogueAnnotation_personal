@@ -32,6 +32,7 @@ source("src/Paralogous_var_align_functions.R")
 * "Ohnologs"
 * Perform PA on paralogs from CPG (from @Modos2016) and non-CPG and see difference? 
 * Integrating ortholog data to increase confidence calling 
+* Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
 * Debugging plugin
@@ -123,7 +124,7 @@ source("src/Paralogous_var_align_functions.R")
 
 **Results and Discussion**
 
-* additional descriptive statistics and background knowledge of below
+* Additional descriptive statistics and background knowledge of below
 * Analysis of Clinvar validation
     + pathogenic set
         - whole set; cardiomyopathy/channelopathy subset?
