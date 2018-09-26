@@ -4,6 +4,8 @@ title: "Paralog Annotation Notes"
 output: 
   html_document:
     keep_md: true
+    theme: journal
+    highlight: espresso
 
 editor_options: 
   chunk_output_type: inline
@@ -30,6 +32,7 @@ always_allow_html: yes
 * "Ohnologs"
 * Perform PA on paralogs from CPG (from @Modos2016) and non-CPG and see difference? 
 * Integrating ortholog data to increase confidence calling 
+* Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
 * Debugging plugin
@@ -41,9 +44,9 @@ always_allow_html: yes
         - issues seem to be due to server timeouts from running long jobs
         - sent me https://www.ensembl.org/Help/Faq?id=567 for help
     + ask emily about MART3...?
-* Test if plugin works with build37 coords - would save effort in lift overs
-    + try running vep with `--port 3337` from emily's email to use build 37
-* Take a look at forking option for VEP to run faster
+* Use `--port 3337` with `--assembly GRCh37` as VEP arguements to run in build 37 coords
+* STILL HAVE YET TO ACCOUNT FOR CONFLICTING P/B VARIANTS IN SCRIPTS
+* Take a look at forking option for VEP to run faster?
 * Make a list and write down overlapping genes that cause an issue like MART3, where only one of the overlapping genes has info reported back. Write it as an appendix.
     + Either report back in output file as special results or maybe TAKE OUT error catching for "Can't call methods: start/location_from_column" errors and see if server still times out. That way warnings will be reported.
 * All possible missense vcf for exome
@@ -58,7 +61,7 @@ always_allow_html: yes
 * Get setup on imperial hpc and make sure plugin works
     + ~~setup perl api installation and make sure $PERL5LIB is correct; check erica chat history~~
     + ~~right installation instructions in github probably~~
-    + check how to run qsub on hpc
+    + run 30-38 failed, rerun
 * ~~Data from denis~~ 
     + DONE - denis says that data I have is most up to date
     + Convert Para Z scores to 1 file for faster lookup and addition to tableize data.
@@ -121,7 +124,7 @@ always_allow_html: yes
 
 **Results and Discussion**
 
-* additional descriptive statistics and background knowledge of below
+* Additional descriptive statistics and background knowledge of below
 * Analysis of Clinvar validation
     + pathogenic set
         - whole set; cardiomyopathy/channelopathy subset?
@@ -216,8 +219,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 Gnomad_dataset_split
 ```
 
-<!--html_preserve--><div id="htmlwidget-4b3de38524195a65e641" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4b3de38524195a65e641">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH cluster: 9\"; \"Imperial HPC: 29\"; \"CX1(array): 19\"; \"AX4(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH cluster: 9\"; \"Total 38\" -> \"Imperial HPC: 29\"; \"RBH cluster: 9\" -> \"1-9\"; \"Imperial HPC: 29\" -> \"CX1(array): 19\"; \"CX1(array): 19\" -> \"10-19\"; \"Imperial HPC: 29\" -> \"AX4(array): 10\"; \"AX4(array): 10\" -> \"20-29\"; \"CX1(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-f73f30eb34351cc55a83" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f73f30eb34351cc55a83">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH cluster: 9\"; \"Imperial HPC: 29\"; \"CX1(array): 19\"; \"AX4(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH cluster: 9\"; \"Total 38\" -> \"Imperial HPC: 29\"; \"RBH cluster: 9\" -> \"1-9\"; \"Imperial HPC: 29\" -> \"CX1(array): 19\"; \"CX1(array): 19\" -> \"10-19\"; \"Imperial HPC: 29\" -> \"AX4(array): 10\"; \"AX4(array): 10\" -> \"20-29\"; \"CX1(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Benchmarking performance of the plugin
 
@@ -248,8 +251,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 pipeline
 ```
 
-<!--html_preserve--><div id="htmlwidget-13f1aec5d1447bc0e6b7" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-13f1aec5d1447bc0e6b7">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-2ccc772db45073dc3ed5" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2ccc772db45073dc3ed5">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.

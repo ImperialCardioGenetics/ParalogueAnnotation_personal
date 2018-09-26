@@ -4,6 +4,8 @@ title: "Paralog Annotation Notes"
 output: 
   html_document:
     keep_md: true
+    theme: journal
+    highlight: espresso
 
 editor_options: 
   chunk_output_type: inline
