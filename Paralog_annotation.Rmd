@@ -1637,7 +1637,7 @@ Attributable Risk Percent: 92.7%
 #### Paralogue stats
 According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues.
 
-These additional statistics were calculated by programmatically extracting the genes of interest and then retrieving relevant information from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
+These additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
 
 
 #### Plan for overall annotations table
