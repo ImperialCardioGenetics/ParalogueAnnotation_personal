@@ -2,10 +2,10 @@
 title: "Paralog Annotation Notes"
 # output: rmarkdown::github_document
 output: 
-  html_document:
-    # keep_md: true
-    theme: journal
-    highlight: espresso
+  # html_document:
+  #   # keep_md: true
+  #   theme: journal
+  #   highlight: espresso
   md_document:
     preserve_yaml: false
 
