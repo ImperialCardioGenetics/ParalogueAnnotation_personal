@@ -27,35 +27,28 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 
 	if VEPversion == 90:
 		#VEP version 90
-		# rm_command = ("rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/90_GRCh" + genome_build)
 		mv_command = (
 			"mv /data/Share/nick/Paralog_Anno/homo_sapiens_non_use/" + str(genome_build) + " /data/Share/nick/Paralog_Anno/homo_sapiens"
 			)
 
 		#OFFLINE MODE
 		offline_command = (
-			# "perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-vep/vep --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
 			"perl -I /data/Share/nick/Paralog_Anno/paralogueAnnotator /data/Install/ensembl-vep/vep --force_overwrite --vcf --allele_number --canonical --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
 			" --assembly " + str(genome_build) +
 			" -i " + 
-			# input_dir + 
 			input_file +
 			" -o " + 
-			# input_dir + 
 			output_file + 
 			" " + flavour
 			)
 
 		#ONLINE MODE		
 		online_command = (
-			# "perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-vep/vep --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
 			"perl -I /data/Share/nick/Paralog_Anno/paralogueAnnotator /data/Install/ensembl-vep/vep --force_overwrite --vcf --allele_number --canonical --database" +
 			" --assembly " + str(genome_build) +
 			" -i " + 
-			# input_dir + 
 			input_file +
 			" -o " + 
-			# input_dir + 
 			output_file + 
 			" " + flavour
 			)
@@ -77,18 +70,13 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 			)
 	
 	if offline == 0:
-		# print(mv_command)
-		# os.system(mv_command)
 		print(online_command)
 		os.system(online_command)
-		# print(mv_back_command)
-		# os.system(mv_back_command)
 	elif offline == 1:
 		print(offline_command)
 		os.system(offline_command)
 	
 	with open(
-		# input_dir + 
 		output_file + 
 		"_summary.html"
 		) as infile:
@@ -110,11 +98,9 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 	###TESTED THE BELOW WITH VEP90#### MIGHT NOT WORK WITH OTHER VERSIONS
 	#reads through outfile of vep+plugin and tidies up data by extracting only variants that have paralogs and spits that out as another outfile
 	out_file = open(
-		# input_dir + 
 		output_file + "_paralogs", "w", encoding="utf-8")
 	if not flavour == "":
 		with codecs.open(	#changed "open" to "codecs.open" to solve unicode error. Changed back maybe
-			# input_dir + 
 			output_file, encoding="utf-8"
 			) as infile:
 			for line in infile:
@@ -126,7 +112,6 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 					# print(line, "\n")
 					for x in line:
 						y = x.split("|")
-						# print(y, "\n")
 						gene = y[3]
 						paralog = y[25]	#Remember to change indexing if also changing the number of flags being used by VEP
 						if paralog == "" or paralog == "\n":
@@ -143,66 +128,4 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 					out_file.write(line)
 	out_file.close()
 	
-	# ###FOR CLINVAR VARIANTS AT LEAST###SCRAP ALL OF THIS, USE R TIDYVERSE JOIN METHOD INSTEAD
-	# out_file = open(input_dir + output_file + "_aligned_vars", "w")
-	# with open(input_dir + output_file + "_paralogs") as infile1:
-	# 	infile2 = open(input_dir + input_file, "r") 
-	# 	text_list = infile2.read()
-	# 	infile2.close()
-	# 	####TEST_BELOW####
-	# 	# chromosome = 1
-	# 	# pos1 = 1050574
-	# 	# pos2 = 1050575
-	# 	# pos3 = 1050576
-	# 	# s1 = re.findall("^"+str(chromosome)+"\t"+str(pos1)+"\s.*$", text_list, re.MULTILINE)
-	# 	# s2 = re.findall("^"+str(chromosome)+"\t"+str(pos2)+"\s.*$", text_list, re.MULTILINE)
-	# 	# s3 = re.findall("^"+str(chromosome)+"\t"+str(pos3)+"\s.*$", text_list, re.MULTILINE)		
-	# 	# if s1:
-	# 	# 	print("YES")
-	# 	# 	print(s1)
-	# 	# if s2:
-	# 	# 	print(s2)
-	# 	# if s3:
-	# 	# 	print(s3)
-	# 	####END_OF_TEST####
-	# 	for line in infile1:
-	# 		if not line.strip() == "":
-	# 			query_variant = line.split("PARALOGS->")[0]
-	# 			out_file.write(query_variant)
-	# 			paralog_line = line.split("PARALOGS->")[1].rstrip()
-	# 			paralog_line = paralog_line.split("|&")[1]
-	# 			paralog_line = paralog_line.split("&")
-	# 			paralog_line = list(filter(None, paralog_line))
-	# 			print(paralog_line)
-	# 			out_file.write(str(paralog_line)+";")
-	# 			for paralog in paralog_line:
-	# 				if not paralog == "":
-	# 					print(paralog)
-	# 					location = paralog.split(":")[1]
-	# 					chromosome = location.split("_")[0].lstrip("chr")
-	# 					position = location.split("_")[1]
-	# 					position1 = int(position.split("-")[0])
-	# 					position2 = int(position.split("-")[1])
-	# 					positions = list(range(position1,position2+1))
-	# 					print(chromosome, type(positions), positions)
-	# 					# p = re.compile(r"^"+str(chromosome)+r"\t"+positions+r"\t")
-	# 					for pos in positions:
-	# 						s = re.findall("^"+str(chromosome)+"\t"+str(pos)+"\s.*$",text_list, re.MULTILINE)
-	# 						if s:
-	# 							print(s)
-	# 							out_file.write(str(s)+";")
-	# 			out_file.write("\n")
-	# out_file.close()
-	# #################################################
-	
 	print("VEP_ParalogAnno Done!")
-
-# VEP_Plugin_run(2, "/data/Share/nick/Paralog_Anno/data_files", "new_extracted_clinvar_cm_intepretated_raw_variants_2.vcf", "38", 87)
-
-
-# flavour = int(sys.argv[1])	#0(no plugin), 1(variants), 2(paraloc),
-# input_dir = sys.argv[2]	#input directory
-# input_file = sys.argv[3]	#name of input file
-# genome_build = str(sys.argv[4]) #37, 38
-# VEPversion = int(sys.argv[5]) #83, 87, 90
-# VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion)
