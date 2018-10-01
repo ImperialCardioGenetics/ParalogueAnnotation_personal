@@ -3,43 +3,12 @@ import  os, sys, subprocess, re, shlex, subprocess, codecs
 
 #WRAPPER FOR VEP(VERSION 90) and PLUGIN
 
-# def VEP_Plugin_run(flavour, input_dir, input_file, genome_build, VEPversion):
 def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, offline=1, output_filename="default"):
-	# flavour = int(sys.argv[1])	#0(no plugin), 1(variants), 2(paraloc)
-	# input_dir = sys.argv[2]	#input directory
 	input_dir = input_file.rsplit("/", 1)[0]
-	# input_file = sys.argv[3]	#name of input file
-	# # output_file = sys.argv[3]	#name of output file
-	# genome_build = str(sys.argv[4]) #37, 38
-	# VEPversion = int(sys.argv[5]) #83, 87, 90
-
-	#e.g. python3 VEP_ParalogAnno.py 0 /data/Share/nick/Paralog_Anno/data_files 10_pathogenic.vcf 38 90
-
-	# if not len(os.listdir("/data/Share/nick/Paralog_Anno/homo_sapiens/")) == 0:
-	# 	sys.exit("Terminating script:/data/Share/nick/Paralog_Anno/homo_sapiens/ not empty. Please empty and try again")
-
-	# print(type(flavour))
 	if flavour == 0:
-		# print("check")
 		flavour = ""
 		output_file = input_file.rsplit(".",1)[0]+".out_no_plugin"
 		print(output_file)
-	# elif flavour == 1:
-	# 	flavour = "--plugin ParalogueAnno_plugin_cleanup"
-	# 	output_file = input_file.rsplit(".",1)[0]+".out_old"
-	# 	print(output_file)
-	# elif flavour == 2:
-	# 	flavour = "--plugin ParalogueAnno_plugin_cleanup,paraloc"
-	# 	output_file = input_file.rsplit(".",1)[0]+".out_old_paraloc"
-	# 	print(output_file)
-	# elif flavour == 3:
-	# 	flavour = "--plugin ParalogueAnnotation"
-	# 	output_file = input_file.rsplit(".",1)[0]+".out_new"
-	# 	print(output_file)
-	# elif flavour == 4:
-	# 	flavour = "--plugin ParalogueAnnotation,paraloc"
-	# 	output_file = input_file.rsplit(".",1)[0]+".out_new_paraloc"
-	# 	print(output_file)
 	elif flavour == 1:
 		flavour = "--plugin ParalogueAnnotation"
 		output_file = input_file.rsplit(".",1)[0]+".out"
@@ -56,37 +25,6 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 		input_dir = input_dir+"/"
 	print(input_dir)
 
-
-	'''if VEPversion == 83:
-		#VEP version 83
-		# rm_command = ("rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/83_GRCh" + genome_build)
-		mv_command = (
-			"mv /data/Share/nick/Paralog_Anno/homo_sapiens_non_use/83_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens"
-			)
-		command = (
-			"perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/variant_effect_predictor.pl --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
-			" -i " + input_dir + input_file +
-			" -o " + input_dir + output_file + 
-			" " + flavour
-			)
-		mv_back_command = (
-			"mv /data/Share/nick/Paralog_Anno/homo_sapiens/83_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens_non_use"
-			)
-	elif VEPversion == 87:
-		#VEP version 87
-		# rm_command = ("rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/87_GRCh" + genome_build)
-		mv_command = (
-			"mv /data/Share/nick/Paralog_Anno/homo_sapiens_non_use/87_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens"
-			)
-		command = (
-			"perl -I /data/Install/ensembl-tools-release-83/scripts/variant_effect_predictor/.vep/Plugins /data/Install/ensembl-tools-release-87/ensembl-tools/scripts/variant_effect_predictor/variant_effect_predictor.pl --force_overwrite --vcf --offline --cache --dir_cache /data/Share/nick/Paralog_Anno/" +
-			" -i " + input_dir + input_file +
-			" -o " + input_dir + output_file + 
-			" " + flavour
-			)
-		mv_back_command = (
-			"mv /data/Share/nick/Paralog_Anno/homo_sapiens/87_GRCh" + genome_build + " /data/Share/nick/Paralog_Anno/homo_sapiens_non_use"
-			)'''
 	if VEPversion == 90:
 		#VEP version 90
 		# rm_command = ("rm -rf /data/Share/nick/Paralog_Anno/homo_sapiens/90_GRCh" + genome_build)
