@@ -1,4 +1,4 @@
-import  os, sys, subprocess, re
+import os, sys, subprocess, re
 
 #Tableize.py wrapper plus additional formatting that can't be done in tableize. Also adds in Para Z scores.
 

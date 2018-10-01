@@ -1,4 +1,4 @@
-import  os, sys, subprocess, re, shlex, subprocess, codecs
+import os, sys, subprocess, re, shlex, subprocess, codecs
 
 
 #WRAPPER FOR VEP(VERSION 90) and PLUGIN
