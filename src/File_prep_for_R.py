@@ -21,7 +21,6 @@ def R_file_prep(input_file, refid_flavour):
 	with open(input_file, "r", encoding="utf-8") as f:
 		for line in f:
 			if line != "\n" and not line.startswith("#"):
-				# print(line)
 				chrom = line.split()[0]
 				position = line.split()[1]
 				ID = line.split()[2]
@@ -29,37 +28,26 @@ def R_file_prep(input_file, refid_flavour):
 				Alt = line.split()[4]
 				
 				line = line.rstrip()
-				#print(line)
 				paralog_codons = line.split("PARALOGS->")[1]
 				gene = paralog_codons.split("|")[3]
 				
-				#print(chrom+" "+position+"\t"+str(ID)+"\t"+gene)
 				out_file.write(str(chrom)+" "+str(position)+"\t"+str(ID)+"\t"+str(gene)+"\t"+str(Ref)+"\t"+str(Alt)+"\t")
 
 				paralog_codons = paralog_codons.split("|&")[1]
 				paralog_codons = paralog_codons.split("&")
-				# paralog_codons.pop(0)
 				paralog_codons.remove("")
-				#print(paralog_codons)
 				refid_flav2_check = 0
 				if refid_flavour == "all_con":
 					if all(refids.endswith("REFID=1") for refids in paralog_codons) == True:
 						refid_flav2_check = 1
 
 				for codon in paralog_codons:
-					#print(codon)
 
 					if refid_flavour == "noQC" or refid_flav2_check == 1:
 						refID = codon.split(":")[-1]
-						#print(refID)
 						codon = codon.split(":")[1]
 						paralog_chrom = codon.split("_")[0].lstrip("chr")
 						paralog_position = int(codon.split("-")[1])
-						# print(
-						# 	str(paralog_chrom)+" "+str(paralog_position-2)+"\t"+
-						# 	str(paralog_chrom)+" "+str(paralog_position-1)+"\t"+
-						# 	str(paralog_chrom)+" "+str(paralog_position)+"\t"
-						# 	)
 
 						out_file.write(
 							str(paralog_chrom)+" "+str(paralog_position-2)+"\t"+
@@ -70,15 +58,9 @@ def R_file_prep(input_file, refid_flavour):
 					if refid_flavour == "para_con":
 						refID = codon.split(":")[-1]
 						if refID == "REFID=1":
-							# print(refID)
 							codon = codon.split(":")[1]
 							paralog_chrom = codon.split("_")[0].lstrip("chr")
 							paralog_position = int(codon.split("-")[1])
-							# print(
-							# 	str(paralog_chrom)+" "+str(paralog_position-2)+"\t"+
-							# 	str(paralog_chrom)+" "+str(paralog_position-1)+"\t"+
-							# 	str(paralog_chrom)+" "+str(paralog_position)+"\t"
-							# 	)
 
 							out_file.write(
 								str(paralog_chrom)+" "+str(paralog_position-2)+"\t"+
@@ -86,19 +68,11 @@ def R_file_prep(input_file, refid_flavour):
 								str(paralog_chrom)+" "+str(paralog_position)+"\t"
 								)
 
-					# if refid_flavour == 2:
-					# 	refID = 
-
 				out_file.write("\n")
 
 				if len(paralog_codons)*3 + 3 > max_split:
 					max_split = len(paralog_codons)*3 + 3
-					# print(len(paralog_codons))
-					# print(paralog_codons)
 					max_paralog_codons = paralog_codons
-				# newline[1] = "\t".join(newline[1])
-				# newline = "\t".join(newline)
-				# out_file.write(newline)
 		# print("THE MAX NUMBER OF COLUMNS: ",max_split, max_paralog_codons)	#number of columns for dataframe in R; + 2 for (chrom poistion) and (ID)
 	out_file.close()
 	
@@ -129,15 +103,5 @@ def R_file_prep2(input_file2):	#REDUNDANT DUE TO TABLEIZE! Do not use!
 						position = line.split()[1]
 						ID = line.split()[2]
 						out_file2.write(str(chrom)+" "+str(position)+"\t"+str(ID)+"\n")
-		# elif input_file2.endswith("out_paraloc"):
-		# 	out_file2 = open(input_file2+"_onlyVariantslist", "w")
-		# 	with open(input_file2, "r") as f:
-		# 		for line in f:
-		# 			if not line.startswith("#"):
-		# 				chrom = line.split()[0]
-		# 				position = line.split()[1]
-		# 				ID = line.split()[2]
-		# 				amino_acids = line.split("CSQ=")[1]
 
-		# 				out_file2.write(str(chrom)+" "+str(position)+"\t"+str(ID)+"\n")
 		out_file2.close()
