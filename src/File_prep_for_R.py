@@ -1,4 +1,4 @@
-import  os, sys, subprocess, re
+import os, sys, subprocess, re
 
 #SCRIPT FOR SEPARATING EACH LINE IN VCF OUTPUT FROM VEP_PARALOGANNO.PY INTO TAB SEP FILE READY FOR JOIN IN R
 #don't use if VEP_ParalogAnno.py has been edited to already do this, check to see if same code exists in that script

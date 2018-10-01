@@ -1,4 +1,4 @@
-import  os, sys, subprocess, re, shlex, subprocess, codecs
+import os, sys, subprocess, re, shlex, subprocess, codecs
 from VEP_ParalogAnno import *
 from File_prep_for_R import *
 from Tableize_wrapper import *
