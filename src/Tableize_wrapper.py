@@ -18,7 +18,6 @@ def Tableize_wrap(input_file):
 				AAs = line[8].split(",")
 				Codons = line[9].split(",")
 				Gene = str(line[6])+".txt"
-				# print(line[1],line[7])
 				for column in range(0,len(AAs)):
 					if (
 						line[7] != "NA" and 
@@ -27,7 +26,6 @@ def Tableize_wrap(input_file):
 						if Gene in os.listdir("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes"):
 							with open("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes/"+Gene) as para_z_file:
 								for i, para_z_line in enumerate(para_z_file):
-									# print(i)
 									if i == int(line[7])-1:
 										if AAs[column].split("/")[0] == para_z_line.split()[1]:
 											para_z_score = para_z_line.split()[2]
@@ -42,5 +40,4 @@ def Tableize_wrap(input_file):
 					out_file.write(line[0] + "\t" + line[1] +"\t" +line[2] +"\t" + line[3] +"\t" +line[4] +"\t" +line[5] +"\t" + line[6] + "\t" + line[7] + "\t" + AAs[column] + "\t" + Codons[column] + "\t" + line[10] + "\t" + str(para_z_score) + "\n")
 		out_file.close()
 
-	# os.system("mv " + input_file + "_tableized_temp " + input_file + "_tableized")
 	print("Tableize_wrapper Done!")
