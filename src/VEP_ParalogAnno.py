@@ -25,6 +25,11 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 		input_dir = input_dir+"/"
 	print(input_dir)
 
+
+	if genome_build == "GRCh37":
+		genome_build = "GRCh37 --port 3337"
+
+
 	if VEPversion == 90:
 		#VEP version 90
 		mv_command = (
