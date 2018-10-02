@@ -6,6 +6,7 @@ from Tableize_wrapper import *
 input_file = sys.argv[1]	#path of input file
 
 build = sys.argv[2]	#genome build: either 37 or 38
+print(build)
 if build == 37:
 	genome_build = "GRCh37"
 elif build == 38:
@@ -13,6 +14,7 @@ elif build == 38:
 else:
 	sys.exit("ERROR: genome build not recognized")
 
+flavour = sys.argv[3]
 if flavour == "base":
 	flavour = 0
 elif flavour == "variant":
