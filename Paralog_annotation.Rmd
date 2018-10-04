@@ -1101,6 +1101,7 @@ These additional statistics were calculated by programmatically extracting the g
 ```{r eval = FALSE, include = FALSE}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
+portein_genes_w_paralogues = getBM(filters = c("biotype", ""))
 ```
 
 #### Plan for overall annotations table
