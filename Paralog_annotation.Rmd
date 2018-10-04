@@ -70,7 +70,7 @@ source("src/Paralogous_var_align_functions.R")
     + run 30-38 failed, rerun
 * ~~Data from denis~~ 
     + DONE - denis says that data I have is most up to date
-    + Convert Para Z scores to 1 file for faster lookup and addition to tableize data.
+    + DONE - Convert Para Z scores to 1 file for faster lookup and addition to tableize data.
 * Data from henrike
     + waiting, will send me data when ready
 * Web tool
