@@ -76,6 +76,7 @@ def R_file_prep(input_file, refid_flavour):
 		# print("THE MAX NUMBER OF COLUMNS: ",max_split, max_paralog_codons)	#number of columns for dataframe in R; + 2 for (chrom poistion) and (ID)
 	out_file.close()
 	
+	#Remove last "\n" from file so R doesn't think its a separate column when reading in
 	infile = input_file+"2.noQC" #paralogs2 file
 
 	out_file_name = infile+"woLastCol"
