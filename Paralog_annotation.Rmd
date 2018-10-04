@@ -1098,6 +1098,7 @@ According to ensembl, 92096 protein coding genes are defined to have paralogues.
 
 These additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
 
+Reproducing using biomaRt:
 ```{r eval = FALSE, include = FALSE}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
