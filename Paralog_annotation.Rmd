@@ -682,10 +682,7 @@ plt.gcf().clear()
 ```
 
 #### Scripts pipeline
-<!-- old
-vcf input file -> VEP_ParalogAnno.py -> File_prep_for_R.py -> Paralogous_var_align.R
-vcf input file -> VEP_ParalogAnno.py -> paraloc file -> tableize_vcf.py (Tableize_wrapper.py) -> Paralogous_var_align.R
--->
+
 ```{r}
 library(DiagrammeR)
 pipeline = DiagrammeR::grViz("
@@ -1101,7 +1098,10 @@ According to ensembl, 92096 protein coding genes are defined to have paralogues.
 
 These additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
 
-
+```{r eval = FALSE, include = FALSE}
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
+```
 
 #### Plan for overall annotations table
 REF              | All | Alt matches |Alt no match
