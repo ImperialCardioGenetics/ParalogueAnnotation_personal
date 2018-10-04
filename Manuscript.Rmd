@@ -472,10 +472,10 @@ The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm
 NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. This is due to the fact that the paralogous variant VEP is referring to is simply not in the dataset that I am annotating back to. As a result, it is best to make sure that the ref alleles are indeed the same when processing in R.
 
 The annotataion of the entire clinvar set as of 2018:
-```{r eval = FALSE, include = FALSE}
+```{r echo = FALSE}
 #noQC
 #pathogenic to pathogenic
-p.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+p.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 # p.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized")
 #benign to pathogenic
 b.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
@@ -508,7 +508,7 @@ conf4 = conf_matrix(p4.num_of_paralog_anno, p3.paralogous_var_align$paralog_data
 
 
 Taking only the 8 sarcomeric genes:
-```{r eval = FALSE, include = FALSE}
+```{r echo = FALSE}
 #noQC
 p.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 b.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
@@ -562,7 +562,7 @@ sarcomeric_set = data.frame(Variant,
 Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 
 Taking only the 5 channelopathy genes:
-```{r eval = FALSE, include = FALSE}
+```{r echo = FALSE}
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
 lapply(Packages, library, character.only = TRUE)
 #noQC
@@ -805,7 +805,7 @@ Limitations of this current framework are the reliance on 1) genes with paralogu
 
 For calculating the EFs, run the all possible missense variants through VEP+plugin and return paraloc locations. Then join those locations with pathogenic clinvar variants as before. This indicates which variants from all possible missense variants are likely to be pathogenic. Then we check to see if any of these variants are present in the cases and controls. Hopefully the controls will be less but there is more control data than cases bare in mind. Calculate the EFs using that. Remember though the EFs are based on how many times an allele is seen, not the number of different alleles by themselves.
 
-```{r eval = FALSE, include = FALSE}
+```{r echo = FALSE}
 #noQC
 #all missense data
 art.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
