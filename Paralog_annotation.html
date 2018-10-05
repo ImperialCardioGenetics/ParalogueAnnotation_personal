@@ -237,7 +237,7 @@ $(document).ready(function () {
 <li><del>Data from denis</del>
 <ul>
 <li>DONE - denis says that data I have is most up to date</li>
-<li>Convert Para Z scores to 1 file for faster lookup and addition to tableize data.</li>
+<li>DONE - Convert Para Z scores to 1 file for faster lookup and addition to tableize data.</li>
 </ul></li>
 <li>Data from henrike
 <ul>
@@ -410,8 +410,8 @@ Gnomad_dataset_split =<span class="st"> </span>DiagrammeR<span class="op">::</sp
 
 <span class="st">}&quot;</span>)
 Gnomad_dataset_split</code></pre></div>
-<div id="htmlwidget-49dd9db355399edb5b82" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-49dd9db355399edb5b82">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8f6bf980701a72a2ed1b" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8f6bf980701a72a2ed1b">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="benchmarking-performance-of-the-plugin" class="section level4">
 <h4>Benchmarking performance of the plugin</h4>
@@ -419,10 +419,6 @@ Gnomad_dataset_split</code></pre></div>
 </div>
 <div id="scripts-pipeline" class="section level4">
 <h4>Scripts pipeline</h4>
-<!-- old
-vcf input file -> VEP_ParalogAnno.py -> File_prep_for_R.py -> Paralogous_var_align.R
-vcf input file -> VEP_ParalogAnno.py -> paraloc file -> tableize_vcf.py (Tableize_wrapper.py) -> Paralogous_var_align.R
--->
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DiagrammeR)
 pipeline =<span class="st"> </span>DiagrammeR<span class="op">::</span><span class="kw">grViz</span>(<span class="st">&quot;</span>
 <span class="st">digraph boxes_and_circles {</span>
@@ -438,8 +434,8 @@ pipeline =<span class="st"> </span>DiagrammeR<span class="op">::</span><span cla
 
 <span class="st">}&quot;</span>)
 pipeline</code></pre></div>
-<div id="htmlwidget-c0e4db07175d3024d682" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c0e4db07175d3024d682">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-394879d537d323531f96" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-394879d537d323531f96">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-terms" class="section level4">
 <h4>Statistical terms</h4>
@@ -451,10 +447,7 @@ pipeline</code></pre></div>
 <p>The Clinvar file <strong>clinvar_20171029.vcf</strong> was downloaded from <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/" class="uri">ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/</a>. Note that since the initial look at what was available there’s been updated Clinvar files.</p>
 <p>NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. This is due to the fact that the paralogous variant VEP is referring to is simply not in the dataset that I am annotating back to. As a result, it is best to make sure that the ref alleles are indeed the same when processing in R.</p>
 <p>The annotataion of the entire clinvar set as of 2018:</p>
-<!--Previous old code below, remove once above code works-->
-<p>The annotataion of the entire clinvar set as of 20171029:</p>
 <p>Taking only the 8 sarcomeric genes:</p>
-<!-- Old code below -->
 <p>Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.</p>
 <p>Taking only the 5 channelopathy genes:</p>
 <p>On the other hand, channelopathy genes did annotate well suggesting that their paralogues are involved in disease.</p>
@@ -464,17 +457,15 @@ pipeline</code></pre></div>
 <h4>Annotation of all possible missense variations in the 8 sarcomeric genes and calculation of EF</h4>
 <p>Limitations of this current framework are the reliance on 1) genes with paralogues and 2) for those paralogues to have pathogenic variants. This is not always the case, for example in HCM (DOUBLE CHECK THIS CLAIM), where there are not many pathogenic paralogous variants since most paralogues of HCM disease genes are not associated with diesase (according roddy….). Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.</p>
 <p>For calculating the EFs, run the all possible missense variants through VEP+plugin and return paraloc locations. Then join those locations with pathogenic clinvar variants as before. This indicates which variants from all possible missense variants are likely to be pathogenic. Then we check to see if any of these variants are present in the cases and controls. Hopefully the controls will be less but there is more control data than cases bare in mind. Calculate the EFs using that. Remember though the EFs are based on how many times an allele is seen, not the number of different alleles by themselves.</p>
-<!--
-
--->
 <p>Total cases: 6140 number of affected cases: 39</p>
 <p>Total controls: 60678 number of affected controls: 28</p>
 <p>Odds ratio 13.7648 95 % CI: 8.4648 to 22.3833 z statistic 10.570 Significance level P &lt; 0.0001 Attributable Risk Percent: 92.7% 95 % CI: 79.6 to 100</p>
 </div>
 <div id="paralogue-stats" class="section level4">
 <h4>Paralogue stats</h4>
-<p>According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues.</p>
-<p>These additional statistics were calculated by programmatically extracting the genes of interest (using <code>src/check_what_clinvar_genes.py</code> and <code>src/Find_unique_genes.py</code>) and then retrieving relevant information from <a href="https://www.ensembl.org/biomart">Ensembl’s Bioimart</a></p>
+<p>The additional statistics were calculated by programmatically extracting the genes of interest (using <code>src/check_what_clinvar_genes.py</code> and <code>src/Find_unique_genes.py</code>) and then retrieving relevant information manually from <a href="https://www.ensembl.org/biomart">Ensembl’s Bioimart</a></p>
+<p>Reproducing using biomaRt:</p>
+<p>According to ensembl, 14514 protein coding genes are defined to have paralogues. While 6469 protein genes do not have paralogues.</p>
 </div>
 <div id="plan-for-overall-annotations-table" class="section level4">
 <h4>Plan for overall annotations table</h4>
