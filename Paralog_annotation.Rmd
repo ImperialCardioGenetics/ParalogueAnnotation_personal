@@ -1101,11 +1101,27 @@ Reproducing using biomaRt:
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
-protein_genes_w_paralogues = unique(protein_genes_w_paralogues$external_gene_name)
+protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
 # length(protein_genes_w_paralogues)
 protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
 protein_genes_wo_paralogues = unique(protein_genes_wo_paralogues$external_gene_name)
 # length(protein_genes_wo_paralogues)
+
+
+#testing to see how many genes in the clinvar dataset have paralogues
+clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized$SYMBOL))
+# clinvar_P_LP_tableized_genes = as.data.frame(t(clinvar_P_LP_tableized_genes))
+# colnames(clinvar_P_LP_tableized_genes) = "Gene"
+
+count = 0
+for (gene in clinvar_P_LP_tableized_genes){
+  # print(gene)
+  if (gene %in% protein_genes_w_paralogues_genes){
+    count = count + 1
+  }
+}
+
 ```
 
 According to ensembl, `r length(protein_genes_w_paralogues)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues)` protein genes do not have paralogues.
