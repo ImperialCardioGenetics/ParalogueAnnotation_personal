@@ -1094,16 +1094,22 @@ Attributable Risk Percent: 92.7%
 95 % CI: 79.6 to 100
 
 #### Paralogue stats
-According to ensembl, 92096 protein coding genes are defined to have paralogues. While 7958 protein genes do not have paralogues.
-
-These additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
+The additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information manually from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
 
 Reproducing using biomaRt:
-```{r eval = FALSE, include = FALSE}
+```{r include = FALSE}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
+protein_genes_w_paralogues = unique(protein_genes_w_paralogues$external_gene_name)
+# length(protein_genes_w_paralogues)
+protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
+protein_genes_wo_paralogues = unique(protein_genes_wo_paralogues$external_gene_name)
+# length(protein_genes_wo_paralogues)
 ```
+
+According to ensembl, `r length(protein_genes_w_paralogues)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues)` protein genes do not have paralogues.
+
 
 #### Plan for overall annotations table
 REF              | All | Alt matches |Alt no match
