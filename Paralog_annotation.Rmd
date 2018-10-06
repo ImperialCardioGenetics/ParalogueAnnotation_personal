@@ -1135,10 +1135,17 @@ for (gene in clinvar_B_LB_tableized_genes){
     clinvar_B_LB_genes_wo_paralogs = c(gene, clinvar_B_LB_genes_wo_paralogs)
   }
 }
+
+clinvar_P_LP_variants_wo_paralogs = vector()
+for (variant in clinvar_P_LP_tableized$SYMBOL){
+  if (variant %in% protein_genes_wo_paralogues_genes){
+    clinvar_P_LP_variants_wo_paralogs = c(variant, clinvar_P_LP_variants_wo_paralogs)
+  }
+}
 ```
 
 According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues_genes)` protein coding genes do not have paralogues.
-In the clinvar pathogenic and likely pathogenic dataset, there's `r length(clinvar_P_LP_tableized$CHROM)` variants from `r length(clinvar_P_LP_tableized_genes)` genes. `r length(clinvar_P_LP_genes_wo_paralogs)` of these genes do not have paralogs and therefore variants within these genes were not used for annotation. HOW MANY IS THIS?
+In the clinvar pathogenic and likely pathogenic dataset, there's `r length(clinvar_P_LP_tableized$CHROM)` variants from `r length(clinvar_P_LP_tableized_genes)` genes. `r length(clinvar_P_LP_genes_wo_paralogs)` of these genes do not have paralogs and therefore the `r length(clinvar_P_LP_variants_wo_paralogs)` variants lying within these genes were not used for annotation.
 
 #### Plan for overall annotations table
 REF              | All | Alt matches |Alt no match
