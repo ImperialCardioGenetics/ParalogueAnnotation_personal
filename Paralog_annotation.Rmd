@@ -1057,7 +1057,8 @@ For calculating the EFs, run the all possible missense variants through VEP+plug
 ```{r eval = FALSE, include = FALSE}
 #noQC
 #all missense data
-art.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# art.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+art.paralogous_var_align = Paralogous_var_align("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC", "/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/cm_mutation_vep_canon.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_art_var = art.paralogous_var_align$Total_paralog_annotations[!is.na(art.paralogous_var_align$Total_paralog_annotations$ID.y),]
 #case data
 case.data = read.csv("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.vcf", sep = "\t", skip = 4)
