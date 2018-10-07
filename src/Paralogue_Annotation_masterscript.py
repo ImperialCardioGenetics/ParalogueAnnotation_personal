@@ -23,7 +23,7 @@ elif flavour == "paraloc": #NORMALLY paraloc IS WHAT YOU WANT
 else:
 	sys.exit("ERROR: plugin mode selected not recognized")
 
-refid_flavour = sys.arv[4] #flavour of refid filtering - how conserved do you want the reference alleles to be?
+refid_flavour = sys.argv[4] #flavour of refid filtering - how conserved do you want the reference alleles to be?
 if refid_flavour == "noQC":
 	refid_flavour = "noQC"
 elif refid_flavour == "para_con":
