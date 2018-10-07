@@ -744,6 +744,16 @@ b4.Total_paralog_annotations = b3.paralogous_var_align$Total_paralog_annotations
 b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
 
 conf4 = conf_matrix(p4.num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b4.num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
+
+#plotting sankey diagrams
+p = plot_ly(
+  type = "sankey",
+  orientation = "h",
+  
+  node = list(
+    label = 
+  )
+)
 ```
 
 Taking only the 8 sarcomeric genes:
