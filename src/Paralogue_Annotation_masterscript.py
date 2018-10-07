@@ -18,7 +18,7 @@ if flavour == "base":
 	flavour = 0
 elif flavour == "variant":
 	flavour = 1
-elif flavour == "paraloc":
+elif flavour == "paraloc": #NORMALLY paraloc IS WHAT YOU WANT
 	flavour = 2
 else:
 	sys.exit("ERROR: plugin mode selected not recognized")
@@ -38,4 +38,4 @@ print(len(sys.argv), sys.argv)
 
 VEP_Plugin_run(input_file, genome_build=genome_build, flavour=flavour, VEPversion=93, offline=1)#, output_filename=sys.argv[2])
 Tableize_wrap(input_file.rsplit(".",1)[0]+".out_paraloc")
-R_file_prep(input_file.rsplit(".",1)[0]+".out_paraloc_paralogs", refid_flavour="noQC")
+R_file_prep(input_file.rsplit(".",1)[0]+".out_paraloc_paralogs", refid_flavour=refid_flavour)
