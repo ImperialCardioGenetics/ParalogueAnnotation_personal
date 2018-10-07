@@ -165,7 +165,7 @@ Here **Paralogue Annotation** is tested further on a (Likely) Pathogenic/Benign 
 <span style="color:red">Also have a look at @Barshir2018 for more info about paralogs in diseases.</span>
 
 
-### Material and Methods Notes
+### Material and Methods
 
 The Paralog Annotation algorithm was wriiten by Erica as a perl script plugin (called __ParalogueAnno_plugin_cleanup.pm__) for Ensembl's VEP version 90 (https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html). 
 
@@ -711,50 +711,11 @@ The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm
 
 NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. This is due to the fact that the paralogous variant VEP is referring to is simply not in the dataset that I am annotating back to. As a result, it is best to make sure that the ref alleles are indeed the same when processing in R.
 
-The annotataion of the entire clinvar set as of 2018:
-```{r eval = FALSE, include = FALSE}
-#noQC
-#pathogenic to pathogenic
-p.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-# p.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized")
-#benign to pathogenic
-b.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-#stats
-conf = conf_matrix(p.paralogous_var_align$num_of_paralog_anno, p.paralogous_var_align$paralog_data, b.paralogous_var_align$num_of_paralog_anno, b.paralogous_var_align$paralog_data)
-
-#para_con
-p2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-conf2 = conf_matrix(p2.paralogous_var_align$num_of_paralog_anno, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$num_of_paralog_anno, b2.paralogous_var_align$paralog_data)
-
-#all_con
-p3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-conf3 = conf_matrix(p3.paralogous_var_align$num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
-
-#alt_con
-#pathogenic to pathogenic
-p4.Total_paralog_annotations = p3.paralogous_var_align$Total_paralog_annotations[p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
-# p4.Total_paralog_annotations = p4.Total_paralog_annotations[!duplicated(p4.Total_paralog_annotations$ID.x),]
-p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
-
-#benign to pathogenic
-b4.Total_paralog_annotations = b3.paralogous_var_align$Total_paralog_annotations[b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
-# b4.Total_paralog_annotations = b4.Total_paralog_annotations[!duplicated(b4.Total_paralog_annotations$ID.x),]
-b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
-
-conf4 = conf_matrix(p4.num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b4.num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
-
-#plotting sankey diagrams
-p = plot_ly(
-  type = "sankey",
-  orientation = "h",
-  
-  node = list(
-    label = 
-  )
-)
-
+The annotataion of the entire clinvar dataset as of March 2018 release (clinvar_alleles.single.b38.vcf.gz) was taken from https://github.com/macarthur-lab/clinvar/tree/master/output/b38/single. Different clinical significance definitions were subsetted using grep e.g:
+```{bash eval = FALSE}
+grep -P "CLINICAL_SIGNIFICANCE=Pathogenic" clinvar_alleles.single.b38.vcf > output1.vcf
+grep -P "CLINICAL_SIGNIFICANCE=Likely_pathogenic" clinvar_alleles.single.b38.vcf > output2.vcf
+cat output1.vcf output2.vcf > clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.vcf
 ```
 
 Taking only the 8 sarcomeric genes:
@@ -1060,7 +1021,7 @@ For calculating the EFs, run the all possible missense variants through VEP+plug
 #noQC
 #all missense data
 # art.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-art.paralogous_var_align = Paralogous_var_align("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC", "/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/cm_mutation_vep_canon.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/cm_mutation_vep_canon.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_art_var = art.paralogous_var_align$Total_paralog_annotations[!is.na(art.paralogous_var_align$Total_paralog_annotations$ID.y),]
 #case data
 case.data = read.csv("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.vcf", sep = "\t", skip = 4)
@@ -1204,3 +1165,50 @@ gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point()
 The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
 
 #### References
+### Results and Discussion
+#### Annotation of Clinvar
+```{r eval = FALSE, include = FALSE}
+#noQC
+#pathogenic to pathogenic
+p.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# p.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized")
+#benign to pathogenic
+b.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+#stats
+conf = conf_matrix(p.paralogous_var_align$num_of_paralog_anno, p.paralogous_var_align$paralog_data, b.paralogous_var_align$num_of_paralog_anno, b.paralogous_var_align$paralog_data)
+
+#para_con
+p2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+conf2 = conf_matrix(p2.paralogous_var_align$num_of_paralog_anno, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$num_of_paralog_anno, b2.paralogous_var_align$paralog_data)
+
+#all_con
+p3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+conf3 = conf_matrix(p3.paralogous_var_align$num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
+
+#alt_con
+#pathogenic to pathogenic
+p4.Total_paralog_annotations = p3.paralogous_var_align$Total_paralog_annotations[p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+# p4.Total_paralog_annotations = p4.Total_paralog_annotations[!duplicated(p4.Total_paralog_annotations$ID.x),]
+p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
+
+#benign to pathogenic
+b4.Total_paralog_annotations = b3.paralogous_var_align$Total_paralog_annotations[b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+# b4.Total_paralog_annotations = b4.Total_paralog_annotations[!duplicated(b4.Total_paralog_annotations$ID.x),]
+b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
+
+conf4 = conf_matrix(p4.num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b4.num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
+
+#plotting sankey diagrams
+# p = plot_ly(
+#   type = "sankey",
+#   orientation = "h",
+#   
+#   node = list(
+#     label = 
+#   )
+)
+
+```
+In total, `r conf$con_table[1]` Pathogenic and Likely Pathogenic variants and `r conf$con_table[2]` Benign and Likey Benign variants were
