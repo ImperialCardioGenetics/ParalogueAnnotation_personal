@@ -11,10 +11,13 @@ def R_file_prep(input_file, refid_flavour="noQC"):
 
 	if refid_flavour == "noQC":
 		out_file = open(input_file+"2.noQC", "w")
+		infile = input_file+"2.noQC"
 	elif refid_flavour == "para_con":
 		out_file = open(input_file+"2.para_con", "w")
+		infile = input_file+"2.para_con"
 	elif refid_flavour == "all_con":
 		out_file = open(input_file+"2.all_con", "w")
+		infile = input_file+"2.all_con"
 
 	max_split = 0	#check to see max number of columns for R import as wide format
 	max_paralog_codons = ""
@@ -77,7 +80,7 @@ def R_file_prep(input_file, refid_flavour="noQC"):
 	out_file.close()
 	
 	#Remove last "\n" from file so R doesn't think its a separate column when reading in
-	infile = input_file+"2.noQC" #paralogs2 file
+	# infile = input_file+"2.noQC" #paralogs2 file
 
 	out_file_name = infile+"woLastCol"
 	out_file = open(infile+"woLastCol", "w")
