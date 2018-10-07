@@ -13,7 +13,7 @@ elif int(build) == 38:
 else:
 	sys.exit("ERROR: genome build not recognized")
 
-flavour = sys.argv[3]
+flavour = sys.argv[3] #flavour of plugin
 if flavour == "base":
 	flavour = 0
 elif flavour == "variant":
@@ -23,7 +23,7 @@ elif flavour == "paraloc":
 else:
 	sys.exit("ERROR: plugin mode selected not recognized")
 
-refid_flavour = sys.arv[4]
+refid_flavour = sys.arv[4] #flavour of refid filtering - how conserved do you want the reference alleles to be?
 if refid_flavour == "noQC":
 	refid_flavour = "noQC"
 elif refid_flavour == "para_con":
