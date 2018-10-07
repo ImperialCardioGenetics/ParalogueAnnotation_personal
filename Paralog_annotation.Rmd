@@ -754,6 +754,7 @@ p = plot_ly(
     label = 
   )
 )
+
 ```
 
 Taking only the 8 sarcomeric genes:
@@ -806,6 +807,7 @@ sarcomeric_set = data.frame(Variant,
                                Variants_remaining_after_PA_QC3,
                                Variants_removed_after_PA_QC3
                                )
+
 ```
 
 Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
