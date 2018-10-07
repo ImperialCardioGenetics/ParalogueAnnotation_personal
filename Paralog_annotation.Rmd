@@ -565,6 +565,8 @@ out_file.close()
 os.system("mv " + input_file + "_tableized_temp " + input_file + "_tableized")
 ```
 
+It is worth noting that using VEP with different versions of perl will result in slight different outputs. The difference do not seem to be detrimental to the end result as it appears that only VEP is affect but not the Plugin.
+
 #### Datasets
 Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. 
 
