@@ -39,6 +39,7 @@ source("src/Paralogous_var_align_functions.R")
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
+* Make sure noQC, para_con, and all_con output files have consistent total beginning number of variants
 * Look at situation where only alt allele are conserved but ignore ref allele entirely
 * GO - Need to map distribution of variants back to the genome, probably only take a single paralogue family as example.
 * Debugging plugin
