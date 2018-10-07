@@ -224,8 +224,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 Gnomad_dataset_split
 ```
 
-<!--html_preserve--><div id="htmlwidget-ea1fa9028aa0ec1dd2f4" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ea1fa9028aa0ec1dd2f4">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-53aebc201739acae1f17" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-53aebc201739acae1f17">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Benchmarking performance of the plugin
 
@@ -253,8 +253,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 pipeline
 ```
 
-<!--html_preserve--><div id="htmlwidget-b3a25f6850fbddd75164" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b3a25f6850fbddd75164">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-4cf221b11573bcfe64ee" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4cf221b11573bcfe64ee">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
@@ -266,8 +266,13 @@ The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm
 
 NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. This is due to the fact that the paralogous variant VEP is referring to is simply not in the dataset that I am annotating back to. As a result, it is best to make sure that the ref alleles are indeed the same when processing in R.
 
-The annotataion of the entire clinvar set as of 2018 - data taken from https://github.com/macarthur-lab/clinvar/tree/master/output/b38/single :
+The annotataion of the entire clinvar dataset as of March 2018 release (clinvar_alleles.single.b38.vcf.gz) was taken from https://github.com/macarthur-lab/clinvar/tree/master/output/b38/single. Different clinical significance definitions were subsetted using grep e.g:
 
+```bash
+grep -P "CLINICAL_SIGNIFICANCE=Pathogenic" clinvar_alleles.single.b38.vcf > output1.vcf
+grep -P "CLINICAL_SIGNIFICANCE=Likely_pathogenic" clinvar_alleles.single.b38.vcf > output2.vcf
+cat output1.vcf output2.vcf > clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.vcf
+```
 
 Taking only the 8 sarcomeric genes:
 
@@ -337,3 +342,10 @@ The "2R"" hypothesis states that some 500 million years ago, early vertebrates w
 #### References
 ### Results and Discussion
 #### Annotation of Clinvar
+
+                                              Pathogenic   Benign
+-------------------------------------------  -----------  -------
+Number of variants in total                        21646    12226
+Number of variants predicted as pathogenic         17289      589
+
+In total, 21646 Pathogenic and Likely Pathogenic variants and 17289 Benign and Likey Benign variants were from clinvar. 

@@ -21,11 +21,21 @@ elif flavour == "variant":
 elif flavour == "paraloc":
 	flavour = 2
 else:
-	sys.exit("ERROR: mode selected not recognized")
+	sys.exit("ERROR: plugin mode selected not recognized")
+
+refid_flavour = sys.arv[4]
+if refid_flavour == "noQC":
+	refid_flavour = "noQC"
+elif refid_flavour == "para_con":
+	refid_flavour = "para_con"
+elif refid_flavour == "all_con":
+	refid_flavour = "all_con"
+else:
+	sys.exit("ERROR: refid flavour selected not recognized")
 
 print(len(sys.argv), sys.argv)
 
 
 VEP_Plugin_run(input_file, genome_build=genome_build, flavour=flavour, VEPversion=93, offline=1)#, output_filename=sys.argv[2])
 Tableize_wrap(input_file.rsplit(".",1)[0]+".out_paraloc")
-R_file_prep(input_file.rsplit(".",1)[0]+".out_paraloc_paralogs", "noQC")
+R_file_prep(input_file.rsplit(".",1)[0]+".out_paraloc_paralogs", refid_flavour="noQC")

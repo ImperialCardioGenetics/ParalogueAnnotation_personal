@@ -4,7 +4,7 @@ import os, sys, subprocess, re
 #don't use if VEP_ParalogAnno.py has been edited to already do this, check to see if same code exists in that script
 ###BELOW ONLY WORKS FOR CLINVAR VCF FILES (EXAC HAS NO INFO IN ID VARIABLE)
 
-def R_file_prep(input_file, refid_flavour):
+def R_file_prep(input_file, refid_flavour="noQC"):
 	#input_file = sys.argv[1]	#path of VEP_ParalogAnno.py paralogs output file
 	dir1 = input_file.rsplit("/", 1)[0]
 	#refid_flavour = sys.argv[3] #how to consider the refID: "noQC", "para_con" or "all_con". "noQC" - don't do any quality control and just take all alignments as annotations. "para_con" - only consider paralogous pairwise alignments where refID = 1. "all_con" - only consider total gene family paralogous alignments where all refID in that family = 1
