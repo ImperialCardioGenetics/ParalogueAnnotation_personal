@@ -187,6 +187,7 @@ $(document).ready(function () {
 <div id="obstacles-to-get-done" class="section level3">
 <h3>OBSTACLES TO GET DONE:</h3>
 <ul>
+<li>Make sure noQC, para_con, and all_con output files have consistent total beginning number of variants</li>
 <li>Look at situation where only alt allele are conserved but ignore ref allele entirely</li>
 <li>GO - Need to map distribution of variants back to the genome, probably only take a single paralogue family as example.</li>
 <li>Debugging plugin
@@ -389,6 +390,7 @@ $(document).ready(function () {
 <p>As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using <strong>tableize_vcf.py</strong>. <strong>/data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py</strong> was used to format the VEP output into table format for R processing. For example:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">python</span> /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info SYMBOL,Amino_acids,Codons,Paralogue_Vars --split_by_transcript --canonical_only</code></pre></div>
 <p>If <strong>–split_by_transcript</strong> is used then the code above is sufficient. Otherwise a python wrapper that includes additional formatting (<strong>/data/Share/nick/Paralog_Anno/Tableize_wrapper.py</strong>) that tableize couldn’t do, i.e. separate variants that had multiple REF and ALT alleles was used to prepare the data for R.</p>
+<p>It is worth noting that using VEP with different versions of perl will result in slight different outputs. The difference do not seem to be detrimental to the end result as it appears that only VEP is affect but not the Plugin.</p>
 <div id="datasets" class="section level4">
 <h4>Datasets</h4>
 <p>Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang <em>et al.</em> <span class="citation">(Zhang et al. 2017)</span>.</p>
@@ -410,8 +412,8 @@ Gnomad_dataset_split =<span class="st"> </span>DiagrammeR<span class="op">::</sp
 
 <span class="st">}&quot;</span>)
 Gnomad_dataset_split</code></pre></div>
-<div id="htmlwidget-53aebc201739acae1f17" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-53aebc201739acae1f17">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a60182508a944fb256fc" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a60182508a944fb256fc">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="benchmarking-performance-of-the-plugin" class="section level4">
 <h4>Benchmarking performance of the plugin</h4>
@@ -434,8 +436,8 @@ pipeline =<span class="st"> </span>DiagrammeR<span class="op">::</span><span cla
 
 <span class="st">}&quot;</span>)
 pipeline</code></pre></div>
-<div id="htmlwidget-4cf221b11573bcfe64ee" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4cf221b11573bcfe64ee">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6498c50275e86ba778b0" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6498c50275e86ba778b0">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-terms" class="section level4">
 <h4>Statistical terms</h4>
@@ -564,25 +566,76 @@ pipeline</code></pre></div>
 <table>
 <thead>
 <tr class="header">
-<th></th>
-<th align="right">Pathogenic</th>
-<th align="right">Benign</th>
+<th align="left">Variant</th>
+<th align="left">Total</th>
+<th align="left">Paralogue_Annotation_no_QC</th>
+<th align="left">Variants_remaining_after_PA_QC1</th>
+<th align="left">Variants_removed_after_PA_QC1</th>
+<th align="left">Variants_remaining_after_PA_QC2</th>
+<th align="left">Variants_removed_after_PA_QC2</th>
+<th align="left">Variants_remaining_after_PA_QC3</th>
+<th align="left">Variants_removed_after_PA_QC3</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Number of variants in total</td>
-<td align="right">21646</td>
-<td align="right">12226</td>
+<td align="left">Pathogenic variants</td>
+<td align="left">22583</td>
+<td align="left">17477</td>
+<td align="left">16356</td>
+<td align="left">1121</td>
+<td align="left">7220</td>
+<td align="left">9136</td>
+<td align="left">3170</td>
+<td align="left">4050</td>
 </tr>
 <tr class="even">
-<td>Number of variants predicted as pathogenic</td>
-<td align="right">17289</td>
-<td align="right">589</td>
+<td align="left">Benign variants</td>
+<td align="left">13070</td>
+<td align="left">605</td>
+<td align="left">183</td>
+<td align="left">422</td>
+<td align="left">40</td>
+<td align="left">143</td>
+<td align="left">3</td>
+<td align="left">37</td>
+</tr>
+<tr class="odd">
+<td align="left">PPV</td>
+<td align="left">NA</td>
+<td align="left">0.966541311801792</td>
+<td align="left">0.988935243968801</td>
+<td align="left">0.72650680492547</td>
+<td align="left">0.994490358126722</td>
+<td align="left">0.984588856557819</td>
+<td align="left">0.99905452253388</td>
+<td align="left">0.990946904820161</td>
+</tr>
+<tr class="even">
+<td align="left">Sensitivity</td>
+<td align="left">NA</td>
+<td align="left">0.773900721781871</td>
+<td align="left">0.724261612717531</td>
+<td align="left">NA</td>
+<td align="left">0.319709516007616</td>
+<td align="left">NA</td>
+<td align="left">0.140371075587832</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">P value</td>
+<td align="left">NA</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">3.80673775046922e-14</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
 </tr>
 </tbody>
 </table>
-<p>In total, 21646 Pathogenic and Likely Pathogenic variants and 17289 Benign and Likey Benign variants were from clinvar.</p>
+<p>In total, 22583 Pathogenic and Likely Pathogenic variants and 17477 Benign and Likey Benign variants were from clinvar.</p>
 <div id="refs" class="references">
 <div id="ref-Barshir2018">
 <p>Barshir, Ruth, Idan Hekselman, Netta Shemesh, Moran Sharon, Lena Novack, and Esti Yeger-Lotem. 2018. “Role of Duplicate Genes in Determining the Tissue-Selectivity of Hereditary Diseases.” <em>PLoS Genetics</em> 14 (5): e1007327.</p>

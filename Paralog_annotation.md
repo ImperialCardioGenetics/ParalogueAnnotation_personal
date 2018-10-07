@@ -37,6 +37,7 @@ always_allow_html: yes
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
+* Make sure noQC, para_con, and all_con output files have consistent total beginning number of variants
 * Look at situation where only alt allele are conserved but ignore ref allele entirely
 * GO - Need to map distribution of variants back to the genome, probably only take a single paralogue family as example.
 * Debugging plugin
@@ -197,6 +198,8 @@ python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Shar
 If __--split_by_transcript__ is used then the code above is sufficient. Otherwise a python wrapper that includes additional formatting (__/data/Share/nick/Paralog_Anno/Tableize_wrapper.py__) that tableize couldn't do, i.e. separate variants that had multiple REF and ALT alleles was used to prepare the data for R. 
 
 
+It is worth noting that using VEP with different versions of perl will result in slight different outputs. The difference do not seem to be detrimental to the end result as it appears that only VEP is affect but not the Plugin.
+
 #### Datasets
 Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. 
 
@@ -224,8 +227,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 Gnomad_dataset_split
 ```
 
-<!--html_preserve--><div id="htmlwidget-53aebc201739acae1f17" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-53aebc201739acae1f17">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-a60182508a944fb256fc" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a60182508a944fb256fc">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Benchmarking performance of the plugin
 
@@ -253,8 +256,8 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 pipeline
 ```
 
-<!--html_preserve--><div id="htmlwidget-4cf221b11573bcfe64ee" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4cf221b11573bcfe64ee">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-6498c50275e86ba778b0" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6498c50275e86ba778b0">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
@@ -343,9 +346,12 @@ The "2R"" hypothesis states that some 500 million years ago, early vertebrates w
 ### Results and Discussion
 #### Annotation of Clinvar
 
-                                              Pathogenic   Benign
--------------------------------------------  -----------  -------
-Number of variants in total                        21646    12226
-Number of variants predicted as pathogenic         17289      589
+Variant               Total   Paralogue_Annotation_no_QC   Variants_remaining_after_PA_QC1   Variants_removed_after_PA_QC1   Variants_remaining_after_PA_QC2   Variants_removed_after_PA_QC2   Variants_remaining_after_PA_QC3   Variants_removed_after_PA_QC3 
+--------------------  ------  ---------------------------  --------------------------------  ------------------------------  --------------------------------  ------------------------------  --------------------------------  ------------------------------
+Pathogenic variants   22583   17477                        16356                             1121                            7220                              9136                            3170                              4050                          
+Benign variants       13070   605                          183                               422                             40                                143                             3                                 37                            
+PPV                   NA      0.966541311801792            0.988935243968801                 0.72650680492547                0.994490358126722                 0.984588856557819               0.99905452253388                  0.990946904820161             
+Sensitivity           NA      0.773900721781871            0.724261612717531                 NA                              0.319709516007616                 NA                              0.140371075587832                 NA                            
+P value               NA      0                            0                                 3.80673775046922e-14            0                                 0                               0                                 0                             
 
-In total, 21646 Pathogenic and Likely Pathogenic variants and 17289 Benign and Likey Benign variants were from clinvar. 
+In total, 22583 Pathogenic and Likely Pathogenic variants and 17477 Benign and Likey Benign variants were from clinvar. 
