@@ -1073,7 +1073,21 @@ Attributable Risk Percent: 92.7%
 #### Paralogue stats
 The additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information manually from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
 
-Reproducing using biomaRt:
+Alternatively, this can be reproduced using biomaRt package
+                 
+#### Para-Z scores
+For the para-z scores, will need to extract amino acid position from VEP output as well. Then look up the gene in question in para-z score folder, and using the position identify the para-z score. From my understanding, the para-z score is the same across aligned amino acids in the same gene family. Therefore, we could use a cut-off threshold to further improve our confidence in calling variants pathogenic etc. We could also then calculate ROC curves by altering the cut-off to see how that affects sensitivity/PPV.
+
+All available para-z scores were retreived from https://git-r3lab.uni.lu/genomeanalysis/paralogs/tree/master/data [@Lal2017]. Para-Z score cutoff thresholds were used to remove any annotation alignments in question. Amino Acid positions that had a para-z score below the chosen cutoff threshold were not used for annotations.
+
+#### Ohnologs
+The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
+
+
+### Results and Discussion
+
+### Paralogue stats
+
 ```{r include = FALSE}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
@@ -1124,17 +1138,6 @@ for (variant in clinvar_P_LP_tableized$SYMBOL){
 According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues_genes)` protein coding genes do not have paralogues.
 In the clinvar pathogenic and likely pathogenic dataset, there's `r length(clinvar_P_LP_tableized$CHROM)` variants from `r length(clinvar_P_LP_tableized_genes)` genes. `r length(clinvar_P_LP_genes_wo_paralogs)` of these genes do not have paralogs and therefore the `r length(clinvar_P_LP_variants_wo_paralogs)` variants lying within these genes were not used for annotation.
 
-                 
-#### Para-Z scores
-For the para-z scores, will need to extract amino acid position from VEP output as well. Then look up the gene in question in para-z score folder, and using the position identify the para-z score. From my understanding, the para-z score is the same across aligned amino acids in the same gene family. Therefore, we could use a cut-off threshold to further improve our confidence in calling variants pathogenic etc. We could also then calculate ROC curves by altering the cut-off to see how that affects sensitivity/PPV.
-
-All available para-z scores were retreived from https://git-r3lab.uni.lu/genomeanalysis/paralogs/tree/master/data [@Lal2017]. Para-Z score cutoff thresholds were used to remove any annotation alignments in question. Amino Acid positions that had a para-z score below the chosen cutoff threshold were not used for annotations.
-
-#### Ohnologs
-The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
-
-
-### Results and Discussion
 #### Annotation of Clinvar
 ```{r echo = FALSE, results='asis', warning=FALSE}
 library(knitr)
@@ -1228,6 +1231,6 @@ ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xl
 ```
 
 
-The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless 
+The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
 
 #### References
