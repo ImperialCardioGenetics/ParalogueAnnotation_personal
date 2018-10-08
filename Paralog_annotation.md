@@ -6,8 +6,10 @@ output:
     keep_md: true
     theme: journal
     highlight: espresso
+    fig_caption: yes
   md_document:
     preserve_yaml: false
+    fig_caption: yes
 
 editor_options: 
   chunk_output_type: inline
@@ -227,9 +229,6 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 Gnomad_dataset_split
 ```
 
-<!--html_preserve--><div id="htmlwidget-68f4d67ca03a5c83d8dc" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-68f4d67ca03a5c83d8dc">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"RBH\ncluster: 9\"; \"Imperial\nHPC: 29\"; \"CX1\n(array): 19\"; \"AX4\n(array): 10\";\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"Total 38\"; \"1-9\"; \"10-19\"; \"20-29\"; \"30-38\"\n\n\"Total 38\" -> \"RBH\ncluster: 9\"; \"Total 38\" -> \"Imperial\nHPC: 29\"; \"RBH\ncluster: 9\" -> \"1-9\"; \"Imperial\nHPC: 29\" -> \"CX1\n(array): 19\"; \"CX1\n(array): 19\" -> \"10-19\"; \"Imperial\nHPC: 29\" -> \"AX4\n(array): 10\"; \"AX4\n(array): 10\" -> \"20-29\"; \"CX1\n(array): 19\" -> \"30-38\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
-
 #### Benchmarking performance of the plugin
 
 __/data/Share/nick/Paralog_Anno/multi_vcf_extractor_benchmark.py__ is used to demonstrate speed at which VEP+Plugin takes to run
@@ -255,9 +254,6 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 }")
 pipeline
 ```
-
-<!--html_preserve--><div id="htmlwidget-a0d1b5adc20c6c1a1855" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a0d1b5adc20c6c1a1855">{"x":{"diagram":"\ndigraph boxes_and_circles {\ngraph [overlap = true, fontsize = 10]\n\nnode [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]\n\"VEP_ParalogAnno.py\"; \"File_prep_for_R.py\"; \"Tableize_wrapper.py\"; \"R markdown\"\n\nnode [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]\n\"vcf input file\"; \"paralogs file\"; \"paraloc file\"; \"paralogs2 file\"; \"paraloc_tableized file\"\n\n\"vcf input file\" -> \"VEP_ParalogAnno.py\"; \"VEP_ParalogAnno.py\" -> \"paralogs file\"; \"VEP_ParalogAnno.py\" -> \"paraloc file\"; \"paralogs file\" -> \"File_prep_for_R.py\"; \"paraloc file\" -> \"Tableize_wrapper.py\"; \"File_prep_for_R.py\" -> \"paralogs2 file\"; \"Tableize_wrapper.py\" -> \"paraloc_tableized file\"; \"paralogs2 file\" -> \"R markdown\"; \"paraloc_tableized file\" -> \"R markdown\"\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 #### Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
@@ -313,23 +309,26 @@ Attributable Risk Percent: 92.7%
 #### Paralogue stats
 The additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information manually from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
 
-Reproducing using biomaRt:
-
-
-According to ensembl, 14514 protein coding genes are defined to have paralogues. While 6469 protein coding genes do not have paralogues.
-In the clinvar pathogenic and likely pathogenic dataset, there's 102435 variants from 6665 genes. 3177 of these genes do not have paralogs and therefore the 28732 variants lying within these genes were not used for annotation.
-
+Alternatively, this can be reproduced using biomaRt package
                  
 #### Para-Z scores
 For the para-z scores, will need to extract amino acid position from VEP output as well. Then look up the gene in question in para-z score folder, and using the position identify the para-z score. From my understanding, the para-z score is the same across aligned amino acids in the same gene family. Therefore, we could use a cut-off threshold to further improve our confidence in calling variants pathogenic etc. We could also then calculate ROC curves by altering the cut-off to see how that affects sensitivity/PPV.
 
-All available para-z scores were retreived from https://git-r3lab.uni.lu/genomeanalysis/paralogs/tree/master/data [@Lal2017]. Para-Z score cutoff thresholds were used to remove any annotation alignments in question.
+All available para-z scores were retreived from https://git-r3lab.uni.lu/genomeanalysis/paralogs/tree/master/data [@Lal2017]. Para-Z score cutoff thresholds were used to remove any annotation alignments in question. Amino Acid positions that had a para-z score below the chosen cutoff threshold were not used for annotations.
 
 #### Ohnologs
 The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
 
 
 ### Results and Discussion
+
+### Paralogue stats
+
+![\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to](Paralog_annotation_files/figure-html/paralog_dist-1.png)
+
+According to ensembl, 14514 protein coding genes are defined to have paralogues. While 6469 protein coding genes did not have paralogues.
+In the clinvar pathogenic and likely pathogenic dataset, there's 102435 variants from 6665 genes. 3177 of these did not have paralogs and therefore the 28732 variants lying within these genes were not used for annotation, leaving 73703 for use in the analysis. Of those genes with paralogues (**fig.** \ref{fig:paralogue_dist}) the mean had 6.297 paralogues with a standard deviation of 6.311. The maximum number of paralogues a gene had was 49
+
 #### Annotation of Clinvar
 
 Variant               Total   Paralogue_Annotation_no_QC   Variants_remaining_after_PA_QC1   Variants_removed_after_PA_QC1   Variants_remaining_after_PA_QC2   Variants_removed_after_PA_QC2   Variants_remaining_after_PA_QC3   Variants_removed_after_PA_QC3 
@@ -344,9 +343,9 @@ In total, 22583 Pathogenic and Likely Pathogenic variants and 17477 Benign and L
 
 #### Para-Z scores
 
-![](Paralog_annotation_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](Paralog_annotation_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 
-The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless 
+The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
 
 #### References
