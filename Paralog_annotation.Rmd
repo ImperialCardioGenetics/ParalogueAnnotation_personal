@@ -1024,33 +1024,33 @@ For calculating the EFs, run the all possible missense variants through VEP+plug
 #noQC
 #all missense data
 # art.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/cm_mutation_vep_canon.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/cm_mutation_vep_canon.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_art_var = art.paralogous_var_align$Total_paralog_annotations[!is.na(art.paralogous_var_align$Total_paralog_annotations$ID.y),]
 #case data
-case.data = read.csv("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.vcf", sep = "\t", skip = 4)
+case.data = read.csv("data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.vcf", sep = "\t", skip = 4)
 case.data$Variant_pos = paste(case.data$X.CHROM, case.data$POS, sep = " ")
 patho_case.data = case.data[case.data$Variant_pos %in% patho_art_var$Variant_pos,]
 #control data
-control.data = read.csv("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_ExAC_missense_sarcomeric_chr_wRefAl.vcf", sep = "\t", skip = 4)
+control.data = read.csv("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.vcf", sep = "\t", skip = 4)
 control.data$Variant_pos = paste(control.data$X.CHROM, control.data$POS, sep = " ")
 patho_control.data = control.data[control.data$Variant_pos %in% patho_art_var$Variant_pos,]
 
 #case data VEP
-case.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+case.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_case_var = case.paralogous_var_align$Total_paralog_annotations[!is.na(case.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_case_var_IDs = patho_case_var$ID.x
 # write(patho_case_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_case_var_IDs.txt", sep = "\t", ncolumns = 1)
-case.data = read.csv("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/HCM_missense_LMM_OMGL_chr.csv", sep = ",")
+case.data = read.csv("data/case_and_control/HCM_missense_LMM_OMGL_chr.csv", sep = ",")
 patho_case.data = case.data[case.data$mut_id %in% patho_case_var_IDs,]
 case_cases = sum(patho_case.data$sum.vs_case_count.)
 Total_case_cases = sum(case.data$sum.vs_case_count.)
 
 #control data VEP
-control.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+control.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_control_var = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_control_var_IDs = patho_control_var$ID.x
 # write(patho_control_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_control_var_IDs.txt", sep = "\t", ncolumns = 1)
-control.data = read.csv("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/ExAC_missense_sarcomeric_chr.csv", sep = ",")
+control.data = read.csv("data/case_and_control/ExAC_missense_sarcomeric_chr.csv", sep = ",")
 patho_control.data = control.data[control.data$mut_id %in% patho_control_var_IDs,]
 control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
@@ -1124,34 +1124,20 @@ for (variant in clinvar_P_LP_tableized$SYMBOL){
 According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues_genes)` protein coding genes do not have paralogues.
 In the clinvar pathogenic and likely pathogenic dataset, there's `r length(clinvar_P_LP_tableized$CHROM)` variants from `r length(clinvar_P_LP_tableized_genes)` genes. `r length(clinvar_P_LP_genes_wo_paralogs)` of these genes do not have paralogs and therefore the `r length(clinvar_P_LP_variants_wo_paralogs)` variants lying within these genes were not used for annotation.
 
-#### Plan for overall annotations table
-REF              | All | Alt matches |Alt no match
------------------|-----|-------------|-------------
-                 |     |             |
-No QC            |     |             |
-                 |     |             |
------------------|-----|-------------|-------------
-                 |     |             |
-Paralog Conserved|     |             |
-                 |     |             |
------------------|-----|-------------|-------------
-                 |     |             |
-All Conserved    |     |             |
-                 |     |             |
                  
 #### Para-Z scores
 For the para-z scores, will need to extract amino acid position from VEP output as well. Then look up the gene in question in para-z score folder, and using the position identify the para-z score. From my understanding, the para-z score is the same across aligned amino acids in the same gene family. Therefore, we could use a cut-off threshold to further improve our confidence in calling variants pathogenic etc. We could also then calculate ROC curves by altering the cut-off to see how that affects sensitivity/PPV.
 
-```{r eval = FALSE, include = FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 Sensitivity_list = vector()
 FPR_list = vector()
 con_table_list = matrix(, ncol = 2)
 for (i in seq(0,11)){
 #noQC
 #pathogenic to pathogenic
-p.paraz_var_align = ParaZ_var_align(i,"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+p.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 #benign to pathogenic
-b.paraz_var_align = ParaZ_var_align(i,"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 paraz.conf = conf_matrix(p.paraz_var_align$num_of_paralog_anno, p.paraz_var_align$paralog_data, b.paraz_var_align$num_of_paralog_anno, b.paraz_var_align$paralog_data)
 Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
 FPR_list = c(FPR_list, paraz.conf$FPR)
@@ -1161,13 +1147,15 @@ roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = 
 gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 
-gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.25) + ylim(0.7,1)
+ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.04) + ylim(0.3,0.7) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+
+
 ```
 
 #### Ohnologs
 The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
 
-#### References
+
 ### Results and Discussion
 #### Annotation of Clinvar
 ```{r echo = FALSE, results='asis', warning=FALSE}
@@ -1234,3 +1222,5 @@ kable(clinvar_set)
 ```
 
 In total, `r conf$con_table[1]` Pathogenic and Likely Pathogenic variants and `r conf$con_table[2]` Benign and Likey Benign variants were from clinvar. 
+
+#### References
