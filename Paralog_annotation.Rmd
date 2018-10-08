@@ -1128,29 +1128,6 @@ In the clinvar pathogenic and likely pathogenic dataset, there's `r length(clinv
 #### Para-Z scores
 For the para-z scores, will need to extract amino acid position from VEP output as well. Then look up the gene in question in para-z score folder, and using the position identify the para-z score. From my understanding, the para-z score is the same across aligned amino acids in the same gene family. Therefore, we could use a cut-off threshold to further improve our confidence in calling variants pathogenic etc. We could also then calculate ROC curves by altering the cut-off to see how that affects sensitivity/PPV.
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-Sensitivity_list = vector()
-FPR_list = vector()
-con_table_list = matrix(, ncol = 2)
-for (i in seq(0,11)){
-#noQC
-#pathogenic to pathogenic
-p.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-#benign to pathogenic
-b.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-paraz.conf = conf_matrix(p.paraz_var_align$num_of_paralog_anno, p.paraz_var_align$paralog_data, b.paraz_var_align$num_of_paralog_anno, b.paraz_var_align$paralog_data)
-Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
-FPR_list = c(FPR_list, paraz.conf$FPR)
-con_table_list = rbind(con_table_list, paraz.conf$con_table)
-}
-roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list, cutoff = seq(0,11)))
-gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
-gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
-
-ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.04) + ylim(0.3,0.7) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
-
-
-```
 
 #### Ohnologs
 The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
@@ -1222,5 +1199,31 @@ kable(clinvar_set)
 ```
 
 In total, `r conf$con_table[1]` Pathogenic and Likely Pathogenic variants and `r conf$con_table[2]` Benign and Likey Benign variants were from clinvar. 
+
+#### Para-Z scores
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Sensitivity_list = vector()
+FPR_list = vector()
+con_table_list = matrix(, ncol = 2)
+for (i in seq(0,11)){
+#noQC
+#pathogenic to pathogenic
+p.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+#benign to pathogenic
+b.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+paraz.conf = conf_matrix(p.paraz_var_align$num_of_paralog_anno, p.paraz_var_align$paralog_data, b.paraz_var_align$num_of_paralog_anno, b.paraz_var_align$paralog_data)
+Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
+FPR_list = c(FPR_list, paraz.conf$FPR)
+con_table_list = rbind(con_table_list, paraz.conf$con_table)
+}
+roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list, cutoff = seq(0,11)))
+gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
+gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
+
+ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.04) + ylim(0.3,0.7) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+
+
+```
 
 #### References
