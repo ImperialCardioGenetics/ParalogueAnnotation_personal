@@ -1089,7 +1089,7 @@ The "2R"" hypothesis states that some 500 million years ago, early vertebrates w
 
 ### Results and Discussion
 
-### Paralogue stats
+#### Paralogue stats
 
 ```{r paralog_dist, echo = FALSE, fig.cap = cap}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
