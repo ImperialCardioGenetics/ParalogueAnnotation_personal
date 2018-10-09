@@ -42,6 +42,7 @@ opts_knit$set(eval.after = 'fig.cap')
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
+* Look at if patho set have more variants that lie in genes that have more paralogs than benign
 * Make sure noQC, para_con, and all_con output files have consistent total beginning number of variants
 * Look at situation where only alt allele are conserved but ignore ref allele entirely
 * GO - Need to map distribution of variants back to the genome, probably only take a single paralogue family as example.
@@ -1136,6 +1137,8 @@ for (gene in clinvar_B_LB_tableized_genes){
     clinvar_B_LB_genes_wo_paralogs = c(gene, clinvar_B_LB_genes_wo_paralogs)
   }
 }
+clinvar_B_LB_genes_w_paralogs_wide = protein_genes_w_paralogues_wide[protein_genes_w_paralogues_wide$external_gene_name %in% clinvar_B_LB_genes_w_paralogs,]
+hist(clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1))
 
 clinvar_P_LP_variants_wo_paralogs = vector()
 for (variant in clinvar_P_LP_tableized$SYMBOL){
