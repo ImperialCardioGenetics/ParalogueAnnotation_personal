@@ -42,6 +42,7 @@ opts_knit$set(eval.after = 'fig.cap')
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
+* For the number of variants being, how many of them actually align to anther variant? At least ones within paralogues? Difference between patho and benign variants?
 * Look at if patho set have more variants that lie in genes that have more paralogs than benign
 * Make sure noQC, para_con, and all_con output files have consistent total beginning number of variants
 * Look at situation where only alt allele are conserved but ignore ref allele entirely
@@ -55,7 +56,6 @@ opts_knit$set(eval.after = 'fig.cap')
         - issues seem to be due to server timeouts from running long jobs
         - sent me https://www.ensembl.org/Help/Faq?id=567 for help
     + ask emily about MART3...?
-* Use `--port 3337` with `--assembly GRCh37` as VEP arguements to run in build 37 coords
 * STILL HAVE YET TO ACCOUNT FOR CONFLICTING P/B VARIANTS IN SCRIPTS
 * Take a look at forking option for VEP to run faster?
 * Make a list and write down overlapping genes that cause an issue like MART3, where only one of the overlapping genes has info reported back. Write it as an appendix.
