@@ -39,6 +39,8 @@ always_allow_html: yes
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
+* For the number of variants being, how many of them actually align to anther variant? At least ones within paralogues? Difference between patho and benign variants?
+* Look at if patho set have more variants that lie in genes that have more paralogs than benign
 * Make sure noQC, para_con, and all_con output files have consistent total beginning number of variants
 * Look at situation where only alt allele are conserved but ignore ref allele entirely
 * GO - Need to map distribution of variants back to the genome, probably only take a single paralogue family as example.
@@ -51,7 +53,6 @@ always_allow_html: yes
         - issues seem to be due to server timeouts from running long jobs
         - sent me https://www.ensembl.org/Help/Faq?id=567 for help
     + ask emily about MART3...?
-* Use `--port 3337` with `--assembly GRCh37` as VEP arguements to run in build 37 coords
 * STILL HAVE YET TO ACCOUNT FOR CONFLICTING P/B VARIANTS IN SCRIPTS
 * Take a look at forking option for VEP to run faster?
 * Make a list and write down overlapping genes that cause an issue like MART3, where only one of the overlapping genes has info reported back. Write it as an appendix.
@@ -322,12 +323,21 @@ The "2R"" hypothesis states that some 500 million years ago, early vertebrates w
 
 ### Results and Discussion
 
-### Paralogue stats
+#### Paralogue stats
 
-![\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to](Paralog_annotation_files/figure-html/paralog_dist-1.png)
+![\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to](Paralog_annotation_files/figure-html/paralog_dist-1.png)![\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to](Paralog_annotation_files/figure-html/paralog_dist-2.png)![\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to](Paralog_annotation_files/figure-html/paralog_dist-3.png)
 
-According to ensembl, 14514 protein coding genes are defined to have paralogues. While 6469 protein coding genes did not have paralogues.
-In the clinvar pathogenic and likely pathogenic dataset, there's 102435 variants from 6665 genes. 3177 of these did not have paralogs and therefore the 28732 variants lying within these genes were not used for annotation, leaving 73703 for use in the analysis. Of those genes with paralogues (**fig.** \ref{fig:paralogue_dist}) the mean had 6.297 paralogues with a standard deviation of 6.311. The maximum number of paralogues a gene had was 49
+```
+## Warning in
+## ks.test(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, : p-value
+## will be approximate in the presence of ties
+```
+
+According to ensembl, 14514 protein coding genes are defined to have paralogues. While 6469 protein coding genes did not have paralogues. Of those genes with paralogues (**fig.** \ref{fig:paralogue_dist}) the mean had 6.297 paralogues with a standard deviation of 6.311. The maximum number of paralogues a gene had was 49.
+In the clinvar pathogenic and likely pathogenic dataset, there were 102435 variants from 6665 genes. 3177 of these did not have paralogs and therefore the 28732 variants lying within these genes were not used for annotation, leaving 73703 for use in the analysis. The distribution of number of paralogues for these set of genes is shown in **fig.**. The mean number of paralogues was 5.707 with a standard deviation 4.656.
+For variants in the clinvar benign and likely benign dataset, there were 147115 variants from 7047 genes. 109830 variants resided in 3509 genes with paralogs.
+
+
 
 #### Annotation of Clinvar
 
