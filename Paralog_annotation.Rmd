@@ -1113,6 +1113,7 @@ clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized$SYMBOL))
 clinvar_B_LB_tableized = read.csv(file="data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 clinvar_B_LB_tableized_genes = as.vector(unique(clinvar_B_LB_tableized$SYMBOL))
 
+#see if Patho and Benign sets have same distribution of variants in genes with paralogues
 clinvar_P_LP_genes_w_paralogs = vector()
 clinvar_P_LP_genes_wo_paralogs = vector()
 clinvar_B_LB_genes_w_paralogs = vector()
@@ -1153,6 +1154,8 @@ for (variant in clinvar_B_LB_tableized$SYMBOL){
     clinvar_B_LB_variants_wo_paralogs = c(variant, clinvar_B_LB_variants_wo_paralogs)
   }
 }
+
+ks = ks.test(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues)
 
 cap = "\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"
 ```
