@@ -1,4 +1,4 @@
-Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr")
+Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "png", "grid", "tinytex")
 lapply(Packages, library, character.only = TRUE)
 
 Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations

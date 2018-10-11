@@ -2,14 +2,16 @@
 title: "Paralog Annotation Notes"
 # output: rmarkdown::github_document
 output: 
-  html_document:
-    keep_md: true
-    theme: journal
-    highlight: espresso
-    fig_caption: yes
-  md_document:
-    preserve_yaml: false
-    fig_caption: yes
+  # html_document:
+  #   keep_md: true
+  #   theme: journal
+  #   highlight: espresso
+  #   fig_caption: yes
+  # md_document:
+  #   preserve_yaml: false
+  #   fig_caption: yes
+  pdf_document:
+    toc: true
 
 editor_options: 
   chunk_output_type: inline
@@ -1092,7 +1094,7 @@ The "2R"" hypothesis states that some 500 million years ago, early vertebrates w
 
 #### Paralogue stats
 
-```{r paralog_dist, echo = FALSE, warning=FALSE, fig.cap = cap}
+```{r echo = FALSE, warning=FALSE, fig.cap = cap}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
@@ -1260,7 +1262,7 @@ kable(clinvar_set)
 
 ```
 
-In total, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar were in genes with paralogues. With no quality control `r conf$con_table[2]` pathogenic or likely pathogenic variants were aligned 
+In total, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control `r conf$con_table[2]` P/LP  and `r conf$con_table[4]` B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. 
 
 #### Para-Z scores
 
