@@ -42,7 +42,7 @@ opts_knit$set(eval.after = 'fig.cap')
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
-* For the number of variants being patho or benign, how many of them actually align to anther variant? At least ones within paralogues? Difference between patho and benign variants?
+* For the number of variants being patho or benign, how many of them actually align to anther variant? At least ones within paralogues? Difference between patho and benign variants? - Basically how many annotations there are...
 * Look at if patho set have more variants that lie in genes that have more paralogs than benign
 * Make sure noQC, para_con, and all_con output files have consistent total beginning number of variants
 * Look at situation where only alt allele are conserved but ignore ref allele entirely
@@ -1179,19 +1179,34 @@ p.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.sing
 # p.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized")
 #benign to pathogenic
 b.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+#pathogenic to benign
+ptob.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
+#benign to benign
+btob.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
 #stats
 conf = conf_matrix(p.paralogous_var_align$num_of_paralog_anno, p.paralogous_var_align$paralog_data, b.paralogous_var_align$num_of_paralog_anno, b.paralogous_var_align$paralog_data)
+conf_b = conf_matrix_benign(ptob.paralogous_var_align$num_of_paralog_anno, ptob.paralogous_var_align$paralog_data, btob.paralogous_var_align$num_of_paralog_anno, btob.paralogous_var_align$paralog_data)
 
 #para_con
 p2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 b2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+ptob2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
+btob2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
+
 conf2 = conf_matrix(p2.paralogous_var_align$num_of_paralog_anno, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$num_of_paralog_anno, b2.paralogous_var_align$paralog_data)
+conf_b2 = conf_matrix_benign(ptob2.paralogous_var_align$num_of_paralog_anno, ptob2.paralogous_var_align$paralog_data, btob2.paralogous_var_align$num_of_paralog_anno, btob2.paralogous_var_align$paralog_data)
+
 var_removed = var_rem_matrix(conf$con_table, conf2$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
 
 #all_con
 p3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 b3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+ptob3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
+btob3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
+
 conf3 = conf_matrix(p3.paralogous_var_align$num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
+conf_b3 = conf_matrix_benign(ptob3.paralogous_var_align$num_of_paralog_anno, ptob3.paralogous_var_align$paralog_data, btob3.paralogous_var_align$num_of_paralog_anno, btob3.paralogous_var_align$paralog_data)
+
 var_removed2 = var_rem_matrix(conf2$con_table, conf3$con_table, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$paralog_data)
 
 #alt_con
@@ -1205,8 +1220,19 @@ b4.Total_paralog_annotations = b3.paralogous_var_align$Total_paralog_annotations
 # b4.Total_paralog_annotations = b4.Total_paralog_annotations[!duplicated(b4.Total_paralog_annotations$ID.x),]
 b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
 
+#pathogenic to benign
+ptob4.Total_paralog_annotations = ptob3.paralogous_var_align$Total_paralog_annotations[ptob3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==ptob3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+ptob4.num_of_paralog_anno = sum(!is.na(ptob4.Total_paralog_annotations$ID.y))
+
+#benign to benign
+btob4.Total_paralog_annotations = btob3.paralogous_var_align$Total_paralog_annotations[btob3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==btob3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+btob4.num_of_paralog_anno = sum(!is.na(btob4.Total_paralog_annotations$ID.y))
+
 conf4 = conf_matrix(p4.num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b4.num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
+conf_b4 = conf_matrix_benign(ptob4.num_of_paralog_anno, ptob3.paralogous_var_align$paralog_data, btob4.num_of_paralog_anno, btob3.paralogous_var_align$paralog_data)
+
 var_removed3 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$paralog_data)
+
 
 #Overall_table
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
@@ -1234,7 +1260,7 @@ kable(clinvar_set)
 
 ```
 
-In total, `r conf$con_table[1]` Pathogenic and Likely Pathogenic variants and `r conf$con_table[2]` Benign and Likey Benign variants were from clinvar. 
+In total, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar were in genes with paralogues. With no quality control `r conf$con_table[2]` pathogenic or likely pathogenic variants were aligned 
 
 #### Para-Z scores
 
