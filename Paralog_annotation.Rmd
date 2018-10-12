@@ -1022,8 +1022,6 @@ Looking at alt alleles. Taking only pairwise alignments where the alt allele is 
 
 #### Annotation of all possible missense variations in the 8 sarcomeric genes and calculation of EF
 
-Limitations of this current framework are the reliance on 1) genes with paralogues and 2) for those paralogues to have pathogenic variants. This is not always the case, for example in HCM (DOUBLE CHECK THIS CLAIM), where there are not many pathogenic paralogous variants since most paralogues of HCM disease genes are not associated with diesase (according roddy….). Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.
-
 For calculating the EFs, run the all possible missense variants through VEP+plugin and return paraloc locations. Then join those locations with pathogenic clinvar variants as before. This indicates which variants from all possible missense variants are likely to be pathogenic. Then we check to see if any of these variants are present in the cases and controls. Hopefully the controls will be less but there is more control data than cases bare in mind. Calculate the EFs using that. Remember though the EFs are based on how many times an allele is seen, not the number of different alleles by themselves.
 
 
@@ -1262,7 +1260,7 @@ ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xl
 
 The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
 
-#### EF
+#### Subset of 8 sarcomeric genes and calculation of EF
 
 ```{r eval = FALSE, include = FALSE}
 #noQC
@@ -1300,6 +1298,8 @@ control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
 
 ```
+
+Limitations of this current framework are the reliance on 1) genes with paralogues, 2) for those paralogues to have pathogenic variants and 3) the alignment of the paralogous variants. This is not always the case. For example in the 8 sarcomeric genes involved in HCM [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1], there were not many paralogous alignments.   since most paralogues of HCM disease genes are no. Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.
 
 
 #### References
