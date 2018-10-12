@@ -1265,6 +1265,8 @@ kable(clinvar_set)
 
 The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table}**. In summary, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control, `r conf$con_table[2]` known P/LP  and `r conf$con_table[4]` known B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. Comparatively, predicting benign variants was not as reliable. With `r conf_b$con_table[2]` known P/LP and `r conf_b$con_table[4]` known B/LB variants predicted to be benign. Though the proportional differene is statistically significant with a p-value of `r conf_b$Pvalue$p.value`, this lead to a PPV and sensitivity of `r conf_b$PPV` and `r conf_b$Sensitivity` respectively. 
 
+Using the aforementioned quality control steps to increase the stringency of conservation across alignment columns in regards to reference and alternate amino acid alleles shows improvement to PPV and decrease in sensitivity over all. 
+
 #### Para-Z scores
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
