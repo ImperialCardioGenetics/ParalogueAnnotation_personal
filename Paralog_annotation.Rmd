@@ -12,7 +12,7 @@ output:
   #   fig_caption: yes
   pdf_document:
     toc: true
-
+    fig_caption: yes
 editor_options: 
   chunk_output_type: inline
 bibliography: bibliography.bib
@@ -22,7 +22,7 @@ always_allow_html: yes
 <!--Load Packages and function-->
 ```{r echo=FALSE, message=FALSE, warning=FALSE, include=FALSE, results='hide'}
 source("src/Paralogous_var_align_functions.R")
-opts_knit$set(eval.after = 'fig.cap')
+# opts_knit$set(eval.after = 'fig.cap')
 ```
 
 ### Aims
@@ -1094,7 +1094,7 @@ The "2R"" hypothesis states that some 500 million years ago, early vertebrates w
 
 #### Paralogue stats
 
-```{r echo = FALSE, warning=FALSE, fig.cap = cap}
+```{r paralog_dist, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
@@ -1102,6 +1102,7 @@ protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$e
 # length(protein_genes_w_paralogues)
 protein_genes_w_paralogues_wide = count(protein_genes_w_paralogues, external_gene_name)
 colnames(protein_genes_w_paralogues_wide)[2] = "number_of_paralogues"
+par(mfrow=c(2,2))
 hist(protein_genes_w_paralogues_wide$number_of_paralogues, breaks = seq(0,50,1))
 
 protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
@@ -1159,21 +1160,21 @@ for (variant in clinvar_B_LB_tableized$SYMBOL){
 
 ks = ks.test(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues)
 
-cap = "\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"
+# cap = "\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"
 ```
 
-According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues_genes)` protein coding genes did not have paralogues. Of those genes with paralogues (**fig.** \ref{fig:paralogue_dist}) the mean had `r round(mean(protein_genes_w_paralogues_wide$number_of_paralogues), 3)` paralogues with a standard deviation of `r round(sd(protein_genes_w_paralogues_wide$number_of_paralogues), 3)`. The maximum number of paralogues a gene had was `r max(protein_genes_w_paralogues_wide$number_of_paralogues)`.
+According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues_genes)` protein coding genes did not have paralogues. Of those genes with paralogues (**fig.** \ref{fig:paralog_dist}a) the mean had `r round(mean(protein_genes_w_paralogues_wide$number_of_paralogues), 3)` paralogues with a standard deviation of `r round(sd(protein_genes_w_paralogues_wide$number_of_paralogues), 3)`. The maximum number of paralogues a gene had was `r max(protein_genes_w_paralogues_wide$number_of_paralogues)`.
 
-In the clinvar pathogenic and likely pathogenic dataset, there were `r length(clinvar_P_LP_tableized$CHROM)` variants from `r length(clinvar_P_LP_tableized_genes)` genes. `r length(clinvar_P_LP_genes_wo_paralogs)` of these did not have paralogs and therefore the `r length(clinvar_P_LP_variants_wo_paralogs)` variants lying within these genes were not used for annotation, leaving `r length(clinvar_P_LP_tableized$CHROM) - length(clinvar_P_LP_variants_wo_paralogs)` for use in the analysis. The distribution of number of paralogues for these set of genes is shown in **fig.**. The mean number of paralogues was `r round(mean(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)` with a standard deviation `r round(sd(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)`.
+In the clinvar pathogenic and likely pathogenic dataset, there were `r length(clinvar_P_LP_tableized$CHROM)` variants from `r length(clinvar_P_LP_tableized_genes)` genes. `r length(clinvar_P_LP_genes_wo_paralogs)` of these did not have paralogs and therefore the `r length(clinvar_P_LP_variants_wo_paralogs)` variants lying within these genes were not used for annotation, leaving `r length(clinvar_P_LP_tableized$CHROM) - length(clinvar_P_LP_variants_wo_paralogs)` for use in the analysis. The distribution of number of paralogues for these set of genes is shown in **fig.** \ref{fig:paralog_dist}b. The mean number of paralogues was `r round(mean(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)` with a standard deviation `r round(sd(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)`.
 
-For variants in the clinvar benign and likely benign dataset, there were `r length(clinvar_B_LB_tableized$CHROM)` variants from `r length(clinvar_B_LB_tableized_genes)` genes. `r length(clinvar_B_LB_tableized$CHROM) - length(clinvar_B_LB_variants_wo_paralogs)` variants resided in `r length(clinvar_B_LB_genes_w_paralogs)` genes with paralogs. Their respective distribution is shown in **fig.**, with a mean of `r round(mean(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)` paralogues and a standard deviation of `r round(sd(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)`.
+For variants in the clinvar benign and likely benign dataset, there were `r length(clinvar_B_LB_tableized$CHROM)` variants from `r length(clinvar_B_LB_tableized_genes)` genes. `r length(clinvar_B_LB_tableized$CHROM) - length(clinvar_B_LB_variants_wo_paralogs)` variants resided in `r length(clinvar_B_LB_genes_w_paralogs)` genes with paralogs. Their respective distribution is shown in **fig.** \ref{fig:paralog_dist}c, with a mean of `r round(mean(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)` paralogues and a standard deviation of `r round(sd(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)`.
 
 Performing a simple kolmogorov smirnov test between the distribution of pathogenic variants in genes with paralogues and benign variants shows a p-value of `r ks$p.value` suggesting that the null hypothesis of the distributions being identical cannot be rejected. From this, there appears to be no statistical difference between pathogenic variants being more likely to lie in genes that have more paralogs compared to benign, at least in regards to the definitions of clinical significance made by clinvar.
 
 
 
 #### Annotation of Clinvar
-```{r echo = FALSE, results='asis', warning=FALSE}
+```{r clinvar_table, echo = FALSE, results='asis', warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 library(knitr)
 #noQC
 #pathogenic to pathogenic
@@ -1262,7 +1263,7 @@ kable(clinvar_set)
 
 ```
 
-In total, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control `r conf$con_table[2]` P/LP  and `r conf$con_table[4]` B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. 
+The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table}**. In summary, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control, `r conf$con_table[2]` known P/LP  and `r conf$con_table[4]` known B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. Comparatively, predicting benign variants was not as reliable. With `r conf_b$con_table[2]` known P/LP and `r conf_b$con_table[4]` known B/LB variants predicted to be benign. Though the proportional differene is statistically significant with a p-value of `r conf_b$Pvalue$p.value`, this lead to a PPV and sensitivity of `r conf_b$PPV` and `r conf_b$Sensitivity` respectively. 
 
 #### Para-Z scores
 
