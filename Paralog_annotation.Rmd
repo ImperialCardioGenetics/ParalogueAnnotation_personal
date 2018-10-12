@@ -2,7 +2,9 @@
 title: "Paralog Annotation Notes"
 # output: rmarkdown::github_document
 output: 
-  # html_document:
+  pdf_document:
+    toc: true
+    fig_caption: yes
   #   keep_md: true
   #   theme: journal
   #   highlight: espresso
@@ -10,9 +12,7 @@ output:
   # md_document:
   #   preserve_yaml: false
   #   fig_caption: yes
-  pdf_document:
-    toc: true
-    fig_caption: yes
+  # html_document:
 editor_options: 
   chunk_output_type: inline
 bibliography: bibliography.bib
@@ -727,61 +727,6 @@ grep -P "CLINICAL_SIGNIFICANCE=Likely_pathogenic" clinvar_alleles.single.b38.vcf
 cat output1.vcf output2.vcf > clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.vcf
 ```
 
-Taking only the 8 sarcomeric genes:
-```{r eval = FALSE, include = FALSE}
-#noQC
-p.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-conf = conf_matrix(p.sarco_var_align$num_of_paralog_anno, p.sarco_var_align$paralog_data, b.sarco_var_align$num_of_paralog_anno, b.sarco_var_align$paralog_data)
-#para_con
-p2.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b2.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-conf2 = conf_matrix(p2.sarco_var_align$num_of_paralog_anno, p2.sarco_var_align$paralog_data, b2.sarco_var_align$num_of_paralog_anno, b2.sarco_var_align$paralog_data)
-#all_con
-p3.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b3.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-conf3 = conf_matrix(p3.sarco_var_align$num_of_paralog_anno, p3.sarco_var_align$paralog_data, b3.sarco_var_align$num_of_paralog_anno, b3.sarco_var_align$paralog_data)
-
-#alt_con
-#pathogenic to pathogenic
-p4.Total_paralog_annotations = p3.sarco_var_align$Total_paralog_annotations[p3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
-# p4.Total_paralog_annotations = p4.Total_paralog_annotations[!duplicated(p4.Total_paralog_annotations$ID.x),]
-p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
-
-#benign to pathogenic
-b4.Total_paralog_annotations = b3.sarco_var_align$Total_paralog_annotations[b3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
-# b4.Total_paralog_annotations = b4.Total_paralog_annotations[!duplicated(b4.Total_paralog_annotations$ID.x),]
-b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
-
-conf4 = conf_matrix(p4.num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.num_of_paralog_anno, b3.sarco_var_align$paralog_data)
-
-#Overall_table
-Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
-Total = c(length(p.sarco_var_align$paralog_data$ID),length(b.sarco_var_align$paralog_data$ID),"NA","NA","NA")
-Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivty,conf$Pvalue$p.value)
-Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
-
-Variants_removed_after_PA_QC1 = c(var_rem_para_con[2],var_rem_para_con[4],var_rem_para_con_PPV,"NA",var_rem_para_con_p_value$p.value)
-Variants_remaining_after_PA_QC2 = c(format(con_table3[2], scientific = FALSE),format(con_table3[4], scientific = FALSE),con_table3_PPV,con_table3_Sensitivty,con_table3_p_value$p.value)
-Variants_removed_after_PA_QC2 = c(var_rem_all_con[2],var_rem_all_con[4],var_rem_all_con_PPV,"NA",var_rem_all_con_p_value$p.value)
-Variants_remaining_after_PA_QC3 = c(format(con_table4[2], scientific = FALSE),format(con_table4[4], scientific = FALSE),con_table4_PPV,con_table4_Sensitivty,con_table4_p_value$p.value)
-Variants_removed_after_PA_QC3 = c(var_rem_alt_con[2],var_rem_alt_con[4],var_rem_alt_con_PPV,"NA",var_rem_alt_con_p_value$p.value)
-
-sarcomeric_set = data.frame(Variant,
-                               Total,
-                               Paralogue_Annotation_no_QC,
-                               Variants_remaining_after_PA_QC1,
-                               Variants_removed_after_PA_QC1,
-                               Variants_remaining_after_PA_QC2,
-                               Variants_removed_after_PA_QC2,
-                               Variants_remaining_after_PA_QC3,
-                               Variants_removed_after_PA_QC3
-                               )
-
-```
-
-Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
-
 Taking only the 5 channelopathy genes:
 ```{r eval = FALSE, include = FALSE}
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "huxtable")
@@ -1225,7 +1170,7 @@ kable(clinvar_set)
 
 ```
 
-The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table}**. In summary, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control, `r conf$con_table[2]` known P/LP  and `r conf$con_table[4]` known B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. Comparatively, predicting benign variants was not as reliable. With `r conf_b$con_table[2]` known P/LP and `r conf_b$con_table[4]` known B/LB variants predicted to be benign. Though the proportional differene is statistically significant with a p-value of `r conf_b$Pvalue$p.value`, this lead to a PPV and sensitivity of `r conf_b$PPV` and `r conf_b$Sensitivity` respectively. 
+The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table}**. In summary, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control, `r conf$con_table[2]` known P/LP  and `r conf$con_table[4]` known B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. Comparatively, predicting benign variants was not as reliable. With `r conf_b$con_table[2]` known P/LP and `r conf_b$con_table[4]` known B/LB variants predicted to be benign. Though the proportional differene is statistically significant with a p-value of $`r conf_b$Pvalue$p.value`$, this lead to a PPV and sensitivity of `r conf_b$PPV` and `r conf_b$Sensitivity` respectively. 
 
 Using the aforementioned quality control steps to increase the stringency of conservation across alignment columns in regards to reference and alternate amino acid alleles shows improvement to PPV and decrease in sensitivity over all for predicting pathogenic variants. But this does not help the case for predicting benign variants. The PPV does not improve significantly to a reliable level. Therefore, it can be concluded that at least with the dataset used in this study, paralogue annotation can be used as a variant classification method for predicting pathogenic variants, but not benign.
 
@@ -1261,6 +1206,60 @@ ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xl
 The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
 
 #### Subset of 8 sarcomeric genes and calculation of EF
+Taking only the 8 sarcomeric genes:
+```{r eval = FALSE, include = FALSE}
+#noQC
+p.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+conf = conf_matrix(p.sarco_var_align$num_of_paralog_anno, p.sarco_var_align$paralog_data, b.sarco_var_align$num_of_paralog_anno, b.sarco_var_align$paralog_data)
+#para_con
+p2.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b2.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+conf2 = conf_matrix(p2.sarco_var_align$num_of_paralog_anno, p2.sarco_var_align$paralog_data, b2.sarco_var_align$num_of_paralog_anno, b2.sarco_var_align$paralog_data)
+#all_con
+p3.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b3.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+conf3 = conf_matrix(p3.sarco_var_align$num_of_paralog_anno, p3.sarco_var_align$paralog_data, b3.sarco_var_align$num_of_paralog_anno, b3.sarco_var_align$paralog_data)
+
+#alt_con
+#pathogenic to pathogenic
+p4.Total_paralog_annotations = p3.sarco_var_align$Total_paralog_annotations[p3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+# p4.Total_paralog_annotations = p4.Total_paralog_annotations[!duplicated(p4.Total_paralog_annotations$ID.x),]
+p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
+
+#benign to pathogenic
+b4.Total_paralog_annotations = b3.sarco_var_align$Total_paralog_annotations[b3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+# b4.Total_paralog_annotations = b4.Total_paralog_annotations[!duplicated(b4.Total_paralog_annotations$ID.x),]
+b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
+
+conf4 = conf_matrix(p4.num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.num_of_paralog_anno, b3.sarco_var_align$paralog_data)
+
+#Overall_table
+Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
+Total = c(length(p.sarco_var_align$paralog_data$ID),length(b.sarco_var_align$paralog_data$ID),"NA","NA","NA")
+Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivty,conf$Pvalue$p.value)
+Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
+
+Variants_removed_after_PA_QC1 = c(var_rem_para_con[2],var_rem_para_con[4],var_rem_para_con_PPV,"NA",var_rem_para_con_p_value$p.value)
+Variants_remaining_after_PA_QC2 = c(format(con_table3[2], scientific = FALSE),format(con_table3[4], scientific = FALSE),con_table3_PPV,con_table3_Sensitivty,con_table3_p_value$p.value)
+Variants_removed_after_PA_QC2 = c(var_rem_all_con[2],var_rem_all_con[4],var_rem_all_con_PPV,"NA",var_rem_all_con_p_value$p.value)
+Variants_remaining_after_PA_QC3 = c(format(con_table4[2], scientific = FALSE),format(con_table4[4], scientific = FALSE),con_table4_PPV,con_table4_Sensitivty,con_table4_p_value$p.value)
+Variants_removed_after_PA_QC3 = c(var_rem_alt_con[2],var_rem_alt_con[4],var_rem_alt_con_PPV,"NA",var_rem_alt_con_p_value$p.value)
+
+sarcomeric_set = data.frame(Variant,
+                               Total,
+                               Paralogue_Annotation_no_QC,
+                               Variants_remaining_after_PA_QC1,
+                               Variants_removed_after_PA_QC1,
+                               Variants_remaining_after_PA_QC2,
+                               Variants_removed_after_PA_QC2,
+                               Variants_remaining_after_PA_QC3,
+                               Variants_removed_after_PA_QC3
+                               )
+
+```
+
+Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 
 ```{r eval = FALSE, include = FALSE}
 #noQC
