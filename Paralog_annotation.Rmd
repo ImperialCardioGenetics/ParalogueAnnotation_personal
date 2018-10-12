@@ -1299,7 +1299,13 @@ Total_control_cases = sum(control.data$mut_exac_count)
 
 ```
 
-Limitations of this current framework are the reliance on 1) genes with paralogues, 2) for those paralogues to have pathogenic variants and 3) the alignment of the paralogous variants. This is not always the case. For example in the 8 sarcomeric genes involved in HCM [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1], there were not many paralogous alignments.   since most paralogues of HCM disease genes are no. Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.
+Limitations of this current framework are the reliance on 1) genes with paralogues, 2) for those paralogues to have pathogenic variants and 3) the alignment of the paralogous variants. This is not always the case. For example, consiering MYH7, its closest paralogue MYH6 
+
+For example in the 8 sarcomeric genes involved in HCM [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1], taking MYH7 there were not many paralogous alignments.   since most paralogues of HCM disease genes are no.
+
+Infact performing the analysis on all possible missesnse mutations for these set of genes still shows a lack of annotation...
+
+Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.
 
 
 #### References
