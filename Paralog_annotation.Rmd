@@ -1082,7 +1082,7 @@ Performing a simple kolmogorov smirnov test between the distribution of pathogen
 
 #### Annotation of Clinvar
 ```{r clinvar_table, echo = FALSE, results='asis', warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
-library(knitr)
+# library(knitr)
 #noQC
 #pathogenic to pathogenic
 p.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
@@ -1207,7 +1207,7 @@ The filtering steps outlined above take a more binaray path into taking account 
 
 #### Subset of 8 sarcomeric genes and calculation of EF
 Taking only the 8 sarcomeric genes:
-```{r eval = FALSE, include = FALSE}
+```{r echo = FALSE, results='asis', warning=FALSE}
 #noQC
 p.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 b.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
@@ -1235,16 +1235,39 @@ b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
 conf4 = conf_matrix(p4.num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.num_of_paralog_anno, b3.sarco_var_align$paralog_data)
 
 #Overall_table
+# Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
+# Total = c(length(p.sarco_var_align$paralog_data$ID),length(b.sarco_var_align$paralog_data$ID),"NA","NA","NA")
+# Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivty,conf$Pvalue$p.value)
+# Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
+# 
+# Variants_removed_after_PA_QC1 = c(var_rem_para_con[2],var_rem_para_con[4],var_rem_para_con_PPV,"NA",var_rem_para_con_p_value$p.value)
+# Variants_remaining_after_PA_QC2 = c(format(con_table3[2], scientific = FALSE),format(con_table3[4], scientific = FALSE),con_table3_PPV,con_table3_Sensitivty,con_table3_p_value$p.value)
+# Variants_removed_after_PA_QC2 = c(var_rem_all_con[2],var_rem_all_con[4],var_rem_all_con_PPV,"NA",var_rem_all_con_p_value$p.value)
+# Variants_remaining_after_PA_QC3 = c(format(con_table4[2], scientific = FALSE),format(con_table4[4], scientific = FALSE),con_table4_PPV,con_table4_Sensitivty,con_table4_p_value$p.value)
+# Variants_removed_after_PA_QC3 = c(var_rem_alt_con[2],var_rem_alt_con[4],var_rem_alt_con_PPV,"NA",var_rem_alt_con_p_value$p.value)
+# 
+# sarcomeric_set = data.frame(Variant,
+#                                Total,
+#                                Paralogue_Annotation_no_QC,
+#                                Variants_remaining_after_PA_QC1,
+#                                Variants_removed_after_PA_QC1,
+#                                Variants_remaining_after_PA_QC2,
+#                                Variants_removed_after_PA_QC2,
+#                                Variants_remaining_after_PA_QC3,
+#                                Variants_removed_after_PA_QC3
+#                                )
+
+#Overall_table
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
-Total = c(length(p.sarco_var_align$paralog_data$ID),length(b.sarco_var_align$paralog_data$ID),"NA","NA","NA")
-Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivty,conf$Pvalue$p.value)
+Total = c(length(p.paralogous_var_align$paralog_data$ID),length(b.paralogous_var_align$paralog_data$ID),"NA","NA","NA")
+Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
 Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
 
-Variants_removed_after_PA_QC1 = c(var_rem_para_con[2],var_rem_para_con[4],var_rem_para_con_PPV,"NA",var_rem_para_con_p_value$p.value)
-Variants_remaining_after_PA_QC2 = c(format(con_table3[2], scientific = FALSE),format(con_table3[4], scientific = FALSE),con_table3_PPV,con_table3_Sensitivty,con_table3_p_value$p.value)
-Variants_removed_after_PA_QC2 = c(var_rem_all_con[2],var_rem_all_con[4],var_rem_all_con_PPV,"NA",var_rem_all_con_p_value$p.value)
-Variants_remaining_after_PA_QC3 = c(format(con_table4[2], scientific = FALSE),format(con_table4[4], scientific = FALSE),con_table4_PPV,con_table4_Sensitivty,con_table4_p_value$p.value)
-Variants_removed_after_PA_QC3 = c(var_rem_alt_con[2],var_rem_alt_con[4],var_rem_alt_con_PPV,"NA",var_rem_alt_con_p_value$p.value)
+Variants_removed_after_PA_QC1 = c(var_removed$con_table[2],var_removed$con_table[4],var_removed$PPV,"NA",var_removed$Pvalue$p.value)
+Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),conf3$PPV,conf3$Sensitivity,conf3$Pvalue$p.value)
+Variants_removed_after_PA_QC2 = c(var_removed2$con_table[2],var_removed2$con_table[4],var_removed2$PPV,"NA",var_removed2$Pvalue$p.value)
+Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),conf4$PPV,conf4$Sensitivity,conf4$Pvalue$p.value)
+Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],var_removed3$PPV,"NA",var_removed3$Pvalue$p.value)
 
 sarcomeric_set = data.frame(Variant,
                                Total,
@@ -1256,6 +1279,7 @@ sarcomeric_set = data.frame(Variant,
                                Variants_remaining_after_PA_QC3,
                                Variants_removed_after_PA_QC3
                                )
+kable(sarcomeric_set)
 
 ```
 
