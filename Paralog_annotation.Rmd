@@ -1283,9 +1283,9 @@ kable(sarcomeric_set)
 
 ```
 
-There are however limitations to this current framework. Such as the reliance on 1) genes with paralogues, 2) for those paralogues to have pathogenic variants and 3) for the paralogous variants to be aligned to corresponding equivalent positions. This is not always the case. For example, consiering MYH7, its closest paralogue MYH6
+There are however limitations to this current framework. Such as the reliance on 1) genes with paralogues, 2) for those paralogues to have pathogenic variants and 3) for the paralogous variants to be aligned to corresponding equivalent positions. This is not always the case. For example, in the consideration of Hypertrophic Cardiomyopathy (HCM) and the 8 sarcomeric genes commonly associated with the genetic basis of HCM: MYH7; MYBPC3; TNNT2; TPM1; MYL2; MYL3; TNNI3; and ACTC1.
 
-Using only the 8 sarcomeric genes and joining to the whole clinvar dataset did not provide many annotations which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
+Annotating only these 8 sarcomeric genes with the whole clinvar P/LP dataset as before did not provide many annotations, which could suggest either PA does not perform well on sarcomeric genes (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data. Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 
 ```{r eval = FALSE, include = FALSE}
 #noQC
