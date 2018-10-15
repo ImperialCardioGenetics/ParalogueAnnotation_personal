@@ -22,7 +22,6 @@ always_allow_html: yes
 <!--Load Packages and function-->
 ```{r echo=FALSE, message=FALSE, warning=FALSE, include=FALSE, results='hide'}
 source("src/Paralogous_var_align_functions.R")
-# opts_knit$set(eval.after = 'fig.cap')
 ```
 
 ### Aims
@@ -1081,7 +1080,7 @@ Performing a simple kolmogorov smirnov test between the distribution of pathogen
 
 
 #### Annotation of Clinvar
-```{r clinvar_table, echo = FALSE, results='asis', warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
+```{r clinvar_table, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 # library(knitr)
 #noQC
 #pathogenic to pathogenic
@@ -1156,18 +1155,35 @@ Variants_removed_after_PA_QC2 = c(var_removed2$con_table[2],var_removed2$con_tab
 Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),conf4$PPV,conf4$Sensitivity,conf4$Pvalue$p.value)
 Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],var_removed3$PPV,"NA",var_removed3$Pvalue$p.value)
 
-clinvar_set = data.frame(Variant,
-                               Total,
-                               Paralogue_Annotation_no_QC,
-                               Variants_remaining_after_PA_QC1,
-                               Variants_removed_after_PA_QC1,
-                               Variants_remaining_after_PA_QC2,
-                               Variants_removed_after_PA_QC2,
-                               Variants_remaining_after_PA_QC3,
-                               Variants_removed_after_PA_QC3
-                               )
-# kable(clinvar_set)
-print(xtable(clinvar_set), scalebox='0.75')
+# Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
+# Variants_remaining_after_PA_QC1 = c(conf2$con_table[2],conf2$con_table[4],conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
+# 
+# Variants_removed_after_PA_QC1 = c(var_removed$con_table[2],var_removed$con_table[4],var_removed$PPV,"NA",var_removed$Pvalue$p.value)
+# Variants_remaining_after_PA_QC2 = c(conf3$con_table[2],conf3$con_table[4],conf3$PPV,conf3$Sensitivity,conf3$Pvalue$p.value)
+# Variants_removed_after_PA_QC2 = c(var_removed2$con_table[2],var_removed2$con_table[4],var_removed2$PPV,"NA",var_removed2$Pvalue$p.value)
+# Variants_remaining_after_PA_QC3 = c(conf4$con_table[2],conf4$con_table[4],conf4$PPV,conf4$Sensitivity,conf4$Pvalue$p.value)
+# Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],var_removed3$PPV,"NA",var_removed3$Pvalue$p.value)
+
+clinvar_set1 = data.frame(Variant,
+                          Total,
+                          Paralogue_Annotation_no_QC,
+                          Variants_remaining_after_PA_QC1,
+                          Variants_removed_after_PA_QC1,
+                          Variants_remaining_after_PA_QC2
+                          # Variants_removed_after_PA_QC2,
+                          # Variants_remaining_after_PA_QC3,
+                          # Variants_removed_after_PA_QC3
+                          )
+
+clinvar_set2 = data.frame(Variant,
+                          Total,
+                          Variants_removed_after_PA_QC2,
+                          Variants_remaining_after_PA_QC3,
+                          Variants_removed_after_PA_QC3
+                          )
+
+kable(clinvar_set1)
+kable(clinvar_set2)
 ```
 
 The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table}**. In summary, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control, `r conf$con_table[2]` known P/LP  and `r conf$con_table[4]` known B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. Comparatively, predicting benign variants was not as reliable. With `r conf_b$con_table[2]` known P/LP and `r conf_b$con_table[4]` known B/LB variants predicted to be benign. Though the proportional differene is statistically significant with a p-value of $`r conf_b$Pvalue$p.value`$, this lead to a PPV and sensitivity of `r conf_b$PPV` and `r conf_b$Sensitivity` respectively. 
