@@ -1166,8 +1166,8 @@ clinvar_set = data.frame(Variant,
                                Variants_remaining_after_PA_QC3,
                                Variants_removed_after_PA_QC3
                                )
-kable(clinvar_set)
-
+# kable(clinvar_set)
+print(xtable(clinvar_set), scalebox='0.75')
 ```
 
 The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table}**. In summary, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control, `r conf$con_table[2]` known P/LP  and `r conf$con_table[4]` known B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. Comparatively, predicting benign variants was not as reliable. With `r conf_b$con_table[2]` known P/LP and `r conf_b$con_table[4]` known B/LB variants predicted to be benign. Though the proportional differene is statistically significant with a p-value of $`r conf_b$Pvalue$p.value`$, this lead to a PPV and sensitivity of `r conf_b$PPV` and `r conf_b$Sensitivity` respectively. 
@@ -1287,7 +1287,7 @@ There are however limitations to this current framework. Such as the reliance on
 
 Annotating only these 8 sarcomeric genes with the whole clinvar P/LP dataset as before did not provide many annotations, which could suggest either PA does not perform well on sarcomeric genes for the reasons stated above (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data - given more pathogenic variants to annotate with would certainly increase the likelihood of paralogous alignments. 
 
-```{r paralog_dist, echo=FALSE, message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 gene_id = c("MYH7", "MYBPC3", "TNNT2", "TPM1", "MYL2", "MYL3", "TNNI3", "ACTC1")
@@ -1298,10 +1298,12 @@ sarcomeric_genes = getBM(attributes = c("external_gene_name",
                                    values = list("protein_coding", TRUE, gene_id), mart = ens_human)
 
 clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-clinvar_P_LP_tableized_variant = as.vector(clinvar_P_LP_tableized$SYMBOL)
 
-for (variant in clinvar_P_LP_tableized_variant){
-  
+sarcomeric_paralog_variants = vector()
+for (variant in clinvar_P_LP_tableized$SYMBOL){
+  if (variant %in% sarcomeric_genes$hsapiens_paralog_associated_gene_name){
+    sarcomeric_paralog_variants = c(sarcomeric_paralog_variants, variant)
+  }
 }
 ```
 
