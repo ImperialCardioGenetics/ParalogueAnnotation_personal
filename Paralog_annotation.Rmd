@@ -1292,6 +1292,17 @@ ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 gene_id = c("MYH7", "MYBPC3", "TNNT2", "TPM1", "MYL2", "MYL3", "TNNI3", "ACTC1")
 
+sarcomeric_genes = getBM(attributes = c("external_gene_name",
+                                                  "hsapiens_paralog_associated_gene_name"), 
+                                   filters = c("biotype", "with_hsapiens_paralog", "external_gene_name"), 
+                                   values = list("protein_coding", TRUE, gene_id), mart = ens_human)
+
+clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_tableized_variant = as.vector(clinvar_P_LP_tableized$SYMBOL)
+
+for (variant in clinvar_P_LP_tableized_variant){
+  
+}
 ```
 
 Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
