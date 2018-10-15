@@ -4,6 +4,7 @@ title: "Paralog Annotation Notes"
 output: 
   pdf_document:
     toc: true
+    number_sections: true
     fig_caption: yes
   #   keep_md: true
   #   theme: journal
@@ -1167,23 +1168,20 @@ Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_tab
 clinvar_set1 = data.frame(Variant,
                           Total,
                           Paralogue_Annotation_no_QC,
-                          Variants_remaining_after_PA_QC1,
-                          Variants_removed_after_PA_QC1,
-                          Variants_remaining_after_PA_QC2
-                          # Variants_removed_after_PA_QC2,
-                          # Variants_remaining_after_PA_QC3,
-                          # Variants_removed_after_PA_QC3
+                          Variants_remaining_after_PA_QC1
                           )
 
-clinvar_set2 = data.frame(Variant,
-                          Total,
-                          Variants_removed_after_PA_QC2,
-                          Variants_remaining_after_PA_QC3,
-                          Variants_removed_after_PA_QC3
+clinvar_set2 = data.frame(Variants_removed_after_PA_QC1,
+                          Variants_remaining_after_PA_QC2,
+                          Variants_removed_after_PA_QC2
                           )
+
+clinvar_set3 = data.frame(Variants_remaining_after_PA_QC3,
+                          Variants_removed_after_PA_QC3)
 
 kable(clinvar_set1)
 kable(clinvar_set2)
+kable(clinvar_set3)
 ```
 
 The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table}**. In summary, `r conf$con_table[1]` Pathogenic and Likely Pathogenic (P/LP) variants and `r conf$con_table[2]` Benign and Likey Benign (B/LB) variants from clinvar had paralogue annotations. With no quality control, `r conf$con_table[2]` known P/LP  and `r conf$con_table[4]` known B/LB variants were predicted to be pathogenic, given a PPV and sensitivity of `r conf$PPV` and `r conf$Sensitivity` respectively. Comparatively, predicting benign variants was not as reliable. With `r conf_b$con_table[2]` known P/LP and `r conf_b$con_table[4]` known B/LB variants predicted to be benign. Though the proportional differene is statistically significant with a p-value of $`r conf_b$Pvalue$p.value`$, this lead to a PPV and sensitivity of `r conf_b$PPV` and `r conf_b$Sensitivity` respectively. 
