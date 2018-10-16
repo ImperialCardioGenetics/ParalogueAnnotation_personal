@@ -1319,6 +1319,8 @@ for (variant in clinvar_P_LP_tableized$SYMBOL){
     sarcomeric_paralog_variants = c(sarcomeric_paralog_variants, variant)
   }
 }
+sarcomeric_genes = spread(sarcomeric_genes, key = "hsapiens_paralog_associated_gene_name", "hsapiens_paralog_associated_gene_name")
+for ()
 ```
 
 Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
