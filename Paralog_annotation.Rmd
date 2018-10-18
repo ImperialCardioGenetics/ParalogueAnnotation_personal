@@ -1301,7 +1301,7 @@ There are however limitations to this current framework. Such as the reliance on
 
 Annotating only these 8 sarcomeric genes with the whole clinvar P/LP dataset as before did not provide many annotations, which could suggest either PA does not perform well on sarcomeric genes for the reasons stated above (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data - given more pathogenic variants to annotate with would certainly increase the likelihood of paralogous alignments. 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+```{r sarco_para, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:sarco_para}Number of paralogues each sarcomeric gene has"}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 gene_id = c("MYH7", "MYBPC3", "TNNT2", "TPM1", "MYL2", "MYL3", "TNNI3", "ACTC1")
@@ -1313,12 +1313,20 @@ sarcomeric_genes = getBM(attributes = c("external_gene_name",
 
 clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 
-sarcomeric_paralog_variants = vector()
+sarcomeric_paralog_variants = data.frame(Doubles=double(),
+                                         Ints=integer(),
+                                         Factors=factor(),
+                                         Logicals=logical(),
+                                         Characters=character(),
+                                         stringsAsFactors=FALSE)
+count = 1
 for (variant in clinvar_P_LP_tableized$SYMBOL){
   if (variant %in% sarcomeric_genes$hsapiens_paralog_associated_gene_name){
-    sarcomeric_paralog_variants = c(sarcomeric_paralog_variants, variant)
+    sarcomeric_paralog_variants = rbind(sarcomeric_paralog_variants, clinvar_P_LP_tableized[count,])
   }
+  count = count + 1
 }
+
 # sarcomeric_genes_paralogs = spread(sarcomeric_genes, key = "hsapiens_paralog_associated_gene_name", "hsapiens_paralog_associated_gene_name")
 
 sarcomeric_genes_paralogs = sarcomeric_genes %>%
@@ -1326,9 +1334,13 @@ sarcomeric_genes_paralogs = sarcomeric_genes %>%
   summarise(total = toString(hsapiens_paralog_associated_gene_name)) %>%
   ungroup()
 
+
+
 kable(sarcomeric_genes_paralogs)
 
 ```
+
+Looking at how many paralogues the 8 sarcomeric genes have (table ..) there is at least 2 for each with MYH7 having the most (13)
 
 Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 
