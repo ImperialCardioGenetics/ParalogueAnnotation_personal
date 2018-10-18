@@ -1230,10 +1230,15 @@ conf = conf_matrix(p.sarco_var_align$num_of_paralog_anno, p.sarco_var_align$para
 p2.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 b2.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 conf2 = conf_matrix(p2.sarco_var_align$num_of_paralog_anno, p2.sarco_var_align$paralog_data, b2.sarco_var_align$num_of_paralog_anno, b2.sarco_var_align$paralog_data)
+
+var_removed = var_rem_matrix(conf$con_table, conf2$con_table, p2.sarco_var_align$paralog_data, b2.sarco_var_align$paralog_data)
+
 #all_con
 p3.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 b3.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 conf3 = conf_matrix(p3.sarco_var_align$num_of_paralog_anno, p3.sarco_var_align$paralog_data, b3.sarco_var_align$num_of_paralog_anno, b3.sarco_var_align$paralog_data)
+
+var_removed2 = var_rem_matrix(conf2$con_table, conf3$con_table, p3.sarco_var_align$paralog_data, b3.sarco_var_align$paralog_data)
 
 #alt_con
 #pathogenic to pathogenic
@@ -1247,6 +1252,8 @@ b4.Total_paralog_annotations = b3.sarco_var_align$Total_paralog_annotations[b3.s
 b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
 
 conf4 = conf_matrix(p4.num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.num_of_paralog_anno, b3.sarco_var_align$paralog_data)
+
+var_removed3 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.sarco_var_align$paralog_data, b3.sarco_var_align$paralog_data)
 
 #Overall_table
 # Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
@@ -1273,7 +1280,7 @@ conf4 = conf_matrix(p4.num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.
 
 #Overall_table
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
-Total = c(length(p.paralogous_var_align$paralog_data$ID),length(b.paralogous_var_align$paralog_data$ID),"NA","NA","NA")
+Total = c(length(p.sarco_var_align$paralog_data$ID),length(b.sarco_var_align$paralog_data$ID),"NA","NA","NA")
 Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
 Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
 
@@ -1297,9 +1304,13 @@ kable(sarcomeric_set)
 
 ```
 
-There are however limitations to this current framework. Such as the reliance on 1) genes with paralogues, 2) for those paralogues to have pathogenic variants and 3) for the paralogous variants to be aligned to corresponding equivalent positions. This is not always the case. For example, in the consideration of Hypertrophic Cardiomyopathy (HCM) and the 8 sarcomeric genes commonly associated with the genetic basis of HCM: MYH7; MYBPC3; TNNT2; TPM1; MYL2; MYL3; TNNI3; and ACTC1.
+There are however limitations to this current framework. These can be listed as the following criteria: 1)the reliance on genes with paralogues; 2) for those paralogues to have pathogenic variants; and 3) for the paralogous variants to be aligned to corresponding equivalent positions. This is not always the case. 
 
-Annotating only these 8 sarcomeric genes with the whole clinvar P/LP dataset as before did not provide many annotations, which could suggest either PA does not perform well on sarcomeric genes for the reasons stated above (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data - given more pathogenic variants to annotate with would certainly increase the likelihood of paralogous alignments. 
+As a specific example, consider Hypertrophic Cardiomyopathy (HCM) and the 8 sarcomeric genes commonly associated with the genetic basis of HCM: MYH7; MYBPC3; TNNT2; TPM1; MYL2; MYL3; TNNI3; and ACTC1.
+
+Annotating only these 8 sarcomeric genes with the whole clinvar P/LP dataset as before did not provide many annotations - without any quality control there were only `r sarcomeric_set$Paralogue_Annotation_no_QC[1]` P/LP variants and `r sarcomeric_set$Paralogue_Annotation_no_QC[2]` B/LP variants predicted to be pathogenic.
+
+This could suggest either PA does not perform well on sarcomeric genes for the reasons stated above (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data - given more pathogenic variants to annotate with would certainly increase the likelihood of paralogous alignments. 
 
 ```{r sarco_para, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:sarco_para}Number of paralogues each sarcomeric gene has"}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
@@ -1312,6 +1323,20 @@ sarcomeric_genes = getBM(attributes = c("external_gene_name",
                                    values = list("protein_coding", TRUE, gene_id), mart = ens_human)
 
 clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+
+sarcomeric_variants = data.frame(Doubles=double(),
+                                         Ints=integer(),
+                                         Factors=factor(),
+                                         Logicals=logical(),
+                                         Characters=character(),
+                                         stringsAsFactors=FALSE)
+count = 1
+for (variant in clinvar_P_LP_tableized$SYMBOL){
+  if (variant %in% gene_id){
+    sarcomeric_variants = rbind(sarcomeric_variants, clinvar_P_LP_tableized[count,])
+  }
+  count = count + 1
+}
 
 sarcomeric_paralog_variants = data.frame(Doubles=double(),
                                          Ints=integer(),
@@ -1337,10 +1362,14 @@ sarcomeric_genes_paralogs = sarcomeric_genes %>%
 
 
 kable(sarcomeric_genes_paralogs)
-
+#kable(sarcomeric_paralog_variants)
 ```
 
-Looking at how many paralogues the 8 sarcomeric genes have (table ..) there is at least 2 for each with MYH7 having the most (13)
+Looking at how many paralogues the 8 sarcomeric genes have (table `sarcomeric_genes_paralogs`), there are at least 2 for each gene with MYH7 having the most - 13. This satisfies the first criteria.
+
+In the clinvar P/LP dataset, there are `r length(sarcomeric_variants$CHROM)` known P/LP variants that lie in the 8 sarcomeric genes. But taking only the paralogues of these genes, there are only `r length(sarcomeric_paralog_variants$CHROM)` variants. Assuming the clinvar dataset is complete and considering it in isolation, this would suggest that in comparison to the main 8 sarcomeric genes involved in HCM, their associated paralogues are not as frequently involved in disease. This still does however statisfy the second criteria.
+
+
 
 Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 
