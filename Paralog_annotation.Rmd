@@ -1371,10 +1371,10 @@ Looking at how many paralogues the 8 sarcomeric genes have (table `sarcomeric_ge
 
 In the clinvar P/LP dataset, there are `r length(sarcomeric_variants$CHROM)` known P/LP variants that lie in the 8 sarcomeric genes. But taking only the paralogues of these genes, there are only `r length(sarcomeric_paralog_variants$CHROM)` variants. Assuming the clinvar dataset is complete and considering it in isolation, this would suggest that in comparison to variants in the main 8 sarcomeric genes involved in HCM, their associated paralogous variants are not as frequently involved in disease. This still does however statisfy the second criteria.
 
-Therefore, the third criteria is where the lack of as many annotations arises.
-
+Therefore, the third criteria is where the lack of as many annotations arises. Having additional data for both known reference variants to transfer annotations from and more query variants to transfer annotations to may resolve this as there would intuitively be more alignments available to transfer annotations. Collecting additional known pathogenic variants can be difficult as that would require established verification of such variants. But querying every possible potential missense 
+<!--
 Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
-
+-->
 ```{r eval = FALSE, include = FALSE}
 #noQC
 #all missense data
@@ -1412,7 +1412,6 @@ Total_control_cases = sum(control.data$mut_exac_count)
 
 ```
 
- 
 
 For example in the 8 sarcomeric genes involved in HCM [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1], taking MYH7 there were not many paralogous alignments.   since most paralogues of HCM disease genes are no.
 
