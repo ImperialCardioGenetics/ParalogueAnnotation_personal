@@ -1369,9 +1369,9 @@ kable(sarcomeric_genes_paralogs)
 
 Looking at how many paralogues the 8 sarcomeric genes have (table `sarcomeric_genes_paralogs`), there are at least 2 for each gene with MYH7 having the most - 13. This satisfies the first criteria.
 
-In the clinvar P/LP dataset, there are `r length(sarcomeric_variants$CHROM)` known P/LP variants that lie in the 8 sarcomeric genes. But taking only the paralogues of these genes, there are only `r length(sarcomeric_paralog_variants$CHROM)` variants. Assuming the clinvar dataset is complete and considering it in isolation, this would suggest that in comparison to the main 8 sarcomeric genes involved in HCM, their associated paralogues are not as frequently involved in disease. This still does however statisfy the second criteria.
+In the clinvar P/LP dataset, there are `r length(sarcomeric_variants$CHROM)` known P/LP variants that lie in the 8 sarcomeric genes. But taking only the paralogues of these genes, there are only `r length(sarcomeric_paralog_variants$CHROM)` variants. Assuming the clinvar dataset is complete and considering it in isolation, this would suggest that in comparison to variants in the main 8 sarcomeric genes involved in HCM, their associated paralogous variants are not as frequently involved in disease. This still does however statisfy the second criteria.
 
-
+Therefore, the third criteria is where the lack of as many annotations arises.
 
 Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 
