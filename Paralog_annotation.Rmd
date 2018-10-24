@@ -1371,7 +1371,7 @@ Looking at how many paralogues the 8 sarcomeric genes have (table `sarcomeric_ge
 
 In the clinvar P/LP dataset, there are `r length(sarcomeric_variants$CHROM)` known P/LP variants that lie in the 8 sarcomeric genes. But taking only the paralogues of these genes, there are only `r length(sarcomeric_paralog_variants$CHROM)` variants. Assuming the clinvar dataset is complete and considering it in isolation, this would suggest that in comparison to variants in the main 8 sarcomeric genes involved in HCM, their associated paralogous variants are not as frequently involved in disease. This still does however statisfy the second criteria.
 
-Therefore, the third criteria is where the lack of as many annotations arises. Having additional data for both known reference variants to transfer annotations from and more query variants to transfer annotations to may resolve this as there would intuitively be more alignments available to transfer annotations. Collecting additional known pathogenic variants can be difficult as that would require established interpretation and verification of such variants. But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done. 
+Therefore, the third criteria is where the lack of as many annotations arises. Having additional data for both known reference variants to transfer annotations from and more query variants to transfer annotations to may resolve this as there would intuitively be more alignments available to transfer annotations. Collecting additional known pathogenic variants can be difficult as that would require established interpretation and verification of such variants. 
 <!--
 Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 -->
@@ -1380,9 +1380,9 @@ Therefore, it is not yet certain that PA does not work on sarcomeric genes and a
 #all missense data
 # art.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
-patho_art_var = art.paralogous_var_align$Total_paralog_annotations[!is.na(art.paralogous_var_align$Total_paralog_annotations$ID.y),]
-art_conf = conf_matrix(p.art.paralogous_var_align$num_of_paralog_anno,p.art.paralogous_var_align$paralog_data,b.art.paralogous_var_align$num_of_paralog_anno,b.art.paralogous_var_align$paralog_data)
+# b.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
+patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
+# art_conf = conf_matrix(p.art.paralogous_var_align$num_of_paralog_anno,p.art.paralogous_var_align$paralog_data,b.art.paralogous_var_align$num_of_paralog_anno,b.art.paralogous_var_align$paralog_data)
 #case data
 case.data = read.csv("data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.vcf", sep = "\t", skip = 4)
 case.data$Variant_pos = paste(case.data$X.CHROM, case.data$POS, sep = " ")
@@ -1413,6 +1413,9 @@ control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
 
 ```
+
+But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art.paralogous_var_align$paralog_data$Variant_pos)` total variants). Doing so, predicts `r p.art.paralogous_var_align$num_of_paralog_anno` variants to pathogenic - a `r p.art.paralogous_var_align$num_of_paralog_anno/p.sarco_var_align$num_of_paralog_anno` fold increase. 
+
 
 
 For example in the 8 sarcomeric genes involved in HCM [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1], taking MYH7 there were not many paralogous alignments.   since most paralogues of HCM disease genes are no.
