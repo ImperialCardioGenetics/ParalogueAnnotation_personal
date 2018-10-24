@@ -44,6 +44,8 @@ source("src/Paralogous_var_align_functions.R")
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
+* output as word doc and then can edit the stylised formats in word. This can then be used as a reference template doc (see https://github.com/jamesware/denovolyzerManuscript/blob/master/denovolyzerManuscript.Rmd) to auto stylize formats that are difficult to do in r markdown.
+* set `cache = TRUE` to enable caching so whole code is rerun all the time
 * For the number of variants being patho or benign, how many of them actually align to anther variant? At least ones within paralogues? Difference between patho and benign variants? - Basically how many annotations there are...
 * Look at if patho set have more variants that lie in genes that have more paralogs than benign
 * Make sure noQC, para_con, and all_con output files have consistent total beginning number of variants
