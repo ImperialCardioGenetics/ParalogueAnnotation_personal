@@ -1313,7 +1313,7 @@ kable(sarcomeric_set)
 
 ```
 
-Is PA disease specific?
+<!--Is PA disease specific?-->
 
 There are however limitations to this current framework. These can be listed as the following criteria: 1)the reliance on genes with paralogues; 2) for those paralogues to have pathogenic variants; and 3) for the paralogous variants to be aligned to corresponding equivalent positions. This is not always the case. 
 
@@ -1427,6 +1427,8 @@ Total_control_cases = sum(control.data$mut_exac_count)
 #noQC
 #all missense data
 p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
+patho_art_var = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene %in% gene_subset)  
 patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
 
 ```
