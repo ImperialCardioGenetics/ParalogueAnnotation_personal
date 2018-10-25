@@ -2,10 +2,10 @@
 title: "Paralog Annotation Notes"
 # output: rmarkdown::github_document
 output: 
-  # pdf_document:
-  #   toc: true
-  #   number_sections: true
-  #   fig_caption: yes
+  pdf_document:
+    toc: true
+    number_sections: true
+    fig_caption: yes
 
   # md_document:
   #   preserve_yaml: false
@@ -17,7 +17,7 @@ output:
     #   highlight: espresso
     #   fig_caption: yes
     
-  word_document
+  # word_document
         
 editor_options: 
   chunk_output_type: inline
@@ -1430,7 +1430,7 @@ p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_
 gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
 
 p.art_Total_paralog_annotations = dplyr::filter(p.art.paralogous_var_align$Total_paralog_annotations, Gene %in% gene_subset)  
-p.art_num_of_paralog_anno = patho_art_var[!is.na(patho_art_var$ID.y),]
+p.art_num_of_paralog_anno = p.art_Total_paralog_annotations[!is.na(p.art_Total_paralog_annotations$ID.y),]
 
 p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene %in% gene_subset)
 
@@ -1439,7 +1439,7 @@ p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene
 ```
 
 
-But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art.paralogous_var_align$paralog_data$Variant_pos)` total variants). Doing so, predicts `r length(p.art_num_of_paralog_anno$Variant_pos)` variants to pathogenic - a `r p.art.paralogous_var_align$num_of_paralog_anno/p.sarco_var_align$num_of_paralog_anno` fold increase. 
+But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art_paralog_data$Variant_pos)` total variants). Doing so, predicts `r length(p.art_num_of_paralog_anno$Variant_pos)` variants to pathogenic - a `r p.art.paralogous_var_align$num_of_paralog_anno/p.sarco_var_align$num_of_paralog_anno` fold increase. 
 
 However,
 
