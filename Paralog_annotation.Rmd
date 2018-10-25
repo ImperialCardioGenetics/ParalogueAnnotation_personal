@@ -1428,13 +1428,18 @@ Total_control_cases = sum(control.data$mut_exac_count)
 #all missense data
 p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
-patho_art_var = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene %in% gene_subset)  
-patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
+
+p.art_Total_paralog_annotations = dplyr::filter(p.art.paralogous_var_align$Total_paralog_annotations, Gene %in% gene_subset)  
+p.art_num_of_paralog_anno = patho_art_var[!is.na(patho_art_var$ID.y),]
+
+p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene %in% gene_subset)
+
+# patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
 
 ```
 
 
-But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art.paralogous_var_align$paralog_data$Variant_pos)` total variants). Doing so, predicts `r p.art.paralogous_var_align$num_of_paralog_anno` variants to pathogenic - a `r p.art.paralogous_var_align$num_of_paralog_anno/p.sarco_var_align$num_of_paralog_anno` fold increase. 
+But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art.paralogous_var_align$paralog_data$Variant_pos)` total variants). Doing so, predicts `r length(p.art_num_of_paralog_anno$Variant_pos)` variants to pathogenic - a `r p.art.paralogous_var_align$num_of_paralog_anno/p.sarco_var_align$num_of_paralog_anno` fold increase. 
 
 However,
 
