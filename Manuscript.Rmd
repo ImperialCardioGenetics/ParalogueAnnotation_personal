@@ -2,10 +2,8 @@
 title: "Paralog Annotation Notes"
 # output: rmarkdown::github_document
 output: 
-  html_document:
-    keep_md: true
-    theme: journal
-    highlight: espresso
+  word_document:
+#    reference_docx: template.docx
 
 editor_options: 
   chunk_output_type: inline

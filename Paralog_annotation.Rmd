@@ -2,18 +2,23 @@
 title: "Paralog Annotation Notes"
 # output: rmarkdown::github_document
 output: 
-  pdf_document:
-    toc: true
-    number_sections: true
-    fig_caption: yes
-  #   keep_md: true
-  #   theme: journal
-  #   highlight: espresso
+  # pdf_document:
+  #   toc: true
+  #   number_sections: true
   #   fig_caption: yes
+
   # md_document:
   #   preserve_yaml: false
   #   fig_caption: yes
+  
   # html_document:
+    #   keep_md: true
+    #   theme: journal
+    #   highlight: espresso
+    #   fig_caption: yes
+    
+  word_document
+        
 editor_options: 
   chunk_output_type: inline
 bibliography: bibliography.bib
@@ -1415,6 +1420,15 @@ control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
 
 ```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#noQC
+#all missense data
+p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
+
+```
+
 
 But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art.paralogous_var_align$paralog_data$Variant_pos)` total variants). Doing so, predicts `r p.art.paralogous_var_align$num_of_paralog_anno` variants to pathogenic - a `r p.art.paralogous_var_align$num_of_paralog_anno/p.sarco_var_align$num_of_paralog_anno` fold increase. 
 
