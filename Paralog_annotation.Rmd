@@ -1441,7 +1441,9 @@ p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene
 
 But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art_paralog_data$Variant_pos)` total variants). Doing so, predicts `r length(p.art_num_of_paralog_anno$Variant_pos)` variants to pathogenic - a `r length(p.art_num_of_paralog_anno$Variant_pos)/p.sarco_var_align$num_of_paralog_anno` fold increase. Though how many additional predictions are true positives would require validation.
 
-However,
+However, it must be noted that genes with few predictions should not discourage use of PA...
+
+EFs show that even with few predictions, PA still works.
 
 For example in the 8 sarcomeric genes involved in HCM [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1], taking MYH7 there were not many paralogous alignments.   since most paralogues of HCM disease genes are no.
 
