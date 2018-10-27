@@ -1009,7 +1009,7 @@ The "2R"" hypothesis states that some 500 million years ago, early vertebrates w
 
 #### Paralogue stats
 
-```{r paralog_dist, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"}
+```{r paralog_dist, cache=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
@@ -1089,7 +1089,7 @@ Performing a simple kolmogorov smirnov test between the distribution of pathogen
 
 
 #### Annotation of Clinvar
-```{r clinvar_table, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
+```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 # library(knitr)
 #noQC
 #pathogenic to pathogenic
@@ -1202,7 +1202,7 @@ Using the aforementioned quality control steps to increase the stringency of con
 
 #### Para-Z scores
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r message=FALSE, cache=TRUE, warning=FALSE, echo=FALSE}
 Sensitivity_list = vector()
 FPR_list = vector()
 con_table_list = matrix(, ncol = 2)
@@ -1231,7 +1231,7 @@ The filtering steps outlined above take a more binaray path into taking account 
 
 #### Subset of 8 sarcomeric genes and calculation of EF
 Taking only the 8 sarcomeric genes:
-```{r echo = FALSE, results='asis', warning=FALSE}
+```{r echo = FALSE, cache=TRUE, results='asis', warning=FALSE}
 #noQC
 p.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 b.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
@@ -1324,7 +1324,7 @@ Annotating only these 8 sarcomeric genes with the whole clinvar P/LP dataset as 
 
 This could suggest either PA does not perform well on sarcomeric genes for the reasons stated above (paralogues to sarcomeric genes are not involed in disease) or that there is a lack of data - given more pathogenic variants to annotate with would certainly increase the likelihood of paralogous alignments. 
 
-```{r sarco_para, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:sarco_para}Number of paralogues each sarcomeric gene has"}
+```{r sarco_para, cache=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:sarco_para}Number of paralogues each sarcomeric gene has"}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 gene_id = c("MYH7", "MYBPC3", "TNNT2", "TPM1", "MYL2", "MYL3", "TNNI3", "ACTC1")
@@ -1385,7 +1385,26 @@ Therefore, the third criteria is where the lack of as many annotations arises. H
 <!--
 Therefore, it is not yet certain that PA does not work on sarcomeric genes and annotataion of additional sarcomeric data is required. See below.
 -->
-```{r eval = FALSE, include = FALSE}
+
+```{r echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+#noQC
+#all missense data
+p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
+
+p.art_Total_paralog_annotations = dplyr::filter(p.art.paralogous_var_align$Total_paralog_annotations, Gene %in% gene_subset)  
+p.art_num_of_paralog_anno = p.art_Total_paralog_annotations[!is.na(p.art_Total_paralog_annotations$ID.y),]
+
+p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene %in% gene_subset)
+
+# patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
+
+```
+
+
+But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art_paralog_data$Variant_pos)` total variants). Doing so, predicts `r length(p.art_num_of_paralog_anno$Variant_pos)` variants to pathogenic - a `r length(p.art_num_of_paralog_anno$Variant_pos)/p.sarco_var_align$num_of_paralog_anno` fold increase. Though validating how many additional predictions are true positives would require additional known pathogenicity data.
+<!--
+```{r eval = FALSE, cache=TRUE, include = FALSE}
 #noQC
 #all missense data
 # art.paralogous_var_align = Paralogous_var_align("/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/all_possible_mutation_icc/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized", "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
@@ -1423,26 +1442,50 @@ control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
 
 ```
+-->
+```{r eval = FALSE, cache=TRUE, include = FALSE}
+#case data VEP
+case.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+patho_case_var = case.paralogous_var_align$Total_paralog_annotations[!is.na(case.paralogous_var_align$Total_paralog_annotations$ID.y),]
+patho_case_var_IDs = patho_case_var$ID.x
+# write(patho_case_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_case_var_IDs.txt", sep = "\t", ncolumns = 1)
+case.data = read.csv("data/case_and_control/HCM_missense_LMM_OMGL_chr.csv", sep = ",")
+patho_case.data = case.data[case.data$mut_id %in% patho_case_var_IDs,]
+case_cases = sum(patho_case.data$sum.vs_case_count.)
+Total_case_cases = sum(case.data$sum.vs_case_count.)
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-#noQC
-#all missense data
-p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
-
-p.art_Total_paralog_annotations = dplyr::filter(p.art.paralogous_var_align$Total_paralog_annotations, Gene %in% gene_subset)  
-p.art_num_of_paralog_anno = p.art_Total_paralog_annotations[!is.na(p.art_Total_paralog_annotations$ID.y),]
-
-p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene %in% gene_subset)
-
-# patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
-
+#control data VEP
+control.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+patho_control_var = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$ID.y),]
+patho_control_var_IDs = patho_control_var$ID.x
+# write(patho_control_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_control_var_IDs.txt", sep = "\t", ncolumns = 1)
+control.data = read.csv("data/case_and_control/ExAC_missense_sarcomeric_chr.csv", sep = ",")
+patho_control.data = control.data[control.data$mut_id %in% patho_control_var_IDs,]
+control_cases = sum(patho_control.data$mut_exac_count)
+Total_control_cases = sum(control.data$mut_exac_count)
 ```
 
-
-But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art_paralog_data$Variant_pos)` total variants). Doing so, predicts `r length(p.art_num_of_paralog_anno$Variant_pos)` variants to pathogenic - a `r length(p.art_num_of_paralog_anno$Variant_pos)/p.sarco_var_align$num_of_paralog_anno` fold increase. Though validating how many additional predictions are true positives would require additional known pathogenicity data.
-
 However, it must be noted that even in genes with few predictions, paralogue annotation can still be functional and such predictions applicable. For the 8 sarcomeric genes 
+
+Cases with positive (bad) outcome
+Number in exposed group: 	
+39
+ 	
+Number in control group: 	
+28
+ 	
+Cases with negative (good) outcome
+Number in exposed group: 	
+41404
+ 	
+Number in control group: 	
+456365
+
+Results
+Odds ratio 	15.3524
+95 % CI:	9.4468 to 24.9499
+z statistic	11.024
+Significance level	P < 0.0001
 
 EFs show that even with few predictions, PA still works.
 
