@@ -1,5 +1,5 @@
 ---
-title: "Paralog Annotation Notes"
+title: "Applications of Paralog Annotation"
 # output: rmarkdown::github_document
 output: 
   word_document:

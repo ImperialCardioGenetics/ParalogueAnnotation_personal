@@ -1442,7 +1442,7 @@ p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene
 
 But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (` r length(p.art_paralog_data$Variant_pos)` total variants). Doing so, predicts `r length(p.art_num_of_paralog_anno$Variant_pos)` variants to pathogenic - a `r length(p.art_num_of_paralog_anno$Variant_pos)/p.sarco_var_align$num_of_paralog_anno` fold increase. Though validating how many additional predictions are true positives would require additional known pathogenicity data.
 
-However, it must be noted that even in genes with few predictions, paralogue annotation can still be functional and such predictions applicable.
+However, it must be noted that even in genes with few predictions, paralogue annotation can still be functional and such predictions applicable. For the 8 sarcomeric genes 
 
 EFs show that even with few predictions, PA still works.
 
