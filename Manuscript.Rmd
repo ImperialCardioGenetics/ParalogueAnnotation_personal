@@ -22,7 +22,9 @@ always_allow_html: yes
 ```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 source("src/Paralogous_var_align_functions.R")
 ```
-
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
 \newpage
 # Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
@@ -226,7 +228,9 @@ Using the aforementioned quality control steps to increase the stringency of con
 
 ## Para-Z scores
 
-```{r paraz, message=FALSE, cache=TRUE, warning=FALSE, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:paraz}Distribution of genes with paralogues by the number of paralogues they're related to"}
+The filtering steps outlined above take a more binaray approach to taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores defined by @Lal2017 on the other hand takes a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. As shown by **fig.** \ref{fig:paraz}, one can use the Para-Z scores as cutoff thresholds for how paralogue conserved alignments must be before considering annotations. The more stringent the cutoff the lower the false positive rate is, but as expected the lower the sensitivity is also. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
+
+```{r paraz, message=FALSE, cache=TRUE, warning=FALSE, echo=FALSE, fig.width=4,fig.height=3,fig.cap="\\label{fig:paraz}ROC space plot of pathogenic/likely pathogenic clinvar variants predicted as pathogenic by paralogue annotation at varying degrees of Para-Z scores"}
 Sensitivity_list = vector()
 FPR_list = vector()
 con_table_list = matrix(, ncol = 2)
@@ -246,15 +250,9 @@ gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point()
 gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 
 ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.04) + ylim(0.3,0.7) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
-
-
 ```
 
-
-The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
-
 ## Subset of 8 sarcomeric genes and calculation of EF
-Taking only the 8 sarcomeric genes:
 ```{r echo = FALSE, cache=TRUE, results='asis', warning=FALSE}
 #noQC
 p.sarco_var_align = Subset_var_align(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
