@@ -23,16 +23,16 @@ always_allow_html: yes
 source("src/Paralogous_var_align_functions.R")
 ```
 
-
-### Introduction
+\newpage
+# Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
 Previously Ware *et al.* have developed **Paralogue Annotation** [@Ware2012; @Walsh2014], which utilizes information from paralogues (evolutionarily related genes from the same species) to help classify pathogenic variants. They verified its use in LQT syndrome (LQTS) genes on variants acquired from patient cohorts.
 
 Here **Paralogue Annotation** is tested further using a Pathogenic/Likely Pathogenic (P/LP) and Benign/Likely Benign (B/LB) varaint dataset acquired from Clinvar. These variants covered a wider range of genes other than just those involved in LQTS
 
-### Results and Discussion
+# Results and Discussion
 
-#### Paralogue stats
+## Paralogue stats
 
 ```{r paralog_dist, cache=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
@@ -43,7 +43,7 @@ protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$e
 protein_genes_w_paralogues_wide = count(protein_genes_w_paralogues, external_gene_name)
 colnames(protein_genes_w_paralogues_wide)[2] = "number_of_paralogues"
 par(mfrow=c(2,2))
-hist(protein_genes_w_paralogues_wide$number_of_paralogues, breaks = seq(0,50,1))
+hist(protein_genes_w_paralogues_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="A) Distribution of genes with paralogues", cex.main = 0.7)
 
 protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
 protein_genes_wo_paralogues_genes = as.vector(unique(protein_genes_wo_paralogues$external_gene_name))
@@ -70,7 +70,7 @@ for (gene in clinvar_P_LP_tableized_genes){
   }
 }
 clinvar_P_LP_genes_w_paralogs_wide = protein_genes_w_paralogues_wide[protein_genes_w_paralogues_wide$external_gene_name %in% clinvar_P_LP_genes_w_paralogs,]
-hist(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1))
+hist(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="B) Distribution of genes with pathogenic/likely pathogenic variants", cex.main = 0.7)
 
 
 for (gene in clinvar_B_LB_tableized_genes){
@@ -82,7 +82,7 @@ for (gene in clinvar_B_LB_tableized_genes){
   }
 }
 clinvar_B_LB_genes_w_paralogs_wide = protein_genes_w_paralogues_wide[protein_genes_w_paralogues_wide$external_gene_name %in% clinvar_B_LB_genes_w_paralogs,]
-hist(clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1))
+hist(clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="C) Distribution of genes with benign/likely benign variants", cex.main = 0.7)
 
 clinvar_P_LP_variants_wo_paralogs = vector()
 for (variant in clinvar_P_LP_tableized$SYMBOL){
@@ -113,7 +113,7 @@ Performing a simple kolmogorov smirnov test between the distribution of pathogen
 
 
 
-#### Annotation of Clinvar
+## Annotation of Clinvar
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 # library(knitr)
 #noQC
@@ -180,14 +180,14 @@ var_removed3 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.paralogous_va
 #Overall_table
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
 Total = c(length(p.paralogous_var_align$paralog_data$ID),length(b.paralogous_var_align$paralog_data$ID),"NA","NA","NA")
-Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
-Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
+Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),round(conf$PPV, digits = 3),round(conf$Sensitivity, digits = 3),round(conf$Pvalue$p.value, digits = 3))
+Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),round(conf2$PPV, digits = 3), round(conf2$Sensitivity, digits = 3), round(conf2$Pvalue$p.value, digits = 3))
 
-Variants_removed_after_PA_QC1 = c(var_removed$con_table[2],var_removed$con_table[4],var_removed$PPV,"NA",var_removed$Pvalue$p.value)
-Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),conf3$PPV,conf3$Sensitivity,conf3$Pvalue$p.value)
-Variants_removed_after_PA_QC2 = c(var_removed2$con_table[2],var_removed2$con_table[4],var_removed2$PPV,"NA",var_removed2$Pvalue$p.value)
-Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),conf4$PPV,conf4$Sensitivity,conf4$Pvalue$p.value)
-Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],var_removed3$PPV,"NA",var_removed3$Pvalue$p.value)
+Variants_removed_after_PA_QC1 = c(var_removed$con_table[2],var_removed$con_table[4],round(var_removed$PPV, digits = 3),"NA",round(var_removed$Pvalue$p.value, digits = 3))
+Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),round(conf3$PPV, digits = 3),round(conf3$Sensitivity, digits = 3),round(conf3$Pvalue$p.value, digits = 3))
+Variants_removed_after_PA_QC2 = c(var_removed2$con_table[2],var_removed2$con_table[4],round(var_removed2$PPV, digits = 3),"NA",round(var_removed2$Pvalue$p.value, digits = 3))
+Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),round(conf4$PPV, digits = 3),round(conf4$Sensitivity, digits = 3),round(conf4$Pvalue$p.value, digits = 3))
+Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],round(var_removed3$PPV, digits = 3),"NA",round(var_removed3$Pvalue$p.value, digits = 3))
 
 # Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
 # Variants_remaining_after_PA_QC1 = c(conf2$con_table[2],conf2$con_table[4],conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
@@ -198,7 +198,7 @@ Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_tab
 # Variants_remaining_after_PA_QC3 = c(conf4$con_table[2],conf4$con_table[4],conf4$PPV,conf4$Sensitivity,conf4$Pvalue$p.value)
 # Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],var_removed3$PPV,"NA",var_removed3$Pvalue$p.value)
 
-clinvar_set1 = data.frame(Variant,
+clinvar_set = data.frame(Variant,
                           Total,
                           Paralogue_Annotation_no_QC,
                           Variants_remaining_after_PA_QC1,
@@ -209,15 +209,9 @@ clinvar_set1 = data.frame(Variant,
                           Variants_removed_after_PA_QC3
                           )
 
-# clinvar_set2 = data.frame(Variants_removed_after_PA_QC1,
-#                           Variants_remaining_after_PA_QC2,
-#                           Variants_removed_after_PA_QC2
-#                           )
-# 
-# clinvar_set3 = data.frame(Variants_remaining_after_PA_QC3,
-#                           Variants_removed_after_PA_QC3)
-
-pander(clinvar_set1)
+clinvar_set = t(clinvar_set)
+rownames(clinvar_set)  = c("", "Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants removed from QC1", "Variants remaining after QC2", "Variants removed after QC2", "Variants remaining after QC3", "Variants removed after QC3")
+kable(clinvar_set)
 # pander(clinvar_set2)
 # pander(clinvar_set3)
 ```
@@ -230,9 +224,9 @@ Using the aforementioned quality control steps to increase the stringency of con
 
 
 
-#### Para-Z scores
+## Para-Z scores
 
-```{r message=FALSE, cache=TRUE, warning=FALSE, echo=FALSE}
+```{r paraz, message=FALSE, cache=TRUE, warning=FALSE, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:paraz}Distribution of genes with paralogues by the number of paralogues they're related to"}
 Sensitivity_list = vector()
 FPR_list = vector()
 con_table_list = matrix(, ncol = 2)
@@ -259,7 +253,7 @@ ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xl
 
 The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
 
-#### Subset of 8 sarcomeric genes and calculation of EF
+## Subset of 8 sarcomeric genes and calculation of EF
 Taking only the 8 sarcomeric genes:
 ```{r echo = FALSE, cache=TRUE, results='asis', warning=FALSE}
 #noQC
@@ -389,7 +383,7 @@ In the clinvar P/LP dataset, there are `r length(sarcomeric_variants$CHROM)` kno
 
 Therefore, the third criteria is where the lack of as many annotations arises. Having additional data for both known reference variants to transfer annotations from and more query variants to transfer annotations to may resolve this as there would intuitively be more alignments available to transfer annotations. Collecting additional known pathogenic variants can be difficult as that would require established interpretation and verification of such variants. 
 
-<!--Data in below code chunk too big. Unable to KnitR. Have to hard write in numbers in paragraph.-->
+<!--Data in below code chunk too big. Unable to KnitR. Have to hard write numbers in paragraph.-->
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 #noQC
 #all missense data
@@ -460,7 +454,7 @@ Infact performing the analysis on all possible missesnse mutations for these set
 Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.
 
 
-#### References
+# References
 
 
 
