@@ -584,6 +584,8 @@ It is worth noting that using VEP with different versions of perl will result in
 #### Datasets
 Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. 
 
+Clinical significance definitions of variants defined according to Clinvar [@landrum2015clinvar].
+
 EFs calculated from OMGL and LMM datasets taken from previous @Walsh2017 publication.
 
 Exac and Gnomad data from @Lek2016. 
