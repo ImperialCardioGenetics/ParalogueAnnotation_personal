@@ -206,9 +206,9 @@ clinvar_set2 = data.frame(Variants_removed_after_PA_QC1,
 clinvar_set3 = data.frame(Variants_remaining_after_PA_QC3,
                           Variants_removed_after_PA_QC3)
 
-kable(clinvar_set1)
-kable(clinvar_set2)
-kable(clinvar_set3)
+pander(kable(clinvar_set1))
+pander(kable(clinvar_set2))
+pander(kable(clinvar_set3))
 ```
 
 Prior to annotation, there were `r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])` variants that aligned to at least one paralogous equivalent position according to ensembl (`r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])/length(clinvar_P_LP_tableized$CHROM)`)
