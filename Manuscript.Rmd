@@ -2,9 +2,15 @@
 title: "Further applications of Paralog Annotation"
 # output: rmarkdown::github_document
 output: 
-  word_document:
-   reference_docx: template.docx
 
+  # word_document:
+  #  reference_docx: template.docx
+
+  pdf_document:
+    toc: true
+    number_sections: true
+    fig_caption: yes
+    
 editor_options: 
   chunk_output_type: inline
 bibliography: bibliography.bib
@@ -195,20 +201,25 @@ Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_tab
 clinvar_set1 = data.frame(Variant,
                           Total,
                           Paralogue_Annotation_no_QC,
-                          Variants_remaining_after_PA_QC1
-                          )
-
-clinvar_set2 = data.frame(Variants_removed_after_PA_QC1,
+                          Variants_remaining_after_PA_QC1,
+                          Variants_removed_after_PA_QC1,
                           Variants_remaining_after_PA_QC2,
-                          Variants_removed_after_PA_QC2
+                          Variants_removed_after_PA_QC2,
+                          Variants_remaining_after_PA_QC3,
+                          Variants_removed_after_PA_QC3
                           )
 
-clinvar_set3 = data.frame(Variants_remaining_after_PA_QC3,
-                          Variants_removed_after_PA_QC3)
+# clinvar_set2 = data.frame(Variants_removed_after_PA_QC1,
+#                           Variants_remaining_after_PA_QC2,
+#                           Variants_removed_after_PA_QC2
+#                           )
+# 
+# clinvar_set3 = data.frame(Variants_remaining_after_PA_QC3,
+#                           Variants_removed_after_PA_QC3)
 
-pander(kable(clinvar_set1))
-pander(kable(clinvar_set2))
-pander(kable(clinvar_set3))
+pander(clinvar_set1)
+# pander(clinvar_set2)
+# pander(clinvar_set3)
 ```
 
 Prior to annotation, there were `r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])` variants that aligned to at least one paralogous equivalent position according to ensembl (`r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])/length(clinvar_P_LP_tableized$CHROM)`)
