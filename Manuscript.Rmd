@@ -36,11 +36,11 @@ Here **Paralogue Annotation** is tested further using a Pathogenic/Likely Pathog
 # Material and Methods
 
 ## Datasets
-Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. 
+Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. Variants that were positioned in any of the following 8 sarcomeric: MYH7; MYBPC3; TNNT2; TPM1; MYL2; MYL3; TNNI3; and ACTC1, were also subsetted for further analysis as the case example and used for etiological fraction calculations.
 
-Clinical significance definitions of variants defined according to Clinvar [@landrum2015clinvar].
+Clinical significance definitions of variants - Pathogenic; Likely Pathogenic; Likely Benign; Benign - were defined according to Clinvar [@landrum2015clinvar]. Variants of unknown significance were not used in the study.
 
-EFs calculated from OMGL and LMM datasets taken from previous @Walsh2017 publication.
+For the case and control study, HCM diseased cohorts data were gathered from the OMGL and LMM datasets, which were taken from previous @Walsh2017 publication. Data from ExAC were used as the control cohort @Lek2016.
 
 ## Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
