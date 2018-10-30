@@ -52,6 +52,26 @@ Likewise for a benign paralogous alignment, a TP = benign query variant with a p
 
 ## Annotation of all possible missense variations in the 8 sarcomeric genes and calculation of EF
 
+Odds ratios (OR) are calculated by:
+
+$$ OR =  \frac{(a/b)}{(c/d)} $$
+
+where:
+
+$a = $ number of variants predicted to be pathogenic by paralogue annotation in the diseased cohort
+
+$b = $ number of variants not predicted to be pathogenic by paralogue annotation in the diseased cohort
+
+$c = $ number of varaints predicted to be pathogenic by paralogue annotation in the control cohort
+
+$d = $ number of variants not predicted to be pathogenic by paralogue annotation in the control cohort
+
+and the 95% confidence intervals for OR values
+
+$$ 95\% \ CI = [e^{\ln(OR) - 1.96 \cdot SE(\ln(OR))},e^{\ln(OR) + 1.96 \cdot SE(\ln(OR))}] $$
+
+Etiological Fractions (EF) can then be calculated by:
+
 
 
 ## Paralogue stats
@@ -221,7 +241,7 @@ var_removed3 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.paralogous_va
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
 Total = c(length(p.paralogous_var_align$paralog_data$ID),length(b.paralogous_var_align$paralog_data$ID),"NA","NA","NA")
 Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),round(conf$PPV, digits = 3),round(conf$Sensitivity, digits = 3),round(conf$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),round(conf2$PPV, digits = 3), round(conf2$Sensitivity, digits = 3), round(conf2$Pvalue$p.value, digits = 3))
+Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),round(conf2$PPV, digits = 3), round(conf2$Sensitivity, digits = 3), conf2$Pvalue$p.value)
 
 Variants_removed_after_PA_QC1 = c(var_removed$con_table[2],var_removed$con_table[4],round(var_removed$PPV, digits = 3),"NA",round(var_removed$Pvalue$p.value, digits = 3))
 Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),round(conf3$PPV, digits = 3),round(conf3$Sensitivity, digits = 3),round(conf3$Pvalue$p.value, digits = 3))
@@ -464,7 +484,7 @@ control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
 ```
 
-However, it must be noted that even in genes with few predictions, paralogue annotation can still be functional and such predictions applicable. For the 8 sarcomeric genes 
+However, it must be noted that even in genes with few predictions, paralogue annotation can still be functional and such predictions applicable. In the case of the 8 sarcomeric genes, one can still validate the use of paralogue annotation in a case control study.
 
 Cases with positive (bad) outcome
 Number in exposed group: 	

@@ -979,6 +979,7 @@ Looking at alt alleles. Taking only pairwise alignments where the alt allele is 
 
 For calculating the EFs, run the all possible missense variants through VEP+plugin and return paraloc locations. Then join those locations with pathogenic clinvar variants as before. This indicates which variants from all possible missense variants are likely to be pathogenic. Then we check to see if any of these variants are present in the cases and controls. Hopefully the controls will be less but there is more control data than cases bare in mind. Calculate the EFs using that. Remember though the EFs are based on how many times an allele is seen, not the number of different alleles by themselves.
 
+OR =  \frac{(a/b)}{(c/d)} 
 
 Total cases: 6140
 number of affected cases: 39
