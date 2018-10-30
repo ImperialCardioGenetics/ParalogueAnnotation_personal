@@ -41,6 +41,12 @@ ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
+
+eg = bitr(protein_genes_w_paralogues_genes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+ego = groupGO(gene = eg$ENTREZID, OrgDb = org.Hs.eg.db, keyType = 'ENTREZID', readable = TRUE, ont = "MF", level = 3)
+barplot(ego)
+
+
 # length(protein_genes_w_paralogues)
 protein_genes_w_paralogues_wide = count(protein_genes_w_paralogues, external_gene_name)
 colnames(protein_genes_w_paralogues_wide)[2] = "number_of_paralogues"
