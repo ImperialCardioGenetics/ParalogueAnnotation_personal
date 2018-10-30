@@ -58,21 +58,30 @@ $$ OR =  \frac{(a/b)}{(c/d)} $$
 
 where:
 
-$a = $ number of variants predicted to be pathogenic by paralogue annotation in the diseased cohort
+$a =$ number of variants predicted to be pathogenic by paralogue annotation in the diseased cohort
 
-$b = $ number of variants not predicted to be pathogenic by paralogue annotation in the diseased cohort
+$b =$ number of variants not predicted to be pathogenic by paralogue annotation in the diseased cohort
 
-$c = $ number of varaints predicted to be pathogenic by paralogue annotation in the control cohort
+$c =$ number of varaints predicted to be pathogenic by paralogue annotation in the control cohort
 
-$d = $ number of variants not predicted to be pathogenic by paralogue annotation in the control cohort
+$d =$ number of variants not predicted to be pathogenic by paralogue annotation in the control cohort
 
-and the 95% confidence intervals for OR values
+and the 95% confidence intervals for OR values are calculated according to @altman1991practical via:
 
 $$ 95\% \ CI = [e^{\ln(OR) - 1.96 \cdot SE(\ln(OR))},e^{\ln(OR) + 1.96 \cdot SE(\ln(OR))}] $$
+where:
+
+$$ SE(\ln(OR)) =  \sqrt{\frac{1}{a}+\frac{1}{b}+\frac{1}{c}+\frac{1}{d}} $$
 
 Etiological Fractions (EF) can then be calculated by:
 
+$$ EF = \frac{OR - 1}{OR} $$
+and the 95% confidence intervals for EF values are calculated according to @hildebrandt2006calculating via:
 
+$$ 95\% \ CI = [\widehat{EF} - z_{1-\frac{a}{2}} \sqrt{\widehat{VAR}(\widehat{\Phi})}, \ min( \widehat{EF} + z_{1-\frac{a}{2}} \sqrt{\widehat{VAR}(\widehat{\Phi})}, \ 1)]  $$
+where the asymptomatic variance estimator of $\widehat{\Phi}$ is given by:
+
+$$ \widehat{VAR}(\widehat{\Phi}) = \widehat{\Phi}^2 $$
 
 ## Paralogue stats
 The additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information manually from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
