@@ -47,10 +47,10 @@ In context of is there a pathogenic paralogue alignment? A TP = pathogenic query
 
 Likewise for a benign paralogous alignment, a TP = benign query variant with a paralogous benign hit; FP = pathogenic query variant with a paralogous benign hit; FN = benign query variant with no paralogous benign hit; and TN = pathogenic query variant with no paralogous benign hit.
 
-## Annotation of Clinvar
+## Transfer of annotations across paralogues
 
 
-## Annotation of all possible missense variations in the 8 sarcomeric genes and calculation of EF
+## Calculation of Etiological Fractions
 
 Odds ratios (OR) are calculated by:
 
