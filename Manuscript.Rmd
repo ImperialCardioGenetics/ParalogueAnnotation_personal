@@ -27,7 +27,7 @@ knitr::opts_chunk$set(fig.pos = 'H')
 ```
 \newpage
 # Introduction
-With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
+With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. Several commonly used bioinformatic tools, such as SIFT and Polyphen,
 Previously Ware *et al.* have developed **Paralogue Annotation** [@Ware2012; @Walsh2014], which utilizes information from paralogues (evolutionarily related genes from the same species) to help classify pathogenic variants. They verified its use in LQT syndrome (LQTS) genes on variants acquired from patient cohorts.
 
 Here **Paralogue Annotation** is tested further using a Pathogenic/Likely Pathogenic (P/LP) and Benign/Likely Benign (B/LB) varaint dataset acquired from Clinvar. These variants covered a wider range of genes other than just those involved in LQTS
@@ -42,7 +42,8 @@ Clinical significance definitions of variants - Pathogenic; Likely Pathogenic; L
 
 For the case and control study, HCM diseased cohorts data were gathered from the OMGL and LMM datasets, which were taken from previous @Walsh2017 publication. Data from ExAC were used as the control cohort @Lek2016.
 
-## Transfer of annotations across paralogues
+## Annotation of variants and transfer of annotations across paralogues
+
 
 
 ### Statistical measures
