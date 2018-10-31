@@ -72,7 +72,7 @@ Positive Predictive Values (PPV) and Sensitivties are therefore calculated by:
 $$PPV = \frac{TP}{TP+FP}$$
 $$Sensitivity = \frac{TP}{TP+FN}$$
 
-P values are calculated via Fisher's exact test on a 2x2 contingency table tabulating the number of variants of interest and how many 
+P values are calculated via a Fisher's exact test on a 2x2 contingency table tabulating the number of pathogenic and benign variants of interest and how many of those are predicted as pathogenic or benign.
 
 ## Calculation of Etiological Fractions
 
