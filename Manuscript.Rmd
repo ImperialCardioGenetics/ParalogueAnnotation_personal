@@ -42,13 +42,37 @@ Clinical significance definitions of variants - Pathogenic; Likely Pathogenic; L
 
 For the case and control study, HCM diseased cohorts data were gathered from the OMGL and LMM datasets, which were taken from previous @Walsh2017 publication. Data from ExAC were used as the control cohort @Lek2016.
 
-## Statistical terms
-In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
-
-Likewise for a benign paralogous alignment, a TP = benign query variant with a paralogous benign hit; FP = pathogenic query variant with a paralogous benign hit; FN = benign query variant with no paralogous benign hit; and TN = pathogenic query variant with no paralogous benign hit.
-
 ## Transfer of annotations across paralogues
 
+
+### Statistical measures
+For a pathogenic paralogue alignment:
+
+true positive (TP) = pathogenic query variant with a paralogous pathogenic hit;
+
+false positive (FP) = benign query variant with a paralogous pathogenic hit;
+
+false negative (FN) = pathogenic query variant with no paralogous pathogenic hit;
+
+and true negative (TN) = benign query variant with no paralogous pathogenic hit.\newline
+
+
+Likewise for a benign paralogous alignment:
+
+TP = benign query variant with a paralogous benign hit; 
+
+FP = pathogenic query variant with a paralogous benign hit; 
+
+FN = benign query variant with no paralogous benign hit; 
+
+and TN = pathogenic query variant with no paralogous benign hit.\newline
+
+Positive Predictive Values (PPV) and Sensitivties are therefore calculated by:
+
+$$PPV = \frac{TP}{TP+FP}$$
+$$Sensitivity = \frac{TP}{TP+FN}$$
+
+P values are calculated via Fisher's exact test on a 2x2 contingency table tabulating the number of variants of interest and how many 
 
 ## Calculation of Etiological Fractions
 
