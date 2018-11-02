@@ -45,23 +45,6 @@ For the case and control study, HCM diseased cohorts data were gathered from the
 
 ## Annotation of variants and transfer of annotations across paralogues
 
-```{r cache = TRUE, echo = FALSE, message = FALSE, warning=FALSE}
-# library(DiagrammeR)
-pipeline = DiagrammeR::grViz("
-digraph boxes_and_circles {
-graph [overlap = true, fontsize = 10]
-
-node [shape = plaintext, fillcolor = green, style=filled, fixedsize=false]
-'VEP_ParalogAnno.py'; 'File_prep_for_R.py'; 'Tableize_wrapper.py'; 'R markdown'
-
-node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
-'vcf input file'; 'paralogs file'; 'paraloc file'; 'paralogs2 file'; 'paraloc_tableized file'
-
-'vcf input file' -> 'VEP_ParalogAnno.py'; 'VEP_ParalogAnno.py' -> 'paralogs file'; 'VEP_ParalogAnno.py' -> 'paraloc file'; 'paralogs file' -> 'File_prep_for_R.py'; 'paraloc file' -> 'Tableize_wrapper.py'; 'File_prep_for_R.py' -> 'paralogs2 file'; 'Tableize_wrapper.py' -> 'paraloc_tableized file'; 'paralogs2 file' -> 'R markdown'; 'paraloc_tableized file' -> 'R markdown'
-
-}")
-pipeline
-```
 
 
 ## Statistical measures
