@@ -29,6 +29,7 @@ knitr::opts_chunk$set(fig.pos = 'H')
 # Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as being pathogenic requires supporting evidence, which does not always exists especially if the variant is novel. Several commonly used bioinformatic tools for predicting the functional effect of variants, such as SIFT and REVEL [@sim2012sift,@ioannidis2016revel], utilize information from conservation and/or changes in biophysiocochemical properties of the substituting amino acid. However these predictions cannot be considered as sufficient evidence for pathogenicity if predicted as such and need to be used with care, especially in a clinical context, as results typically have low specificity [@flanagan2010using].
 
+
 Previously Ware *et al.* developed the concept of **Paralogue Annotation** [@Ware2012; @Walsh2014], which utilizes known variant information from paralogues (evolutionarily related genes from the same species) to help classify pathogenic variants. They verified its use in LQT syndrome (LQTS) genes on variants acquired from patient cohorts.
 
 Here **Paralogue Annotation** is tested further using a Pathogenic/Likely Pathogenic (P/LP) and Benign/Likely Benign (B/LB) varaint dataset acquired from Clinvar. These variants covered a wider range of genes other than just those involved in LQTS
