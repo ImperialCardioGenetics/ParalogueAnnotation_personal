@@ -49,7 +49,7 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 
 		#ONLINE MODE		
 		online_command = (
-			"perl -I /data/Share/nick/Paralog_Anno/paralogueAnnotator /data/Install/ensembl-vep/vep --force_overwrite --vcf --allele_number --canonical --database" +
+			"perl -I /data/Share/nick/Paralog_Anno/paralogueAnnotator /data/Install/ensembl-vep/vep --sift b --force_overwrite --vcf --allele_number --canonical --database" +
 			" --assembly " + str(genome_build) +
 			" -i " + 
 			input_file +
