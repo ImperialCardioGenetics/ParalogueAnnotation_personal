@@ -1010,6 +1010,11 @@ All available para-z scores were retreived from https://git-r3lab.uni.lu/genomea
 The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
 
 
+#### REVEL scores
+REVEL scores [@ioannidis2016revel] were taken from https://sites.google.com/site/revelgenomics/downloads and were used to compare against Paralogue Annotation.
+
+Due to the large excessive memory usage, a separate R script was used to annotate with REVEL scores - __src/Annotate_REVEL.R__.
+
 ### Results and Discussion
 
 #### Paralogue stats
