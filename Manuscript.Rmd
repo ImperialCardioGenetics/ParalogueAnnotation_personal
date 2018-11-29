@@ -553,7 +553,7 @@ Infact performing the analysis on all possible missesnse mutations for these set
 Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.
 
 \newpage
-## Comparison to other scores
+## Comparison to SIFT/REVEL
 
 # References
 
