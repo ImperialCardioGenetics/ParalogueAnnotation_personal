@@ -2,3 +2,4 @@
 *_files/
 revel_all_chromosomes.csv.zip
 src/__pycache__
+.Rhistory
