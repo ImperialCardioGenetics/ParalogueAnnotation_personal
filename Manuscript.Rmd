@@ -556,8 +556,18 @@ Hence we calculated EFs in order to see for those few variants that are predicte
 ## Comparison to SIFT/REVEL
 ```{r cf_sift_revel, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 
-Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org")
+Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+Sift_tableized_data = Sift_tableized_file
+Sift_tableized_data$Variant_pos = paste(Sift_tableized_data$CHROM,Sift_tableized_data$POS, sep = " ")
+Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+Revel_tableized_data = Revel_tableized_file[!is.na(Revel_tableized_file$Amino_acids)&!is.na(Revel_tableized_file$REVEL_score),]
+Revel_tableized_data$Variant_pos = paste(Revel_tableized_data$CHROM,Revel_tableized_data$POS, sep = " ")
+Revel_tableized_data$REF_Amino_acids = sapply(Revel_tableized_data[,"Amino_acids"],strsplit, "/")
+Revel_tableized_data$REF_Amino_acids = sapply(Revel_tableized_data[,"REF_Amino_acids"],function(x) x[1])
+Revel_tableized_data$ALT_Amino_acids = sapply(Revel_tableized_data[,"Amino_acids"],strsplit, "/")
+Revel_tableized_data$ALT_Amino_acids = sapply(Revel_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
 
+sift_revel_data = right_join(Revel_tableized_data,Sift_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT"))
 ```
 
 # References
