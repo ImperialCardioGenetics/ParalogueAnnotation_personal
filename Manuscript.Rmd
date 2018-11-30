@@ -121,8 +121,8 @@ All available para-z scores were retreived from https://git-r3lab.uni.lu/genomea
 
 \newpage
 
-## REVEL scores
-REVEL scores [@ioannidis2016revel] were taken from https://sites.google.com/site/revelgenomics/downloads and were used to compare against Paralogue Annotation.
+## Comparison to SIFT/REVEL scores
+SIFT and REVEL scores were retreived using ANNOVAR with dbnsfp30a [@wang2010annovar,@liu2016dbnsfp] and from https://sites.google.com/site/revelgenomics/downloads [@ioannidis2016revel] respectively.
 
 # Results and Discussion
 
@@ -554,7 +554,11 @@ Hence we calculated EFs in order to see for those few variants that are predicte
 
 \newpage
 ## Comparison to SIFT/REVEL
+```{r cf_sift_revel, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 
+Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org")
+
+```
 
 # References
 

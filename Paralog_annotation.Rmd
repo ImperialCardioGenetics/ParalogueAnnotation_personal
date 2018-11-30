@@ -1011,7 +1011,15 @@ The "2R"" hypothesis states that some 500 million years ago, early vertebrates w
 
 
 #### Comparison to SIFT and REVEL scores
-REVEL scores [@ioannidis2016revel] were taken from https://sites.google.com/site/revelgenomics/downloads and were used to compare against Paralogue Annotation.
+SIFT and REVEL scores were retreived using ANNOVAR with dbnsfp30a [@wang2010annovar,@liu2016dbnsfp] and from https://sites.google.com/site/revelgenomics/downloads [@ioannidis2016revel] respectively.
+
+As REVEL only has scores for GRCh37 coordinates, had rerun PA with said coords. Then the SIFT scores were annotated with ANNOVAR on the __clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs__. ANNOVAR didn't like empty lines in the file so they were removed first using some simple bash. The tableize command below was used to extract only the sift scores.
+
+```{bash eval = FALSE, include = FALSE}
+python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf --out /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org --do_not_minrep --include_id --split_by_transcript --canonical_only --info SIFT_score,SIFT_pred
+```
+
+The revel scores were converted from csv to tsv using some bash and binary indexed using tabix for faster lookup. Then python script __/data/Share/nick/Paralog_Anno/data_files/REVEL_scores/
 
 Due to the large excessive memory usage, a separate R script was used to annotate with REVEL scores - __src/Annotate_REVEL.R__.
 
