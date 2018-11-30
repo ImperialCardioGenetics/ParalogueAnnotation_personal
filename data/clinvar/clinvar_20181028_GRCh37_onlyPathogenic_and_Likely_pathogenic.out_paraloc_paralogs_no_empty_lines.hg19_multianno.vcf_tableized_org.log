@@ -1,5 +1,5 @@
 Running file: /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf
-Started at: 2018_11_30_12_28_12
+Started at: 2018_11_30_13_21_22
 --add_ucsc_link False
 --lof_only False
 --biallelic_only False
@@ -20,8 +20,8 @@ Started at: 2018_11_30_12_28_12
 --dont_collapse_annotations False
 --include_id True
 --functional_simplify False
---vep_info SYMBOL,Protein_position,Amino_acids,Codons,Paralogue_Vars,SIFT_score,SIFT_score
---info None
+--vep_info None
+--info SIFT_score,SIFT_pred
 --sample_info None
 --split_by_transcript True
 --hom_samples False
