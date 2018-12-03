@@ -1,0 +1,29 @@
+Running file: /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf
+Started at: 2018_12_03_12_28_07
+--add_ucsc_link False
+--lof_only False
+--biallelic_only False
+--split_size None
+--canonical_only True
+--mysql False
+--original_position False
+--split_by_gene False
+--all_csqs False
+--vcf /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf
+--simplify_gtex False
+--ucsc_link_window 20
+--samples False
+--only_pass False
+--do_not_minrep True
+--snps_only False
+--omit_filter False
+--dont_collapse_annotations False
+--include_id True
+--functional_simplify False
+--vep_info None
+--info SIFT_score,SIFT_pred
+--sample_info None
+--split_by_transcript True
+--hom_samples False
+--output /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org
+--options False
