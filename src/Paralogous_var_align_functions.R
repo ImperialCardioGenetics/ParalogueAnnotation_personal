@@ -146,6 +146,22 @@ ParaZ_var_align = function(paraz_cutoff,paralogs2_file, paralog_tableized_file, 
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
 }
 
+Sift_Revel_var_align = function(paralogs2_file, sift_revel_tableized_file, joining_tableized_data=sift_revel_tableized_file){ #Function for joining together variant paralogous locations with SIFT and REVEL scores; assumes SIFT/REVEL scores already annotated to an appropriate tableized file
+  # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
+  paralog_data = file(paralogs2_file)
+  max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  paralog_data = read.csv(file=paralogs2_file, sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")))
+  
+  paralog_data = left_join(paralog_data,sift_revel_tableized_file, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
+  gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
+  
+  ref_data = joining_tableized_data
+  
+  Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos", "Gene" = "SYMBOL"))
+  num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
+  return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
+}
+
 conf_matrix = function(ptop.num_of_paralog_anno, p.paralog_data, btop.num_of_paralog_anno, b.paralog_data){ #function for calculating confusion matrix and stats
   con_table_TP = ptop.num_of_paralog_anno
   con_table_FP = btop.num_of_paralog_anno

@@ -569,8 +569,9 @@ Revel_tableized_data$ALT_Amino_acids = sapply(Revel_tableized_data[,"ALT_Amino_a
 
 sift_revel_data = right_join(Revel_tableized_data,Sift_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT"))
 sift_revel_data = sift_revel_data[!is.na(sift_revel_data$REVEL_score)&!is.na(sift_revel_data$SIFT_score),]
+sift_revel_data = sift_revel_data[!duplicated(sift_revel_data),]
 
-p.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sift_revel_data)
+p.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sift_revel_data)
 
 ```
 
