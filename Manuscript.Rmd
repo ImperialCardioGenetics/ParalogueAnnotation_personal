@@ -571,8 +571,9 @@ sift_revel_data = right_join(Revel_tableized_data,Sift_tableized_data, by =  c("
 sift_revel_data = sift_revel_data[!is.na(sift_revel_data$REVEL_score)&!is.na(sift_revel_data$SIFT_score),]
 sift_revel_data = sift_revel_data[!duplicated(sift_revel_data),]
 
-p.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sift_revel_data)
-ACTUALLY REMINDER TO SELF - CANT JOIN WITH ONLY TABLEIZED FILE AS THAT WONT HAVE THE SIFT OR REVEL SCORES - REVERT TO BEFORE
+p.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sift_revel_data)
+
+p.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 ```
 
 # References
