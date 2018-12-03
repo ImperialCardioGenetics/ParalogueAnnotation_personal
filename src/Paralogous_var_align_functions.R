@@ -168,7 +168,7 @@ Sift_Revel_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   ref_data = joining_tableized_data
   
   Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
-  Total_paralog_annotations = filter(Total_paralog_annotations, Gene != SYMBOL, !is.na())
+  Total_paralog_annotations = filter(Total_paralog_annotations, Gene != SYMBOL)
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
 }
