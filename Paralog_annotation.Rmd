@@ -97,6 +97,77 @@ source("src/Paralogous_var_align_functions.R")
 * Make all input data reproducible
 * Look at bioconductor biomart package - easier to extract paralogue info from ensembl biomart
 
+### Useful code tips:
+If comparing 2 dataframes and wanting to check what rows exist in one but not the other - first check if there are any multiple duplicated rows, i.e. 3x, 4x, etc. as these tend to be the causes (https://stackoverflow.com/questions/18201074/find-how-many-times-duplicated-rows-repeat-in-r-data-frame):
+
+```{r eval = FALSE, include = TRUE}
+library(plyr)
+ddply(df,.(a,b),nrow)
+
+  a   b V1
+1 1 2.5  1
+2 1 3.5  2
+3 2 2.0  2
+4 3 1.0  1
+5 4 2.2  1
+6 4 7.0  1
+```
+
+Then find out which ones are the exact problems (http://www.cookbook-r.com/Manipulating_data/Comparing_data_frames/#joining-the-data-frames):
+
+```{r eval = FALSE, include = TRUE}
+dupsBetweenGroups <- function (df, idcol) {
+    # df: the data frame
+    # idcol: the column which identifies the group each row belongs to
+
+    # Get the data columns to use for finding matches
+    datacols <- setdiff(names(df), idcol)
+
+    # Sort by idcol, then datacols. Save order so we can undo the sorting later.
+    sortorder <- do.call(order, df)
+    df <- df[sortorder,]
+
+    # Find duplicates within each id group (first copy not marked)
+    dupWithin <- duplicated(df)
+
+    # With duplicates within each group filtered out, find duplicates between groups. 
+    # Need to scan up and down with duplicated() because first copy is not marked.
+    dupBetween = rep(NA, nrow(df))
+    dupBetween[!dupWithin] <- duplicated(df[!dupWithin,datacols])
+    dupBetween[!dupWithin] <- duplicated(df[!dupWithin,datacols], fromLast=TRUE) | dupBetween[!dupWithin]
+
+    # ============= Replace NA's with previous non-NA value ==============
+    # This is why we sorted earlier - it was necessary to do this part efficiently
+
+    # Get indexes of non-NA's
+    goodIdx <- !is.na(dupBetween)
+
+    # These are the non-NA values from x only
+    # Add a leading NA for later use when we index into this vector
+    goodVals <- c(NA, dupBetween[goodIdx])
+
+    # Fill the indices of the output vector with the indices pulled from
+    # these offsets of goodVals. Add 1 to avoid indexing to zero.
+    fillIdx <- cumsum(goodIdx)+1
+
+    # The original vector, now with gaps filled
+    dupBetween <- goodVals[fillIdx]
+
+    # Undo the original sort
+    dupBetween[sortorder] <- dupBetween
+
+    # Return the vector of which entries are duplicated across groups
+    return(dupBetween)
+}
+
+dfA$Coder <- "A"
+dfB$Coder <- "B"
+
+df <- rbind(dfA, dfB)
+
+cbind(df, unique=!dupRows)
+```
+
 ### Manuscript Plan
 * New tool to show (more likely Erica will write up)
 * Contrast to previous studies, is genome wide validated
