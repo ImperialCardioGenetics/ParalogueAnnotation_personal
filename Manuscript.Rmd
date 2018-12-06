@@ -555,6 +555,7 @@ Hence we calculated EFs in order to see for those few variants that are predicte
 \newpage
 ## Comparison to SIFT/REVEL
 ```{r cf_sift_revel, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+p.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 Sift_tableized_data = Sift_tableized_file[!is.na(Sift_tableized_file$SIFT_score),]
@@ -571,26 +572,15 @@ sift_revel_data = right_join(Revel_tableized_data,Sift_tableized_data, by =  c("
 sift_revel_data = sift_revel_data[!is.na(sift_revel_data$REVEL_score)&!is.na(sift_revel_data$SIFT_score),]
 sift_revel_data = sift_revel_data[!duplicated(sift_revel_data),]
 
-paralog__sift_revel_data = left_join(paralog_data,sift_revel_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
-
 p.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sift_revel_data, "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.Sift_Revel_var_align$Total_paralog_annotations = p.Sift_Revel_var_align$Total_paralog_annotations[!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score)&!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$SIFT_score),]
+p.num_of_sift = length(which(p.Sift_Revel_var_align$Total_paralog_annotations$SIFT_pred == "D"))
+p.num_of_revel = length(which(p.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score > 0.5))
 
-p.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-
-
-paralog_data = file("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC")
-max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
-paralog_data = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")))
-
-paralog_tableized_data = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-paralog_tableized_data = paralog_tableized_data[!is.na(paralog_tableized_data$Amino_acids),]
-paralog_tableized_data$Variant_pos = paste(paralog_tableized_data$CHROM,paralog_tableized_data$POS, sep = " ")
-paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
-paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"REF_Amino_acids"],function(x) x[1])
-paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
-paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
-
-paralog_annotated_data = left_join(paralog_data,paralog_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
+b.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", sift_revel_data, "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized")
+b.Sift_Revel_var_align$Total_paralog_annotations = b.Sift_Revel_var_align$Total_paralog_annotations[!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score)&!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$SIFT_score),]
+b.num_of_sift = length(which(p.Sift_Revel_var_align$Total_paralog_annotations$SIFT_pred == "T"))
+b.num_of_revel = length(which(p.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score <= 0.5))
 ```
 
 # References
