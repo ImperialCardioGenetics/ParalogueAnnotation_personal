@@ -250,7 +250,14 @@ calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiolo
   return(list("OR" = OR, "EF" = EF))
 }
 
-case_control_gene_split = function(data, patho_var_ids, gene){ #function for splitting genes in the case control study to allow gene by gene analysis of EFs
-  case.data
-  control_data
+case_control_gene_split = function(data_df, patho_var_ids, gene){ #function for splitting genes in the case control study to allow gene by gene analysis of EFs
+  if (!missing(gene)){
+    gene_data = data_df[data_df$gene_symbol==gene,]
+  } else {
+    gene_data = data_df
+  }
+  patho_gene_data = gene_data[gene_data$mut_id %in% patho_var_ids,]
+  patho_gene_cases = sum(patho_gene_data$sum.vs_case_count.)
+  Total_gene_cases = sum(gene_data$sum.vs_case_count.)
+  return(list("patho_gene_cases" = patho_gene_cases, "Total_gene_cases" = Total_gene_cases, "gene_data" = gene_data, "patho_gene_data" = patho_gene_data))
 }

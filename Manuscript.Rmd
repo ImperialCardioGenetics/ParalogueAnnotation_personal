@@ -522,11 +522,16 @@ control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
 
 #Gene by gene analysis
-ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
-patho_ACTC1.case.data = ACTC1.case.data[ACTC1.case.data$mut_id %in% patho_case_var_IDs,]
-patho_ACTC1.case.cases = sum(patho_ACTC1.case.data$sum.vs_case_count.)
-Total_patho_ACTC1.case.cases = sum(ACTC1.case.data$sum.vs_case_count.)
-
+# ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
+# patho_ACTC1.case.data = ACTC1.case.data[ACTC1.case.data$mut_id %in% patho_case_var_IDs,]
+# patho_ACTC1.case.cases = sum(patho_ACTC1.case.data$sum.vs_case_count.)
+# Total_patho_ACTC1.case.cases = sum(ACTC1.case.data$sum.vs_case_count.)
+x = case_control_gene_split(case.data, patho_case_var_IDs)
+y = case_control_gene_split(control.data, patho_control_var_IDs, "ACTC1")
+calc_EF()
+for (gene in c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
+  
+}
 ```
 
 However, it must be noted that even in genes with few predictions, paralogue annotation can still be functional and such predictions applicable. In the case of the 8 sarcomeric genes, one can still validate the use of paralogue annotation in a case control study.
