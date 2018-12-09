@@ -259,5 +259,5 @@ case_control_gene_split = function(data_df, patho_var_ids, gene){ #function for 
   patho_gene_data = gene_data[gene_data$mut_id %in% patho_var_ids,]
   patho_gene_cases = sum(patho_gene_data$sum.vs_case_count.)
   Total_gene_cases = sum(gene_data$sum.vs_case_count.)
-  return(list("patho_gene_cases" = patho_gene_cases, "Total_gene_cases" = Total_gene_cases, "gene_data" = gene_data, "patho_gene_data" = patho_gene_data))
+  return(list("pa_predicted_gene_cases" = patho_gene_cases, "Total_gene_cases" = Total_gene_cases, "gene_data" = gene_data, "pa_predicted_gene_data" = patho_gene_data))
 }
