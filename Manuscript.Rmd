@@ -506,13 +506,15 @@ case.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped
 patho_case_var = case.paralogous_var_align$Total_paralog_annotations[!is.na(case.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_case_var_IDs = patho_case_var$ID.x
 # write(patho_case_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_case_var_IDs.txt", sep = "\t", ncolumns = 1)
-case.data = read.csv("data/case_and_control/HCM_missense_LMM_OMGL_chr.csv", sep = ",")
+case.data = read.csv("data/case_and_control/HCM_missense_LMM_OMGL_chr.csv", sep = ",") #only rare variants in the diseased cohort
 patho_case.data = case.data[case.data$mut_id %in% patho_case_var_IDs,]
 case_cases = sum(patho_case.data$sum.vs_case_count.)
 Total_case_cases = sum(case.data$sum.vs_case_count.)
 
+All_variant_case.cases = data.frame(genes = c("MYBPC3","MYH7","TNNT2","TNNI3","TPM1","ACTC1","MYL2","MYL3"), cases = c(6179,6112,6103,6047,4447,4185,4185,4185))
+
 #control data VEP
-control.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+control.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized") #only rare variants in the control cohort
 patho_control_var = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_control_var_IDs = patho_control_var$ID.x
 # write(patho_control_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_control_var_IDs.txt", sep = "\t", ncolumns = 1)
@@ -521,11 +523,16 @@ patho_control.data = control.data[control.data$mut_id %in% patho_control_var_IDs
 control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
 
+All_variant_control.cases = data.frame(genes = c("MYH7","TNNT2","TNNI3","MYBPC3","TPM1","ACTC1","MYL2","MYL3"), cases = c(60483,56800,53377,45646,58651,60271,60554,60611))
+
 #Gene by gene analysis
-# ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
+ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
 # patho_ACTC1.case.data = ACTC1.case.data[ACTC1.case.data$mut_id %in% patho_case_var_IDs,]
 # patho_ACTC1.case.cases = sum(patho_ACTC1.case.data$sum.vs_case_count.)
-# Total_patho_ACTC1.case.cases = sum(ACTC1.case.data$sum.vs_case_count.)
+Total_ACTC1.case.cases = sum(ACTC1.case.data$sum.vs_case_count.)
+ACTC1.control.data = control.data[control.data$gene_symbol=="ACTC1",]
+Total_ACTC1.control.cases = sum(ACTC1.control.data$mut_exac_count)
+
 x = case_control_gene_split(case.data, patho_case_var_IDs)
 y = case_control_gene_split(control.data, patho_control_var_IDs, "ACTC1")
 calc_EF()
