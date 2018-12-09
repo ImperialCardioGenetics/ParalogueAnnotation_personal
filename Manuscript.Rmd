@@ -526,19 +526,29 @@ Total_control_cases = sum(control.data$mut_exac_count)
 All_variant_control.cases = data.frame(genes = c("MYH7","TNNT2","TNNI3","MYBPC3","TPM1","ACTC1","MYL2","MYL3"), cases = c(60483,56800,53377,45646,58651,60271,60554,60611))
 
 #Gene by gene analysis
-ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
+# example code for only ACTC1
+# ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
 # patho_ACTC1.case.data = ACTC1.case.data[ACTC1.case.data$mut_id %in% patho_case_var_IDs,]
 # patho_ACTC1.case.cases = sum(patho_ACTC1.case.data$sum.vs_case_count.)
-Total_ACTC1.case.cases = sum(ACTC1.case.data$sum.vs_case_count.)
-ACTC1.control.data = control.data[control.data$gene_symbol=="ACTC1",]
-Total_ACTC1.control.cases = sum(ACTC1.control.data$mut_exac_count)
+# Total_ACTC1.case.cases = sum(ACTC1.case.data$sum.vs_case_count.)
+#
+# ACTC1.control.data = control.data[control.data$gene_symbol=="ACTC1",]
+# patho_ACTC1.control.data = ACTC1.control.data[ACTC1.control.data$mut_id %in% patho_control_var_IDs,]
+# patho_ACTC1.control.cases = sum(patho_ACTC1.control.data$mut_exac_count)
+# Total_ACTC1.control.cases = sum(ACTC1.control.data$mut_exac_count)
+# calc_EF(Total_ACTC1.case.cases,All_variant_case.cases[All_variant_case.cases$genes=="ACTC1","cases"],Total_ACTC1.control.cases,All_variant_control.cases[All_variant_control.cases$genes=="ACTC1","cases"]) #all rare variants
+# calc_EF(patho_ACTC1.case.cases,All_variant_case.cases[All_variant_case.cases$genes=="ACTC1","cases"],patho_ACTC1.control.cases,All_variant_control.cases[All_variant_control.cases$genes=="ACTC1","cases"]) #rare variants predicted to be pathogenic by PA 
 
 x = case_control_gene_split(case.data, patho_case_var_IDs)
 y = case_control_gene_split(control.data, patho_control_var_IDs, "ACTC1")
-calc_EF()
 for (gene in c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
   
 }
+
+
+
+
+
 ```
 
 However, it must be noted that even in genes with few predictions, paralogue annotation can still be functional and such predictions applicable. In the case of the 8 sarcomeric genes, one can still validate the use of paralogue annotation in a case control study.
