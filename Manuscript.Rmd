@@ -525,6 +525,7 @@ Total_control_cases = sum(control.data$mut_exac_count)
 ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
 patho_ACTC1.case.data = ACTC1.case.data[ACTC1.case.data$mut_id %in% patho_case_var_IDs,]
 patho_ACTC1.case.cases = sum(patho_ACTC1.case.data$sum.vs_case_count.)
+Total_patho_ACTC1.case.cases = sum(ACTC1.case.data$sum.vs_case_count.)
 
 ```
 
