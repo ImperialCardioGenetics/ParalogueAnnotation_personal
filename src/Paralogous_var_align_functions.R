@@ -244,8 +244,13 @@ var_rem_matrix = function(con_table1, con_table2, p.paralog_data, b.paralog_data
   return(list("con_table" = var_rem_con, "PPV" = var_rem_con_PPV, "Sensitivity" = var_rem_con_Sensitivity, "Pvalue" = var_rem_con_p_value, "TP" = var_rem_con_TP, "FP" = var_rem_con_FP, "FN" = var_rem_con_FN))
 }
 
-calc_EF = function(a, b, c, d){
+calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiological Fractions
   OR = (a/b)/(c/d)
   EF = (OR-1)/OR
   return(list("OR" = OR, "EF" = EF))
+}
+
+case_control_gene_split = function(data, patho_var_ids, gene){ #function for splitting genes in the case control study to allow gene by gene analysis of EFs
+  case.data
+  control_data
 }
