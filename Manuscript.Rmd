@@ -511,10 +511,6 @@ patho_case.data = case.data[case.data$mut_id %in% patho_case_var_IDs,]
 case_cases = sum(patho_case.data$sum.vs_case_count.)
 Total_case_cases = sum(case.data$sum.vs_case_count.)
 
-ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
-patho_ACTC1.case.data = ACTC1.case.data[ACTC1.case.data$mut_id %in% patho_case_var_IDs,]
-patho_ACTC1.case.cases = sum(patho_ACTC1.case.data$sum.vs_case_count.)
-
 #control data VEP
 control.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_control_var = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$ID.y),]
@@ -524,6 +520,12 @@ control.data = read.csv("data/case_and_control/ExAC_missense_sarcomeric_chr.csv"
 patho_control.data = control.data[control.data$mut_id %in% patho_control_var_IDs,]
 control_cases = sum(patho_control.data$mut_exac_count)
 Total_control_cases = sum(control.data$mut_exac_count)
+
+#Gene by gene analysis
+ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
+patho_ACTC1.case.data = ACTC1.case.data[ACTC1.case.data$mut_id %in% patho_case_var_IDs,]
+patho_ACTC1.case.cases = sum(patho_ACTC1.case.data$sum.vs_case_count.)
+
 ```
 
 However, it must be noted that even in genes with few predictions, paralogue annotation can still be functional and such predictions applicable. In the case of the 8 sarcomeric genes, one can still validate the use of paralogue annotation in a case control study.
