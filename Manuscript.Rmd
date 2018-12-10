@@ -543,8 +543,14 @@ All_variant_control.cases = data.frame(genes = c("MYH7","TNNT2","TNNI3","MYBPC3"
 # y = case_control_gene_split(control.data, patho_control_var_IDs, "ACTC1")
 gene_EFS = list()
 for (gene in c("MYH7")){#,"MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
-  x = case_control_gene_split(case.data, patho_case_var_IDs, gene)
-  y = calc_EF(x$)
+  cases = case_control_gene_split(case.data, patho_case_var_IDs, gene)
+  controls = case_control_gene_split(control.data, patho_control_var_IDs, gene)
+  all_rare_vars = calc_EF(cases$Total_gene_cases,
+                          All_variant_case.cases[All_variant_case.cases$genes==gene,"cases"],
+                          controls$Total_gene_cases,
+                          All_variant_control.cases[All_variant_control.cases$genes==gene,"cases"])
+  pa_predicted_rare_vars = calc_EF(cases$pa_predicted_gene_cases,
+                                   )
 }
 
 
