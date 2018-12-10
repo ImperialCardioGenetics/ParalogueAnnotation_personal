@@ -109,6 +109,8 @@ where the asymptomatic variance estimator of $\widehat{\Phi}$ is given by:
 
 $$ \widehat{VAR}(\widehat{\Phi}) = \widehat{\Phi}^2 $$
 
+NOTE ACCORDING TO https://www.medcalc.org/calc/odds_ratio.php - "Where zeros cause problems with computation of the odds ratio or its standard error, 0.5 is added to all cells (a, b, c, d) (Pagano & Gauvreau, 2000; Deeks & Higgins, 2010)."
+
 ## Paralogue stats
 The additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information manually from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
 
@@ -501,7 +503,7 @@ p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene
 But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (30607 total variants). Doing so, predicts 1545 variants to pathogenic - a 96.6 fold increase. Though validating how many additional predictions are true positives would require additional known pathogenicity data.
 
 ```{r eval = FALSE, cache=TRUE, include = FALSE}
-#case data VEP
+##case data VEP##
 case.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 patho_case_var = case.paralogous_var_align$Total_paralog_annotations[!is.na(case.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_case_var_IDs = patho_case_var$ID.x
@@ -513,7 +515,7 @@ Total_case_cases = sum(case.data$sum.vs_case_count.)
 
 All_variant_case.cases = data.frame(genes = c("MYBPC3","MYH7","TNNT2","TNNI3","TPM1","ACTC1","MYL2","MYL3"), cases = c(6179,6112,6103,6047,4447,4185,4185,4185))
 
-#control data VEP
+##control data VEP##
 control.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized") #only rare variants in the control cohort
 patho_control_var = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_control_var_IDs = patho_control_var$ID.x
@@ -525,7 +527,7 @@ Total_control_cases = sum(control.data$mut_exac_count)
 
 All_variant_control.cases = data.frame(genes = c("MYH7","TNNT2","TNNI3","MYBPC3","TPM1","ACTC1","MYL2","MYL3"), cases = c(60483,56800,53377,45646,58651,60271,60554,60611))
 
-#Gene by gene analysis
+##Gene by gene analysis##
 # example code for only ACTC1
 # ACTC1.case.data = case.data[case.data$gene_symbol=="ACTC1",]
 # patho_ACTC1.case.data = ACTC1.case.data[ACTC1.case.data$mut_id %in% patho_case_var_IDs,]
@@ -541,20 +543,35 @@ All_variant_control.cases = data.frame(genes = c("MYH7","TNNT2","TNNI3","MYBPC3"
 
 # x = case_control_gene_split(case.data, patho_case_var_IDs)
 # y = case_control_gene_split(control.data, patho_control_var_IDs, "ACTC1")
-gene_EFS = list()
-for (gene in c("MYH7")){#,"MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
+
+# gene_EFs = list()
+gene_EFs = data.frame()
+for (gene in c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
+# for (gene in c("MYBPC3")){
   cases = case_control_gene_split(case.data, patho_case_var_IDs, gene)
   controls = case_control_gene_split(control.data, patho_control_var_IDs, gene)
   all_rare_vars = calc_EF(cases$Total_gene_cases,
-                          All_variant_case.cases[All_variant_case.cases$genes==gene,"cases"],
+                          All_variant_case.cases[All_variant_case.cases$genes==gene,"cases"]-cases$Total_gene_cases,
                           controls$Total_gene_cases,
-                          All_variant_control.cases[All_variant_control.cases$genes==gene,"cases"])
+                          All_variant_control.cases[All_variant_control.cases$genes==gene,"cases"]-controls$Total_gene_cases)
   pa_predicted_rare_vars = calc_EF(cases$pa_predicted_gene_cases,
-                                   )
+                                   All_variant_case.cases[All_variant_case.cases$genes==gene,"cases"]-cases$pa_predicted_gene_cases,
+                                   controls$pa_predicted_gene_cases,
+                                   All_variant_control.cases[All_variant_control.cases$genes==gene,"cases"]-controls$pa_predicted_gene_cases)
+  # gene_EFs[[gene]] = list("all_rare_vars" = all_rare_vars, "pa_predicted_rare_vars" = pa_predicted_rare_vars)
+  tmp_df = data.frame(gene,all_rare_vars$OR,all_rare_vars$EF,pa_predicted_rare_vars$OR,pa_predicted_rare_vars$EF)
+  gene_EFs = rbind(gene_EFs,tmp_df)
 }
-
-
-
+##Overall##
+all_rare_vars = calc_EF(Total_case_cases,
+                        max(All_variant_case.cases$cases)-Total_case_cases,
+                        Total_control_cases,
+                        max(All_variant_control.cases$cases)-Total_control_cases)
+pa_predicted_rare_vars = calc_EF(case_cases,
+                                 max(All_variant_case.cases$cases)-case_cases,
+                                 control_cases,
+                                 max(All_variant_control.cases$cases)-control_cases)
+gene_EFs = rbind(gene_EFs,data.frame(gene="Overall",all_rare_vars$OR,all_rare_vars$EF,pa_predicted_rare_vars$OR,pa_predicted_rare_vars$EF))
 
 
 ```

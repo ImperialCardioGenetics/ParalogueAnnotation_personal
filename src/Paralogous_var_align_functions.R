@@ -245,6 +245,12 @@ var_rem_matrix = function(con_table1, con_table2, p.paralog_data, b.paralog_data
 }
 
 calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiological Fractions
+  if (a == 0 | b == 0 | c == 0 | d == 0){
+    a = a + 0.5
+    b = b + 0.5
+    c = c + 0.5
+    d = d + 0.5
+  }
   OR = (a/b)/(c/d)
   EF = (OR-1)/OR
   return(list("OR" = OR, "EF" = EF))
