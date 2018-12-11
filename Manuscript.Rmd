@@ -280,14 +280,13 @@ var_removed3 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.paralogous_va
 #Overall_table
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","P value")
 Total = c(length(p.paralogous_var_align$paralog_data$ID),length(b.paralogous_var_align$paralog_data$ID),"NA","NA","NA")
-Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),round(conf$PPV, digits = 3),round(conf$Sensitivity, digits = 3),round(conf$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),round(conf2$PPV, digits = 3), round(conf2$Sensitivity, digits = 3), conf2$Pvalue$p.value)
-
-Variants_removed_after_PA_QC1 = c(var_removed$con_table[2],var_removed$con_table[4],round(var_removed$PPV, digits = 3),"NA",round(var_removed$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),round(conf3$PPV, digits = 3),round(conf3$Sensitivity, digits = 3),round(conf3$Pvalue$p.value, digits = 3))
-Variants_removed_after_PA_QC2 = c(var_removed2$con_table[2],var_removed2$con_table[4],round(var_removed2$PPV, digits = 3),"NA",round(var_removed2$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),round(conf4$PPV, digits = 3),round(conf4$Sensitivity, digits = 3),round(conf4$Pvalue$p.value, digits = 3))
-Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],round(var_removed3$PPV, digits = 3),"NA",round(var_removed3$Pvalue$p.value, digits = 3))
+Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),round(conf$PPV, digits = 3),round(conf$Sensitivity, digits = 3),round(conf$Specificity, digits = 3),round(conf$Pvalue$p.value, digits = 3))
+Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),round(conf2$PPV, digits = 3), round(conf2$Sensitivity, digits = 3),round(conf2$Specificity, digits = 3), conf2$Pvalue$p.value)
+Variants_removed_after_PA_QC1 = c(var_removed$con_table[2],var_removed$con_table[4],round(var_removed$PPV, digits = 3),"NA","NA",round(var_removed$Pvalue$p.value, digits = 3))
+Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),round(conf3$PPV, digits = 3),round(conf3$Sensitivity, digits = 3),round(conf3$Specificity, digits = 3),round(conf3$Pvalue$p.value, digits = 3))
+Variants_removed_after_PA_QC2 = c(var_removed2$con_table[2],var_removed2$con_table[4],round(var_removed2$PPV, digits = 3),"NA","NA",round(var_removed2$Pvalue$p.value, digits = 3))
+Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),round(conf4$PPV, digits = 3),round(conf4$Sensitivity, digits = 3),round(conf4$Specificity, digits = 3),round(conf4$Pvalue$p.value, digits = 3))
+Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],round(var_removed3$PPV, digits = 3),"NA","NA",round(var_removed3$Pvalue$p.value, digits = 3))
 
 # Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
 # Variants_remaining_after_PA_QC1 = c(conf2$con_table[2],conf2$con_table[4],conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
