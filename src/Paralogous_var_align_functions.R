@@ -190,6 +190,7 @@ conf_matrix = function(ptop.num_of_paralog_anno, p.paralog_data, btop.num_of_par
   con_table_FN = nrow(p.paralog_data)-ptop.num_of_paralog_anno
   con_table_PPV = con_table_TP/(con_table_TP+con_table_FP)
   con_table_Sensitivty = con_table_TP/(con_table_TP+con_table_FN)
+  con_table_Specificity = con_table_TN/(con_table_TN+con_table_FP)
   con_table_FPR = con_table_FP/(con_table_FP+con_table_TN)
   con_table = matrix(
     c(nrow(p.paralog_data),
@@ -211,6 +212,7 @@ conf_matrix_benign = function(ptob.num_of_paralog_anno, p.paralog_data, btob.num
   con_table_FN = nrow(p.paralog_data)-ptob.num_of_paralog_anno
   con_table_PPV = con_table_TP/(con_table_TP+con_table_FP)
   con_table_Sensitivty = con_table_TP/(con_table_TP+con_table_FN)
+  con_table_Specificity = con_table_TN/(con_table_TN+con_table_FP)
   con_table_FPR = con_table_FP/(con_table_FP+con_table_TN)
   con_table = matrix(
     c(nrow(p.paralog_data),
