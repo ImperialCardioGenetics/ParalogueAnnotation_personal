@@ -242,7 +242,10 @@ btob2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.
 
 conf2 = conf_matrix(p2.paralogous_var_align$num_of_paralog_anno, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$num_of_paralog_anno, b2.paralogous_var_align$paralog_data)
 conf_b2 = conf_matrix_benign(ptob2.paralogous_var_align$num_of_paralog_anno, ptob2.paralogous_var_align$paralog_data, btob2.paralogous_var_align$num_of_paralog_anno, btob2.paralogous_var_align$paralog_data)
-
+genes_after_QC1 = length(unique(p2.paralogous_var_align$Total_paralog_annotations$Gene))
+write.table(unique(p2.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC1.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_with_PA_QC1 = length(unique(p2.paralogous_var_align$Total_paralog_annotations$SYMBOL))
+write.table(unique(p2.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC1.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 var_removed = var_rem_matrix(conf$con_table, conf2$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
 
