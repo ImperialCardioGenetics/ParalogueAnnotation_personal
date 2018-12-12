@@ -333,6 +333,7 @@ kable(clinvar_set)
 clinvar_set_genes = data.frame(c("Total","Genes with Paralogue Annotations - no QC", "Genes remaining after QC1", "Genes with Paralogue Annotations - QC1", "Genes remaining after QC2", "Genes with Paralogue Annotations - QC2", "Genes remaining after QC3", "Genes with Paralogue Annotations - QC3"),
                                c(genes_before_PA,genes_with_PA_noQC,genes_after_QC1,genes_with_PA_QC1,genes_after_QC2,genes_with_PA_QC2,genes_after_QC3,genes_with_PA_QC3))
 colnames(clinvar_set_genes) = c("","Number of genes")
+kable(clinvar_set_genes)
 ```
 
 Prior to annotation, there were `r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])` variants that aligned to at least one paralogous equivalent position according to ensembl (`r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])/length(clinvar_P_LP_tableized$CHROM)`)
@@ -347,10 +348,16 @@ Using the aforementioned quality control steps to increase the stringency of con
 The filtering steps outlined above take a more binaray approach to taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores defined by @Lal2017 on the other hand takes a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. As shown by **fig.** \ref{fig:paraz}, one can use the Para-Z scores as cutoff thresholds for how paralogue conserved alignments must be before considering annotations. The more stringent the cutoff the lower the false positive rate is, but as expected the lower the sensitivity is also. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
 \newpage
 
-```{r paraz, message=FALSE, cache=TRUE, warning=FALSE, echo=FALSE, fig.width=4,fig.height=3,fig.cap="\\label{fig:paraz}ROC space plot of pathogenic/likely pathogenic clinvar variants predicted as pathogenic by paralogue annotation at varying degrees of Para-Z scores"}
+```{r paraz, message=FALSE, cache=TRUE,  results='asis', warning=FALSE, echo=FALSE, fig.width=4,fig.height=3,fig.cap="\\label{fig:paraz}ROC space plot of pathogenic/likely pathogenic clinvar variants predicted as pathogenic by paralogue annotation at varying degrees of Para-Z scores"}
 Sensitivity_list = vector()
 FPR_list = vector()
 con_table_list = matrix(, ncol = 2)
+PPV_list = vector()
+P_value_list = vector()
+Specificity_list = vector()
+##Table##
+paraz_set = t(data.frame(Variant,Total))
+####
 for (i in seq(0,11)){
 #noQC
 #pathogenic to pathogenic
@@ -361,12 +368,25 @@ paraz.conf = conf_matrix(p.paraz_var_align$num_of_paralog_anno, p.paraz_var_alig
 Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
 FPR_list = c(FPR_list, paraz.conf$FPR)
 con_table_list = rbind(con_table_list, paraz.conf$con_table)
+PPV_list = c(PPV_list, paraz.conf$PPV)
+P_value_list = c(P_value_list, paraz.conf$Pvalue$p.value)
+Specificity_list = c(Specificity_list, paraz.conf$Specificity)
+
+PA_threshold_row = c(format(paraz.conf$con_table[2], scientific = FALSE), format(paraz.conf$con_table[2,2], scientific = FALSE), round(paraz.conf$PPV, digits = 3), round(paraz.conf$Sensitivity, digits = 3), round(paraz.conf$Specificity,digits = 3), round(paraz.conf$Pvalue$p.value, digits = 3))
+paraz_set = rbind(paraz_set, PA_threshold_row)
 }
+##Graph
 roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list, cutoff = seq(0,11)))
 gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 
 ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.04) + ylim(0.3,0.7) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+
+
+
+
+
+
 ```
 
 ## Case example: lack of paralogue annotation on 8 sarcomeric genes subset and use of etiological fractions as alternate validation 
