@@ -257,6 +257,10 @@ btob3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.
 
 conf3 = conf_matrix(p3.paralogous_var_align$num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
 conf_b3 = conf_matrix_benign(ptob3.paralogous_var_align$num_of_paralog_anno, ptob3.paralogous_var_align$paralog_data, btob3.paralogous_var_align$num_of_paralog_anno, btob3.paralogous_var_align$paralog_data)
+genes_after_QC2 = length(unique(p3.paralogous_var_align$Total_paralog_annotations$Gene))
+write.table(unique(p3.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_with_PA_QC2 = length(unique(p3.paralogous_var_align$Total_paralog_annotations$SYMBOL))
+write.table(unique(p3.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 var_removed2 = var_rem_matrix(conf2$con_table, conf3$con_table, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$paralog_data)
 
@@ -281,6 +285,10 @@ btob4.num_of_paralog_anno = sum(!is.na(btob4.Total_paralog_annotations$ID.y))
 
 conf4 = conf_matrix(p4.num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b4.num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
 conf_b4 = conf_matrix_benign(ptob4.num_of_paralog_anno, ptob3.paralogous_var_align$paralog_data, btob4.num_of_paralog_anno, btob3.paralogous_var_align$paralog_data)
+genes_after_QC3 = length(unique(p4.Total_paralog_annotations$Gene))
+write.table(unique(p4.Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC3.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_with_PA_QC3 = length(unique(p4.Total_paralog_annotations$SYMBOL))
+write.table(unique(p4.Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC3.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 var_removed3 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$paralog_data)
 
