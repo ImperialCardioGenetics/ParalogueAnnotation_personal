@@ -314,21 +314,25 @@ Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_tab
 # Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],var_removed3$PPV,"NA",var_removed3$Pvalue$p.value)
 
 clinvar_set = data.frame(Variant,
-                          Total,
-                          Paralogue_Annotation_no_QC,
-                          Variants_remaining_after_PA_QC1,
-                          Variants_removed_after_PA_QC1,
-                          Variants_remaining_after_PA_QC2,
-                          Variants_removed_after_PA_QC2,
-                          Variants_remaining_after_PA_QC3,
-                          Variants_removed_after_PA_QC3
-                          )
+                         Total,
+                         Paralogue_Annotation_no_QC,
+                         Variants_remaining_after_PA_QC1,
+                         Variants_removed_after_PA_QC1,
+                         Variants_remaining_after_PA_QC2,
+                         Variants_removed_after_PA_QC2,
+                         Variants_remaining_after_PA_QC3,
+                         Variants_removed_after_PA_QC3
+                         )
 
 clinvar_set = t(clinvar_set)
-rownames(clinvar_set)  = c("", "Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants removed from QC1", "Variants remaining after QC2", "Variants removed after QC2", "Variants remaining after QC3", "Variants removed after QC3")
+rownames(clinvar_set) = c("", "Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants removed from QC1", "Variants remaining after QC2", "Variants removed after QC2", "Variants remaining after QC3", "Variants removed after QC3")
 kable(clinvar_set)
 # pander(clinvar_set2)
 # pander(clinvar_set3)
+
+clinvar_set_genes = data.frame(c("Total","Genes with Paralogue Annotations - no QC", "Genes remaining after QC1", "Genes with Paralogue Annotations - QC1", "Genes remaining after QC2", "Genes with Paralogue Annotations - QC2", "Genes remaining after QC3", "Genes with Paralogue Annotations - QC3"),
+                               c(genes_before_PA,genes_with_PA_noQC,genes_after_QC1,genes_with_PA_QC1,genes_after_QC2,genes_with_PA_QC2,genes_after_QC3,genes_with_PA_QC3))
+colnames(clinvar_set_genes) = c("","Number of genes")
 ```
 
 Prior to annotation, there were `r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])` variants that aligned to at least one paralogous equivalent position according to ensembl (`r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])/length(clinvar_P_LP_tableized$CHROM)`)
