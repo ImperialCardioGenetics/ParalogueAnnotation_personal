@@ -653,9 +653,11 @@ p.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPat
 # Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 Sift_tableized_data = Sift_tableized_file[!is.na(Sift_tableized_file$SIFT_score),]
+# Sift_tableized_data = Sift_tableized_file
 Sift_tableized_data$Variant_pos = paste(Sift_tableized_data$CHROM,Sift_tableized_data$POS, sep = " ")
 Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 Revel_tableized_data = Revel_tableized_file[!is.na(Revel_tableized_file$Amino_acids)&!is.na(Revel_tableized_file$REVEL_score),]
+# Revel_tableized_data = Revel_tableized_file
 Revel_tableized_data$Variant_pos = paste(Revel_tableized_data$CHROM,Revel_tableized_data$POS, sep = " ")
 Revel_tableized_data$REF_Amino_acids = sapply(Revel_tableized_data[,"Amino_acids"],strsplit, "/")
 Revel_tableized_data$REF_Amino_acids = sapply(Revel_tableized_data[,"REF_Amino_acids"],function(x) x[1])
