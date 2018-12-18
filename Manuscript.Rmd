@@ -45,7 +45,7 @@ For the case and control study, HCM diseased cohorts data were gathered from the
 
 ## Annotation of variants and transfer of annotations across paralogues
 
-
+The data was prepared by removing frameshift mutations
 
 ## Statistical measures
 For a pathogenic paralogue alignment:
@@ -652,12 +652,12 @@ p.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPat
 
 # Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-Sift_tableized_data = Sift_tableized_file[!is.na(Sift_tableized_file$SIFT_score),]
-# Sift_tableized_data = Sift_tableized_file
+# Sift_tableized_data = Sift_tableized_file[!is.na(Sift_tableized_file$SIFT_score),]
+Sift_tableized_data = Sift_tableized_file
 Sift_tableized_data$Variant_pos = paste(Sift_tableized_data$CHROM,Sift_tableized_data$POS, sep = " ")
 Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-Revel_tableized_data = Revel_tableized_file[!is.na(Revel_tableized_file$Amino_acids)&!is.na(Revel_tableized_file$REVEL_score),]
-# Revel_tableized_data = Revel_tableized_file
+# Revel_tableized_data = Revel_tableized_file[!is.na(Revel_tableized_file$Amino_acids)&!is.na(Revel_tableized_file$REVEL_score),]
+Revel_tableized_data = Revel_tableized_file
 Revel_tableized_data$Variant_pos = paste(Revel_tableized_data$CHROM,Revel_tableized_data$POS, sep = " ")
 Revel_tableized_data$REF_Amino_acids = sapply(Revel_tableized_data[,"Amino_acids"],strsplit, "/")
 Revel_tableized_data$REF_Amino_acids = sapply(Revel_tableized_data[,"REF_Amino_acids"],function(x) x[1])
@@ -665,7 +665,7 @@ Revel_tableized_data$ALT_Amino_acids = sapply(Revel_tableized_data[,"Amino_acids
 Revel_tableized_data$ALT_Amino_acids = sapply(Revel_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
 
 sift_revel_data = right_join(Revel_tableized_data,Sift_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT"))
-sift_revel_data = sift_revel_data[!is.na(sift_revel_data$REVEL_score)&!is.na(sift_revel_data$SIFT_score),]
+# sift_revel_data = sift_revel_data[!is.na(sift_revel_data$REVEL_score)&!is.na(sift_revel_data$SIFT_score),]
 sift_revel_data = sift_revel_data[!duplicated(sift_revel_data),]
 
 #Benign variants
@@ -689,8 +689,8 @@ b.sift_revel_data = b.sift_revel_data[!duplicated(b.sift_revel_data),]
 
 ##Predicting pathogenic
 p.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sift_revel_data, "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-p.Sift_Revel_var_align$Total_paralog_annotations = p.Sift_Revel_var_align$Total_paralog_annotations[!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score)&!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$SIFT_score),]
-p.Total_number_of_vars = dim(p.Sift_Revel_var_align$Total_paralog_annotations)[1]
+# p.Sift_Revel_var_align$Total_paralog_annotations = p.Sift_Revel_var_align$Total_paralog_annotations[!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score)&!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$SIFT_score),]
+p.Total_number_of_vars = length(p.Sift_Revel_var_align$paralog_data$ID)
 p.num_of_paralog_anno = sum(!is.na(p.Sift_Revel_var_align$Total_paralog_annotations$ID.y))
 p.num_of_sift = length(which(p.Sift_Revel_var_align$Total_paralog_annotations$SIFT_pred == "D"))
 p.num_of_revel = length(which(p.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score > 0.5))
