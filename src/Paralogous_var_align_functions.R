@@ -17,6 +17,9 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   # paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],unlist)
   paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
   paralog_data = left_join(paralog_data,paralog_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
+  
+  paralog_data = paralog_data[!duplicated(paralog_data),]
+  
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
   
   joining_tableized_data = read.csv(file=joining_tableized_file, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
