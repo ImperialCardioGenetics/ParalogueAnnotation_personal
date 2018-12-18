@@ -166,6 +166,8 @@ dfB$Coder <- "B"
 
 df <- rbind(dfA, dfB)
 
+dupRows <- dupsBetweenGroups(df, "Coder")
+
 cbind(df, unique=!dupRows)
 ```
 
@@ -1184,6 +1186,20 @@ For variants in the clinvar benign and likely benign dataset, there were `r leng
 
 Performing a simple kolmogorov smirnov test between the distribution of pathogenic variants in genes with paralogues and benign variants shows a p-value of `r ks$p.value` suggesting that the null hypothesis of the distributions being identical cannot be rejected. From this, there appears to be no statistical difference between pathogenic variants being more likely to lie in genes that have more paralogs compared to benign, at least in regards to the definitions of clinical significance made by clinvar.
 
+
+
+#### Testing for overlapping genes in ensembl
+```{r overlapping_genes, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE"}
+paralog_tableized_data = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+paralog_tableized_data = paralog_tableized_data[!is.na(paralog_tableized_data$Amino_acids),]
+
+paralog_tableized_data$Variant_pos = paste(paralog_tableized_data$CHROM,paralog_tableized_data$POS, sep = " ")
+paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
+paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"REF_Amino_acids"],function(x) x[1])
+paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
+paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+
+```
 
 
 #### Annotation of Clinvar

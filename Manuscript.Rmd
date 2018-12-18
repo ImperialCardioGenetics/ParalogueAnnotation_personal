@@ -695,20 +695,19 @@ p.num_of_paralog_anno = sum(!is.na(p.Sift_Revel_var_align$Total_paralog_annotati
 p.num_of_sift = length(which(p.Sift_Revel_var_align$Total_paralog_annotations$SIFT_pred == "D"))
 p.num_of_revel = length(which(p.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score > 0.5))
 
-
 btop.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", b.sift_revel_data, "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 btop.Sift_Revel_var_align$Total_paralog_annotations = btop.Sift_Revel_var_align$Total_paralog_annotations[!is.na(btop.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score)&!is.na(btop.Sift_Revel_var_align$Total_paralog_annotations$SIFT_score),]
-btop.Total_number_of_vars = dim(btop.Sift_Revel_var_align$Total_paralog_annotations)[1]
 btop.num_of_paralog_anno = sum(!is.na(btop.Sift_Revel_var_align$Total_paralog_annotations$ID.y))
 btop.num_of_sift = length(which(btop.Sift_Revel_var_align$Total_paralog_annotations$SIFT_pred == "D"))
 btop.num_of_revel = length(which(btop.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score > 0.5))
 
-data.frame(c(p.Total_number_of_vars,btop.Total_number_of_vars),c(p.num_of_paralog_anno,btop.num_of_paralog_anno),c(p.num_of_revel,btop.num_of_revel),c(p.num_of_sift,btop.num_of_sift))
+PA_PPV = p.num_of_paralog_anno/(p.num_of_paralog_anno+btop.num_of_paralog_anno)
+sift_PPV = p.num_of_sift/(p.num_of_sift+btop.num_of_sift)
+revel_PPV = p.num_of_revel/(p.num_of_revel+btop.num_of_revel)
 
 ##Predicting Benign
 ptob.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", sift_revel_data, "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized")
 ptob.Sift_Revel_var_align$Total_paralog_annotations = ptob.Sift_Revel_var_align$Total_paralog_annotations[!is.na(ptob.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score)&!is.na(ptob.Sift_Revel_var_align$Total_paralog_annotations$SIFT_score),]
-ptob.Total_number_of_vars = dim(ptob.Sift_Revel_var_align$Total_paralog_annotations)[1]
 ptob.num_of_paralog_anno = sum(!is.na(ptob.Sift_Revel_var_align$Total_paralog_annotations$ID.y))
 ptob.num_of_sift = length(which(ptob.Sift_Revel_var_align$Total_paralog_annotations$SIFT_pred == "T"))
 ptob.num_of_revel = length(which(ptob.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score <= 0.5))
@@ -716,10 +715,30 @@ ptob.num_of_revel = length(which(ptob.Sift_Revel_var_align$Total_paralog_annotat
 
 b.Sift_Revel_var_align = Sift_Revel_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", b.sift_revel_data, "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized")
 b.Sift_Revel_var_align$Total_paralog_annotations = b.Sift_Revel_var_align$Total_paralog_annotations[!is.na(b.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score)&!is.na(b.Sift_Revel_var_align$Total_paralog_annotations$SIFT_score),]
-b.Total_number_of_vars = dim(b.Sift_Revel_var_align$Total_paralog_annotations)[1]
+b.Total_number_of_vars = length(b.Sift_Revel_var_align$paralog_data$ID)
 b.num_of_paralog_anno = sum(!is.na(b.Sift_Revel_var_align$Total_paralog_annotations$ID.y))
 b.num_of_sift = length(which(b.Sift_Revel_var_align$Total_paralog_annotations$SIFT_pred == "T"))
 b.num_of_revel = length(which(b.Sift_Revel_var_align$Total_paralog_annotations$REVEL_score <= 0.5))
+
+Sum_table = data.frame(c(p.Total_number_of_vars,b.Total_number_of_vars,"NA"),
+                       c(format(p.num_of_paralog_anno, scientific = FALSE),format(btop.num_of_paralog_anno,scientific = FALSE),round(PA_PPV,digits=3)),
+                       c(format(p.num_of_sift, scientific = FALSE),format(btop.num_of_sift, scientific = FALSE),round(sift_PPV, digits = 3)),
+                       c(format(p.num_of_revel, scientific = FALSE), format(btop.num_of_revel, scientific = FALSE), round(revel_PPV, digits = 3))
+                       )
+rownames(Sum_table) = c("Pathogenic", "Benign","PPV")                       
+colnames(Sum_table) = c("Total", "Pathogenic variants predicted by PA", "Pathogenic variants predicted by SIFT", "Pathogenic variants predicted by REVEL")
+
+
+x = p.normal_PA$paralog_data[,c("Variant_pos","ID")]
+x2 = ddply(x,.(Variant_pos,ID),nrow)
+x2$Coder = "X"
+y = p.Sift_Revel_var_align$paralog_data[,c("Variant_pos", "ID")]
+y2 = ddply(y,.(Variant_pos,ID),nrow)
+y2$Coder = "Y"
+z = rbind(x2, y2)
+dupRows <- dupsBetweenGroups(z, "Coder")
+z2 = cbind(z, unique=dupRows)
+
 ```
 
 # References
