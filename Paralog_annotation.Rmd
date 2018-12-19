@@ -49,6 +49,7 @@ source("src/Paralogous_var_align_functions.R")
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
+* For the clinvar dataset, count how many variants are in which genes
 * have a look at lab_meeting_6_11_feedback_notes.docx for things to do:
     + Annotate paralogs file with SIFT - Annovar can't handle empty lines in paraloc_paralogs file; check R_file_prep
 * output as word doc and then can edit the stylised formats in word. This can then be used as a reference template doc (see https://github.com/jamesware/denovolyzerManuscript/blob/master/denovolyzerManuscript.Rmd) to auto stylize formats that are difficult to do in r markdown.
@@ -1200,7 +1201,10 @@ paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"REF_Ami
 paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
 paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
 
-x = paralog_tableized_data[,c("Variant_pos", "ID")]
+non_frameshift_mut = paralog_tableized_data[nchar(paralog_tableized_data$REF)==nchar(paralog_tableized_data$ALT),]
+frameshift_mut = paralog_tableized_data[nchar(paralog_tableized_data$REF)!=nchar(paralog_tableized_data$ALT),]
+
+x = non_frameshift_mut[,c("Variant_pos", "ID")]
 x2 = ddply(x,.(Variant_pos,ID),nrow)
 ```
 
