@@ -1190,7 +1190,7 @@ Performing a simple kolmogorov smirnov test between the distribution of pathogen
 
 #### Testing for overlapping genes in ensembl
 ```{r overlapping_genes, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
-    
+library(plyr)
 paralog_tableized_data = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 paralog_tableized_data = paralog_tableized_data[!is.na(paralog_tableized_data$Amino_acids),]
 
