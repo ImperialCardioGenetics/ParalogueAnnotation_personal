@@ -142,7 +142,7 @@ protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$e
 
 
 # length(protein_genes_w_paralogues)
-protein_genes_w_paralogues_wide = count(protein_genes_w_paralogues, external_gene_name)
+protein_genes_w_paralogues_wide = count(protein_genes_w_paralogues, "external_gene_name")
 colnames(protein_genes_w_paralogues_wide)[2] = "number_of_paralogues"
 par(mfrow=c(2,2))
 hist(protein_genes_w_paralogues_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="A) Distribution of genes with paralogues", cex.main = 0.7)
