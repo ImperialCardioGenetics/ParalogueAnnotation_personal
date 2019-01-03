@@ -1102,7 +1102,7 @@ The tableize command below was used to extract only the sift scores.
 python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf --out /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines.hg19_multianno.vcf_tableized_org --do_not_minrep --include_id --split_by_transcript --canonical_only --info SIFT_score,SIFT_pred
 ```
 
-The revel scores were converted from csv to tsv using some bash and binary indexed using tabix for faster lookup. Then python script __/rds/general/user/nyl112/home/WORK/data/REVEL_scores/extract_revel_score.py__ was used to annotate the tableized file with the revel scores.
+The revel scores were converted from csv to tsv using some bash and binary indexed using tabix for faster lookup. Then python script (on Imeperial HPC) __/rds/general/user/nyl112/home/WORK/data/REVEL_scores/extract_revel_score.py__ was used to annotate the tableized file with the revel scores.
 
 Due to the large excessive memory usage, a separate R script was used to annotate with REVEL scores - __src/Annotate_REVEL.R__.
 
