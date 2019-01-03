@@ -73,6 +73,7 @@ source("src/Paralogous_var_align_functions.R")
 * Make a list and write down overlapping genes that cause an issue like MART3, where only one of the overlapping genes has info reported back. Write it as an appendix.
     + Either report back in output file as special results or maybe TAKE OUT error catching for "Can't call methods: start/location_from_column" errors and see if server still times out. That way warnings will be reported.
     + NOTE the overlapping genes issue causes another problem where 2 overlapping transcripts are considered canonical but vep spits out both transcripts as being from the same gene...e.g. "Gene: DCAF8 ENSG00000132716" and "Gene: AL139011.2 ENSG00000258465"
+    + MADE a solution that helps but might not fix all - since some of the overlapping genes were not actual protein coding genes (non-sense mediated decay. mirna etc.) made tableize wrapper extract only protein coding transcripts
 * All possible missense vcf for exome
     + be clear between all possible amino acid substitution and all possible nucleotide substitution
         - the sythetic exome from ExAC should contain all possible SNV
