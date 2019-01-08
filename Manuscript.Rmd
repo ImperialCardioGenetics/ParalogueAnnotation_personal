@@ -745,6 +745,8 @@ z2 = cbind(z, unique=dupRows)
 
 ```{r cf_sift_revel, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 p.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+conf = conf_matrix(p.normal_PA$num_of_paralog_anno, p.normal_PA$paralog_data, b.normal_PA$num_of_paralog_anno, b.normal_PA$paralog_data)
 
 ##Preparing sift and revel files
 #Pathogenic variants
