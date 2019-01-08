@@ -1105,7 +1105,6 @@ python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Shar
 
 The revel scores were converted from csv to tsv using some bash and binary indexed using tabix for faster lookup. Then python script (on Imeperial HPC) __/rds/general/user/nyl112/home/WORK/data/REVEL_scores/extract_revel_score.py__ was used to annotate the tableized file with the revel scores.
 
-Due to the large excessive memory usage, a separate R script was used to annotate with REVEL scores - __src/Annotate_REVEL.R__.
 
 ### Results and Discussion
 
