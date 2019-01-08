@@ -149,7 +149,7 @@ ParaZ_var_align = function(paraz_cutoff,paralogs2_file, paralog_tableized_file, 
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
 }
 
-Sift_Revel_var_align_OLD = function(paralogs2_file, sift_revel_tableized_file, paralog_tableized_file){ #Function for joining together variant paralogous locations with SIFT and REVEL scores; assumes SIFT/REVEL scores already annotated to an appropriate tableized file
+#Sift_Revel_var_align_OLD = function(paralogs2_file, sift_revel_tableized_file, paralog_tableized_file){ #Function for joining together variant paralogous locations with SIFT and REVEL scores; assumes SIFT/REVEL scores already annotated to an appropriate tableized file
   # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
   paralog_data = file(paralogs2_file)
   max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
@@ -186,7 +186,7 @@ Sift_Revel_var_align_OLD = function(paralogs2_file, sift_revel_tableized_file, p
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
 } #Do I really need these?
 
-Sift_Revel_var_align = function(paralogs2_file, paralog_tableized_file, sift_revel_tableized_file){ #Function for joining together variant paralogous locations with SIFT and REVEL scores; assumes SIFT/REVEL scores already annotated to an appropriate tableized file
+#Sift_Revel_var_align = function(paralogs2_file, paralog_tableized_file, sift_revel_tableized_file){ #Function for joining together variant paralogous locations with SIFT and REVEL scores; assumes SIFT/REVEL scores already annotated to an appropriate tableized file
   # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
   paralog_data = file(paralogs2_file)
   max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
