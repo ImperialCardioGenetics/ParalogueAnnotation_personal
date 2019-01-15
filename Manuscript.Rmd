@@ -383,6 +383,9 @@ gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 
 ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.04) + ylim(0.3,0.7) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
 
+
+prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
+
 kable(paraz_set)
 ```
 
