@@ -766,6 +766,11 @@ Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPa
 Sift_tableized_data = Sift_tableized_file
 Sift_tableized_data$Variant_pos = paste(Sift_tableized_data$CHROM,Sift_tableized_data$POS, sep = " ")
 
+for (var in 1:nrow(x)){
+  # print(x[var,])
+  
+}
+
 p.num_of_sift = length(which(Sift_tableized_data$SIFT_pred == "D")) #NOT GOING TO WORK. NEED TO TAKE SAME VARIANTS THAT WERE IN GENES WITH PARALOGUES!!!!!
 
 Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
