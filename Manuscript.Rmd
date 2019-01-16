@@ -750,6 +750,8 @@ z2 = cbind(z, unique=dupRows)
 
 ```
 
+NOTE: BELOW NOT GOING TO WORK. NEED TO TAKE SAME VARIANTS THAT WERE IN GENES WITH PARALOGUES IF CF WITH OTHER TOOLS!!!!!
+
 ```{r cf_sift_revel, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 p.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 b.normal_PA = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -763,6 +765,9 @@ Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPa
 # Sift_tableized_data = Sift_tableized_file[!is.na(Sift_tableized_file$SIFT_score),]
 Sift_tableized_data = Sift_tableized_file
 Sift_tableized_data$Variant_pos = paste(Sift_tableized_data$CHROM,Sift_tableized_data$POS, sep = " ")
+
+p.num_of_sift = length(which(Sift_tableized_data$SIFT_pred == "D")) #NOT GOING TO WORK. NEED TO TAKE SAME VARIANTS THAT WERE IN GENES WITH PARALOGUES!!!!!
+
 Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 # Revel_tableized_data = Revel_tableized_file[!is.na(Revel_tableized_file$Amino_acids)&!is.na(Revel_tableized_file$REVEL_score),]
 Revel_tableized_data = Revel_tableized_file
