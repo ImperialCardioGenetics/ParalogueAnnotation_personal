@@ -19,6 +19,7 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   paralog_data = left_join(paralog_data,paralog_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
   
   paralog_data = paralog_data[!duplicated(paralog_data),]
+  # n_occur = data.frame(table(paralog_data$ID))
   
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
   
