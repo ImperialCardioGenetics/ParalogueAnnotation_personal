@@ -364,6 +364,29 @@ var_rem_matrix = function(con_table1, con_table2, p.paralog_data, b.paralog_data
   return(list("con_table" = var_rem_con, "PPV" = var_rem_con_PPV, "Sensitivity" = var_rem_con_Sensitivity, "Pvalue" = var_rem_con_p_value, "TP" = var_rem_con_TP, "FP" = var_rem_con_FP, "FN" = var_rem_con_FN))
 }
 
+raw_conf_matrix = function(num_patho_pred_patho, p.tableized_data, num_benign_pred_patho, b.tableized_data){ #function for calculating confusion matrix and stats from raw TP, TN, FP and FN numbers from anything
+  con_table_TP = num_patho_pred_patho
+  con_table_FP = num_benign_pred_patho
+  con_table_TN = nrow(b.tableized_data)-num_benign_pred_patho
+  con_table_FN = nrow(p.tableized_data)-num_patho_pred_patho
+  con_table_PPV = con_table_TP/(con_table_TP+con_table_FP)
+  con_table_Sensitivty = con_table_TP/(con_table_TP+con_table_FN)
+  con_table_Specificity = con_table_TN/(con_table_TN+con_table_FP)
+  con_table_FPR = con_table_FP/(con_table_FP+con_table_TN)
+  con_table_ACC = (con_table_TP + con_table_TN)/(con_table_TP + con_table_TN + con_table_FP + con_table_FN)
+  con_table = matrix(
+    c(nrow(p.tableized_data),
+      num_patho_pred_patho,
+      nrow(b.tableized_data),
+      num_benign_pred_patho
+    ), ncol = 2
+  )
+  colnames(con_table) = c("Pathogenic", "Benign")
+  rownames(con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+  con_table_p_value = fisher.test(con_table)
+  return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "Specificity" = con_table_Specificity, "FPR" = con_table_FPR,"Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN))
+}
+
 calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiological Fractions
   if (a == 0 | b == 0 | c == 0 | d == 0){
     a = a + 0.5
