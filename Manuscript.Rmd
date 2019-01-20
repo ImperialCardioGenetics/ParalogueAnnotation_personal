@@ -537,6 +537,7 @@ Therefore, the third criteria is where the lack of as many annotations arises. H
 #noQC
 #all missense data
 p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+p.art.paralogous_var_align = Paralogous_var_align("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 
 gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
 
