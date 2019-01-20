@@ -124,7 +124,9 @@ All available para-z scores were retreived from https://git-r3lab.uni.lu/genomea
 \newpage
 
 ## Comparison to SIFT/REVEL scores
-SIFT and REVEL scores were retreived using ANNOVAR with dbnsfp30a [@wang2010annovar,@liu2016dbnsfp] and from https://sites.google.com/site/revelgenomics/downloads [@ioannidis2016revel] respectively.
+SIFT and Mcap scores were retreived using ANNOVAR with dbnsfp30a [@wang2010annovar,@liu2016dbnsfp]. Revel scores were downloaded from https://sites.google.com/site/revelgenomics/downloads [@ioannidis2016revel].
+
+Revel did not provide scores for all available variants in the dataset and therefore to ensure the same variants were being annotated by all tools
 
 # Results and Discussion
 
