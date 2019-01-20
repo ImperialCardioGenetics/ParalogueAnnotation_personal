@@ -2,7 +2,6 @@ Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "p
 lapply(Packages, library, character.only = TRUE)
 
 Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations
-  # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
   paralog_data = file(paralogs2_file)
   max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
   paralog_data = read.csv(file=paralogs2_file, sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")))
@@ -11,10 +10,8 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   
   paralog_tableized_data$Variant_pos = paste(paralog_tableized_data$CHROM,paralog_tableized_data$POS, sep = " ")
   paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
-  # paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"REF_Amino_acids"],unlist)
   paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"REF_Amino_acids"],function(x) x[1])
   paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
-  # paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],unlist)
   paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
   paralog_data = left_join(paralog_data,paralog_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
   
@@ -28,14 +25,13 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   
   joining_tableized_data$Variant_pos = paste(joining_tableized_data$CHROM,joining_tableized_data$POS, sep = " ")
   joining_tableized_data$REF_Amino_acids = sapply(joining_tableized_data[,"Amino_acids"],strsplit, "/")
-  # joining_tableized_data$REF_Amino_acids = sapply(joining_tableized_data[,"REF_Amino_acids"],unlist)
   joining_tableized_data$REF_Amino_acids = sapply(joining_tableized_data[,"REF_Amino_acids"],function(x) x[1])
   joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"Amino_acids"],strsplit, "/")
-  # joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"ALT_Amino_acids"],unlist)
   joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
   ref_data = joining_tableized_data
   
   Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
+  Total_paralog_annotations = Total_paralog_annotations[!duplicated(Total_paralog_annotations),]
   Unique_variant_annotations = Total_paralog_annotations[!is.na(Total_paralog_annotations$ID.y),]
   Unique_variant_annotations = unique(Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
   
@@ -53,12 +49,13 @@ Paralogous_var_align_compressed = function(paralogs2_file, paralog_tableized_fil
   
   paralog_tableized_data$Variant_pos = paste(paralog_tableized_data$CHROM,paralog_tableized_data$POS, sep = " ")
   paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
-  # paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"REF_Amino_acids"],unlist)
   paralog_tableized_data$REF_Amino_acids = sapply(paralog_tableized_data[,"REF_Amino_acids"],function(x) x[1])
   paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"Amino_acids"],strsplit, "/")
-  # paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],unlist)
   paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
   paralog_data = left_join(paralog_data,paralog_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
+  
+  paralog_data = paralog_data[!duplicated(paralog_data),]
+  
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
   
   joining_tableized_data = read.csv(file=joining_tableized_file, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
@@ -66,14 +63,13 @@ Paralogous_var_align_compressed = function(paralogs2_file, paralog_tableized_fil
   
   joining_tableized_data$Variant_pos = paste(joining_tableized_data$CHROM,joining_tableized_data$POS, sep = " ")
   joining_tableized_data$REF_Amino_acids = sapply(joining_tableized_data[,"Amino_acids"],strsplit, "/")
-  # joining_tableized_data$REF_Amino_acids = sapply(joining_tableized_data[,"REF_Amino_acids"],unlist)
   joining_tableized_data$REF_Amino_acids = sapply(joining_tableized_data[,"REF_Amino_acids"],function(x) x[1])
   joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"Amino_acids"],strsplit, "/")
-  # joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"ALT_Amino_acids"],unlist)
   joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
   ref_data = joining_tableized_data
   
   Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
+  Total_paralog_annotations = unique(Total_paralog_annotations)
   
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
