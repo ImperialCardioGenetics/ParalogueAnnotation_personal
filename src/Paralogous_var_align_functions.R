@@ -19,6 +19,7 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   paralog_data = left_join(paralog_data,paralog_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
   
   paralog_data = paralog_data[!duplicated(paralog_data),]
+  input_variants = unique(paralog_data[c("Variant_pos", "ID", "REF", "ALT")])
   
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
   
@@ -35,8 +36,12 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   ref_data = joining_tableized_data
   
   Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
+  Unique_variant_annotations = Total_paralog_annotations[!is.na(Total_paralog_annotations$ID.y),]
+  Unique_variant_annotations = unique(Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+  
+  true_num_of_paralog_anno = length(Unique_variant_annotations$Variant_pos)
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
-  return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
+  return(list("paralog_data" = paralog_data, "input_variants" = input_variants, "Unique_variant_annotations" = Unique_variant_annotations,"gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "true_num_of_paralog_anno" = true_num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
 }
 
 Paralogous_var_align_compressed = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations - compressed files
@@ -69,6 +74,7 @@ Paralogous_var_align_compressed = function(paralogs2_file, paralog_tableized_fil
   ref_data = joining_tableized_data
   
   Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
+  
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
 }
