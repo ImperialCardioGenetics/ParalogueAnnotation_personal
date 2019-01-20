@@ -229,7 +229,7 @@ ptob.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.s
 #benign to benign
 btob.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized")
 #stats
-conf = conf_matrix(p.paralogous_var_align$num_of_paralog_anno, p.paralogous_var_align$paralog_data, b.paralogous_var_align$num_of_paralog_anno, b.paralogous_var_align$paralog_data)
+conf = conf_matrix(p.paralogous_var_align$true_num_of_paralog_anno, p.paralogous_var_align$input_variants, b.paralogous_var_align$true_num_of_paralog_anno, b.paralogous_var_align$input_variants)
 conf_b = conf_matrix_benign(ptob.paralogous_var_align$num_of_paralog_anno, ptob.paralogous_var_align$paralog_data, btob.paralogous_var_align$num_of_paralog_anno, btob.paralogous_var_align$paralog_data)
 genes_before_PA = length(unique(p.paralogous_var_align$Total_paralog_annotations$Gene))
 write.table(unique(p.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_before_paralogue_annotation.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
