@@ -42,6 +42,8 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
     n_occur = data.frame(table(paralog_data$ID))
     n_occur = n_occur[n_occur$Freq>1,]
     paralog_data = filter(paralog_data, ID %in% n_occur$Var1)
+  } else {
+    n_occur = NA
   }
   
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
@@ -91,7 +93,7 @@ Paralogous_var_align_compressed = function(paralogs2_file, paralog_tableized_fil
   paralog_tableized_data$ALT_Amino_acids = sapply(paralog_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
   paralog_data = left_join(paralog_data,paralog_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
   
-  paralog_data = paralog_data[!duplicated(paralog_data),]
+  paralog_data = distinct(paralog_data)
   
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
   

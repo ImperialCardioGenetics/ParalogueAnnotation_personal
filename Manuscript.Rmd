@@ -537,19 +537,22 @@ Therefore, the third criteria is where the lack of as many annotations arises. H
 #noQC
 #all missense data
 # p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-p.art.paralogous_var_align = Paralogous_var_align("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-
 gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
+p.art.paralogous_var_align = Paralogous_var_align(Subset = c("Gene", gene_subset), "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 
-p.art_Total_paralog_annotations = dplyr::filter(p.art.paralogous_var_align$Total_paralog_annotations, Gene %in% gene_subset)  
-p.art_num_of_paralog_anno = p.art_Total_paralog_annotations[!is.na(p.art_Total_paralog_annotations$ID.y),]
 
-p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene %in% gene_subset)
+
+# p.art_Total_paralog_annotations = dplyr::filter(p.art.paralogous_var_align$Total_paralog_annotations, Gene %in% gene_subset)  
+# p.art_num_of_paralog_anno = p.art_Total_paralog_annotations[!is.na(p.art_Total_paralog_annotations$ID.y),]
+# 
+# p.art_paralog_data = dplyr::filter(p.art.paralogous_var_align$paralog_data, Gene %in% gene_subset)
 
 # patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
 ```
 
+<!-- Statement below no longer correct: should actually be 1259 variants not 1545. Figure out new fold increase
 But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (30607 total variants). Doing so, predicts 1545 variants to pathogenic - a 96.6 fold increase. Though validating how many additional predictions are true positives would require additional known pathogenicity data.
+-->
 
 ```{r eval = FALSE, cache=TRUE, include = FALSE}
 ##case data VEP##
@@ -659,9 +662,12 @@ Hence we calculated EFs in order to see for those few variants that are predicte
 ## Comparison to SIFT/REVEL
 ```{r cf_sift_revel, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 #First initial run to see what variants are not in overlapping genes
-p.normal_PA2 = Paralogous_var_align_no_overlap("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-test = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA2 = Paralogous_var_align_no_overlap("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# p.normal_PA2 = Paralogous_var_align_no_overlap("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_initial = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# b.normal_PA2 = Paralogous_var_align_no_overlap("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_initial = Paralogous_var_align("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_initial_conf = conf_matrix(p.normal_initial$true_num_of_paralog_anno, p.normal_initial$input_variants, b.normal_initial$true_num_of_paralog_anno, b.normal_initial$input_variants)
+
 
 ##Preparing and annotating with other classifiers
 #revel - as revel has the least number of variants annotated, all other methods were made sure to use the same variants that revel managed to annotate
@@ -669,14 +675,14 @@ Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyP
 Revel_tableized_data = Revel_tableized_file
 Revel_tableized_data$Variant_pos = paste(Revel_tableized_data$CHROM,Revel_tableized_data$POS, sep = " ")
 Revel_tableized_data = Revel_tableized_data[!is.na(Revel_tableized_data$Codons)&!is.na(Revel_tableized_data$Paralogue_Vars),]
-Revel_tableized_data = filter(Revel_tableized_data, ID %in% p.normal_PA2$n_occur$Var1)
+Revel_tableized_data = filter(Revel_tableized_data, ID %in% p.normal_initial$n_occur$Var1)
 p.num_of_revel = length(which(Revel_tableized_data$REVEL_score > 0.5))
 
 b.Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 b.Revel_tableized_data = b.Revel_tableized_file
 b.Revel_tableized_data$Variant_pos = paste(b.Revel_tableized_data$CHROM,b.Revel_tableized_data$POS, sep = " ")
 b.Revel_tableized_data = b.Revel_tableized_data[!is.na(b.Revel_tableized_data$Codons)&!is.na(b.Revel_tableized_data$Paralogue_Vars),]
-b.Revel_tableized_data = filter(b.Revel_tableized_data, ID %in% b.normal_PA2$n_occur$Var1)
+b.Revel_tableized_data = filter(b.Revel_tableized_data, ID %in% b.normal_initial$n_occur$Var1)
 b.num_of_revel = length(which(b.Revel_tableized_data$REVEL_score > 0.5))
 
 # Revel_TP = p.num_of_revel
