@@ -401,35 +401,51 @@ kable(paraz_set)
 ## Case example: lack of paralogue annotation on 8 sarcomeric genes subset and use of etiological fractions as alternate validation 
 ```{r echo = FALSE, cache=TRUE, results='asis', warning=FALSE}
 #noQC
-p.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-conf = conf_matrix(p.sarco_var_align$num_of_paralog_anno, p.sarco_var_align$paralog_data, b.sarco_var_align$num_of_paralog_anno, b.sarco_var_align$paralog_data)
+# p.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# b.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# conf = conf_matrix(p.sarco_var_align$num_of_paralog_anno, p.sarco_var_align$paralog_data, b.sarco_var_align$num_of_paralog_anno, b.sarco_var_align$paralog_data)
+
+p.sarco_var_align = Paralogous_var_align(Subset = c("Gene","MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b.sarco_var_align = Paralogous_var_align(Subset = c("Gene","MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+conf = conf_matrix(p.sarco_var_align$true_num_of_paralog_anno, p.sarco_var_align$paralog_data, b.sarco_var_align$true_num_of_paralog_anno, b.sarco_var_align$paralog_data)
+
+
 #para_con
-p2.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b2.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-conf2 = conf_matrix(p2.sarco_var_align$num_of_paralog_anno, p2.sarco_var_align$paralog_data, b2.sarco_var_align$num_of_paralog_anno, b2.sarco_var_align$paralog_data)
+# p2.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# b2.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# conf2 = conf_matrix(p2.sarco_var_align$num_of_paralog_anno, p2.sarco_var_align$paralog_data, b2.sarco_var_align$num_of_paralog_anno, b2.sarco_var_align$paralog_data)
+p2.sarco_var_align = Paralogous_var_align(Subset = c("Gene","MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b2.sarco_var_align = Paralogous_var_align(Subset = c("Gene","MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+conf2 = conf_matrix(p2.sarco_var_align$true_num_of_paralog_anno, p2.sarco_var_align$paralog_data, b2.sarco_var_align$true_num_of_paralog_anno, b2.sarco_var_align$paralog_data)
 
 var_removed = var_rem_matrix(conf$con_table, conf2$con_table, p2.sarco_var_align$paralog_data, b2.sarco_var_align$paralog_data)
 
 #all_con
-p3.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-b3.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-conf3 = conf_matrix(p3.sarco_var_align$num_of_paralog_anno, p3.sarco_var_align$paralog_data, b3.sarco_var_align$num_of_paralog_anno, b3.sarco_var_align$paralog_data)
+# p3.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# b3.sarco_var_align = Subset_var_align_gene(c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# conf3 = conf_matrix(p3.sarco_var_align$num_of_paralog_anno, p3.sarco_var_align$paralog_data, b3.sarco_var_align$num_of_paralog_anno, b3.sarco_var_align$paralog_data)
+p3.sarco_var_align = Paralogous_var_align(Subset = c("Gene","MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+b3.sarco_var_align = Paralogous_var_align(Subset = c("Gene","MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1"),"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+conf3 = conf_matrix(p3.sarco_var_align$true_num_of_paralog_anno, p3.sarco_var_align$paralog_data, b3.sarco_var_align$true_num_of_paralog_anno, b3.sarco_var_align$paralog_data)
 
 var_removed2 = var_rem_matrix(conf2$con_table, conf3$con_table, p3.sarco_var_align$paralog_data, b3.sarco_var_align$paralog_data)
 
 #alt_con
 #pathogenic to pathogenic
 p4.Total_paralog_annotations = p3.sarco_var_align$Total_paralog_annotations[p3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
-# p4.Total_paralog_annotations = p4.Total_paralog_annotations[!duplicated(p4.Total_paralog_annotations$ID.x),]
+p4.Total_paralog_annotations = distinct(p4.Total_paralog_annotations)
 p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
+p4.Unique_variant_annotations = p4.Total_paralog_annotations[!is.na(p4.Total_paralog_annotations$ID.y),]
+p4.true_num_of_paralog_anno = length(p4.Unique_variant_annotations$Variant_pos)
 
 #benign to pathogenic
 b4.Total_paralog_annotations = b3.sarco_var_align$Total_paralog_annotations[b3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b3.sarco_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
-# b4.Total_paralog_annotations = b4.Total_paralog_annotations[!duplicated(b4.Total_paralog_annotations$ID.x),]
+b4.Total_paralog_annotations = distinct(b4.Total_paralog_annotations)
 b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
+b4.Unique_variant_annotations = b4.Total_paralog_annotations[!is.na(b4.Total_paralog_annotations$ID.y),]
+b4.true_num_of_paralog_anno = length(b4.Unique_variant_annotations$Variant_pos)
 
-conf4 = conf_matrix(p4.num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.num_of_paralog_anno, b3.sarco_var_align$paralog_data)
+conf4 = conf_matrix(p4.true_num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.true_num_of_paralog_anno, b3.sarco_var_align$paralog_data)
 
 var_removed3 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.sarco_var_align$paralog_data, b3.sarco_var_align$paralog_data)
 
@@ -550,9 +566,7 @@ p.art.paralogous_var_align = Paralogous_var_align(Subset = c("Gene", gene_subset
 # patho_art_var = p.art.paralogous_var_align$Total_paralog_annotations[!is.na(p.art.paralogous_var_align$Total_paralog_annotations$ID.y),]
 ```
 
-<!-- Statement below no longer correct: should actually be 1259 variants not 1545. Figure out new fold increase
-But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (30607 total variants). Doing so, predicts 1545 variants to pathogenic - a 96.6 fold increase. Though validating how many additional predictions are true positives would require additional known pathogenicity data.
--->
+But querying every possible missense variant at all positions in the 8 sarcomeric genes can be done (30607 total variants). Doing so, predicts 1259 variants to pathogenic - a 78.7 fold increase. Though validating how many additional predictions are true positives would require additional known pathogenicity data.
 
 ```{r eval = FALSE, cache=TRUE, include = FALSE}
 ##case data VEP##

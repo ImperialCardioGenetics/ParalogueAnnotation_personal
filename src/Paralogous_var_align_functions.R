@@ -401,7 +401,17 @@ calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiolo
     d = d + 0.5
   }
   OR = (a/b)/(c/d)
+  SE_ln_OR = sqrt((1/a)+(1/b)+(1/c)+(1/d))
+  OR_CI = c(
+    exp(log(OR) - 1.96 * SE_ln_OR),
+    exp(log(OR) + 1.96 * SE_ln_OR)
+    )
   EF = (OR-1)/OR
+  EF_hat = 1 - (((c/d) + c)/((a/b) + a))
+  EF_CI = c(
+    EF_hat - 1.96 * sqrt()
+    
+  )
   return(list("OR" = OR, "EF" = EF))
 }
 
