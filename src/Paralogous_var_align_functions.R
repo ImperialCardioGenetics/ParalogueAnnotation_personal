@@ -1,7 +1,7 @@
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "clusterProfiler", "org.Hs.eg.db", "DiagrammeR")
 lapply(Packages, library, character.only = TRUE)
 
-Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations
+Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file, Subset=c(NA,NA)){ #Function for joining together variant paralogous locations
   if (endsWith(paralogs2_file, ".gz")){
     paralog_data = gzfile(paralogs2_file)
     max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
@@ -13,6 +13,13 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
     paralog_data = read.csv(file=paralogs2_file, sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")))
     paralog_tableized_data = read.csv(file=paralog_tableized_file, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
   }
+  
+  if (Subset[1] == "Gene"){
+    paralog_data = dplyr::filter(paralog_data, Gene %in% Subset[-1])
+  } else if (Subset[1] == "ID"){
+    paralog_data = dplyr::filter(paralog_data, ID %in% Subset[-1])
+  }
+  
   paralog_tableized_data = paralog_tableized_data[!is.na(paralog_tableized_data$Amino_acids),]
   
   paralog_tableized_data$Variant_pos = paste(paralog_tableized_data$CHROM,paralog_tableized_data$POS, sep = " ")
@@ -44,7 +51,16 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   
   true_num_of_paralog_anno = length(Unique_variant_annotations$Variant_pos)
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
-  return(list("paralog_data" = paralog_data, "input_variants" = input_variants, "Unique_variant_annotations" = Unique_variant_annotations,"gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "true_num_of_paralog_anno" = true_num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
+  return(list("paralog_data" = paralog_data, 
+              "input_variants" = input_variants, 
+              "Unique_variant_annotations" = Unique_variant_annotations,
+              "gathered_paralog_data" = gathered_paralog_data, 
+              "Total_paralog_annotations" = Total_paralog_annotations, 
+              "num_of_paralog_anno" = num_of_paralog_anno, 
+              "true_num_of_paralog_anno" = true_num_of_paralog_anno, 
+              "ref_data" = ref_data, 
+              "max_no_col" = max_no_col,
+              "Subset" = Subset))
 }
 
 # Paralogous_var_align_compressed is depreciated after implementing features into Paralogous_var_align
@@ -158,6 +174,7 @@ Paralogous_var_align_overlap = function(paralogs2_file, paralog_tableized_file, 
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col, "n_occur" = n_occur))
 }
 
+# Subset_var_align is depreciated after implementing features into Paralogous_var_align
 Subset_var_align_gene = function(gene_subset, paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations
   # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
   paralog_data = file(paralogs2_file)
@@ -195,7 +212,6 @@ Subset_var_align_gene = function(gene_subset, paralogs2_file, paralog_tableized_
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
 }
-
 Subset_var_align_id = function(id_subset, paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations
   # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
   paralog_data = file(paralogs2_file)
@@ -233,6 +249,7 @@ Subset_var_align_id = function(id_subset, paralogs2_file, paralog_tableized_file
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col))
 }
+#
 
 ParaZ_var_align = function(paraz_cutoff,paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations with Para Z scores
   # system(paste("python /media/nick/Data/Users/N/Documents/PhD/Paralogues/ParalogueAnnotation_personal/src/paralogs_file_remove_last_column.py ", paralogs2_file, sep = ""))
