@@ -316,14 +316,14 @@ conf_matrix = function(ptop.num_of_paralog_anno, p.paralog_data, btop.num_of_par
   con_table_FPR = con_table_FP/(con_table_FP+con_table_TN)
   con_table_ACC = (con_table_TP + con_table_TN)/(con_table_TP + con_table_TN + con_table_FP + con_table_FN)
   con_table = matrix(
-    c(nrow(p.paralog_data),
+    c(nrow(p.paralog_data)-ptop.num_of_paralog_anno,
       ptop.num_of_paralog_anno,
-      nrow(b.paralog_data),
+      nrow(b.paralog_data)-btop.num_of_paralog_anno,
       btop.num_of_paralog_anno
     ), ncol = 2
   )
   colnames(con_table) = c("Pathogenic", "Benign")
-  rownames(con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+  rownames(con_table) = c("Number of variants not predicted as pathogenic", "Number of variants predicted as pathogenic")
   con_table_p_value = fisher.test(con_table)
   return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "Specificity" = con_table_Specificity, "FPR" = con_table_FPR,"Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN))
 }
