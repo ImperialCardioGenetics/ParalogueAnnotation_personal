@@ -536,7 +536,7 @@ Therefore, the third criteria is where the lack of as many annotations arises. H
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 #noQC
 #all missense data
-p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+# p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 p.art.paralogous_var_align = Paralogous_var_align("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 
 gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
@@ -767,15 +767,25 @@ mcap_conf = raw_conf_matrix(p.num_of_mcap,Mcap_tableized_data,b.num_of_mcap,b.Mc
 
 
 #PA
-p.normal_PA = Subset_var_align_id(Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA = Subset_var_align_id(b.Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-normal_PA_conf = conf_matrix(p.normal_PA$num_of_paralog_anno, p.normal_PA$paralog_data, b.normal_PA$num_of_paralog_anno, b.normal_PA$paralog_data)
-p.normal_PA2 = Subset_var_align_id(Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA2 = Subset_var_align_id(b.Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-normal_PA2_conf = conf_matrix(p.normal_PA2$num_of_paralog_anno, p.normal_PA2$paralog_data, b.normal_PA2$num_of_paralog_anno, b.normal_PA2$paralog_data)
-p.normal_PA3 = Subset_var_align_id(Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA3 = Subset_var_align_id(b.Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-normal_PA3_conf = conf_matrix(p.normal_PA3$num_of_paralog_anno, p.normal_PA3$paralog_data, b.normal_PA3$num_of_paralog_anno, b.normal_PA3$paralog_data)
+p.normal_PA = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID),"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID),"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, p.normal_PA$input_variants, b.normal_PA$true_num_of_paralog_anno, b.normal_PA$input_variants)
+p.normal_PA2 = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA2 = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA2$true_num_of_paralog_anno, b.normal_PA2$input_variants)
+p.normal_PA3 = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA3 = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, p.normal_PA3$input_variants, b.normal_PA3$true_num_of_paralog_anno, b.normal_PA3$input_variants)
+
+# p.normal_PA = Subset_var_align_id(Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# b.normal_PA = Subset_var_align_id(b.Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# normal_PA_conf = conf_matrix(p.normal_PA$num_of_paralog_anno, p.normal_PA$paralog_data, b.normal_PA$num_of_paralog_anno, b.normal_PA$paralog_data)
+# p.normal_PA2 = Subset_var_align_id(Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# b.normal_PA2 = Subset_var_align_id(b.Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# normal_PA2_conf = conf_matrix(p.normal_PA2$num_of_paralog_anno, p.normal_PA2$paralog_data, b.normal_PA2$num_of_paralog_anno, b.normal_PA2$paralog_data)
+# p.normal_PA3 = Subset_var_align_id(Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# b.normal_PA3 = Subset_var_align_id(b.Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# normal_PA3_conf = conf_matrix(p.normal_PA3$num_of_paralog_anno, p.normal_PA3$paralog_data, b.normal_PA3$num_of_paralog_anno, b.normal_PA3$paralog_data)
 
 
 
