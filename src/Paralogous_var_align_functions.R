@@ -186,6 +186,7 @@ Paralogous_var_align_overlap = function(paralogs2_file, paralog_tableized_file, 
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col, "n_occur" = n_occur))
 }
+#
 
 # Subset_var_align is depreciated after implementing features into Paralogous_var_align
 Subset_var_align_gene = function(gene_subset, paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations
