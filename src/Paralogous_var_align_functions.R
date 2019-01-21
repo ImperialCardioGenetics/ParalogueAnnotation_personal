@@ -395,24 +395,53 @@ raw_conf_matrix = function(num_patho_pred_patho, p.tableized_data, num_benign_pr
 
 calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiological Fractions
   if (a == 0 | b == 0 | c == 0 | d == 0){
-    a = a + 0.5
-    b = b + 0.5
-    c = c + 0.5
-    d = d + 0.5
-  }
+    # a = a + 0.5
+    # b = b + 0.5
+    # c = c + 0.5
+    # d = d + 0.5
+    OR = "NA"
+    OR_CI = "NA"
+    EF = "NA"
+    EF_CI = "NA"
+  } else {
+  
   OR = (a/b)/(c/d)
+  
   SE_ln_OR = sqrt((1/a)+(1/b)+(1/c)+(1/d))
+  
   OR_CI = c(
     exp(log(OR) - 1.96 * SE_ln_OR),
     exp(log(OR) + 1.96 * SE_ln_OR)
     )
+  
   EF = (OR-1)/OR
-  EF_hat = 1 - (((c/d) + c)/((a/b) + a))
+  
+  pi_hat_1 = a/(b + a)
+  pi_hat_0 = c/(d + c)
+  N_0 = c + d
+  N_1 = a + b
+  EF_hat = 1 - (pi_hat_0/pi_hat_1)
+  Phi_hat_squared = (pi_hat_0/pi_hat_1)^2
+  VAR_hat_Phi_hat = Phi_hat_squared * (((1-pi_hat_0)/(N_0 * pi_hat_0)) + ((1-pi_hat_1)/(N_1 * pi_hat_1)))
+  
   EF_CI = c(
-    EF_hat - 1.96 * sqrt()
-    
+    EF_hat - 1.96 * sqrt(VAR_hat_Phi_hat),
+    min(EF_hat + 1.96 * sqrt(VAR_hat_Phi_hat), 1)
   )
-  return(list("OR" = OR, "EF" = EF))
+  }
+  return(list(
+              # "VAR_hat_Phi_hat" = VAR_hat_Phi_hat,
+              # "Phi_hat_squared" = Phi_hat_squared,
+              # "EF_hat" = EF_hat,
+              # "pi_hat_1" = pi_hat_1,
+              # "pi_hat_0" = pi_hat_0,
+              # "N_0" = N_0,
+              # "N_1" = N_1,
+              "OR" = OR, 
+              "OR_CI" = OR_CI, 
+              "EF" = EF, 
+              "EF_CI" = EF_CI
+              ))
 }
 
 case_control_gene_split = function(data_df, patho_var_ids, gene){ #function for splitting genes in the case control study to allow gene by gene analysis of EFs

@@ -625,8 +625,8 @@ for (gene in c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
                                    controls$pa_predicted_gene_cases,
                                    All_variant_control.cases[All_variant_control.cases$genes==gene,"cases"]-controls$pa_predicted_gene_cases)
   # gene_EFs[[gene]] = list("all_rare_vars" = all_rare_vars, "pa_predicted_rare_vars" = pa_predicted_rare_vars)
-  tmp_df = data.frame(gene,all_rare_vars$OR,all_rare_vars$EF,pa_predicted_rare_vars$OR,pa_predicted_rare_vars$EF)
-  gene_EFs = rbind(gene_EFs,tmp_df)
+  tmp_df = data.frame(gene,toString(all_rare_vars$OR),toString(all_rare_vars$OR_CI),toString(all_rare_vars$EF),toString(all_rare_vars$EF_CI),toString(pa_predicted_rare_vars$OR),toString(pa_predicted_rare_vars$OR_CI),toString(pa_predicted_rare_vars$EF),toString(pa_predicted_rare_vars$EF_CI))
+  gene_EFs = dplyr::bind_rows(gene_EFs,tmp_df)
 }
 ##Overall##
 all_rare_vars = calc_EF(Total_case_cases,
@@ -637,7 +637,7 @@ pa_predicted_rare_vars = calc_EF(case_cases,
                                  max(All_variant_case.cases$cases)-case_cases,
                                  control_cases,
                                  max(All_variant_control.cases$cases)-control_cases)
-gene_EFs = rbind(gene_EFs,data.frame(gene="Overall",all_rare_vars$OR,all_rare_vars$EF,pa_predicted_rare_vars$OR,pa_predicted_rare_vars$EF))
+gene_EFs = dplyr::bind_rows(gene_EFs,data.frame(gene="Overall",toString(all_rare_vars$OR),toString(all_rare_vars$OR_CI),toString(all_rare_vars$EF),toString(all_rare_vars$EF_CI),toString(pa_predicted_rare_vars$OR),toString(pa_predicted_rare_vars$OR_CI),toString(pa_predicted_rare_vars$EF),toString(pa_predicted_rare_vars$EF_CI)))
 
 
 ```
