@@ -1,7 +1,9 @@
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "clusterProfiler", "org.Hs.eg.db", "DiagrammeR")
 lapply(Packages, library, character.only = TRUE)
 
-Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file, Subset=c(NA,NA)){ #Function for joining together variant paralogous locations
+Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file, Subset=c("NA","NA"), Overlap = "NA"){ #Function for joining together variant paralogous locations
+  # Subset can either be "Gene" or "ID" with a list of respective gene symbols or id values; leave as "NA" to not subset anything
+  # Overlap can either be 0 to ignore variants in overlapping genes or 1 to only look at variants in overlapping genes; leave as "NA" to analyse everything
   if (endsWith(paralogs2_file, ".gz")){
     paralog_data = gzfile(paralogs2_file)
     max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
@@ -18,7 +20,7 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
     paralog_data = dplyr::filter(paralog_data, Gene %in% Subset[-1])
   } else if (Subset[1] == "ID"){
     paralog_data = dplyr::filter(paralog_data, ID %in% Subset[-1])
-  }
+  } 
   
   paralog_tableized_data = paralog_tableized_data[!is.na(paralog_tableized_data$Amino_acids),]
   
@@ -31,6 +33,16 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
   
   paralog_data = distinct(paralog_data)
   input_variants = distinct(paralog_data[c("Variant_pos", "ID", "REF", "ALT")])
+  
+  if (Overlap == 0){
+    n_occur = data.frame(table(paralog_data$ID))
+    n_occur = n_occur[n_occur$Freq==1,]
+    paralog_data = filter(paralog_data, ID %in% n_occur$Var1)
+  } else if (Overlap == 1){
+    n_occur = data.frame(table(paralog_data$ID))
+    n_occur = n_occur[n_occur$Freq>1,]
+    paralog_data = filter(paralog_data, ID %in% n_occur$Var1)
+  }
   
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
   
@@ -60,7 +72,8 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
               "true_num_of_paralog_anno" = true_num_of_paralog_anno, 
               "ref_data" = ref_data, 
               "max_no_col" = max_no_col,
-              "Subset" = Subset))
+              "Subset" = Subset,
+              "n_occur" = n_occur))
 }
 
 # Paralogous_var_align_compressed is depreciated after implementing features into Paralogous_var_align
@@ -100,6 +113,7 @@ Paralogous_var_align_compressed = function(paralogs2_file, paralog_tableized_fil
 }
 #
 
+# Paralogous_var_align_no_overlap and Paralogous_var_align_overlap are depreciated after implementing features into Paralogous_var_align
 Paralogous_var_align_no_overlap = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations, BUT ignores variants belonging to overlapping genes
   paralog_data = file(paralogs2_file)
   max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
@@ -136,7 +150,6 @@ Paralogous_var_align_no_overlap = function(paralogs2_file, paralog_tableized_fil
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
   return(list("paralog_data" = paralog_data, "gathered_paralog_data" = gathered_paralog_data, "Total_paralog_annotations" = Total_paralog_annotations, "num_of_paralog_anno" = num_of_paralog_anno, "ref_data" = ref_data, "max_no_col" = max_no_col, "n_occur" = n_occur))
 }
-
 Paralogous_var_align_overlap = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations, BUT ignores variants belonging to overlapping genes
   paralog_data = file(paralogs2_file)
   max_no_col = (max(count.fields(paralog_data, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
