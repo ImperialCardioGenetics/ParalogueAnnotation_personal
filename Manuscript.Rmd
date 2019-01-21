@@ -436,6 +436,7 @@ p4.Total_paralog_annotations = p3.sarco_var_align$Total_paralog_annotations[p3.s
 p4.Total_paralog_annotations = distinct(p4.Total_paralog_annotations)
 p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
 p4.Unique_variant_annotations = p4.Total_paralog_annotations[!is.na(p4.Total_paralog_annotations$ID.y),]
+p4.Unique_variant_annotations = distinct(p4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
 p4.true_num_of_paralog_anno = length(p4.Unique_variant_annotations$Variant_pos)
 
 #benign to pathogenic
@@ -443,6 +444,7 @@ b4.Total_paralog_annotations = b3.sarco_var_align$Total_paralog_annotations[b3.s
 b4.Total_paralog_annotations = distinct(b4.Total_paralog_annotations)
 b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
 b4.Unique_variant_annotations = b4.Total_paralog_annotations[!is.na(b4.Total_paralog_annotations$ID.y),]
+b4.Unique_variant_annotations = distinct(b4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
 b4.true_num_of_paralog_anno = length(b4.Unique_variant_annotations$Variant_pos)
 
 conf4 = conf_matrix(p4.true_num_of_paralog_anno, p3.sarco_var_align$paralog_data, b4.true_num_of_paralog_anno, b3.sarco_var_align$paralog_data)
