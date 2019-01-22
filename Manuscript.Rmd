@@ -232,10 +232,10 @@ btob.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.s
 conf = conf_matrix(p.paralogous_var_align$true_num_of_paralog_anno, p.paralogous_var_align$input_variants, b.paralogous_var_align$true_num_of_paralog_anno, b.paralogous_var_align$input_variants)
 conf_b = conf_matrix_benign(ptob.paralogous_var_align$true_num_of_paralog_anno, ptob.paralogous_var_align$input_variants, btob.paralogous_var_align$true_num_of_paralog_anno, btob.paralogous_var_align$input_variants)
 
-genes_before_PA = length(distinct(p.paralogous_var_align$Total_paralog_annotations$Gene))
-write.table(distinct(p.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_before_paralogue_annotation.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
-genes_with_PA_noQC = length(distinct(p.paralogous_var_align$Total_paralog_annotations$SYMBOL))
-write.table(distinct(p.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_paralogue_annotation_noQC.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_before_PA = length(unique(p.paralogous_var_align$Total_paralog_annotations$Gene))
+write.table(unique(p.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_before_paralogue_annotation.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_with_PA_noQC = length(unique(p.paralogous_var_align$Total_paralog_annotations$SYMBOL))
+write.table(unique(p.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_paralogue_annotation_noQC.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 #para_con
 p2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
@@ -245,10 +245,10 @@ btob2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.
 
 conf2 = conf_matrix(p2.paralogous_var_align$true_num_of_paralog_anno, p2.paralogous_var_align$input_variants, b2.paralogous_var_align$true_num_of_paralog_anno, b2.paralogous_var_align$input_variants)
 conf_b2 = conf_matrix_benign(ptob2.paralogous_var_align$true_num_of_paralog_anno, ptob2.paralogous_var_align$input_variants, btob2.paralogous_var_align$true_num_of_paralog_anno, btob2.paralogous_var_align$input_variants)
-genes_after_QC1 = length(distinct(p2.paralogous_var_align$Total_paralog_annotations$Gene))
-write.table(distinct(p2.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC1.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
-genes_with_PA_QC1 = length(distinct(p2.paralogous_var_align$Total_paralog_annotations$SYMBOL))
-write.table(distinct(p2.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC1.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_after_QC1 = length(unique(p2.paralogous_var_align$Total_paralog_annotations$Gene))
+write.table(unique(p2.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC1.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_with_PA_QC1 = length(unique(p2.paralogous_var_align$Total_paralog_annotations$SYMBOL))
+write.table(unique(p2.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC1.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 var_removed = var_rem_matrix(conf$con_table, conf2$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
 
@@ -260,10 +260,10 @@ btob3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_alleles.
 
 conf3 = conf_matrix(p3.paralogous_var_align$true_num_of_paralog_anno, p3.paralogous_var_align$input_variants, b3.paralogous_var_align$true_num_of_paralog_anno, b3.paralogous_var_align$input_variants)
 conf_b3 = conf_matrix_benign(ptob3.paralogous_var_align$true_num_of_paralog_anno, ptob3.paralogous_var_align$input_variants, btob3.paralogous_var_align$true_num_of_paralog_anno, btob3.paralogous_var_align$input_variants)
-genes_after_QC2 = length(distinct(p3.paralogous_var_align$Total_paralog_annotations$Gene))
-write.table(distinct(p3.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
-genes_with_PA_QC2 = length(distinct(p3.paralogous_var_align$Total_paralog_annotations$SYMBOL))
-write.table(distinct(p3.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_after_QC2 = length(unique(p3.paralogous_var_align$Total_paralog_annotations$Gene))
+write.table(unique(p3.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+genes_with_PA_QC2 = length(unique(p3.paralogous_var_align$Total_paralog_annotations$SYMBOL))
+write.table(unique(p3.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 var_removed2 = var_rem_matrix(conf2$con_table, conf3$con_table, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$paralog_data)
 
@@ -273,23 +273,44 @@ var_removed2 = var_rem_matrix(conf2$con_table, conf3$con_table, p3.paralogous_va
 #pathogenic to pathogenic
 p4.Total_paralog_annotations = p3.paralogous_var_align$Total_paralog_annotations[p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
 # p4.Total_paralog_annotations = p4.Total_paralog_annotations[!duplicated(p4.Total_paralog_annotations$ID.x),]
+p4.Total_paralog_annotations = distinct(p4.Total_paralog_annotations)
+
 p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
+p4.Unique_variant_annotations = p4.Total_paralog_annotations[!is.na(p4.Total_paralog_annotations$ID.y),]
+p4.Unique_variant_annotations = distinct(p4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p4.true_num_of_paralog_anno = length(p4.Unique_variant_annotations$Variant_pos)
 
 #benign to pathogenic
 b4.Total_paralog_annotations = b3.paralogous_var_align$Total_paralog_annotations[b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
 # b4.Total_paralog_annotations = b4.Total_paralog_annotations[!duplicated(b4.Total_paralog_annotations$ID.x),]
+b4.Total_paralog_annotations = distinct(b4.Total_paralog_annotations)
+
 b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
+b4.Unique_variant_annotations = b4.Total_paralog_annotations[!is.na(b4.Total_paralog_annotations$ID.y),]
+b4.Unique_variant_annotations = distinct(b4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b4.true_num_of_paralog_anno = length(b4.Unique_variant_annotations$Variant_pos)
 
 #pathogenic to benign
 ptob4.Total_paralog_annotations = ptob3.paralogous_var_align$Total_paralog_annotations[ptob3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==ptob3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+ptob4.Total_paralog_annotations = distinct(ptob4.Total_paralog_annotations)
+
 ptob4.num_of_paralog_anno = sum(!is.na(ptob4.Total_paralog_annotations$ID.y))
+ptob4.Unique_variant_annotations = ptob4.Total_paralog_annotations[!is.na(ptob4.Total_paralog_annotations$ID.y),]
+ptob4.Unique_variant_annotations = distinct(ptob4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+ptob4.true_num_of_paralog_anno = length(ptob4.Unique_variant_annotations$Variant_pos)
 
 #benign to benign
 btob4.Total_paralog_annotations = btob3.paralogous_var_align$Total_paralog_annotations[btob3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==btob3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
-btob4.num_of_paralog_anno = sum(!is.na(btob4.Total_paralog_annotations$ID.y))
+btob4.Total_paralog_annotations = distinct(btob4.Total_paralog_annotations)
 
-conf4 = conf_matrix(p4.num_of_paralog_anno, p3.paralogous_var_align$paralog_data, b4.num_of_paralog_anno, b3.paralogous_var_align$paralog_data)
-conf_b4 = conf_matrix_benign(ptob4.num_of_paralog_anno, ptob3.paralogous_var_align$paralog_data, btob4.num_of_paralog_anno, btob3.paralogous_var_align$paralog_data)
+btob4.num_of_paralog_anno = sum(!is.na(btob4.Total_paralog_annotations$ID.y))
+btob4.Unique_variant_annotations = btob4.Total_paralog_annotations[!is.na(btob4.Total_paralog_annotations$ID.y),]
+btob4.Unique_variant_annotations = distinct(btob4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+btob4.true_num_of_paralog_anno = length(btob4.Unique_variant_annotations$Variant_pos)
+
+
+conf4 = conf_matrix(p4.true_num_of_paralog_anno, p3.paralogous_var_align$input_variants, b4.true_num_of_paralog_anno, b3.paralogous_var_align$input_variants)
+conf_b4 = conf_matrix_benign(ptob4.true_num_of_paralog_anno, ptob3.paralogous_var_align$input_variants, btob4.true_num_of_paralog_anno, btob3.paralogous_var_align$input_variants)
 genes_after_QC3 = length(unique(p4.Total_paralog_annotations$Gene))
 write.table(unique(p4.Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC3.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 genes_with_PA_QC3 = length(unique(p4.Total_paralog_annotations$SYMBOL))
