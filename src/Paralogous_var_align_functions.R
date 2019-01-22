@@ -1,7 +1,12 @@
 Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "clusterProfiler", "org.Hs.eg.db", "DiagrammeR")
 lapply(Packages, library, character.only = TRUE)
 
-Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file, Subset=c("NA","NA"), Overlap = "NA"){ #Function for joining together variant paralogous locations
+Paralogous_var_align = function(paralogs2_file, 
+                                paralog_tableized_file, 
+                                joining_tableized_file=paralog_tableized_file, 
+                                Subset=c("NA","NA"), 
+                                Overlap = "NA",
+                                paraz_cutoff = "NA"){ #Function for joining together variant paralogous locations
   # Subset can either be "Gene" or "ID" with a list of respective gene symbols or id values; leave as "NA" to not subset anything
   # Overlap can either be 0 to ignore variants in overlapping genes or 1 to only look at variants in overlapping genes; leave as "NA" to analyse everything
   if (endsWith(paralogs2_file, ".gz")){
@@ -44,6 +49,12 @@ Paralogous_var_align = function(paralogs2_file, paralog_tableized_file, joining_
     paralog_data = filter(paralog_data, ID %in% n_occur$Var1)
   } else {
     n_occur = NA
+  }
+  
+  if (!(paraz_cutoff == "NA")){
+    paralog_data = paralog_data[!is.na(paralog_data$Para_Z_score) & paralog_data$Para_Z_score >= paraz_cutoff,]
+  } else {
+    paralog_data = paralog_data
   }
   
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
