@@ -336,7 +336,7 @@ conf_matrix = function(ptop.num_of_paralog_anno, p.paralog_data, btop.num_of_par
   colnames(con_table) = c("Pathogenic", "Benign")
   rownames(con_table) = c("Number of variants not predicted as pathogenic", "Number of variants predicted as pathogenic")
   con_table_p_value = fisher.test(con_table)
-  return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "Specificity" = con_table_Specificity, "FPR" = con_table_FPR,"Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN))
+  return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "Specificity" = con_table_Specificity, "FPR" = con_table_FPR, "Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN))
 }
 
 conf_matrix_benign = function(ptob.num_of_paralog_anno, p.paralog_data, btob.num_of_paralog_anno, b.paralog_data){ #function for calculating confusion matrix and stats
@@ -357,17 +357,21 @@ conf_matrix_benign = function(ptob.num_of_paralog_anno, p.paralog_data, btob.num
     ), ncol = 2
   )
   colnames(con_table) = c("Pathogenic", "Benign")
-  rownames(con_table) = c("Number of variants in total", "Number of variants predicted as benign")
+  rownames(con_table) = c("Number of variants not predicted as benign", "Number of variants predicted as benign")
   con_table_p_value = fisher.test(con_table)
-  return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "FPR" = con_table_FPR,"Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN))
+  return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "Specificity" = con_table_Specificity, "FPR" = con_table_FPR,"Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN))
 }
 
 var_rem_matrix = function(con_table1, con_table2, p.paralog_data, b.paralog_data){ #function for calculating confusion matrix and stats for variants removed after filtering at each QC stage
   var_rem_con_TP = con_table1[2]-con_table2[2]
   var_rem_con_FP = con_table1[4]-con_table2[4]
+  var_rem_con_TN = length(b.paralog_data$ID)-var_rem_con_FP
   var_rem_con_FN = length(p.paralog_data$ID)-var_rem_con_TP
   var_rem_con_PPV = var_rem_con_TP/(var_rem_con_TP+var_rem_con_FP)
   var_rem_con_Sensitivity = var_rem_con_TP/(var_rem_con_TP+var_rem_con_FN)
+  var_rem_con_Specificity = var_rem_con_TN/(var_rem_con_TN+var_rem_con_FP)
+  var_rem_con_FPR = var_rem_con_FP/(var_rem_con_FP+var_rem_con_TN)
+  var_rem_con_ACC = (var_rem_con_TP + var_rem_con_TN)/(var_rem_con_TP + var_rem_con_TN + var_rem_con_FP + var_rem_con_FN)
   var_rem_con = matrix(
     c(length(p.paralog_data$ID),
       var_rem_con_TP,
@@ -378,7 +382,7 @@ var_rem_matrix = function(con_table1, con_table2, p.paralog_data, b.paralog_data
   colnames(var_rem_con) = c("Pathogenic", "Benign")
   rownames(var_rem_con) = c("Number of variants in total", "Number of variants predicted as pathogenic")
   var_rem_con_p_value = fisher.test(var_rem_con)
-  return(list("con_table" = var_rem_con, "PPV" = var_rem_con_PPV, "Sensitivity" = var_rem_con_Sensitivity, "Pvalue" = var_rem_con_p_value, "TP" = var_rem_con_TP, "FP" = var_rem_con_FP, "FN" = var_rem_con_FN))
+  return(list("con_table" = var_rem_con, "Accuracy" = var_rem_con_ACC, "PPV" = var_rem_con_PPV, "Sensitivity" = var_rem_con_Sensitivity, "Specificity" = var_rem_con_Specificity, "FPR" = var_rem_con_FPR, "Pvalue" = var_rem_con_p_value, "TP" = var_rem_con_TP, "FP" = var_rem_con_FP, "FN" = var_rem_con_FN))
 }
 
 raw_conf_matrix = function(num_patho_pred_patho, p.tableized_data, num_benign_pred_patho, b.tableized_data){ #function for calculating confusion matrix and stats from raw TP, TN, FP and FN numbers from anything
