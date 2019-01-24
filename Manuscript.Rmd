@@ -240,7 +240,7 @@ write.table(unique(p.paralogous_var_align$Total_paralog_annotations$SYMBOL), fil
 #finding out what genes the variants are in
 var_in_genes_before_PA = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized",Overlap = 1)
 var_in_genes_before_PA = data.frame(table(var_in_genes_before_PA$paralog_data$Gene))
-var_in_genes_with_PA_noQC = data.frame(table())
+# var_in_genes_with_PA_noQC = data.frame(table())
 
 #para_con
 p2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -430,13 +430,13 @@ for (i in seq(0,11)){
 #noQC
 #pathogenic to pathogenic
 # p.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-  p.paraz_var_align = Paralogous_var_align(paraz_cutoff = i,"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+  p.paraz_var_align = Paralogous_var_align(paraz_cutoff = i,"data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 #benign to pathogenic
 # b.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-  b.paraz_var_align = Paralogous_var_align(paraz_cutoff = i,"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+  b.paraz_var_align = Paralogous_var_align(paraz_cutoff = i,"data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
-  paraz.conf = conf_matrix(p.paraz_var_align$true_num_of_paralog_anno, p.paraz_var_align$paralog_data, b.paraz_var_align$true_num_of_paralog_anno, b.paraz_var_align$paralog_data)
+  paraz.conf = conf_matrix(p.paraz_var_align$true_num_of_paralog_anno, p.paraz_var_align$input_variants, b.paraz_var_align$true_num_of_paralog_anno, b.paraz_var_align$input_variants)
   Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
   FPR_list = c(FPR_list, paraz.conf$FPR)
   con_table_list = rbind(con_table_list, paraz.conf$con_table)
@@ -444,7 +444,7 @@ for (i in seq(0,11)){
   P_value_list = c(P_value_list, paraz.conf$Pvalue$p.value)
   Specificity_list = c(Specificity_list, paraz.conf$Specificity)
   
-  PA_threshold_row = c(format(paraz.conf$con_table[2], scientific = FALSE), format(paraz.conf$con_table[2,2], scientific = FALSE), round(paraz.conf$PPV, digits = 3), round(paraz.conf$Sensitivity, digits = 3), round(paraz.conf$Specificity,digits = 3), round(paraz.conf$Pvalue$p.value, digits = 3))
+  PA_threshold_row = c(format(paraz.conf$con_table[2], scientific = FALSE), format(paraz.conf$con_table[2,2], scientific = FALSE), round(paraz.conf$PPV, digits = 3), round(paraz.conf$Sensitivity, digits = 3), round(paraz.conf$Specificity,digits = 3), signif(paraz.conf$Pvalue$p.value, digits = 3))
   paraz_set = rbind(paraz_set, PA_threshold_row)
 }
 ##Graph
@@ -452,14 +452,14 @@ roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = 
 gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 
-ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.1) + ylim(0.2,0.3) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.05) + ylim(0,0.25) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
 
 
 prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
 gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 
-ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.2,0.3) + ylim(0.9,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
 
 kable(paraz_set)
 ```
