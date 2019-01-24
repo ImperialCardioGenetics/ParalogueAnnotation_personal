@@ -520,7 +520,7 @@ Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALS
 
 Variants_removed_after_PA_QC1 = c(var_removed$con_table[2],var_removed$con_table[4],round(digits = 3,var_removed$PPV),round(digits = 3,var_removed$Sensitivity),round(digits = 3,var_removed$Specificity),signif(digits = 3,var_removed$Pvalue$p.value))
 Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),round(digits = 3,conf3$PPV),round(digits = 3,conf3$Sensitivity),round(digits = 3,conf3$Specificity),signif(digits = 3,conf3$Pvalue$p.value))
-Variants_removed_after_PA_QC2 = c(var_removed2$con_table[2],var_removed2$con_table[4],round(digits = 3,var_removed2$PPV),round(digits = 3,var_removed2$Sensitivity),round(digits = 3,var_removed2$Specificity),signif(digits = 3,var_removed2$Pvalue$p.value))
+Variants_removed_after_PA_QC2 = c(sapply(c(var_removed2$con_table[2],var_removed2$con_table[4]),format,scientific=FALSE),round(digits = 3,var_removed2$PPV),round(digits = 3,var_removed2$Sensitivity),round(digits = 3,var_removed2$Specificity),signif(digits = 3,var_removed2$Pvalue$p.value))
 Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),round(digits = 3,conf4$PPV),round(digits = 3,conf4$Sensitivity),round(digits = 3,conf4$Specificity),signif(digits = 3,conf4$Pvalue$p.value))
 Variants_removed_after_PA_QC3 = c(var_removed3$con_table[2],var_removed3$con_table[4],round(digits = 3,var_removed3$PPV),round(digits = 3,var_removed3$Sensitivity),round(digits = 3,var_removed3$Specificity),signif(digits = 3,var_removed3$Pvalue$p.value))
 
