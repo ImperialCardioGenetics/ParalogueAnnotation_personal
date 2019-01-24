@@ -350,9 +350,9 @@ conf_matrix_benign = function(ptob.num_of_paralog_anno, p.paralog_data, btob.num
   con_table_FPR = con_table_FP/(con_table_FP+con_table_TN)
   con_table_ACC = (con_table_TP + con_table_TN)/(con_table_TP + con_table_TN + con_table_FP + con_table_FN)
   con_table = matrix(
-    c(nrow(p.paralog_data),
+    c(nrow(p.paralog_data)-ptob.num_of_paralog_anno,
       ptob.num_of_paralog_anno,
-      nrow(b.paralog_data),
+      nrow(b.paralog_data)-btob.num_of_paralog_anno,
       btob.num_of_paralog_anno
     ), ncol = 2
   )
@@ -373,9 +373,9 @@ var_rem_matrix = function(con_table1, con_table2, p.paralog_data, b.paralog_data
   var_rem_con_FPR = var_rem_con_FP/(var_rem_con_FP+var_rem_con_TN)
   var_rem_con_ACC = (var_rem_con_TP + var_rem_con_TN)/(var_rem_con_TP + var_rem_con_TN + var_rem_con_FP + var_rem_con_FN)
   var_rem_con = matrix(
-    c(length(p.paralog_data$ID),
+    c(nrow(p.paralog_data)-var_rem_con_TP,
       var_rem_con_TP,
-      length(b.paralog_data$ID),
+      nrow(b.paralog_data)-var_rem_con_FP,
       var_rem_con_FP
     ), ncol = 2
   )
