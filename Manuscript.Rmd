@@ -401,7 +401,7 @@ clinvar_set_benign = data.frame(#Variant,
 clinvar_set_benign = t(clinvar_set_benign)
 colnames(clinvar_set_benign) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
 rownames(clinvar_set_benign) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants removed from QC1", "Variants remaining after QC2", "Variants removed after QC2", "Variants remaining after QC3", "Variants removed after QC3")
-
+kable(clinvar_set_benign)
 ```
 
 Prior to annotation, there were `r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])` variants that aligned to at least one paralogous equivalent position according to ensembl (`r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])/length(clinvar_P_LP_tableized$CHROM)`)
