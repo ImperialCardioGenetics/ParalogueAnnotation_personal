@@ -457,6 +457,7 @@ P_value_list = vector()
 Specificity_list = vector()
 ##Table##
 paraz_set = t(data.frame(Variant,Total))
+roc_data = data.frame()
 ####
 for (i in seq(0,11)){
 #noQC
@@ -481,21 +482,55 @@ for (i in seq(0,11)){
 }
 ##Graph
 # roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list, cutoff = seq(0,11)))
-roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list, type = "paraz"))
-roc_data = rbind(roc_data, c(Sensitivity=conf$Sensitivity,FPR=conf$FPR,type = "noQC"))
-roc_data = rbind(roc_data, c(Sensitivity=conf2$Sensitivity,FPR=conf2$FPR,type = "QC1"))
-roc_data = rbind(roc_data, c(Sensitivity=conf3$Sensitivity,FPR=conf3$FPR,type = "QC2"))
-gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
-gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
+roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list))
+roc_data$Type = "Para_z"
 
-ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = type)) + geom_point() + xlim(0,0.05) + ylim(0,0.25) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+# colnames(roc_data) = c("Sensitivity", "FPR", "type")
+# roc_data$type="Para_z"
+roc_data = rbind(roc_data, c(as.numeric(conf$Sensitivity),as.numeric(conf$FPR)))
+roc_data[13,3]="noQC"
+roc_data = rbind(roc_data, c(as.numeric(conf2$Sensitivity),as.numeric(conf2$FPR)))
+roc_data[14,3]="QC1"
+roc_data = rbind(roc_data, c(as.numeric(conf3$Sensitivity),as.numeric(conf3$FPR)))
+roc_data[15,3]="QC2"
+roc_data = rbind(roc_data, c(as.numeric(conf4$Sensitivity),as.numeric(conf4$FPR)))
+roc_data[16,3]="QC3"
 
+# gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
+# gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
+# 
+# ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = type)) + geom_point() + xlim(0,0.05) + ylim(0,0.25) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = Type)) + geom_point(size=2) + xlim(0,0.05) + ylim(0,0.25) + theme(plot.subtitle = element_text(vjust = 1), 
+    plot.caption = element_text(vjust = 1), 
+    axis.title = element_text(size = 14), 
+    plot.title = element_text(size = 14, 
+        hjust = 0.25)) +labs(title = "Receiver operating characteristic
+space plot of Paralogue Annotation")
+ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/ROC_plot.png")
 
-prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
-gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
-gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
+# prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
+prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list))
+prc_data$Type = "Para_z"
 
-ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+prc_data = rbind(prc_data, c(as.numeric(conf$PPV),as.numeric(conf$Sensitivity)))
+prc_data[13,3]="noQC"
+prc_data = rbind(prc_data, c(as.numeric(conf2$PPV),as.numeric(conf2$Sensitivity)))
+prc_data[14,3]="QC1"
+prc_data = rbind(prc_data, c(as.numeric(conf3$PPV),as.numeric(conf3$Sensitivity)))
+prc_data[15,3]="QC2"
+prc_data = rbind(prc_data, c(as.numeric(conf4$PPV),as.numeric(conf4$Sensitivity)))
+prc_data[16,3]="QC3"
+
+# gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
+# gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
+# 
+# ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type)) + geom_point(size=2) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+    plot.caption = element_text(vjust = 1), 
+    axis.title = element_text(size = 14), 
+    plot.title = element_text(size = 14)) +labs(title = "Precision-Recall space plot of Paralogue Annotation", 
+    x = "Recall")
+ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_plot.png")
 
 kable(paraz_set)
 ```
