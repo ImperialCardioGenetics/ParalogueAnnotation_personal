@@ -145,14 +145,27 @@ protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$e
 
 # length(protein_genes_w_paralogues)
 protein_genes_w_paralogues_wide = plyr::count(protein_genes_w_paralogues, "external_gene_name")
+protein_genes_w_paralogues_wide$paralogue = "Yes"
 colnames(protein_genes_w_paralogues_wide)[2] = "number_of_paralogues"
 par(mfrow=c(2,2))
-hist(protein_genes_w_paralogues_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="A) Distribution of genes with paralogues", cex.main = 0.7)
+# hist(protein_genes_w_paralogues_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="A) Overall distribution of genes with paralogues", cex.main = 0.7)
 
 protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
 protein_genes_wo_paralogues_genes = as.vector(unique(protein_genes_wo_paralogues$external_gene_name))
 # length(protein_genes_wo_paralogues)
+protein_genes_wo_paralogues_wide = protein_genes_wo_paralogues
+protein_genes_wo_paralogues_wide[is.na(protein_genes_wo_paralogues_wide)] = 0
+protein_genes_wo_paralogues_wide$paralogue = "No"
+colnames(protein_genes_wo_paralogues_wide)[2] = "number_of_paralogues"
 
+
+# Total protein genes
+all_protein_genes = dplyr::bind_rows(protein_genes_wo_paralogues_wide, protein_genes_w_paralogues_wide)
+his = ggplot(all_protein_genes, aes(x=number_of_paralogues, fill=paralogue)) + geom_histogram(binwidth = 1, colour = "black") + theme(plot.subtitle = element_text(vjust = 1),
+    plot.caption = element_text(vjust = 1), 
+    plot.title = element_text(hjust = 0.5)) +labs(title = "Overall distribution of human protein coding genes in Ensembl and their associated paralogues", 
+    x = "number of paralogues", y = "number of genes", 
+    fill = "Has paralogues")
 
 #testing to see how many genes in the clinvar dataset have paralogues
 clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
@@ -174,7 +187,7 @@ for (gene in clinvar_P_LP_tableized_genes){
   }
 }
 clinvar_P_LP_genes_w_paralogs_wide = protein_genes_w_paralogues_wide[protein_genes_w_paralogues_wide$external_gene_name %in% clinvar_P_LP_genes_w_paralogs,]
-hist(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="B) Distribution of genes with pathogenic/likely pathogenic variants", cex.main = 0.7)
+# hist(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="B) Distribution of genes with pathogenic/likely pathogenic variants", cex.main = 0.7)
 
 
 for (gene in clinvar_B_LB_tableized_genes){
@@ -186,7 +199,7 @@ for (gene in clinvar_B_LB_tableized_genes){
   }
 }
 clinvar_B_LB_genes_w_paralogs_wide = protein_genes_w_paralogues_wide[protein_genes_w_paralogues_wide$external_gene_name %in% clinvar_B_LB_genes_w_paralogs,]
-hist(clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="C) Distribution of genes with benign/likely benign variants", cex.main = 0.7)
+# hist(clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="C) Distribution of genes with benign/likely benign variants", cex.main = 0.7)
 
 clinvar_P_LP_variants_wo_paralogs = vector()
 for (variant in clinvar_P_LP_tableized$SYMBOL){
