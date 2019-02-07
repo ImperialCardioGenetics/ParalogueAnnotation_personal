@@ -172,7 +172,9 @@ his = ggplot(all_protein_genes, aes(x=number_of_paralogues, fill=paralogue)) + g
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +labs(title = "Overall distribution of human protein coding genes in Ensembl and their associated paralogues", 
     x = "number of paralogues", y = "number of genes", 
-    fill = "Has paralogues")
+    fill = "Has paralogues")+labs(title = "Overall distribution of human protein coding
+genes in Ensembl and their associated paralogues")+ylim(0,6000)
+ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/Total_genes_paralogs.png")
 # Subset disease genes only
 disease_genes = vector()
 for (gene in clinvar_P_LP_tableized_genes){
@@ -186,7 +188,9 @@ his2 = ggplot(disease_genes_wide, aes(x=number_of_paralogues, fill=paralogue)) +
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +labs(title = "Distribution of human protein coding genes involved in disease in Ensembl and their associated paralogues", 
     x = "number of paralogues", y = "number of genes", 
-    fill = "Has paralogues")
+    fill = "Has paralogues")+labs(title = "Distribution of human protein coding genes involved
+in disease in Ensembl and their associated paralogues")
+ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/Disease_genes_paralogs.png")
 
 #see if Patho and Benign sets have same distribution of variants in genes with paralogues
 clinvar_P_LP_genes_w_paralogs = vector()
@@ -476,11 +480,15 @@ for (i in seq(0,11)){
   paraz_set = rbind(paraz_set, PA_threshold_row)
 }
 ##Graph
-roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list, cutoff = seq(0,11)))
-gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
+# roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list, cutoff = seq(0,11)))
+roc_data = do.call(rbind, Map(data.frame, Sensitivity = Sensitivity_list, FPR = FPR_list, type = "paraz"))
+roc_data = rbind(roc_data, c(Sensitivity=conf$Sensitivity,FPR=conf$FPR,type = "noQC"))
+roc_data = rbind(roc_data, c(Sensitivity=conf2$Sensitivity,FPR=conf2$FPR,type = "QC1"))
+roc_data = rbind(roc_data, c(Sensitivity=conf3$Sensitivity,FPR=conf3$FPR,type = "QC2"))
+gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 gg = gg + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 
-ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xlim(0,0.05) + ylim(0,0.25) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = type)) + geom_point() + xlim(0,0.05) + ylim(0,0.25) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
 
 
 prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
