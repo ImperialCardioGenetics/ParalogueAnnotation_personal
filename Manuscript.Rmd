@@ -527,9 +527,9 @@ prc_data[16,3]="QC3"
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
 gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type)) + geom_point(size=2) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
-    axis.title = element_text(size = 14), 
+    axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Recall space plot of Paralogue Annotation", 
-    x = "Recall")
+    x = "Recall") + theme(axis.text = element_text(size = 13))
 ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_plot.png")
 
 kable(paraz_set)
