@@ -1,0 +1,21 @@
+Pathogenic variants,Benign variants,PPV,Sensitivity,Specificity,P value
+Total,14957,7443,NA,NA,NA,NA
+Sift,12986,2269,0.851,0.868,0.695,0
+MCap,14167,1047,0.931,0.947,0.859,0
+Revel,13152,704,0.949,0.879,0.905,0
+Paralogue Annotation,3492,381,0.902,0.233,0.949,2.03e-298
+Paralogue Annotation (QC1),3034,93,0.97,0.203,0.988,0
+Paralogue Annotation (QC2),1734,16,0.991,0.116,0.998,9.88999999999999e-289
+Paralogue Annotation (QC3),655,3,0.995,0.0438,1,2.66e-111
+Para z_score cutoff 0,2974,284,0.913,0.286,0.921,1.48e-164
+Para z_score cutoff 1,2884,226,0.927,0.29,0.923,5.9e-147
+Para z_score cutoff 2,2862,210,0.932,0.29,0.926,1.52e-149
+Para z_score cutoff 3,2838,194,0.936,0.292,0.928,1.2e-147
+Para z_score cutoff 4,2758,178,0.939,0.294,0.928,5.09e-138
+Para z_score cutoff 5,2659,149,0.947,0.299,0.93,2.35e-128
+Para z_score cutoff 6,2575,132,0.951,0.305,0.927,3.8e-112
+Para z_score cutoff 7,2476,110,0.957,0.31,0.927,1.76e-97
+Para z_score cutoff 8,2318,82,0.966,0.316,0.923,3.96e-71
+Para z_score cutoff 9,2162,65,0.971,0.321,0.919,3.46e-55
+Para z_score cutoff 10,1988,46,0.977,0.335,0.913,2.05e-38
+Para z_score cutoff 11,1941,42,0.979,0.338,0.912,2.59e-35
