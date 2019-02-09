@@ -390,6 +390,7 @@ clinvar_set = data.frame(#Variant,
 clinvar_set = t(clinvar_set)
 colnames(clinvar_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
 rownames(clinvar_set) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed after QC2",  "Variants removed after QC3")
+write.table(clinvar_set, file = "data/clinvar/clinvar_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 kable(clinvar_set)
 # pander(clinvar_set2)
 # pander(clinvar_set3)
@@ -433,6 +434,7 @@ clinvar_set_benign = data.frame(#Variant,
 clinvar_set_benign = t(clinvar_set_benign)
 colnames(clinvar_set_benign) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
 rownames(clinvar_set_benign) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed after QC2", "Variants removed after QC3")
+write.table(clinvar_set_benign, file = "data/clinvar/clinvar_set_benign.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 kable(clinvar_set_benign)
 ```
 
@@ -637,7 +639,7 @@ sarcomeric_genes = getBM(attributes = c("external_gene_name",
                                    filters = c("biotype", "with_hsapiens_paralog", "external_gene_name"), 
                                    values = list("protein_coding", TRUE, gene_id), mart = ens_human)
 
-clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 
 sarcomeric_variants = data.frame(Doubles=double(),
                                          Ints=integer(),
@@ -693,7 +695,7 @@ Therefore, the third criteria is where the lack of as many annotations arises. H
 #all missense data
 # p.art.paralogous_var_align = Paralogous_var_align_compressed("data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
 gene_subset = c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")
-p.art.paralogous_var_align = Paralogous_var_align(Subset = c("Gene", gene_subset), "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+p.art.paralogous_var_align = Paralogous_var_align(Subset = c("Gene", gene_subset), "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_paralogs2.noQC.gz", "data/all_possible_mutations/remapped_cm_mutation_vep_canon_wRefAl.out_paraloc_tableized.gz", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 
 
@@ -709,7 +711,7 @@ But querying every possible missense variant at all positions in the 8 sarcomeri
 
 ```{r eval = FALSE, cache=TRUE, include = FALSE}
 ##case data VEP##
-case.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
+case.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_HCM_missense_LMM_OMGL_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 patho_case_var = case.paralogous_var_align$Total_paralog_annotations[!is.na(case.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_case_var_IDs = patho_case_var$ID.x
 # write(patho_case_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_case_var_IDs.txt", sep = "\t", ncolumns = 1)
@@ -721,7 +723,7 @@ Total_case_cases = sum(case.data$sum.vs_case_count.)
 All_variant_case.cases = data.frame(genes = c("MYBPC3","MYH7","TNNT2","TNNI3","TPM1","ACTC1","MYL2","MYL3"), cases = c(6179,6112,6103,6047,4447,4185,4185,4185))
 
 ##control data VEP##
-control.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized") #only rare variants in the control cohort
+control.paralogous_var_align = Paralogous_var_align("data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_paralogs2.noQC", "data/case_and_control/remapped_ExAC_missense_sarcomeric_chr_wRefAl.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") #only rare variants in the control cohort
 patho_control_var = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$ID.y),]
 patho_control_var_IDs = patho_control_var$ID.x
 # write(patho_control_var_IDs, file = "/media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/patho_control_var_IDs.txt", sep = "\t", ncolumns = 1)
@@ -750,6 +752,13 @@ All_variant_control.cases = data.frame(genes = c("MYH7","TNNT2","TNNI3","MYBPC3"
 # y = case_control_gene_split(control.data, patho_control_var_IDs, "ACTC1")
 
 # gene_EFs = list()
+
+cell_format = function(value,CI){
+  x = sapply(c(value,CI),format,digits=3,nsmall=3)
+  y = paste(x[1]," (",x[2],",",x[3],")",sep = "")
+  return(y)
+}
+
 gene_EFs = data.frame()
 for (gene in c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
 # for (gene in c("MYBPC3")){
@@ -764,7 +773,8 @@ for (gene in c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
                                    controls$pa_predicted_gene_cases,
                                    All_variant_control.cases[All_variant_control.cases$genes==gene,"cases"]-controls$pa_predicted_gene_cases)
   # gene_EFs[[gene]] = list("all_rare_vars" = all_rare_vars, "pa_predicted_rare_vars" = pa_predicted_rare_vars)
-  tmp_df = data.frame(gene,toString(all_rare_vars$OR),toString(all_rare_vars$OR_CI),toString(all_rare_vars$EF),toString(all_rare_vars$EF_CI),toString(pa_predicted_rare_vars$OR),toString(pa_predicted_rare_vars$OR_CI),toString(pa_predicted_rare_vars$EF),toString(pa_predicted_rare_vars$EF_CI))
+  # tmp_df = data.frame(gene,toString(all_rare_vars$OR),toString(all_rare_vars$OR_CI),toString(all_rare_vars$EF),toString(all_rare_vars$EF_CI),toString(pa_predicted_rare_vars$OR),toString(pa_predicted_rare_vars$OR_CI),toString(pa_predicted_rare_vars$EF),toString(pa_predicted_rare_vars$EF_CI))
+  tmp_df = data.frame(gene,cell_format(all_rare_vars$OR,all_rare_vars$OR_CI),cell_format(all_rare_vars$EF,all_rare_vars$EF_CI),cell_format(pa_predicted_rare_vars$OR,pa_predicted_rare_vars$OR_CI),cell_format(pa_predicted_rare_vars$EF,pa_predicted_rare_vars$EF_CI))
   gene_EFs = dplyr::bind_rows(gene_EFs,tmp_df)
 }
 ##Overall##
@@ -776,8 +786,37 @@ pa_predicted_rare_vars = calc_EF(case_cases,
                                  max(All_variant_case.cases$cases)-case_cases,
                                  control_cases,
                                  max(All_variant_control.cases$cases)-control_cases)
-gene_EFs = dplyr::bind_rows(gene_EFs,data.frame(gene="Overall",toString(all_rare_vars$OR),toString(all_rare_vars$OR_CI),toString(all_rare_vars$EF),toString(all_rare_vars$EF_CI),toString(pa_predicted_rare_vars$OR),toString(pa_predicted_rare_vars$OR_CI),toString(pa_predicted_rare_vars$EF),toString(pa_predicted_rare_vars$EF_CI)))
+gene_EFs = dplyr::bind_rows(gene_EFs,data.frame(gene="Overall",
+                                                
+                                                pastlapply(c(all_rare_vars$OR,all_rare_vars$OR_CI),format,digits=3,nsmall=3))
+                                                
+                                                
+                                                all_rare_vars$EF,
+                                                all_rare_vars$EF_CI,
+                                                pa_predicted_rare_vars$OR,
+                                                pa_predicted_rare_vars$OR_CI,
+                                                pa_predicted_rare_vars$EF,
+                                                pa_predicted_rare_vars$EF_CI
+                                                ),format,digits=3,nsmall=3)
+                                                )
+                            )
+# gene_EFs = dplyr::bind_rows(gene_EFs,data.frame(gene="Overall",
+#                                                 # sapply(c(
+#                                                 toString(all_rare_vars$OR),
+#                                                 toString(all_rare_vars$OR_CI),
+#                                                 toString(all_rare_vars$EF),
+#                                                 toString(all_rare_vars$EF_CI),
+#                                                 toString(pa_predicted_rare_vars$OR),
+#                                                 toString(pa_predicted_rare_vars$OR_CI),
+#                                                 toString(pa_predicted_rare_vars$EF),
+#                                                 toString(pa_predicted_rare_vars$EF_CI)
+#                                                 # ),format,nsmall=3)
+#                                                 )
+#                             )
 
+sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$Sensitivity,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)
+
+write.table(gene_EFs, file = "data/case_and_control/gene_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 ```
 
