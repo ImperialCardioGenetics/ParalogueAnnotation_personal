@@ -340,8 +340,8 @@ conf_matrix = function(ptop.num_of_paralog_anno, p.paralog_data, btop.num_of_par
 }
 
 conf_matrix_benign = function(ptob.num_of_paralog_anno, p.paralog_data, btob.num_of_paralog_anno, b.paralog_data){ #function for calculating confusion matrix and stats
-  con_table_TP = ptob.num_of_paralog_anno
-  con_table_FP = btob.num_of_paralog_anno
+  con_table_TP = btob.num_of_paralog_anno
+  con_table_FP = ptob.num_of_paralog_anno
   con_table_FN = nrow(b.paralog_data)-btob.num_of_paralog_anno
   con_table_TN = nrow(p.paralog_data)-ptob.num_of_paralog_anno
   con_table_PPV = con_table_TP/(con_table_TP+con_table_FP)
