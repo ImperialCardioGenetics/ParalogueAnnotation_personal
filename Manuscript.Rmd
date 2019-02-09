@@ -389,7 +389,7 @@ clinvar_set = data.frame(#Variant,
 
 clinvar_set = t(clinvar_set)
 colnames(clinvar_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
-rownames(clinvar_set) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed after QC2",  "Variants removed after QC3")
+rownames(clinvar_set) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed from QC2",  "Variants removed from QC3")
 write.table(clinvar_set, file = "data/clinvar/clinvar_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 kable(clinvar_set)
 # pander(clinvar_set2)
@@ -433,7 +433,7 @@ clinvar_set_benign = data.frame(#Variant,
 
 clinvar_set_benign = t(clinvar_set_benign)
 colnames(clinvar_set_benign) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
-rownames(clinvar_set_benign) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed after QC2", "Variants removed after QC3")
+rownames(clinvar_set_benign) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed from QC2", "Variants removed from QC3")
 write.table(clinvar_set_benign, file = "data/clinvar/clinvar_set_benign.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 kable(clinvar_set_benign)
 ```
@@ -787,17 +787,10 @@ pa_predicted_rare_vars = calc_EF(case_cases,
                                  control_cases,
                                  max(All_variant_control.cases$cases)-control_cases)
 gene_EFs = dplyr::bind_rows(gene_EFs,data.frame(gene="Overall",
-                                                
-                                                pastlapply(c(all_rare_vars$OR,all_rare_vars$OR_CI),format,digits=3,nsmall=3))
-                                                
-                                                
-                                                all_rare_vars$EF,
-                                                all_rare_vars$EF_CI,
-                                                pa_predicted_rare_vars$OR,
-                                                pa_predicted_rare_vars$OR_CI,
-                                                pa_predicted_rare_vars$EF,
-                                                pa_predicted_rare_vars$EF_CI
-                                                ),format,digits=3,nsmall=3)
+                                                cell_format(all_rare_vars$OR,all_rare_vars$OR_CI),
+                                                cell_format(all_rare_vars$EF,all_rare_vars$EF_CI),
+                                                cell_format(pa_predicted_rare_vars$OR,pa_predicted_rare_vars$OR_CI),
+                                                cell_format(pa_predicted_rare_vars$EF,pa_predicted_rare_vars$EF_CI)
                                                 )
                             )
 # gene_EFs = dplyr::bind_rows(gene_EFs,data.frame(gene="Overall",
@@ -813,10 +806,8 @@ gene_EFs = dplyr::bind_rows(gene_EFs,data.frame(gene="Overall",
 #                                                 # ),format,nsmall=3)
 #                                                 )
 #                             )
-
-sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$Sensitivity,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)
-
-write.table(gene_EFs, file = "data/case_and_control/gene_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+colnames(gene_EFs) = c("Gene","All rare variants OR","All rare variants EF","Predicted pathogenic OR","Predicted pathogenic EF")
+write.table(gene_EFs, file = "data/case_and_control/gene_EFs.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
 
 ```
 
@@ -1053,9 +1044,10 @@ other_tools_set = t(data.frame(
                  sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$Sensitivity,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3))
 ))
 colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
-
 paraz_set = paraz_set[-1,]
 other_tools_set = rbind(other_tools_set,paraz_set)
+rownames(other_tools_set) = c("Total","Sift","MCap","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)","Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
+write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 
 ```
 
