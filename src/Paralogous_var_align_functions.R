@@ -385,6 +385,30 @@ var_rem_matrix = function(con_table1, con_table2, p.paralog_data, b.paralog_data
   return(list("con_table" = var_rem_con, "Accuracy" = var_rem_con_ACC, "PPV" = var_rem_con_PPV, "Sensitivity" = var_rem_con_Sensitivity, "Specificity" = var_rem_con_Specificity, "FPR" = var_rem_con_FPR, "Pvalue" = var_rem_con_p_value, "TP" = var_rem_con_TP, "FP" = var_rem_con_FP, "FN" = var_rem_con_FN))
 }
 
+var_rem_matrix_benign = function(con_table1, con_table2, p.paralog_data, b.paralog_data){ #function for calculating confusion matrix and stats for variants removed after filtering at each QC stage
+  var_rem_con_TP = con_table1[4]-con_table2[4]
+  var_rem_con_FP = con_table1[2]-con_table2[2]
+  var_rem_con_TN = length(p.paralog_data$ID)-var_rem_con_FP
+  var_rem_con_FN = length(b.paralog_data$ID)-var_rem_con_TP
+  var_rem_con_PPV = var_rem_con_TP/(var_rem_con_TP+var_rem_con_FP)
+  var_rem_con_Sensitivity = var_rem_con_TP/(var_rem_con_TP+var_rem_con_FN)
+  var_rem_con_Specificity = var_rem_con_TN/(var_rem_con_TN+var_rem_con_FP)
+  var_rem_con_FPR = var_rem_con_FP/(var_rem_con_FP+var_rem_con_TN)
+  var_rem_con_ACC = (var_rem_con_TP + var_rem_con_TN)/(var_rem_con_TP + var_rem_con_TN + var_rem_con_FP + var_rem_con_FN)
+  var_rem_con = matrix(
+    c(nrow(p.paralog_data)-var_rem_con_TP,
+      var_rem_con_TP,
+      nrow(b.paralog_data)-var_rem_con_FP,
+      var_rem_con_FP
+    ), ncol = 2
+  )
+  colnames(var_rem_con) = c("Pathogenic", "Benign")
+  rownames(var_rem_con) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+  var_rem_con_p_value = fisher.test(var_rem_con)
+  return(list("con_table" = var_rem_con, "Accuracy" = var_rem_con_ACC, "PPV" = var_rem_con_PPV, "Sensitivity" = var_rem_con_Sensitivity, "Specificity" = var_rem_con_Specificity, "FPR" = var_rem_con_FPR, "Pvalue" = var_rem_con_p_value, "TP" = var_rem_con_TP, "FP" = var_rem_con_FP, "FN" = var_rem_con_FN))
+}
+
+
 raw_conf_matrix = function(num_patho_pred_patho, p.tableized_data, num_benign_pred_patho, b.tableized_data){ #function for calculating confusion matrix and stats from raw TP, TN, FP and FN numbers from anything
   con_table_TP = num_patho_pred_patho
   con_table_FP = num_benign_pred_patho
