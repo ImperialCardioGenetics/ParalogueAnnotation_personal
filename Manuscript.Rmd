@@ -107,7 +107,13 @@ and the 95% confidence intervals for EF values are calculated according to @hild
 $$ 95\% \ CI = [\widehat{EF} - z_{1-\frac{a}{2}} \sqrt{\widehat{VAR}(\widehat{\Phi})}, \ min( \widehat{EF} + z_{1-\frac{a}{2}} \sqrt{\widehat{VAR}(\widehat{\Phi})}, \ 1)]  $$
 where the asymptomatic variance estimator of $\widehat{\Phi}$ is given by:
 
-$$ \widehat{VAR}(\widehat{\Phi}) = \widehat{\Phi}^2 $$
+$$ \widehat{VAR}(\widehat{\Phi}) = \widehat{\Phi}^2 [\frac{1-\widehat{\pi}_{0}}{N_0\widehat{\pi}_{0}}+\frac{1-\widehat{\pi}_{1}}{N_1\widehat{\pi}_{1}}]$$
+and:
+$\widehat{\pi}_{1} = a/(b + a)$
+$\widehat{\pi}_{0} = c/(d + c)$ 
+$N_0 = c + d$ 
+$N_1 = a + b$ 
+$\widehat{\Phi}^2 = (\widehat{\pi}_{0}/\widehat{\pi}_{1})^2$
 
 NOTE ACCORDING TO https://www.medcalc.org/calc/odds_ratio.php - "Where zeros cause problems with computation of the odds ratio or its standard error, 0.5 is added to all cells (a, b, c, d) (Pagano & Gauvreau, 2000; Deeks & Higgins, 2010)."
 
