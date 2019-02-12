@@ -172,6 +172,9 @@ clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized$SYMBOL))
 clinvar_B_LB_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 clinvar_B_LB_tableized_genes = as.vector(unique(clinvar_B_LB_tableized$SYMBOL))
 
+#total clinvar genes
+all_clinvar_genes = unique(c(clinvar_P_LP_tableized_genes, clinvar_B_LB_tableized_genes))
+
 # Total protein genes
 all_protein_genes = dplyr::bind_rows(protein_genes_wo_paralogues_wide, protein_genes_w_paralogues_wide)
 his = ggplot(all_protein_genes, aes(x=number_of_paralogues, fill=paralogue)) + geom_histogram(binwidth = 1, colour = "black") + theme(plot.subtitle = element_text(vjust = 1),
@@ -180,7 +183,7 @@ his = ggplot(all_protein_genes, aes(x=number_of_paralogues, fill=paralogue)) + g
     x = "number of paralogues", y = "number of genes", 
     fill = "Has paralogues")+labs(title = "Overall distribution of human protein coding
 genes in Ensembl and their associated paralogues")+ylim(0,6000)
-ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/Total_genes_paralogs.png")
+ggsave("images/Total_genes_paralogs.png")
 # Subset disease genes only
 disease_genes = vector()
 for (gene in clinvar_P_LP_tableized_genes){
@@ -196,7 +199,7 @@ his2 = ggplot(disease_genes_wide, aes(x=number_of_paralogues, fill=paralogue)) +
     x = "number of paralogues", y = "number of genes", 
     fill = "Has paralogues")+labs(title = "Distribution of human protein coding genes involved
 in disease in Ensembl and their associated paralogues")
-ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/Disease_genes_paralogs.png")
+ggsave("images/Disease_genes_paralogs.png")
 
 #see if Patho and Benign sets have same distribution of variants in genes with paralogues
 clinvar_P_LP_genes_w_paralogs = vector()
@@ -243,6 +246,11 @@ for (variant in clinvar_B_LB_tableized$SYMBOL){
 ks = ks.test(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues)
 
 # cap = "\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"
+
+#total number of paralogs in clinvar set
+all_clinvar_gene_wo_paralogs = unique(c(clinvar_P_LP_genes_wo_paralogs, clinvar_B_LB_genes_wo_paralogs))
+all_clinvar_gene_w_paralogs = unique(c(clinvar_P_LP_genes_w_paralogs, clinvar_B_LB_genes_w_paralogs))
+write.table(all_clinvar_gene_w_paralogs,file="data/clinvar/all_clinvar_gene_w_paralogs.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 ```
 
 According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues_genes)` protein coding genes did not have paralogues. Of those genes with paralogues (**fig.** \ref{fig:paralog_dist}a) the mean had `r round(mean(protein_genes_w_paralogues_wide$number_of_paralogues), 3)` paralogues with a standard deviation of `r round(sd(protein_genes_w_paralogues_wide$number_of_paralogues), 3)`. The maximum number of paralogues a gene had was `r max(protein_genes_w_paralogues_wide$number_of_paralogues)`. The zinc finger family of proteins have highest number of paralogues
