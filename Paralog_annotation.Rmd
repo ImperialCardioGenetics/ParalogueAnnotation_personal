@@ -49,6 +49,7 @@ source("src/Paralogous_var_align_functions.R")
 * Gene Ontology packages - topGO?
 
 ### OBSTACLES TO GET DONE:
+* REVEL scores for b38 do exist in annovar, perhaps redo
 * have a look at data_4_1_19_feedback_notes.docx for things to do
 * For the clinvar dataset, count how many variants are in which genes
 * have a look at lab_meeting_6_11_feedback_notes.docx for things to do:
