@@ -192,6 +192,7 @@ for (gene in clinvar_P_LP_tableized_genes){
     disease_genes = c(gene, disease_genes)
   }
 }
+# Disease genes
 disease_genes_wide = all_protein_genes[all_protein_genes$external_gene_name %in% disease_genes,]
 his2 = ggplot(disease_genes_wide, aes(x=number_of_paralogues, fill=paralogue)) + geom_histogram(binwidth = 1, colour = "black") + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
