@@ -1107,6 +1107,21 @@ other_tools_set = rbind(other_tools_set,paraz_set)
 rownames(other_tools_set) = c("Total","Sift","MCap","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)","Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
 write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 
+
+other_tools_data = data.frame(
+  Precision = c(as.numeric(other_tools_set[2:4,3])),
+  Sensitivity = c(as.numeric(other_tools_set[2:4,4]))
+  )
+other_tools_data$Type = c("Sift", "MCap", "Revel")
+other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
+
+gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type)) + geom_point(size=2) + xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
+    plot.caption = element_text(vjust = 1), 
+    axis.title = element_text(size = 16), 
+    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
+    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) + scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
+ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_with_other_tools_plot.png")
+
 ```
 
 
