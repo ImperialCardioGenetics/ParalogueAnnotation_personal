@@ -549,7 +549,7 @@ prc_data[16,3]="QC3"
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
-gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type)) + geom_point(size=2) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) + scale_shape_manual(values=c(15, 4, 16, 17, 18)) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Recall space plot of Paralogue Annotation", 
@@ -557,13 +557,13 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type)) + geom_po
 ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_plot.png")
 
 prc_data2 = prc_data[13:16,]
-prc_data2 = rbind(prc_data2, c(0.619,0.032))
-prc_data2[5,3] = "removed by QC1"
-prc_data2 = rbind(prc_data2, c(0.931,0.083))
-prc_data2[6,3] = "removed by QC2"
-prc_data2 = rbind(prc_data2, c(0.981,0.058))
-prc_data2[7,3] = "removed by QC3"
-gg2_5 = ggplot(prc_data2, aes(x=Sensitivity, y=Precision, colour = Type)) + geom_point(size=2) + xlim(0,0.25) + ylim(0.6,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+# prc_data2 = rbind(prc_data2, c(0.619,0.032))
+# prc_data2[5,3] = "removed by QC1"
+# prc_data2 = rbind(prc_data2, c(0.931,0.083))
+# prc_data2[6,3] = "removed by QC2"
+# prc_data2 = rbind(prc_data2, c(0.981,0.058))
+# prc_data2[7,3] = "removed by QC3"
+gg2_5 = ggplot(prc_data2, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) + scale_shape_manual(values=c(15, 16, 17, 18)) + xlim(0,0.25) + ylim(0.6,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
@@ -1115,12 +1115,14 @@ other_tools_data = data.frame(
   )
 other_tools_data$Type = c("Sift", "MCap", "Revel")
 other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "Revel", "noQC", "QC1" ,"QC2", "QC3"))
 
-gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type)) + geom_point(size=2) + xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
+gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) + scale_shape_manual(values=c(0, 1, 2, 15, 16, 17, 18)) +
+  xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) + scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
+    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) #+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
 ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_with_other_tools_plot.png")
 
 ```
