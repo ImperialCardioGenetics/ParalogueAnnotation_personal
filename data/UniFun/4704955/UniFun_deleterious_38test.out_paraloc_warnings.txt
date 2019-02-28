@@ -1,0 +1,16 @@
+WARNING: Plugin 'ParalogueAnnotation' went wrong: 
+------------- EXCEPTION: Bio::Root::Exception -------------
+MSG: Could not find a sequence segment in ENSP00000352672 containing residue number 374
+STACK: Error::throw
+STACK: Bio::Root::Root::throw /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/Bio/Root/Root.pm:449
+STACK: Bio::SimpleAlign::column_from_residue_number /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/Bio/SimpleAlign.pm:2679
+STACK: ParalogueAnnotation::run /data/Share/nick/Paralog_Anno/paralogueAnnotator/ParalogueAnnotation.pm:231
+STACK: Bio::EnsEMBL::VEP::OutputFactory::run_plugins /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/modules/Bio/EnsEMBL/VEP/OutputFactory.pm:1898
+STACK: Bio::EnsEMBL::VEP::OutputFactory::get_all_VariationFeatureOverlapAllele_output_hashes /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/modules/Bio/EnsEMBL/VEP/OutputFactory.pm:356
+STACK: Bio::EnsEMBL::VEP::OutputFactory::get_all_output_hashes_by_VariationFeature /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/modules/Bio/EnsEMBL/VEP/OutputFactory.pm:306
+STACK: Bio::EnsEMBL::VEP::OutputFactory::VCF::get_all_lines_by_InputBuffer /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/modules/Bio/EnsEMBL/VEP/OutputFactory/VCF.pm:300
+STACK: Bio::EnsEMBL::VEP::Runner::_buffer_to_output /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/modules/Bio/EnsEMBL/VEP/Runner.pm:416
+STACK: Bio::EnsEMBL::VEP::Runner::next_output_line /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/modules/Bio/EnsEMBL/VEP/Runner.pm:364
+STACK: Bio::EnsEMBL::VEP::Runner::run /fs04/master/data/Share/nick/Paralog_Anno/ensembl-vep/modules/Bio/EnsEMBL/VEP/Runner.pm:202
+STACK: /data/Share/nick/Paralog_Anno/ensembl-vep/vep:224
+-----------------------------------------------------------
