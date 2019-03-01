@@ -421,14 +421,14 @@ raw_conf_matrix = function(num_patho_pred_patho, p.tableized_data, num_benign_pr
   con_table_FPR = con_table_FP/(con_table_FP+con_table_TN)
   con_table_ACC = (con_table_TP + con_table_TN)/(con_table_TP + con_table_TN + con_table_FP + con_table_FN)
   con_table = matrix(
-    c(nrow(p.tableized_data),
+    c(nrow(p.tableized_data)-num_patho_pred_patho,
       num_patho_pred_patho,
-      nrow(b.tableized_data),
+      nrow(b.tableized_data)-num_benign_pred_patho,
       num_benign_pred_patho
     ), ncol = 2
   )
   colnames(con_table) = c("Pathogenic", "Benign")
-  rownames(con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+  rownames(con_table) = c("Number of variants not predicted as pathogenic", "Number of variants predicted as pathogenic")
   con_table_p_value = fisher.test(con_table)
   return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "Specificity" = con_table_Specificity, "FPR" = con_table_FPR,"Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN))
 }
