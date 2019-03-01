@@ -888,118 +888,119 @@ Infact performing the analysis on all possible missesnse mutations for these set
 Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.
 
 \newpage
-## Comparison to SIFT/REVEL
+## Comparison to other tools
+Looking at clinvar variants:
 ```{r cf_sift_revel, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
-#First initial run to see what variants are not in overlapping genes
-# p.normal_PA2 = Paralogous_var_align_no_overlap("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-p.normal_initial = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-# b.normal_PA2 = Paralogous_var_align_no_overlap("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_initial = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-normal_initial_conf = conf_matrix(p.normal_initial$true_num_of_paralog_anno, p.normal_initial$input_variants, b.normal_initial$true_num_of_paralog_anno, b.normal_initial$input_variants)
-
-
-##Preparing and annotating with other classifiers
-#revel - as revel has the least number of variants annotated, all other methods were made sure to use the same variants that revel managed to annotate
-Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-Revel_tableized_data = Revel_tableized_file
-Revel_tableized_data$Variant_pos = paste(Revel_tableized_data$CHROM,Revel_tableized_data$POS, sep = " ")
-Revel_tableized_data = Revel_tableized_data[!is.na(Revel_tableized_data$Codons)&!is.na(Revel_tableized_data$Paralogue_Vars),]
-Revel_tableized_data = filter(Revel_tableized_data, ID %in% p.normal_initial$n_occur$Var1)
-p.num_of_revel = length(which(Revel_tableized_data$REVEL_score > 0.5))
-
-b.Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-b.Revel_tableized_data = b.Revel_tableized_file
-b.Revel_tableized_data$Variant_pos = paste(b.Revel_tableized_data$CHROM,b.Revel_tableized_data$POS, sep = " ")
-b.Revel_tableized_data = b.Revel_tableized_data[!is.na(b.Revel_tableized_data$Codons)&!is.na(b.Revel_tableized_data$Paralogue_Vars),]
-b.Revel_tableized_data = filter(b.Revel_tableized_data, ID %in% b.normal_initial$n_occur$Var1)
-b.num_of_revel = length(which(b.Revel_tableized_data$REVEL_score > 0.5))
-
-# Revel_TP = p.num_of_revel
-# Revel_FP = b.num_of_revel
-# Revel_TN = nrow(b.Revel_tableized_data)-b.num_of_revel
-# Revel_FN = nrow(Revel_tableized_data)-p.num_of_revel
-# Revel_PPV = Revel_TP/(Revel_TP+Revel_FP)
-# Revel_Sensitivty = Revel_TP/(Revel_TP+Revel_FN)
-# Revel_Specificity = Revel_TN/(Revel_TN+Revel_FP)
-# Revel_FPR = Revel_FP/(Revel_FP+Revel_TN)
-# Revel_ACC = (Revel_TP + Revel_TN)/(Revel_TP + Revel_TN + Revel_FP + Revel_FN)
-# Revel_con_table = matrix(
-#   c(nrow(Revel_tableized_data),
-#     p.num_of_revel,
-#     nrow(b.Revel_tableized_data),
-#     b.num_of_revel
-#     ), ncol = 2
-# )
-# colnames(Revel_con_table) = c("Pathogenic", "Benign")
-# rownames(Revel_con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
-
-revel_conf = raw_conf_matrix(p.num_of_revel,Revel_tableized_data,b.num_of_revel,b.Revel_tableized_data)
-
-#sift
-Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-Sift_tableized_data = Sift_tableized_file
-Sift_tableized_data$Variant_pos = paste(Sift_tableized_data$CHROM,Sift_tableized_data$POS, sep = " ")
-
-Sift_tableized_data = filter(Sift_tableized_data, ID %in% Revel_tableized_data$ID)
-p.num_of_sift = length(which(Sift_tableized_data$SIFT_pred == "D")) 
-
-b.Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-b.Sift_tableized_data = b.Sift_tableized_file
-b.Sift_tableized_data$Variant_pos = paste(b.Sift_tableized_data$CHROM,b.Sift_tableized_data$POS, sep = " ")
-
-b.Sift_tableized_data = filter(b.Sift_tableized_data, ID %in% b.Revel_tableized_data$ID)
-b.num_of_sift = length(which(b.Sift_tableized_data$SIFT_pred == "D")) 
-
-# Sift_TP = p.num_of_sift
-# Sift_FP = b.num_of_sift
-# Sift_TN = nrow(b.Sift_tableized_data)-b.num_of_sift
-# Sift_FN = nrow(Sift_tableized_data)-p.num_of_sift
-# Sift_PPV = Sift_TP/(Sift_TP+Sift_FP)
-# Sift_Sensitivty = Sift_TP/(Sift_TP+Sift_FN)
-# Sift_Specificity = Sift_TN/(Sift_TN+Sift_FP)
-# Sift_FPR = Sift_FP/(Sift_FP+Sift_TN)
-# Sift_ACC = (Sift_TP + Sift_TN)/(Sift_TP + Sift_TN + Sift_FP + Sift_FN)
-# Sift_con_table = matrix(
-#   c(nrow(Sift_tableized_data),
-#     p.num_of_sift,
-#     nrow(b.Sift_tableized_data),
-#     b.num_of_sift
-#     ), ncol = 2
-# )
-# colnames(Sift_con_table) = c("Pathogenic", "Benign")
-# rownames(Sift_con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
-
-sift_conf = raw_conf_matrix(p.num_of_sift,Sift_tableized_data,b.num_of_sift,b.Sift_tableized_data)
-
-#M-CAP
-Mcap_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc.hg19_multianno.vcf_tableized_org_M_CAP", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-Mcap_tableized_data = filter(Mcap_tableized_file, ID %in% Revel_tableized_data$ID)
-p.num_of_mcap = length(which(Mcap_tableized_data$M.CAP_pred == "D"))
-
-b.Mcap_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc.hg19_multianno.vcf_tableized_org_M_CAP", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-b.Mcap_tableized_data = filter(b.Mcap_tableized_file, ID %in% b.Revel_tableized_data$ID)
-b.num_of_mcap = length(which(b.Mcap_tableized_data$M.CAP_pred == "D")) 
- 
-# Mcap_TP = p.num_of_mcap
-# Mcap_FP = b.num_of_mcap
-# Mcap_TN = nrow(b.Mcap_tableized_data)-b.num_of_mcap
-# Mcap_FN = nrow(Mcap_tableized_data)-p.num_of_mcap
-# Mcap_PPV = Mcap_TP/(Mcap_TP+Mcap_FP)
-# Mcap_Sensitivty = Mcap_TP/(Mcap_TP+Mcap_FN)
-# Mcap_Specificity = Mcap_TN/(Mcap_TN+Mcap_FP)
-# Mcap_FPR = Mcap_FP/(Mcap_FP+Mcap_TN)
-# Mcap_ACC = (Mcap_TP + Mcap_TN)/(Mcap_TP + Mcap_TN + Mcap_FP + Mcap_FN)
-# Mcap_con_table = matrix(
-#   c(nrow(Mcap_tableized_data),
-#     p.num_of_mcap,
-#     nrow(b.Mcap_tableized_data),
-#     b.num_of_mcap
-#     ), ncol = 2
-# )
-# colnames(Mcap_con_table) = c("Pathogenic", "Benign")
-# rownames(Mcap_con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
-
-mcap_conf = raw_conf_matrix(p.num_of_mcap,Mcap_tableized_data,b.num_of_mcap,b.Mcap_tableized_data)
+# #First initial run to see what variants are not in overlapping genes
+# # p.normal_PA2 = Paralogous_var_align_no_overlap("data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# p.normal_initial = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# # b.normal_PA2 = Paralogous_var_align_no_overlap("data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# b.normal_initial = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# normal_initial_conf = conf_matrix(p.normal_initial$true_num_of_paralog_anno, p.normal_initial$input_variants, b.normal_initial$true_num_of_paralog_anno, b.normal_initial$input_variants)
+# 
+# 
+# ##Preparing and annotating with other classifiers
+# #revel - as revel has the least number of variants annotated, all other methods were made sure to use the same variants that revel managed to annotate
+# Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+# Revel_tableized_data = Revel_tableized_file
+# Revel_tableized_data$Variant_pos = paste(Revel_tableized_data$CHROM,Revel_tableized_data$POS, sep = " ")
+# Revel_tableized_data = Revel_tableized_data[!is.na(Revel_tableized_data$Codons)&!is.na(Revel_tableized_data$Paralogue_Vars),]
+# Revel_tableized_data = filter(Revel_tableized_data, ID %in% p.normal_initial$n_occur$Var1)
+# p.num_of_revel = length(which(Revel_tableized_data$REVEL_score > 0.5))
+# 
+# b.Revel_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized_w_REVEL", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+# b.Revel_tableized_data = b.Revel_tableized_file
+# b.Revel_tableized_data$Variant_pos = paste(b.Revel_tableized_data$CHROM,b.Revel_tableized_data$POS, sep = " ")
+# b.Revel_tableized_data = b.Revel_tableized_data[!is.na(b.Revel_tableized_data$Codons)&!is.na(b.Revel_tableized_data$Paralogue_Vars),]
+# b.Revel_tableized_data = filter(b.Revel_tableized_data, ID %in% b.normal_initial$n_occur$Var1)
+# b.num_of_revel = length(which(b.Revel_tableized_data$REVEL_score > 0.5))
+# 
+# # Revel_TP = p.num_of_revel
+# # Revel_FP = b.num_of_revel
+# # Revel_TN = nrow(b.Revel_tableized_data)-b.num_of_revel
+# # Revel_FN = nrow(Revel_tableized_data)-p.num_of_revel
+# # Revel_PPV = Revel_TP/(Revel_TP+Revel_FP)
+# # Revel_Sensitivty = Revel_TP/(Revel_TP+Revel_FN)
+# # Revel_Specificity = Revel_TN/(Revel_TN+Revel_FP)
+# # Revel_FPR = Revel_FP/(Revel_FP+Revel_TN)
+# # Revel_ACC = (Revel_TP + Revel_TN)/(Revel_TP + Revel_TN + Revel_FP + Revel_FN)
+# # Revel_con_table = matrix(
+# #   c(nrow(Revel_tableized_data),
+# #     p.num_of_revel,
+# #     nrow(b.Revel_tableized_data),
+# #     b.num_of_revel
+# #     ), ncol = 2
+# # )
+# # colnames(Revel_con_table) = c("Pathogenic", "Benign")
+# # rownames(Revel_con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+# 
+# revel_conf = raw_conf_matrix(p.num_of_revel,Revel_tableized_data,b.num_of_revel,b.Revel_tableized_data)
+# 
+# #sift
+# Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+# Sift_tableized_data = Sift_tableized_file
+# Sift_tableized_data$Variant_pos = paste(Sift_tableized_data$CHROM,Sift_tableized_data$POS, sep = " ")
+# 
+# Sift_tableized_data = filter(Sift_tableized_data, ID %in% Revel_tableized_data$ID)
+# p.num_of_sift = length(which(Sift_tableized_data$SIFT_pred == "D")) 
+# 
+# b.Sift_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+# b.Sift_tableized_data = b.Sift_tableized_file
+# b.Sift_tableized_data$Variant_pos = paste(b.Sift_tableized_data$CHROM,b.Sift_tableized_data$POS, sep = " ")
+# 
+# b.Sift_tableized_data = filter(b.Sift_tableized_data, ID %in% b.Revel_tableized_data$ID)
+# b.num_of_sift = length(which(b.Sift_tableized_data$SIFT_pred == "D")) 
+# 
+# # Sift_TP = p.num_of_sift
+# # Sift_FP = b.num_of_sift
+# # Sift_TN = nrow(b.Sift_tableized_data)-b.num_of_sift
+# # Sift_FN = nrow(Sift_tableized_data)-p.num_of_sift
+# # Sift_PPV = Sift_TP/(Sift_TP+Sift_FP)
+# # Sift_Sensitivty = Sift_TP/(Sift_TP+Sift_FN)
+# # Sift_Specificity = Sift_TN/(Sift_TN+Sift_FP)
+# # Sift_FPR = Sift_FP/(Sift_FP+Sift_TN)
+# # Sift_ACC = (Sift_TP + Sift_TN)/(Sift_TP + Sift_TN + Sift_FP + Sift_FN)
+# # Sift_con_table = matrix(
+# #   c(nrow(Sift_tableized_data),
+# #     p.num_of_sift,
+# #     nrow(b.Sift_tableized_data),
+# #     b.num_of_sift
+# #     ), ncol = 2
+# # )
+# # colnames(Sift_con_table) = c("Pathogenic", "Benign")
+# # rownames(Sift_con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+# 
+# sift_conf = raw_conf_matrix(p.num_of_sift,Sift_tableized_data,b.num_of_sift,b.Sift_tableized_data)
+# 
+# #M-CAP
+# Mcap_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc.hg19_multianno.vcf_tableized_org_M_CAP", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+# Mcap_tableized_data = filter(Mcap_tableized_file, ID %in% Revel_tableized_data$ID)
+# p.num_of_mcap = length(which(Mcap_tableized_data$M.CAP_pred == "D"))
+# 
+# b.Mcap_tableized_file = read.csv(file="data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc.hg19_multianno.vcf_tableized_org_M_CAP", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+# b.Mcap_tableized_data = filter(b.Mcap_tableized_file, ID %in% b.Revel_tableized_data$ID)
+# b.num_of_mcap = length(which(b.Mcap_tableized_data$M.CAP_pred == "D")) 
+#  
+# # Mcap_TP = p.num_of_mcap
+# # Mcap_FP = b.num_of_mcap
+# # Mcap_TN = nrow(b.Mcap_tableized_data)-b.num_of_mcap
+# # Mcap_FN = nrow(Mcap_tableized_data)-p.num_of_mcap
+# # Mcap_PPV = Mcap_TP/(Mcap_TP+Mcap_FP)
+# # Mcap_Sensitivty = Mcap_TP/(Mcap_TP+Mcap_FN)
+# # Mcap_Specificity = Mcap_TN/(Mcap_TN+Mcap_FP)
+# # Mcap_FPR = Mcap_FP/(Mcap_FP+Mcap_TN)
+# # Mcap_ACC = (Mcap_TP + Mcap_TN)/(Mcap_TP + Mcap_TN + Mcap_FP + Mcap_FN)
+# # Mcap_con_table = matrix(
+# #   c(nrow(Mcap_tableized_data),
+# #     p.num_of_mcap,
+# #     nrow(b.Mcap_tableized_data),
+# #     b.num_of_mcap
+# #     ), ncol = 2
+# # )
+# # colnames(Mcap_con_table) = c("Pathogenic", "Benign")
+# # rownames(Mcap_con_table) = c("Number of variants in total", "Number of variants predicted as pathogenic")
+# 
+# mcap_conf = raw_conf_matrix(p.num_of_mcap,Mcap_tableized_data,b.num_of_mcap,b.Mcap_tableized_data)
 
 
 ##New build 38 data
@@ -1011,31 +1012,57 @@ other_tools_file = filter(other_tools_file, ID %in% p.normal_initial$n_occur$Var
 p.num_of_revel = length(which(other_tools_file$REVEL_score > 0.5))
 p.num_of_sift = length(which(other_tools_file$SIFT_pred == "D"))
 p.num_of_mcap = length(which(other_tools_file$M.CAP_pred == "D"))
-p.num_of_cadd = length(which)
+p.num_of_cadd = length(which(other_tools_file$CADD_phred > 15))
+
+b.normal_initial = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized")
+
+b.other_tools_file = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs_no_empty_lines.hg38_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
+b.other_tools_file = b.other_tools_file[complete.cases(b.other_tools_file),]
+b.other_tools_file = filter(b.other_tools_file, ID %in% b.normal_initial$n_occur$Var1)
+b.num_of_revel = length(which(b.other_tools_file$REVEL_score > 0.5))
+b.num_of_sift = length(which(b.other_tools_file$SIFT_pred == "D"))
+b.num_of_mcap = length(which(b.other_tools_file$M.CAP_pred == "D"))
+b.num_of_cadd = length(which(b.other_tools_file$CADD_phred > 15))
+
+sift_conf = raw_conf_matrix(p.num_of_sift,other_tools_file,b.num_of_sift,b.other_tools_file)
+mcap_conf = raw_conf_matrix(p.num_of_mcap,other_tools_file,b.num_of_mcap,b.other_tools_file)
+revel_conf = raw_conf_matrix(p.num_of_revel,other_tools_file,b.num_of_revel,b.other_tools_file)
+cadd_conf = raw_conf_matrix(p.num_of_cadd,other_tools_file,b.num_of_cadd,b.other_tools_file)
+
 
 #PA
-p.normal_PA = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID),"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID),"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# p.normal_PA = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID),"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# b.normal_PA = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID),"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, p.normal_PA$input_variants, b.normal_PA$true_num_of_paralog_anno, b.normal_PA$input_variants)
+
+p.normal_PA = Paralogous_var_align(Subset = c("ID",other_tools_file$ID),"data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align(Subset = c("ID",b.other_tools_file$ID),"data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, p.normal_PA$input_variants, b.normal_PA$true_num_of_paralog_anno, b.normal_PA$input_variants)
 
-# p.normal_PA = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_paralogs2.noQC", "data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-# b.normal_PA = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_paralogs2.noQC", "data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-# normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, p.normal_PA$input_variants, b.normal_PA$true_num_of_paralog_anno, b.normal_PA$input_variants)
-# p.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-# b.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-# normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, p.normal_PA$input_variants, b.normal_PA$true_num_of_paralog_anno, b.normal_PA$input_variants)
 
-p.normal_PA2 = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA2 = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
+
+# p.normal_PA2 = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# b.normal_PA2 = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA2$true_num_of_paralog_anno, b.normal_PA2$input_variants)
+
+p.normal_PA2 = Paralogous_var_align(Subset = c("ID",other_tools_file$ID), "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA2 = Paralogous_var_align(Subset = c("ID",b.other_tools_file$ID), "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA2$true_num_of_paralog_anno, b.normal_PA2$input_variants)
+
 
 # p.normal_PA2 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_paralogs2.para_con", "data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 # b.normal_PA2 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_paralogs2.para_con", "data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 # normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA2$true_num_of_paralog_anno, b.normal_PA2$input_variants)
 
-p.normal_PA3 = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA3 = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# p.normal_PA3 = Paralogous_var_align(Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# b.normal_PA3 = Paralogous_var_align(Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, p.normal_PA3$input_variants, b.normal_PA3$true_num_of_paralog_anno, b.normal_PA3$input_variants)
+
+p.normal_PA3 = Paralogous_var_align(Subset = c("ID",other_tools_file$ID), "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA3 = Paralogous_var_align(Subset = c("ID",b.other_tools_file$ID), "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, p.normal_PA3$input_variants, b.normal_PA3$true_num_of_paralog_anno, b.normal_PA3$input_variants)
+
 
 p.normal_PA4 = list()
 p.normal_PA4$Total_paralog_annotations = p.normal_PA3$Total_paralog_annotations[p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
@@ -1077,12 +1104,15 @@ for (i in seq(0,11)){
 #noQC
 #pathogenic to pathogenic
 # p.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-  p.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-
+  # p.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  p.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",other_tools_file$ID), "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  
 #benign to pathogenic
 # b.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-  b.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-
+  # b.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  b.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",b.other_tools_file$ID), "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  
+  
   paraz.conf = conf_matrix(p.paraz_var_align$true_num_of_paralog_anno, p.paraz_var_align$paralog_data, b.paraz_var_align$true_num_of_paralog_anno, b.paraz_var_align$paralog_data)
   Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
   FPR_list = c(FPR_list, paraz.conf$FPR)
@@ -1102,6 +1132,8 @@ other_tools_set = t(data.frame(
            sapply(c(sift_conf$PPV,sift_conf$Sensitivity,sift_conf$Specificity,sift_conf$Pvalue$p.value),signif,digits=3)),
   MCap = c(sapply(c(mcap_conf$con_table[2],mcap_conf$con_table[4]),format,scientific = FALSE),
            sapply(c(mcap_conf$PPV,mcap_conf$Sensitivity,mcap_conf$Specificity,mcap_conf$Pvalue$p.value),signif,digits=3)),
+  Cadd = c(sapply(c(cadd_conf$con_table[2],cadd_conf$con_table[4]),format,scientific = FALSE),
+           sapply(c(cadd_conf$PPV,cadd_conf$Sensitivity,cadd_conf$Specificity,cadd_conf$Pvalue$p.value),signif,digits=3)),
   Revel = c(sapply(c(revel_conf$con_table[2],revel_conf$con_table[4]),format,scientific = FALSE),
             sapply(c(revel_conf$PPV,revel_conf$Sensitivity,revel_conf$Specificity,revel_conf$Pvalue$p.value),signif,digits=3)),
   PA.noQC = c(sapply(c(normal_PA_conf$con_table[2],normal_PA_conf$con_table[4]),format,scientific = FALSE),
@@ -1116,19 +1148,19 @@ other_tools_set = t(data.frame(
 colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
 paraz_set = paraz_set[-1,]
 other_tools_set = rbind(other_tools_set,paraz_set)
-rownames(other_tools_set) = c("Total","Sift","MCap","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)","Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
+rownames(other_tools_set) = c("Total","Sift","MCap","CADD","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)","Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
 write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 
 
 other_tools_data = data.frame(
-  Precision = c(as.numeric(other_tools_set[2:4,3])),
-  Sensitivity = c(as.numeric(other_tools_set[2:4,4]))
+  Precision = c(as.numeric(other_tools_set[2:9,3])),
+  Sensitivity = c(as.numeric(other_tools_set[2:9,4]))
   )
-other_tools_data$Type = c("Sift", "MCap", "Revel")
-other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
-other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "Revel", "noQC", "QC1" ,"QC2", "QC3"))
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "noQC", "QC1" ,"QC2", "QC3")
+# other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "noQC", "QC1" ,"QC2", "QC3"))
 
-gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) + scale_shape_manual(values=c(0, 1, 2, 15, 16, 17, 18)) +
+gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) + scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 18)) +
   xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
@@ -1138,6 +1170,16 @@ ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/Paralog
 
 ```
 
+Looking at UniFun and TP53-TA variants:
+```{r cf_UniFun_TP53-TA, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+p.normal_PA = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_paralogs2.noQC", "data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_paralogs2.noQC", "data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, p.normal_PA$input_variants, b.normal_PA$true_num_of_paralog_anno, b.normal_PA$input_variants)
+p.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, p.normal_PA$input_variants, b.normal_PA$true_num_of_paralog_anno, b.normal_PA$input_variants)
+
+```
 
 # References
 
