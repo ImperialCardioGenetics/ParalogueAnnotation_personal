@@ -1,21 +1,22 @@
 Pathogenic variants,Benign variants,PPV,Sensitivity,Specificity,P value
-Total,14957,7443,NA,NA,NA,NA
-Sift,12986,2269,0.851,0.868,0.695,0
-MCap,14167,1047,0.931,0.947,0.859,0
-Revel,13152,704,0.949,0.879,0.905,0
-Paralogue Annotation,3492,381,0.902,0.233,0.949,2.03e-298
-Paralogue Annotation (QC1),3034,93,0.97,0.203,0.988,0
-Paralogue Annotation (QC2),1734,16,0.991,0.116,0.998,9.88999999999999e-289
-Paralogue Annotation (QC3),655,3,0.995,0.0438,1,2.66e-111
-Para z_score cutoff 0,2974,284,0.913,0.286,0.921,1.48e-164
-Para z_score cutoff 1,2884,226,0.927,0.29,0.923,5.9e-147
-Para z_score cutoff 2,2862,210,0.932,0.29,0.926,1.52e-149
-Para z_score cutoff 3,2838,194,0.936,0.292,0.928,1.2e-147
-Para z_score cutoff 4,2758,178,0.939,0.294,0.928,5.09e-138
-Para z_score cutoff 5,2659,149,0.947,0.299,0.93,2.35e-128
-Para z_score cutoff 6,2575,132,0.951,0.305,0.927,3.8e-112
-Para z_score cutoff 7,2476,110,0.957,0.31,0.927,1.76e-97
-Para z_score cutoff 8,2318,82,0.966,0.316,0.923,3.96e-71
-Para z_score cutoff 9,2162,65,0.971,0.321,0.919,3.46e-55
-Para z_score cutoff 10,1988,46,0.977,0.335,0.913,2.05e-38
-Para z_score cutoff 11,1941,42,0.979,0.338,0.912,2.59e-35
+Total,22530,6983,NA,NA,NA,NA
+Sift,20212,2681,0.883,0.897,0.616,2.92e-278
+MCap,21884,4349,0.834,0.971,0.377,2.19e-96
+CADD,21946,4294,0.836,0.974,0.385,1.3e-102
+Revel,19980,1110,0.947,0.887,0.841,0
+Paralogue Annotation,4447,340,0.929,0.197,0.951,4.38e-233
+Paralogue Annotation (QC1),3693,108,0.972,0.164,0.985,1.15000004296688e-317
+Paralogue Annotation (QC2),2000,20,0.99,0.0888,0.997,5.87e-209
+Paralogue Annotation (QC3),643,3,0.995,0.0285,1,4.87e-71
+Para z_score cutoff 0,3812,242,0.94,0.24,0.933,2.55e-142
+Para z_score cutoff 1,3727,205,0.948,0.246,0.93,1.25e-121
+Para z_score cutoff 2,3699,200,0.949,0.246,0.93,8.03e-119
+Para z_score cutoff 3,3680,184,0.952,0.248,0.932,8.04e-118
+Para z_score cutoff 4,3589,168,0.955,0.25,0.932,6.3e-109
+Para z_score cutoff 5,3445,137,0.962,0.252,0.936,1.51e-102
+Para z_score cutoff 6,3344,124,0.964,0.257,0.933,1.4e-90
+Para z_score cutoff 7,3209,106,0.968,0.261,0.932,2.22e-78
+Para z_score cutoff 8,3024,87,0.972,0.266,0.928,2.66e-61
+Para z_score cutoff 9,2836,66,0.977,0.271,0.93,1.4e-51
+Para z_score cutoff 10,2601,45,0.983,0.281,0.927,1.78e-36
+Para z_score cutoff 11,2530,43,0.983,0.282,0.924,1.04e-32
