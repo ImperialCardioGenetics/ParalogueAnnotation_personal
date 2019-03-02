@@ -540,24 +540,26 @@ ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/Paralog
 prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Precision_CI = PPV_CI_list, Sensitivity = Sensitivity_list, Sensitivity_CI = Sens_CI_list))
 prc_data$Type = "Para_z"
 
-prc_data = rbind(prc_data, c(as.numeric(conf$PPV),as.numeric(conf$Sensitivity)))
-prc_data[13,3]="noQC"
-prc_data = rbind(prc_data, c(as.numeric(conf2$PPV),as.numeric(conf2$Sensitivity)))
-prc_data[14,3]="QC1"
-prc_data = rbind(prc_data, c(as.numeric(conf3$PPV),as.numeric(conf3$Sensitivity)))
-prc_data[15,3]="QC2"
-prc_data = rbind(prc_data, c(as.numeric(conf4$PPV),as.numeric(conf4$Sensitivity)))
-prc_data[16,3]="QC3"
+prc_data = rbind(prc_data, c(as.numeric(conf$PPV),as.numeric(1.96*conf$PPV_SE),as.numeric(conf$Sensitivity),as.numeric(1.96*conf$Sensitivity_SE)))
+prc_data[13,5]="noQC"
+prc_data = rbind(prc_data, c(as.numeric(conf2$PPV),as.numeric(1.96*conf2$PPV_SE),as.numeric(conf2$Sensitivity),as.numeric(1.96*conf2$Sensitivity_SE)))
+prc_data[14,5]="QC1"
+prc_data = rbind(prc_data, c(as.numeric(conf3$PPV),as.numeric(1.96*conf3$PPV_SE),as.numeric(conf3$Sensitivity),as.numeric(1.96*conf3$Sensitivity_SE)))
+prc_data[15,5]="QC2"
+prc_data = rbind(prc_data, c(as.numeric(conf4$PPV),as.numeric(1.96*conf4$PPV_SE),as.numeric(conf4$Sensitivity),as.numeric(1.96*conf$Sensitivity_SE)))
+prc_data[16,5]="QC3"
 
 # gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
-gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) + scale_shape_manual(values=c(15, 4, 16, 17, 18)) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+  geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=5) + geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,width=5) +
+  scale_shape_manual(values=c(15, 1, 16, 17, 18)) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(title = "Precision-Recall space plot of Paralogue Annotation", 
-    x = "Recall") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5))
+    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
+    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5))
 ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_plot.png")
 
 prc_data2 = prc_data[13:16,]
@@ -567,7 +569,9 @@ prc_data2 = prc_data[13:16,]
 # prc_data2[6,3] = "removed by QC2"
 # prc_data2 = rbind(prc_data2, c(0.981,0.058))
 # prc_data2[7,3] = "removed by QC3"
-gg2_5 = ggplot(prc_data2, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) + scale_shape_manual(values=c(15, 16, 17, 18)) + xlim(0,0.25) + ylim(0.6,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+gg2_5 = ggplot(prc_data2, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+  geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) + geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=.5) +
+  scale_shape_manual(values=c(15, 16, 17, 18)) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
@@ -577,6 +581,7 @@ ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/Paralog
 
 benign_data = data.frame(Precision = c(0.391,0.258,0.169,0.963), Sensitivity = c(0.092,0.032,0.008,0.007),Type = c("noQC","QC1","QC2","QC3"))
 gg3 = ggplot(benign_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) +
+  
   scale_shape_manual(values=c(15, 16, 17, 18)) + xlim(0,0.25) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
                                                                                                                                   plot.caption = element_text(vjust = 1),
                                                                                                                                   axis.title = element_text(size = 16), 
