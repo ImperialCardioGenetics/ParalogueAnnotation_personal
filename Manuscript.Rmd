@@ -1025,6 +1025,8 @@ b.num_of_mcap = length(which(b.other_tools_file$M.CAP_pred == "D"))
 b.num_of_cadd = length(which(b.other_tools_file$CADD_phred > 15))
 
 sift_conf = raw_conf_matrix(p.num_of_sift,other_tools_file,b.num_of_sift,b.other_tools_file)
+# sift_conf_test = conf_matrix(p.num_of_sift,other_tools_file,b.num_of_sift,b.other_tools_file)
+
 mcap_conf = raw_conf_matrix(p.num_of_mcap,other_tools_file,b.num_of_mcap,b.other_tools_file)
 revel_conf = raw_conf_matrix(p.num_of_revel,other_tools_file,b.num_of_revel,b.other_tools_file)
 cadd_conf = raw_conf_matrix(p.num_of_cadd,other_tools_file,b.num_of_cadd,b.other_tools_file)

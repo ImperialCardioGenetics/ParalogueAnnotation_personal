@@ -344,8 +344,22 @@ conf_matrix = function(ptop.num_of_paralog_anno, p.paralog_data, btop.num_of_par
   colnames(con_table) = c("Pathogenic", "Benign")
   rownames(con_table) = c("Number of variants not predicted as pathogenic", "Number of variants predicted as pathogenic")
   con_table_p_value = fisher.test(con_table)
-  con_table_MCC = ((con_table_TP*con_table_TN)-(con_table_FP*con_table_FN))/sqrt((con_table_TP+con_table_FP)*(con_table_TP+con_table_FN)*(con_table_TN+con_table_FP)*(con_table_TN+con_table_FN))
-  return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "Specificity" = con_table_Specificity, "FPR" = con_table_FPR, "Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN, "MCC" = con_table_MCC))
+  # con_table_MCC = ((con_table_TP*con_table_TN)-(con_table_FP*con_table_FN))/sqrt((con_table_TP+con_table_FP)*(con_table_TP+con_table_FN)*(con_table_TN+con_table_FP)*(con_table_TN+con_table_FN))
+  return(list("con_table" = con_table, 
+              "Accuracy" = con_table_ACC, 
+              "PPV" = con_table_PPV, 
+              "PPV_CI" = PPV_CI,
+              "Sensitivity" = con_table_Sensitivty, 
+              "Sensitivity_CI" = Sens_CI,
+              "Specificity" = con_table_Specificity, 
+              "FPR" = con_table_FPR, 
+              "Pvalue" = con_table_p_value, 
+              "TP" = con_table_TP, 
+              "FP" = con_table_FP, 
+              "TN" = con_table_TN, 
+              "FN" = con_table_FN
+              # "MCC" = con_table_MCC
+              ))
 }
 
 conf_matrix_benign = function(ptob.num_of_paralog_anno, p.paralog_data, btob.num_of_paralog_anno, b.paralog_data){ #function for calculating confusion matrix and stats
