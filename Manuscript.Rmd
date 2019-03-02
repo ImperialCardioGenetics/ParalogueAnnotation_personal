@@ -475,9 +475,11 @@ The filtering steps outlined above take a more binaray approach to taking accoun
 
 ```{r paraz, message=FALSE, cache=TRUE,  results='asis', warning=FALSE, echo=FALSE, fig.width=4,fig.height=3,fig.cap="\\label{fig:paraz}ROC space plot of pathogenic/likely pathogenic clinvar variants predicted as pathogenic by paralogue annotation at varying degrees of Para-Z scores"}
 Sensitivity_list = vector()
+Sens_CI_list = vector()
 FPR_list = vector()
 con_table_list = matrix(, ncol = 2)
 PPV_list = vector()
+PPV_CI_list = vector()
 P_value_list = vector()
 Specificity_list = vector()
 ##Table##
@@ -496,9 +498,11 @@ for (i in seq(0,11)){
 
   paraz.conf = conf_matrix(p.paraz_var_align$true_num_of_paralog_anno, p.paraz_var_align$input_variants, b.paraz_var_align$true_num_of_paralog_anno, b.paraz_var_align$input_variants)
   Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
+  Sens_CI_list = c(Sens_CI_list, 1.96*paraz.conf$Sensitivity_SE)
   FPR_list = c(FPR_list, paraz.conf$FPR)
   con_table_list = rbind(con_table_list, paraz.conf$con_table)
   PPV_list = c(PPV_list, paraz.conf$PPV)
+  PPV_CI_list= c(PPV_CI_list, 1.96*paraz.conf$PPV_SE)
   P_value_list = c(P_value_list, paraz.conf$Pvalue$p.value)
   Specificity_list = c(Specificity_list, paraz.conf$Specificity)
   
@@ -533,7 +537,7 @@ gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = Type)) + geom_point(siz
 ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/ROC_plot.png")
 
 # prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
-prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list))
+prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Precision_CI = PPV_CI_list, Sensitivity = Sensitivity_list, Sensitivity_CI = Sens_CI_list))
 prc_data$Type = "Para_z"
 
 prc_data = rbind(prc_data, c(as.numeric(conf$PPV),as.numeric(conf$Sensitivity)))
