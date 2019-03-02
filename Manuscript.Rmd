@@ -579,6 +579,7 @@ gg2_5 = ggplot(prc_data2, aes(x=Sensitivity, y=Precision, colour = Type, shape =
 ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_with_removed_plot.png")
 
 
+
 benign_data = data.frame(Precision = c(0.391,0.258,0.169,0.963), Sensitivity = c(0.092,0.032,0.008,0.007),Type = c("noQC","QC1","QC2","QC3"))
 gg3 = ggplot(benign_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) +
   
