@@ -1,0 +1,29 @@
+Running file: TP53-TA_benign.vcf.hg19_multianno.vcf
+Started at: 2019_03_03_19_59_20
+--add_ucsc_link False
+--lof_only False
+--biallelic_only False
+--split_size None
+--canonical_only True
+--mysql False
+--original_position False
+--split_by_gene False
+--all_csqs False
+--vcf TP53-TA_benign.vcf.hg19_multianno.vcf
+--simplify_gtex False
+--ucsc_link_window 20
+--samples False
+--only_pass False
+--do_not_minrep True
+--snps_only False
+--omit_filter False
+--dont_collapse_annotations False
+--include_id True
+--functional_simplify False
+--vep_info None
+--info SIFT_score,SIFT_pred,M-CAP_score,M-CAP_pred,CADD_phred,REVEL_score
+--sample_info None
+--split_by_transcript True
+--hom_samples False
+--output /data/Share/nick/Paralog_Anno/ParalogueAnnotation_personal/data/TP53-TA/4704961/TP53-TA_benign.vcf.hg19_multianno.vcf_tableized_org
+--options False
