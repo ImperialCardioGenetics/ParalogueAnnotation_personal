@@ -570,7 +570,8 @@ prc_data2 = prc_data[13:16,]
 # prc_data2 = rbind(prc_data2, c(0.981,0.058))
 # prc_data2[7,3] = "removed by QC3"
 gg2_5 = ggplot(prc_data2, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
-  geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) + geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=.5) +
+  geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+  geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=.5) +
   scale_shape_manual(values=c(15, 16, 17, 18)) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
@@ -580,9 +581,10 @@ ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/Paralog
 
 
 
-benign_data = data.frame(Precision = c(0.391,0.258,0.169,0.963), Sensitivity = c(0.092,0.032,0.008,0.007),Type = c("noQC","QC1","QC2","QC3"))
-gg3 = ggplot(benign_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) +
-  
+benign_data = data.frame(Precision = c(0.391,0.258,0.169,0.963), Precision_CI = c(0.0161531,0.02014389,0.02741531,0.0356178), Sensitivity = c(0.092,0.032,0.008,0.007), Sensitivity_CI = c(0.004658095,0.002811256,0.001446604,0.001341913),Type = c("noQC","QC1","QC2","QC3"))
+gg3 = ggplot(benign_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) +
+  geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+  geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   scale_shape_manual(values=c(15, 16, 17, 18)) + xlim(0,0.25) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
                                                                                                                                   plot.caption = element_text(vjust = 1),
                                                                                                                                   axis.title = element_text(size = 16), 
@@ -1035,11 +1037,14 @@ b.num_of_mcap = length(which(b.other_tools_file$M.CAP_pred == "D"))
 b.num_of_cadd = length(which(b.other_tools_file$CADD_phred > 15))
 
 sift_conf = raw_conf_matrix(p.num_of_sift,other_tools_file,b.num_of_sift,b.other_tools_file)
-# sift_conf_test = conf_matrix(p.num_of_sift,other_tools_file,b.num_of_sift,b.other_tools_file)
-
 mcap_conf = raw_conf_matrix(p.num_of_mcap,other_tools_file,b.num_of_mcap,b.other_tools_file)
 revel_conf = raw_conf_matrix(p.num_of_revel,other_tools_file,b.num_of_revel,b.other_tools_file)
 cadd_conf = raw_conf_matrix(p.num_of_cadd,other_tools_file,b.num_of_cadd,b.other_tools_file)
+
+sift1_conf = conf_matrix(p.num_of_sift,other_tools_file,b.num_of_sift,b.other_tools_file)
+mcap1_conf = conf_matrix(p.num_of_mcap,other_tools_file,b.num_of_mcap,b.other_tools_file)
+revel1_conf = conf_matrix(p.num_of_revel,other_tools_file,b.num_of_revel,b.other_tools_file)
+cadd1_conf = conf_matrix(p.num_of_cadd,other_tools_file,b.num_of_cadd,b.other_tools_file)
 
 
 #PA
@@ -1139,7 +1144,8 @@ for (i in seq(0,11)){
 
 # Overall dataframe
 other_tools_set = t(data.frame(
-  Total = c(sapply(c(revel_conf$con_table[1],revel_conf$con_table[3]),format,scientific = FALSE),"NA","NA","NA","NA"),
+  # Total = c(sapply(c(revel_conf$con_table[1],revel_conf$con_table[3]),format,scientific = FALSE),"NA","NA","NA","NA"),
+  Total = c(sapply(c(dim(other_tools_file)[1],dim(b.other_tools_file)[1]),format,scientific = FALSE),"NA","NA","NA","NA"),
   Sift = c(sapply(c(sift_conf$con_table[2],sift_conf$con_table[4]),format,scientific = FALSE),
            sapply(c(sift_conf$PPV,sift_conf$Sensitivity,sift_conf$Specificity,sift_conf$Pvalue$p.value),signif,digits=3)),
   MCap = c(sapply(c(mcap_conf$con_table[2],mcap_conf$con_table[4]),format,scientific = FALSE),
