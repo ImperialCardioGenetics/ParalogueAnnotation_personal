@@ -1145,25 +1145,26 @@ for (i in seq(0,11)){
 # Overall dataframe
 other_tools_set = t(data.frame(
   # Total = c(sapply(c(revel_conf$con_table[1],revel_conf$con_table[3]),format,scientific = FALSE),"NA","NA","NA","NA"),
-  Total = c(sapply(c(dim(other_tools_file)[1],dim(b.other_tools_file)[1]),format,scientific = FALSE),"NA","NA","NA","NA"),
+  Total = c(sapply(c(dim(other_tools_file)[1],dim(b.other_tools_file)[1]),format,scientific = FALSE),"NA","NA","NA","NA","NA","NA"),
   Sift = c(sapply(c(sift_conf$con_table[2],sift_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(sift_conf$PPV,sift_conf$Sensitivity,sift_conf$Specificity,sift_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(sift_conf$PPV,sift1_conf$PPV_SE*1.96,sift_conf$Sensitivity,sift1_conf$Sensitivity_SE*1.96,sift_conf$Specificity,sift_conf$Pvalue$p.value),signif,digits=3)),
   MCap = c(sapply(c(mcap_conf$con_table[2],mcap_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(mcap_conf$PPV,mcap_conf$Sensitivity,mcap_conf$Specificity,mcap_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(mcap_conf$PPV,mcap1_conf$PPV_SE*1.96,mcap_conf$Sensitivity,mcap1_conf$Sensitivity_SE*1.96,mcap_conf$Specificity,mcap_conf$Pvalue$p.value),signif,digits=3)),
   Cadd = c(sapply(c(cadd_conf$con_table[2],cadd_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(cadd_conf$PPV,cadd_conf$Sensitivity,cadd_conf$Specificity,cadd_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(cadd_conf$PPV,cadd1_conf$PPV_SE*1.96,cadd_conf$Sensitivity,cadd1_conf$Sensitivity_SE*1.96,cadd_conf$Specificity,cadd_conf$Pvalue$p.value),signif,digits=3)),
   Revel = c(sapply(c(revel_conf$con_table[2],revel_conf$con_table[4]),format,scientific = FALSE),
-            sapply(c(revel_conf$PPV,revel_conf$Sensitivity,revel_conf$Specificity,revel_conf$Pvalue$p.value),signif,digits=3)),
+            sapply(c(revel_conf$PPV,revel1_conf$PPV_SE*1.96,revel_conf$Sensitivity,revel1_conf$Sensitivity_SE*1.96,revel_conf$Specificity,revel_conf$Pvalue$p.value),signif,digits=3)),
   PA.noQC = c(sapply(c(normal_PA_conf$con_table[2],normal_PA_conf$con_table[4]),format,scientific = FALSE),
-         sapply(c(normal_PA_conf$PPV,normal_PA_conf$Sensitivity,normal_PA_conf$Specificity,normal_PA_conf$Pvalue$p.value),signif,digits=3)),
+         sapply(c(normal_PA_conf$PPV,normal_PA_conf$PPV_SE*1.96,normal_PA_conf$Sensitivity,normal_PA_conf$Sensitivity_SE*1.96,normal_PA_conf$Specificity,normal_PA_conf$Pvalue$p.value),signif,digits=3)),
   PA.para_con = c(sapply(c(normal_PA2_conf$con_table[2],normal_PA2_conf$con_table[4]),format,scientific = FALSE),
-                  sapply(c(normal_PA2_conf$PPV,normal_PA2_conf$Sensitivity,normal_PA2_conf$Specificity,normal_PA2_conf$Pvalue$p.value),signif,digits=3)),
+                  sapply(c(normal_PA2_conf$PPV,normal_PA2_conf$PPV_SE*1.96,normal_PA2_conf$Sensitivity,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA2_conf$Specificity,normal_PA2_conf$Pvalue$p.value),signif,digits=3)),
   PA.all_con = c(sapply(c(normal_PA3_conf$con_table[2],normal_PA3_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$Sensitivity,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)),
+                 sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$PPV_SE*1.96,normal_PA3_conf$Sensitivity,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)),
   PA.alt_con = c(sapply(c(normal_PA4_conf$con_table[2],normal_PA4_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$Sensitivity,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3))
+                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3))
 ))
-colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
+colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value")
+##REMINDER TO FIX APPENDING OF PARAZ SET AS HAVE NOT YET ADDED CI FOR PPV AND SENS
 paraz_set = paraz_set[-1,]
 other_tools_set = rbind(other_tools_set,paraz_set)
 rownames(other_tools_set) = c("Total","Sift","MCap","CADD","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)","Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
@@ -1172,13 +1173,18 @@ write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names
 
 other_tools_data = data.frame(
   Precision = c(as.numeric(other_tools_set[2:9,3])),
-  Sensitivity = c(as.numeric(other_tools_set[2:9,4]))
+  Precision_CI = c(as.numeric(other_tools_set[2:9,4])),
+  Sensitivity = c(as.numeric(other_tools_set[2:9,5])),
+  Sensitivity_CI = c(as.numeric(other_tools_set[2:9,6]))
   )
 other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "noQC", "QC1" ,"QC2", "QC3")
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
 other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "noQC", "QC1" ,"QC2", "QC3"))
 
-gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=5) + scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 18)) +
+gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+  geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+  geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
+  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 18)) +
   xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
