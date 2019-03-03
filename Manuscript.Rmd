@@ -1217,7 +1217,8 @@ Looking at UniFun and TP53-TA variants:
 ```{r cf_UniFun_TP53-TA, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 p.normal_PA = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_paralogs2.noQC", "data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 b.normal_PA = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_paralogs2.noQC", "data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-
+p.normal_PA2 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_paralogs2.para_con", "data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA2 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_paralogs2.para_con", "data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 other_tools = read.csv(file="data/TP53-TA/4704961/TP53-TA_deleterious.vcf.hg38_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
 p.num_of_revel = length(which(other_tools$REVEL_score > 0.5))
@@ -1236,9 +1237,21 @@ sift_conf = raw_conf_matrix(p.num_of_sift,other_tools,b.num_of_sift,b.other_tool
 mcap_conf = raw_conf_matrix(p.num_of_mcap,other_tools,b.num_of_mcap,b.other_tools)
 revel_conf = raw_conf_matrix(p.num_of_revel,other_tools,b.num_of_revel,b.other_tools)
 cadd_conf = raw_conf_matrix(p.num_of_cadd,other_tools,b.num_of_cadd,b.other_tools)
+sift1_conf = conf_matrix(p.num_of_sift,other_tools,b.num_of_sift,b.other_tools)
+mcap1_conf = conf_matrix(p.num_of_mcap,other_tools,b.num_of_mcap,b.other_tools)
+revel1_conf = conf_matrix(p.num_of_revel,other_tools,b.num_of_revel,b.other_tools)
+cadd1_conf = conf_matrix(p.num_of_cadd,other_tools,b.num_of_cadd,b.other_tools)
 
 normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, other_tools, b.normal_PA$true_num_of_paralog_anno, b.other_tools)
+normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools, b.normal_PA2$true_num_of_paralog_anno, b.other_tools)
 
+df1 = data.frame(
+  Type = c("Sift","Mcap","Cadd","Revel","Paralogue\nAnnotation",),
+  Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV),
+  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96),
+  Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity),
+  Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96)
+)
 
 p.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 b.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")

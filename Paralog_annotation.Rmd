@@ -1097,7 +1097,7 @@ As REVEL only has scores for GRCh37 coordinates, had rerun PA with said coords. 
 ```{bash eval = FALSE, include = FALSE}
 sed -r '/^\s*$/d' clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs > clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines
 
-perl table_annovar.pl clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines  humandb/ -buildver hg19 -remove -protocol dbnsfp35c -operation f -vcfinput -out clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines
+perl table_annovar.pl clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines  humandb/ -buildver hg19 -remove -protocol dbnsfp35a -operation f -vcfinput -out clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_no_empty_lines
 ```
 
 Correction to above - dbnsfp35a exists for hg38 and seems to include revel scores
