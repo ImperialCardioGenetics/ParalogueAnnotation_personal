@@ -1,5 +1,5 @@
 Pathogenic variants,Benign variants,PPV,Sensitivity,Specificity,P value
-Total,2550,5873,NA,NA,NA,NA
+Total,22530,6983,NA,NA,NA,NA
 Sift,20212,2681,0.883,0.897,0.616,0
 MCap,21884,4349,0.834,0.971,0.377,0
 CADD,21946,4294,0.836,0.974,0.385,0
