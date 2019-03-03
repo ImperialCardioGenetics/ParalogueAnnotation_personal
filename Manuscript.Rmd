@@ -379,6 +379,25 @@ write.table(unique(p4.Total_paralog_annotations$SYMBOL), file = "data/clinvar/ge
 var_removed3 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$paralog_data)
 var_removed_b3 = var_rem_matrix(conf_b3$con_table, conf_b4$con_table, ptob3.paralogous_var_align$paralog_data, btob3.paralogous_var_align$paralog_data)
 
+#benign test for only alt con
+ptob5.Total_paralog_annotations = ptob.paralogous_var_align$Total_paralog_annotations[ptob.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==ptob.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+ptob5.Total_paralog_annotations = distinct(ptob5.Total_paralog_annotations)
+
+ptob5.num_of_paralog_anno = sum(!is.na(ptob5.Total_paralog_annotations$ID.y))
+ptob5.Unique_variant_annotations = ptob5.Total_paralog_annotations[!is.na(ptob5.Total_paralog_annotations$ID.y),]
+ptob5.Unique_variant_annotations = distinct(ptob5.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+ptob5.true_num_of_paralog_anno = length(ptob5.Unique_variant_annotations$Variant_pos)
+
+btob5.Total_paralog_annotations = btob.paralogous_var_align$Total_paralog_annotations[btob.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==btob.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+btob5.Total_paralog_annotations = distinct(btob5.Total_paralog_annotations)
+
+btob5.num_of_paralog_anno = sum(!is.na(btob5.Total_paralog_annotations$ID.y))
+btob5.Unique_variant_annotations = btob5.Total_paralog_annotations[!is.na(btob5.Total_paralog_annotations$ID.y),]
+btob5.Unique_variant_annotations = distinct(btob5.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+btob5.true_num_of_paralog_anno = length(btob5.Unique_variant_annotations$Variant_pos)
+
+conf_b5 = conf_matrix_benign(ptob5.true_num_of_paralog_anno, ptob.paralogous_var_align$input_variants, btob5.true_num_of_paralog_anno, btob.paralogous_var_align$input_variants)
+
 #Overall_table for predicting pathogenic variants
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
 Total = c(dim(p.paralogous_var_align$input_variants)[1],dim(b.paralogous_var_align$input_variants)[1],"NA","NA","NA","NA")
