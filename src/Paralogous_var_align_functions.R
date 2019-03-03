@@ -89,6 +89,23 @@ Paralogous_var_align = function(paralogs2_file,
               "n_occur" = n_occur))
 }
 
+Alt_con_PA = function(PA_Total_Anno_df,b.PA_Total_Anno_df){#Function for alt_con paralogue annotation. Input is Total annotation dataframe from either noQC PA or QC2 PA
+  p.normal_PA4 = list()
+  p.normal_PA4$Total_paralog_annotations = PA_Total_Anno_df
+  p.normal_PA4$Total_paralog_annotations = distinct(p.normal_PA4$Total_paralog_annotations)
+  p.normal_PA4$Unique_variant_annotations = p.normal_PA4$Total_paralog_annotations[!is.na(p.normal_PA4$Total_paralog_annotations$ID.y),]
+  p.normal_PA4$Unique_variant_annotations = distinct(p.normal_PA4$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+  p.normal_PA4$true_num_of_paralog_anno = length(p.normal_PA4$Unique_variant_annotations$Variant_pos)
+  b.normal_PA4 = list()
+  b.normal_PA4$Total_paralog_annotations = b.PA_Total_Anno_df
+  b.normal_PA4$Total_paralog_annotations = distinct(b.normal_PA4$Total_paralog_annotations)
+  b.normal_PA4$Unique_variant_annotations = b.normal_PA4$Total_paralog_annotations[!is.na(b.normal_PA4$Total_paralog_annotations$ID.y),]
+  b.normal_PA4$Unique_variant_annotations = distinct(b.normal_PA4$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+  b.normal_PA4$true_num_of_paralog_anno = length(b.normal_PA4$Unique_variant_annotations$Variant_pos)
+  return(list("p.normal_PA4" = p.normal_PA4,
+              "b.normal_PA4" = b.normal_PA4))
+}
+
 # Paralogous_var_align_compressed is depreciated after implementing features into Paralogous_var_align
 Paralogous_var_align_compressed = function(paralogs2_file, paralog_tableized_file, joining_tableized_file=paralog_tableized_file){ #Function for joining together variant paralogous locations - compressed files
   paralog_data = gzfile(paralogs2_file)
