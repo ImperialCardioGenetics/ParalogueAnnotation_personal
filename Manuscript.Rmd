@@ -1374,7 +1374,9 @@ p.normal_PA2 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.ou
 b.normal_PA2 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_paralogs2.para_con", "data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 p.normal_PA3 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_paralogs2.all_con", "data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 b.normal_PA3 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_paralogs2.all_con", "data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA4 = list()
 p.normal_PA4$Total_paralog_annotations = p.normal_PA3$Total_paralog_annotations[p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA4 = list()
 b.normal_PA4$Total_paralog_annotations = b.normal_PA3$Total_paralog_annotations[b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
 normal_PA4 = Alt_con_PA(p.normal_PA4$Total_paralog_annotations,b.normal_PA4$Total_paralog_annotations)
 
