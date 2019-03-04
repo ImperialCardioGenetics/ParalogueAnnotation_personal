@@ -1359,7 +1359,7 @@ gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sha
   xlim(0,1) + ylim(0.75,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
+    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) 
 ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_of_SCN5A.png")
 
