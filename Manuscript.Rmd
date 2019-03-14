@@ -1187,7 +1187,6 @@ other_tools_set = t(data.frame(
                  sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3))
 ))
 colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value")
-##REMINDER TO FIX APPENDING OF PARAZ SET AS HAVE NOT YET ADDED CI FOR PPV AND SENS
 paraz_set = paraz_set[-1,]
 other_tools_set = rbind(other_tools_set,paraz_set)
 rownames(other_tools_set) = c("Total","Sift","MCap","CADD","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)","Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
