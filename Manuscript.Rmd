@@ -1127,14 +1127,16 @@ normal_PA4_conf = conf_matrix(p.normal_PA4$true_num_of_paralog_anno, p.normal_PA
 
 #ParaZ
 Sensitivity_list = vector()
+Sens_CI_list = vector()
 FPR_list = vector()
 con_table_list = matrix(, ncol = 2)
 PPV_list = vector()
+PPV_CI_list = vector()
 P_value_list = vector()
 Specificity_list = vector()
 ##Table##
-paraz_set = t(data.frame(Total = c(revel_conf$con_table[1],revel_conf$con_table[3],"NA","NA","NA","NA")))
-colnames(paraz_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
+paraz_set = t(data.frame(Total = c(revel_conf$con_table[1],revel_conf$con_table[3],"NA","NA","NA","NA","NA","NA")))
+colnames(paraz_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sensitivity CI","Specificity","P value")
 ####
 for (i in seq(0,11)){
 #noQC
@@ -1151,13 +1153,15 @@ for (i in seq(0,11)){
   
   paraz.conf = conf_matrix(p.paraz_var_align$true_num_of_paralog_anno, p.paraz_var_align$paralog_data, b.paraz_var_align$true_num_of_paralog_anno, b.paraz_var_align$paralog_data)
   Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
+  Sens_CI_list = c(Sens_CI_list, 1.96*paraz.conf$Sensitivity_SE)
   FPR_list = c(FPR_list, paraz.conf$FPR)
   con_table_list = rbind(con_table_list, paraz.conf$con_table)
   PPV_list = c(PPV_list, paraz.conf$PPV)
+  PPV_CI_list= c(PPV_CI_list, 1.96*paraz.conf$PPV_SE)
   P_value_list = c(P_value_list, paraz.conf$Pvalue$p.value)
   Specificity_list = c(Specificity_list, paraz.conf$Specificity)
   
-  PA_threshold_row = c(format(paraz.conf$con_table[2], scientific = FALSE), format(paraz.conf$con_table[2,2], scientific = FALSE), round(paraz.conf$PPV, digits = 3), round(paraz.conf$Sensitivity, digits = 3), round(paraz.conf$Specificity,digits = 3), signif(paraz.conf$Pvalue$p.value, digits = 3))
+  PA_threshold_row = c(format(paraz.conf$con_table[2], scientific = FALSE), format(paraz.conf$con_table[2,2], scientific = FALSE), round(paraz.conf$PPV, digits = 3), round(1.96*paraz.conf$PPV_SE, digits = 3), round(paraz.conf$Sensitivity, digits = 3), round(1.96*paraz.conf$Sensitivity_SE, digits =3), round(paraz.conf$Specificity,digits = 3), signif(paraz.conf$Pvalue$p.value, digits = 3))
   paraz_set = rbind(paraz_set, PA_threshold_row)
 }
 
