@@ -924,8 +924,12 @@ There are 15 genes that are associated with LQTS but the main 3 are: KCNH2; KCNQ
 
 The other 12 are: AKAP9; ANK2; CACNA1C; CALM1; CALM2;	CAV3;	KCNE1; KCNE2; KCNJ2; KCNJ5; SCN4B; and SNTA1. [@alders2018long]
 
-```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 
+```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+KCNH2_data = read.csv("data/OMGL_LQTS/KCNH2_JamesWare_270117.csv", sep = ",") 
+KCNH2_data = KCNH2_data[,c("gene", "chrom", "codingEffect", "assembly", "gDNAstart", "gDNAend", "pNomen", "pathogenicityClass", "rsId", "exacQuality", "exacFilter", "exacAlleleCount", "exacAllFreq", "exacAFRFreq", "exacAMRFreq", "exacEASFreq", "exacSASFreq", "exacNFEFreq", "exacFINFreq", "exacOTHFreq", "exacDP")]
+KCNH2_data = KCNH2_data[KCNH2_data$codingEffect == "missense",]
+#Each line is a single patient count with the variant. exacAllelecount is the cell that has the same variant exac count
 ```
 
 ## Comparison to other tools
