@@ -926,10 +926,20 @@ The other 12 are: AKAP9; ANK2; CACNA1C; CALM1; CALM2;	CAV3;	KCNE1; KCNE2; KCNJ2;
 
 
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
-KCNH2_data = read.csv("data/OMGL_LQTS/KCNH2_JamesWare_270117.csv", sep = ",") 
-KCNH2_data = KCNH2_data[,c("gene", "chrom", "codingEffect", "assembly", "gDNAstart", "gDNAend", "pNomen", "pathogenicityClass", "rsId", "exacQuality", "exacFilter", "exacAlleleCount", "exacAllFreq", "exacAFRFreq", "exacAMRFreq", "exacEASFreq", "exacSASFreq", "exacNFEFreq", "exacFINFreq", "exacOTHFreq", "exacDP")]
-KCNH2_data = KCNH2_data[KCNH2_data$codingEffect == "missense",]
+KCNH2_data_ref = read.csv("data/OMGL_LQTS/KCNH2_JamesWare_270117.csv", sep = ",") 
+# KCNH2_data = KCNH2_data[,c("gene", "chrom", "codingEffect", "assembly", "gDNAstart", "gDNAend", "pNomen", "pathogenicityClass", "rsId", "exacQuality", "exacFilter", "exacAlleleCount", "exacAllFreq", "exacAFRFreq", "exacAMRFreq", "exacEASFreq", "exacSASFreq", "exacNFEFreq", "exacFINFreq", "exacOTHFreq", "exacDP")]
+KCNH2_data = KCNH2_data_ref[KCNH2_data_ref$codingEffect == "missense",]
 #Each line is a single patient count with the variant. exacAllelecount is the cell that has the same variant exac count
+#For any variants where exac allele count is NA, just put as 0? Check this assumption
+KCNH2_data = KCNH2_data[!is.na(KCNH2_data$exacAlleleCount),]
+
+KCNQ1_data_ref = read.csv("data/OMGL_LQTS/KCNQ1_JamesWare_270117.csv", sep = ",")
+KCNQ1_data = KCNQ1_data_ref[KCNQ1_data_ref$codingEffect == "missense",]
+KCNQ1_data = KCNQ1_data[!is.na(KCNQ1_data$exacAlleleCount),]
+
+SCN5A_data_ref = read.csv("data/OMGL_LQTS/SCN5A_JamesWare_270117.csv", sep = ",")
+SCN5A_data = SCN5A_data_ref[SCN5A_data_ref$codingEffect == "missense",]
+SCN5A_data = SCN5A_data[!is.na(SCN5A_data$exacAlleleCount),]
 ```
 
 ## Comparison to other tools
