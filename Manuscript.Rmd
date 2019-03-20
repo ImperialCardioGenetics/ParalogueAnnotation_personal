@@ -933,12 +933,12 @@ The other 12 are: AKAP9; ANK2; CACNA1C; CALM1; CALM2;	CAV3;	KCNE1; KCNE2; KCNJ2;
 KCNH2_data_ref = read.csv("data/OMGL_LQTS/KCNH2_JamesWare_270117.csv", sep = ",") 
 # KCNH2_data = KCNH2_data[,c("gene", "chrom", "codingEffect", "assembly", "gDNAstart", "gDNAend", "pNomen", "pathogenicityClass", "rsId", "exacQuality", "exacFilter", "exacAlleleCount", "exacAllFreq", "exacAFRFreq", "exacAMRFreq", "exacEASFreq", "exacSASFreq", "exacNFEFreq", "exacFINFreq", "exacOTHFreq", "exacDP")]
 KCNH2_data = KCNH2_data_ref[KCNH2_data_ref$codingEffect == "missense",]
-gNomen_count = as.data.frame(table(KCNH2_data$gNomen))
-gNomen_count = gNomen_count[gNomen_count$Freq > 0,]
-colnames(gNomen_count)[2] = "sum.vs_case_count"
-#then join...
+KCNH2_gNomen_count = as.data.frame(table(KCNH2_data$gNomen))
+KCNH2_gNomen_count = KCNH2_gNomen_count[KCNH2_gNomen_count$Freq > 0,]
+colnames(KCNH2_gNomen_count)[2] = "sum.vs_case_count"
+KCNH2_data = left_join(KCNH2_data, KCNH2_gNomen_count, by = c("gNomen" = "Var1"))
 KCNH2_data$exacAlleleCount[is.na(KCNH2_data$exacAlleleCount)] = 0
-
+unique_KCNH2_gNomen = KCNH2_data[match(unique(KCNH2_data$gNomen), KCNH2_data$gNomen),]
 
 
 KCNQ1_data_ref = read.csv("data/OMGL_LQTS/KCNQ1_JamesWare_270117.csv", sep = ",")
