@@ -177,6 +177,14 @@ dupRows <- dupsBetweenGroups(df, "Coder")
 cbind(df, unique=!dupRows)
 ```
 
+Unlike Python, most base R functions can be directly applied to vectors/lists and so don't need to constantly use sapply/lapply with them.
+
+```{r eval = FALSE, include = TRUE}
+df = data.frame(x=c(1,2,3),y=c("abc","def","ghi"), stringsAsFactors = 0) #stringsAsFactors = 0 <- SO IMPORTANT! Removes fucking factor levels so can actually format the strings properly! 
+df$z = substr(df$y, nchar(df$y), nchar(df$y))
+df
+```
+
 ### Manuscript Plan
 * New tool to show (more likely Erica will write up)
 * Contrast to previous studies, is genome wide validated
