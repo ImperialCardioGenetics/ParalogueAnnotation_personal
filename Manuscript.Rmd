@@ -943,12 +943,26 @@ unique_KCNH2_gNomen = KCNH2_data[match(unique(KCNH2_data$gNomen), KCNH2_data$gNo
 
 KCNQ1_data_ref = read.csv("data/OMGL_LQTS/KCNQ1_JamesWare_270117.csv", sep = ",")
 KCNQ1_data = KCNQ1_data_ref[KCNQ1_data_ref$codingEffect == "missense",]
+KCNQ1_gNomen_count = as.data.frame(table(KCNQ1_data$gNomen))
+KCNQ1_gNomen_count = KCNQ1_gNomen_count[KCNQ1_gNomen_count$Freq > 0,]
+colnames(KCNQ1_gNomen_count)[2] = "sum.vs_case_count"
+KCNQ1_data = left_join(KCNQ1_data, KCNQ1_gNomen_count, by = c("gNomen" = "Var1"))
 KCNQ1_data$exacAlleleCount[is.na(KCNQ1_data$exacAlleleCount)] = 0
+unique_KCNQ1_gNomen = KCNQ1_data[match(unique(KCNQ1_data$gNomen), KCNQ1_data$gNomen),]
+
 
 SCN5A_data_ref = read.csv("data/OMGL_LQTS/SCN5A_JamesWare_270117.csv", sep = ",")
 SCN5A_data = SCN5A_data_ref[SCN5A_data_ref$codingEffect == "missense",]
+SCN5A_gNomen_count = as.data.frame(table(SCN5A_data$gNomen))
+SCN5A_gNomen_count = SCN5A_gNomen_count[SCN5A_gNomen_count$Freq > 0,]
+colnames(SCN5A_gNomen_count)[2] = "sum.vs_case_count"
+SCN5A_data = left_join(SCN5A_data, SCN5A_gNomen_count, by = c("gNomen" = "Var1"))
 SCN5A_data$exacAlleleCount[is.na(SCN5A_data$exacAlleleCount)] = 0
+unique_SCN5A_gNomen = SCN5A_data[match(unique(SCN5A_data$gNomen), SCN5A_data$gNomen),]
 
+
+
+Total_var = do.call("rbind", list(unique_KCNH2_gNomen, unique_KCNQ1_gNomen, unique_SCN5A_gNomen))
 
 ```
 
