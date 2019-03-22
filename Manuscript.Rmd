@@ -926,6 +926,8 @@ The other 12 are: AKAP9; ANK2; CACNA1C; CALM1; CALM2;	CAV3;	KCNE1; KCNE2; KCNJ2;
 
 For the OMGL data, Total disease cases would be considered as all variants in the spreadsheet. Need to first filter out non missense variants. Then take rare variants (Rare variants defined as https://www.nature.com/articles/gim201726; disease specific - in this case its LQTS; each disease has different threshold of "rarity") and variants that are predicted pathogenic by PA. Look at the same genes in gnomad, take variants from only exome (ask roddy - basically case data can only be extracted from vcfs https://gnomad.broadinstitute.org/downloads or from older version of gnomad browser). Extract only rare variants and ones predicted pathogenic by PA. Calculate EFs from this.
 
+The Total case counts for gnomad would be the mean of all allele numbers of respective variants being considered divided by 2 (due to homo/heterozygous).
+
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 #Each line is a single patient count with the variant. exacAllelecount is the cell that has the same variant exac count
 #For any variants where exac allele count is NA, just put as 0? Check this assumption
