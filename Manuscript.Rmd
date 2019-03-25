@@ -677,7 +677,7 @@ gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = Type)) + geom_point(siz
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14, 
         hjust = 0.25)) +labs(title = "Receiver operating characteristic space plot of\nParalogue Annotation") + theme(axis.text = element_text(size = 13))
-ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/ROC_plot.png")
+ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/ROC_plot_paraz_with_QC1.png")
 
 # prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
 prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Precision_CI = PPV_CI_list, Sensitivity = Sensitivity_list, Sensitivity_CI = Sens_CI_list))
