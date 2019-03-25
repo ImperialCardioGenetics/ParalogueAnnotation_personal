@@ -1026,12 +1026,12 @@ The Total case counts for gnomad would be the mean of all allele numbers of resp
 
 Using https://www.nature.com/articles/gim201726/tables/1 and using the upper CI level, e.g. for LQTS = 8.2 x 10−6. If the maximum filtering allele frequency (max out of all the sub populations, i.e. non-global) is smaller than 8.2 x 10-6 then that variant is considered "rare"
 
-
+OMGL data
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 #Each line is a single patient count with the variant. exacAllelecount is the cell that has the same variant exac count
 #For any variants where exac allele count is NA, just put as 0? Check this assumption
 
-KCNQ1_data_ref = read.csv("data/OMGL_LQTS/KCNQ1_JamesWare_270117.csv", sep = ",")
+KCNQ1_data_ref = read.csv("data/LQTS/KCNQ1_JamesWare_270117.csv", sep = ",")
 colnames(KCNQ1_data_ref)[1] = "gene"
 KCNQ1_data = KCNQ1_data_ref[KCNQ1_data_ref$codingEffect == "missense",]
 KCNQ1_gNomen_count = as.data.frame(table(KCNQ1_data$gNomen))
@@ -1041,7 +1041,7 @@ KCNQ1_data = left_join(KCNQ1_data, KCNQ1_gNomen_count, by = c("gNomen" = "Var1")
 KCNQ1_data$exacAlleleCount[is.na(KCNQ1_data$exacAlleleCount)] = 0
 unique_KCNQ1_gNomen = KCNQ1_data[match(unique(KCNQ1_data$gNomen), KCNQ1_data$gNomen),]
 
-KCNH2_data_ref = read.csv("data/OMGL_LQTS/KCNH2_JamesWare_270117.csv", sep = ",") 
+KCNH2_data_ref = read.csv("data/LQTS/KCNH2_JamesWare_270117.csv", sep = ",") 
 # KCNH2_data = KCNH2_data[,c("gene", "chrom", "codingEffect", "assembly", "gDNAstart", "gDNAend", "pNomen", "pathogenicityClass", "rsId", "exacQuality", "exacFilter", "exacAlleleCount", "exacAllFreq", "exacAFRFreq", "exacAMRFreq", "exacEASFreq", "exacSASFreq", "exacNFEFreq", "exacFINFreq", "exacOTHFreq", "exacDP")]
 KCNH2_data_ref = KCNH2_data_ref[,!(names(KCNH2_data_ref) %in% setdiff(colnames(KCNH2_data_ref), colnames(KCNQ1_data_ref)))]
 KCNH2_data = KCNH2_data_ref[KCNH2_data_ref$codingEffect == "missense",]
@@ -1052,7 +1052,7 @@ KCNH2_data = left_join(KCNH2_data, KCNH2_gNomen_count, by = c("gNomen" = "Var1")
 KCNH2_data$exacAlleleCount[is.na(KCNH2_data$exacAlleleCount)] = 0
 unique_KCNH2_gNomen = KCNH2_data[match(unique(KCNH2_data$gNomen), KCNH2_data$gNomen),]
 
-SCN5A_data_ref = read.csv("data/OMGL_LQTS/SCN5A_JamesWare_270117.csv", sep = ",")
+SCN5A_data_ref = read.csv("data/LQTS/SCN5A_JamesWare_270117.csv", sep = ",")
 colnames(SCN5A_data_ref)[1] = "gene"
 SCN5A_data_ref = SCN5A_data_ref[,!(names(SCN5A_data_ref) %in% setdiff(colnames(SCN5A_data_ref), colnames(KCNQ1_data_ref)))]
 SCN5A_data = SCN5A_data_ref[SCN5A_data_ref$codingEffect == "missense",]
@@ -1074,8 +1074,18 @@ vcf_Total_var$QUAl = "."
 vcf_Total_var$FILTER = "."
 vcf_Total_var$INFO = "."
 colnames(vcf_Total_var)[1:3] = c("#CHROM", "POS", "ID")
-write.table(vcf_Total_var, file = "data/OMGL_LQTS/All_variants.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(vcf_Total_var, file = "data/LQTS/All_variants.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
 ```
+
+Ackerman data from ICC_Mutations
+```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+#Each line is a single patient count with the variant. exacAllelecount is the cell that has the same variant exac count
+#For any variants where exac allele count is NA, just put as 0? Check this assumption
+
+data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
+
+```
+
 
 ## Comparison to other tools
 Looking at clinvar variants:
