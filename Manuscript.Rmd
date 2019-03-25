@@ -553,7 +553,7 @@ gg = ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = Type)) + geom_point(siz
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14, 
         hjust = 0.25)) +labs(title = "Receiver operating characteristic space plot of\nParalogue Annotation") + theme(axis.text = element_text(size = 13))
-ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/ROC_plot.png")
+ggsave("images/ROC_plot.png")
 
 # prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
 prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Precision_CI = PPV_CI_list, Sensitivity = Sensitivity_list, Sensitivity_CI = Sens_CI_list))
@@ -579,7 +579,7 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5))
-ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_plot.png")
+ggsave("images/PRC_plot.png")
 
 prc_data2 = prc_data[13:16,]
 # prc_data2 = rbind(prc_data2, c(0.619,0.032))
@@ -596,7 +596,7 @@ gg2_5 = ggplot(prc_data2, aes(x=Sensitivity, y=Precision, colour = Type, shape =
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5))
-ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_with_removed_plot.png")
+ggsave("images/PRC_with_removed_plot.png")
 
 
 
@@ -608,7 +608,7 @@ gg3 = ggplot(benign_data, aes(x=Sensitivity, y=Precision, colour = Type, shape =
                                                                                                                                   plot.caption = element_text(vjust = 1),
                                                                                                                                   axis.title = element_text(size = 16), 
 plot.title = element_text(size = 14)) + labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5))
-ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/benign_PRC_plot.png")
+ggsave("images/benign_PRC_plot.png")
 
 
 kable(paraz_set)
@@ -703,7 +703,7 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5))
-ggsave("images/PRC_plot.png")
+ggsave("images/PRC_plot_paraz_with_QC1.png")
 
 
 
