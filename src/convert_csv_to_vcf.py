@@ -49,8 +49,9 @@ dir1 = input_file.rsplit("/", 1)[0]
 out_file = open(input_file.rsplit(".", 1)[0]+".vcf", "w")
 out_file.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 
- with open(input_file) as f:
+with open(input_file) as f:
 	for line in f:
+		print(line)
 		if line[0].isdigit():
 			line = line.rstrip().split(",")
 			chrom = line[0]
@@ -59,9 +60,9 @@ out_file.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 			ref = line[3].split(">")[0][-1]
 			alt = line[3].split(">")[1]
 			out_file.write(
-				str(line[8])+"\t"+
-				str(line[9])+"\t"+
-				str(line[0])+"\t"+
+				str(chrom)+"\t"+
+				str(pos)+"\t"+
+				str(ID)+"\t"+
 				str(ref)+"\t"+
 				str(alt)+"\t.\t.\t"+
 				# "gene="+str(line[4])+",HGVSc="+str(line[5])+",HGVSp="+str(line[6])+",pathogenic="+str(line[7])+"\n"
