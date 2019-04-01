@@ -1085,6 +1085,7 @@ Ackerman data from ICC_Mutations
 data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
 data = data_ref[data_ref$mut_protein!="NULL",]
 
+# vcf_conv = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv", sep = ",", stringsAsFactors = 0)
 ```
 
 
