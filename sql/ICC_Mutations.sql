@@ -5,7 +5,7 @@ WHERE rep_ref_id = 665 AND gene_id=mut_gene_id AND mut_id=rep_mut_id;
 
 SELECT mut_chromosome, mut_chr_start_source, mut_id, mut_coding
 FROM ICC_MUTATIONS.report, ICC_MUTATIONS.gene, ICC_MUTATIONS.mutation
-WHERE rep_ref_id = 665 AND gene_id=mut_gene_id AND mut_id=rep_mut_id;
+WHERE rep_ref_id = 665 AND gene_id=mut_gene_id AND mut_id=rep_mut_id AND mut_effect = "missense";# AND mut_coding NOT LIKE "%del%";
 
 SELECT * FROM ICC_MUTATIONS.report, ICC_MUTATIONS.gene, ICC_MUTATIONS.mutation;
 
