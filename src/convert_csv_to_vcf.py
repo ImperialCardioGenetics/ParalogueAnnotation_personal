@@ -77,15 +77,20 @@ out_file = open(input_file.rsplit(".", 1)[0]+".vcf", "w")
 out_file.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 
 with open(input_file) as f:
+	ID_no = 1
 	for line in f:
-		print(line)
+		# print(line)
 		if line[0].isdigit():
 			line = line.rstrip().split(",")
 			chrom = line[0]
 			pos = line[1]
-			ID = line[2]
-			ref = line[3].split(">")[0][-1]
-			alt = line[3].split(">")[1]
+			if line[2]: 
+				ID = line[2]
+			elif not line[2]:	#TEST THIS 
+				ID = "custom_" + ID_no
+				ID_no += 1
+			ref = line[3]
+			alt = line[4]
 			out_file.write(
 				str(chrom)+"\t"+
 				str(pos)+"\t"+
