@@ -1,22 +1,22 @@
-Pathogenic variants,Benign variants,PPV,Sensitivity,Specificity,P value
-Total,22530,6983,NA,NA,NA,NA
-Sift,20212,2681,0.883,0.897,0.616,0
-MCap,21884,4349,0.834,0.971,0.377,0
-CADD,21946,4294,0.836,0.974,0.385,0
-Revel,19980,1110,0.947,0.887,0.841,0
-Paralogue Annotation,4447,340,0.929,0.197,0.951,4.38e-233
-Paralogue Annotation (QC1),3693,108,0.972,0.164,0.985,1.15000004296688e-317
-Paralogue Annotation (QC2),2000,20,0.99,0.0888,0.997,5.87e-209
-Paralogue Annotation (QC3),643,3,0.995,0.0285,1,4.87e-71
-Para z_score cutoff 0,3812,242,0.94,0.24,0.933,2.55e-142
-Para z_score cutoff 1,3727,205,0.948,0.246,0.93,1.25e-121
-Para z_score cutoff 2,3699,200,0.949,0.246,0.93,8.03e-119
-Para z_score cutoff 3,3680,184,0.952,0.248,0.932,8.04e-118
-Para z_score cutoff 4,3589,168,0.955,0.25,0.932,6.3e-109
-Para z_score cutoff 5,3445,137,0.962,0.252,0.936,1.51e-102
-Para z_score cutoff 6,3344,124,0.964,0.257,0.933,1.4e-90
-Para z_score cutoff 7,3209,106,0.968,0.261,0.932,2.22e-78
-Para z_score cutoff 8,3024,87,0.972,0.266,0.928,2.66e-61
-Para z_score cutoff 9,2836,66,0.977,0.271,0.93,1.4e-51
-Para z_score cutoff 10,2601,45,0.983,0.281,0.927,1.78e-36
-Para z_score cutoff 11,2530,43,0.983,0.282,0.924,1.04e-32
+Pathogenic variants,Benign variants,PPV,PPV CI,Sensitivity,Sens CI,Specificity,P value
+Total,22530,6983,NA,NA,NA,NA,NA,NA
+Sift,20212,2681,0.883,0.00417,0.897,0.00397,0.616,0
+MCap,21884,4349,0.834,0.0045,0.971,0.00218,0.377,0
+CADD,21946,4294,0.836,0.00448,0.974,0.00207,0.385,0
+Revel,19980,1110,0.947,0.00301,0.887,0.00414,0.841,0
+Paralogue Annotation,4447,340,0.929,0.00728,0.197,0.0052,0.951,4.38e-233
+Paralogue Annotation (QC1),3693,108,0.972,0.00528,0.164,0.00483,0.985,1.15000004296688e-317
+Paralogue Annotation (QC2),2000,20,0.99,0.00432,0.0888,0.00371,0.997,5.87e-209
+Paralogue Annotation (QC3),643,3,0.995,0.00524,0.0285,0.00217,1,4.87e-71
+Para z_score cutoff 0,3812,242,0.94,0.007,0.24,0.007,0.933,2.55e-142
+Para z_score cutoff 1,3727,205,0.948,0.007,0.246,0.007,0.93,1.25e-121
+Para z_score cutoff 2,3699,200,0.949,0.007,0.246,0.007,0.93,8.03e-119
+Para z_score cutoff 3,3680,184,0.952,0.007,0.248,0.007,0.932,8.04e-118
+Para z_score cutoff 4,3589,168,0.955,0.007,0.25,0.007,0.932,6.3e-109
+Para z_score cutoff 5,3445,137,0.962,0.006,0.252,0.007,0.936,1.51e-102
+Para z_score cutoff 6,3344,124,0.964,0.006,0.257,0.008,0.933,1.4e-90
+Para z_score cutoff 7,3209,106,0.968,0.006,0.261,0.008,0.932,2.22e-78
+Para z_score cutoff 8,3024,87,0.972,0.006,0.266,0.008,0.928,2.66e-61
+Para z_score cutoff 9,2836,66,0.977,0.005,0.271,0.009,0.93,1.4e-51
+Para z_score cutoff 10,2601,45,0.983,0.005,0.281,0.009,0.927,1.78e-36
+Para z_score cutoff 11,2530,43,0.983,0.005,0.282,0.009,0.924,1.04e-32
