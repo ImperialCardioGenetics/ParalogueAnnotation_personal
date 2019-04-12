@@ -105,7 +105,6 @@ with open(input_file) as f:
 				)		
 			allele_freq = float(line[15])
 			if allele_freq <= 8.2e-06:
-
 				out_file2.write(
 					str(chrom)+"\t"+
 					str(pos)+"\t"+
