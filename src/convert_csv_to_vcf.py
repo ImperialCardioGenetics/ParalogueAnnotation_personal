@@ -129,4 +129,5 @@ with open(gnomad_cohort_rare) as f2:
 	print(ref_variants)
 	with open(disease_cohort) as f:
 		for line in f:
-
+			if line[0].isdigit():
+				
