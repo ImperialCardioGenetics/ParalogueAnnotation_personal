@@ -87,10 +87,13 @@ with open(input_file) as f:
 			if line[2]: 
 				ID = line[2]
 			elif not line[2]:	#TEST THIS 
-				ID = "custom_" + ID_no
+				ID = "custom_" + str(ID_no)
 				ID_no += 1
 			ref = line[3]
 			alt = line[4]
+			allele_freq = float(line[15])
+			if allele_freq <= 8.2e-06:
+				
 			out_file.write(
 				str(chrom)+"\t"+
 				str(pos)+"\t"+
