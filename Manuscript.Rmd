@@ -1085,7 +1085,7 @@ Ackerman data from ICC_Mutations
 data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
 data = data_ref[data_ref$mut_protein!="NULL",]
 
-gnomad_KCNE1 = read.csv("data/LQTS/gnomAD_v2.1.1_ENSG00000180509_2019_03_31_15_09_18_KCNE1.csv", sep = ",", stringsAsFactors = 0)
+gnomad_rare_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.vcf", sep = "\t", stringsAsFactors = 0)
 
 # vcf_conv = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv", sep = ",", stringsAsFactors = 0)
 ```
