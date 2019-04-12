@@ -1085,7 +1085,13 @@ Ackerman data from ICC_Mutations
 data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
 data = data_ref[data_ref$mut_protein!="NULL",]
 
+disease_cohort_variants = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.vcf", sep = "\t", stringsAsFactors = 0)
+
+gnomad_total_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants.vcf", sep = "\t", stringsAsFactors = 0)
 gnomad_rare_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.vcf", sep = "\t", stringsAsFactors = 0)
+
+# disease_cohort_variants_tmp = disease_cohort_variants[,c(1,2,4,5)]
+# gnomad_rare_variants_tmp = gnomad_rare_variants[,c(1,2,4,5)]
 
 # vcf_conv = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv", sep = ",", stringsAsFactors = 0)
 ```

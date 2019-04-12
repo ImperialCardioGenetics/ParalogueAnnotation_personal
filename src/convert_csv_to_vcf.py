@@ -94,7 +94,7 @@ with open(input_file) as f:
 				ID_no += 1
 			ref = line[3]
 			alt = line[4]
-			out_file2.write(
+			out_file.write(
 				str(chrom)+"\t"+
 				str(pos)+"\t"+
 				str(ID)+"\t"+
@@ -116,3 +116,17 @@ with open(input_file) as f:
 					)			
 out_file.close()
 out_file2.close()
+
+
+input_file = sys.argv[1]	#path of ICC MUTATION csv file to convert to vcf e.g. /media/nick/Data/PhD/Paralogues/ParalogueAnnotation_personal/data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv
+disease_cohort = input_file.rsplit(".", 1)[0]+".vcf"
+input_file2 = sys.argv[2]	#path of gnomad csv file to convert to vcf e.g. /media/nick/Data/PhD/Paralogues/ParalogueAnnotation_personal/data/LQTS/gnomAD_v2.1.1_ENSG00000180509_2019_03_31_15_09_18_KCNE1.csv
+gnomad_cohort = input_file2.rsplit(".", 1)[0]+".vcf"
+gnomad_cohort_rare = input_file2.rsplit(".", 1)[0]+"_rare.vcf"
+
+with open(gnomad_cohort_rare) as f2:
+	ref_variants = f2.readlines()
+	print(ref_variants)
+	with open(disease_cohort) as f:
+		for line in f:
+
