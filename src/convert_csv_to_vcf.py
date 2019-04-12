@@ -94,14 +94,14 @@ with open(input_file) as f:
 			allele_freq = float(line[15])
 			if allele_freq <= 8.2e-06:
 				
-			out_file.write(
-				str(chrom)+"\t"+
-				str(pos)+"\t"+
-				str(ID)+"\t"+
-				str(ref)+"\t"+
-				str(alt)+"\t.\t.\t"+
-				# "gene="+str(line[4])+",HGVSc="+str(line[5])+",HGVSp="+str(line[6])+",pathogenic="+str(line[7])+"\n"
-				".\n"
-				)			
+				out_file.write(
+					str(chrom)+"\t"+
+					str(pos)+"\t"+
+					str(ID)+"\t"+
+					str(ref)+"\t"+
+					str(alt)+"\t.\t.\t"+
+					# "gene="+str(line[4])+",HGVSc="+str(line[5])+",HGVSp="+str(line[6])+",pathogenic="+str(line[7])+"\n"
+					".\n"
+					)			
 out_file.close()
 
