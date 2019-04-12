@@ -76,6 +76,9 @@ dir1 = input_file.rsplit("/", 1)[0]
 out_file = open(input_file.rsplit(".", 1)[0]+".vcf", "w")
 out_file.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 
+out_file2 = open(input_file.rsplit(".", 1)[0]+"_rare.vcf", "w")
+out_file2.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
+
 with open(input_file) as f:
 	ID_no = 1
 	for line in f:
@@ -91,10 +94,19 @@ with open(input_file) as f:
 				ID_no += 1
 			ref = line[3]
 			alt = line[4]
+			out_file2.write(
+				str(chrom)+"\t"+
+				str(pos)+"\t"+
+				str(ID)+"\t"+
+				str(ref)+"\t"+
+				str(alt)+"\t.\t.\t"+
+				# "gene="+str(line[4])+",HGVSc="+str(line[5])+",HGVSp="+str(line[6])+",pathogenic="+str(line[7])+"\n"
+				".\n"
+				)		
 			allele_freq = float(line[15])
 			if allele_freq <= 8.2e-06:
-				
-				out_file.write(
+
+				out_file2.write(
 					str(chrom)+"\t"+
 					str(pos)+"\t"+
 					str(ID)+"\t"+
@@ -104,4 +116,4 @@ with open(input_file) as f:
 					".\n"
 					)			
 out_file.close()
-
+out_file2.close()
