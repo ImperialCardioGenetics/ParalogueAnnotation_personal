@@ -1083,7 +1083,7 @@ Ackerman data from ICC_Mutations
 #For any variants where exac allele count is NA, just put as 0? Check this assumption
 
 data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
-data = data_ref[data_ref$mut_protein!="NULL",]
+# data = data_ref[data_ref$mut_protein!="NULL",]
 
 disease_cohort_variants = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.vcf", sep = "\t", stringsAsFactors = 0)
 
@@ -1105,6 +1105,8 @@ for (row in 1:nrow(disease_cohort_variants)){
 }
 colnames(rare_disease_cohort_variants)[1] = "#CHROM"
 write.table(rare_disease_cohort_variants, file = "data/LQTS/rare_disease_cohort_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+
+
 
 
 # disease_cohort_variants$check_in_rare_gnomad = ifelse(
