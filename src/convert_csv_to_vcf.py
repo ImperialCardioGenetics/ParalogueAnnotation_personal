@@ -117,7 +117,7 @@ with open(input_file) as f:
 out_file.close()
 out_file2.close()
 
-
+'''
 input_file = sys.argv[1]	#path of ICC MUTATION csv file to convert to vcf e.g. /media/nick/Data/PhD/Paralogues/ParalogueAnnotation_personal/data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv
 disease_cohort = input_file.rsplit(".", 1)[0]+".vcf"
 input_file2 = sys.argv[2]	#path of gnomad csv file to convert to vcf e.g. /media/nick/Data/PhD/Paralogues/ParalogueAnnotation_personal/data/LQTS/gnomAD_v2.1.1_ENSG00000180509_2019_03_31_15_09_18_KCNE1.csv
@@ -130,4 +130,4 @@ with open(gnomad_cohort_rare) as f2:
 	with open(disease_cohort) as f:
 		for line in f:
 			if line[0].isdigit():
-				
+'''				
