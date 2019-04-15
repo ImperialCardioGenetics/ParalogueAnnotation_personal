@@ -1082,7 +1082,7 @@ Ackerman data from ICC_Mutations
 #Each line is a single patient count with the variant. exacAllelecount is the cell that has the same variant exac count
 #For any variants where exac allele count is NA, just put as 0? Check this assumption
 
-data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
+disease_data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
 # data = data_ref[data_ref$mut_protein!="NULL",]
 
 disease_cohort_variants = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.vcf", sep = "\t", stringsAsFactors = 0)
@@ -1108,7 +1108,14 @@ write.table(rare_disease_cohort_variants, file = "data/LQTS/rare_disease_cohort_
 
 disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
+disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x,]
 
+control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.noQC", "data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+
+control_data_ref = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
+control_data_ref  = control_data_ref [-c(103,182,1225,1573),] #remove the extra header lines from when concatenated the separate gene csv files together
+
+control_cohort_data = control_data_ref[control_data_ref$rsID,] #NEED TO PUT IN CUSTOM IDS
 
 # disease_cohort_variants$check_in_rare_gnomad = ifelse(
 #   is.na(
