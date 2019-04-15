@@ -1090,6 +1090,34 @@ disease_cohort_variants = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convert
 gnomad_total_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants.vcf", sep = "\t", stringsAsFactors = 0)
 gnomad_rare_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.vcf", sep = "\t", stringsAsFactors = 0)
 
+rare_disease_cohort_variants = data.frame()
+# disease_cohort_variants = disease_cohort_variants[1:10,]
+for (row in 1:nrow(disease_cohort_variants)){
+  if (
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_rare_variants$X.CHROM, gnomad_rare_variants$POS, gnomad_rare_variants$REF, gnomad_rare_variants$ALT)
+    ){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  } else if (!(
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_total_variants$X.CHROM, gnomad_total_variants$POS, gnomad_total_variants$REF, gnomad_total_variants$ALT)
+  )){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  }
+}
+colnames(rare_disease_cohort_variants)[1] = "#CHROM"
+write.table(rare_disease_cohort_variants, file = "data/LQTS/rare_disease_cohort_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+
+
+# disease_cohort_variants$check_in_rare_gnomad = ifelse(
+#   is.na(
+#     match(
+#       paste0(disease_cohort_variants$X.CHROM, disease_cohort_variants$POS, disease_cohort_variants$REF, disease_cohort_variants$ALT),
+#       paste0(gnomad_rare_variants$X.CHROM, gnomad_rare_variants$POS, gnomad_rare_variants$REF, gnomad_rare_variants$ALT)
+#       )
+#     ),"No", "Yes"
+#   )
+# 
+# disease_cohort_variants$check_in_total_gnomad
+
 # disease_cohort_variants_tmp = disease_cohort_variants[,c(1,2,4,5)]
 # gnomad_rare_variants_tmp = gnomad_rare_variants[,c(1,2,4,5)]
 
