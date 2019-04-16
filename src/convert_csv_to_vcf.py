@@ -79,19 +79,24 @@ out_file.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 out_file2 = open(input_file.rsplit(".", 1)[0]+"_rare.vcf", "w")
 out_file2.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 
+out_file3 = open(input_file.rsplit(".", 1)[0]+"_with_customIDs.csv", "w")
+
 with open(input_file) as f:
 	ID_no = 1
-	for line in f:
+	for og_line in f:
 		# print(line)
-		if line[0].isdigit():
-			line = line.rstrip().split(",")
+		if og_line[0].isdigit():
+			line = og_line.rstrip().split(",")
+			csv_line = og_line.split(",",3)
 			chrom = line[0]
 			pos = line[1]
-			if line[2]: 
-				ID = line[2]
-			elif not line[2]:	#TEST THIS 
-				ID = "custom_" + str(ID_no)
-				ID_no += 1
+			# if line[2]: 
+			# 	ID = line[2]
+			# elif not line[2]:	#TEST THIS 
+			# 	ID = "custom_" + str(ID_no)
+			# 	ID_no += 1
+			ID = "custom_" + str(ID_no)
+			ID_no += 1
 			ref = line[3]
 			alt = line[4]
 			out_file.write(
@@ -113,9 +118,17 @@ with open(input_file) as f:
 					str(alt)+"\t.\t.\t"+
 					# "gene="+str(line[4])+",HGVSc="+str(line[5])+",HGVSp="+str(line[6])+",pathogenic="+str(line[7])+"\n"
 					".\n"
-					)			
+					)
+			out_file3.write(
+				str(chrom)+"\t"+
+				str(pos)+"\t"+
+				str(ID)+"\t"+
+				str(csv_line[3])
+				)
+
 out_file.close()
 out_file2.close()
+out_file3.close()
 
 '''
 input_file = sys.argv[1]	#path of ICC MUTATION csv file to convert to vcf e.g. /media/nick/Data/PhD/Paralogues/ParalogueAnnotation_personal/data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv
