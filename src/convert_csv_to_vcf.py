@@ -51,7 +51,7 @@ out_file.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 
 with open(input_file) as f:
 	for line in f:
-		print(line)
+		# print(line)
 		if line[0].isdigit():
 			line = line.rstrip().split(",")
 			chrom = line[0]
@@ -83,8 +83,12 @@ out_file3 = open(input_file.rsplit(".", 1)[0]+"_with_customIDs.csv", "w")
 
 with open(input_file) as f:
 	ID_no = 1
+	header_out_file3_check = 0
 	for og_line in f:
 		# print(line)
+		if header_out_file3_check == 0:
+			out_file3.write(og_line)
+			header_out_file3_check = 1
 		if og_line[0].isdigit():
 			line = og_line.rstrip().split(",")
 			csv_line = og_line.split(",",3)
