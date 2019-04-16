@@ -1115,6 +1115,7 @@ control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQT
 control_data_ref = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
 control_data_ref  = control_data_ref [-c(103,182,1225,1573),] #remove the extra header lines from when concatenated the separate gene csv files together
 
+
 control_cohort_data = control_data_ref[control_data_ref$rsID,] #NEED TO PUT IN CUSTOM IDS
 
 # disease_cohort_variants$check_in_rare_gnomad = ifelse(
