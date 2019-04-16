@@ -1088,7 +1088,7 @@ disease_data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", strin
 disease_cohort_variants = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.vcf", sep = "\t", stringsAsFactors = 0)
 
 gnomad_total_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants.vcf", sep = "\t", stringsAsFactors = 0)
-gnomad_rare_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.vcf", sep = "\t", stringsAsFactors = 0)
+gnomad_rare_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.vcf", sep = "\t", stringsAsFactors = 0) #RUN PA ON THIS FILE
 
 rare_disease_cohort_variants = data.frame()
 # disease_cohort_variants = disease_cohort_variants[1:10,]
@@ -1104,7 +1104,7 @@ for (row in 1:nrow(disease_cohort_variants)){
   }
 }
 colnames(rare_disease_cohort_variants)[1] = "#CHROM"
-write.table(rare_disease_cohort_variants, file = "data/LQTS/rare_disease_cohort_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+write.table(rare_disease_cohort_variants, file = "data/LQTS/rare_disease_cohort_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
 
 disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
