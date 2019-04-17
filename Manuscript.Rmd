@@ -1082,8 +1082,6 @@ Ackerman data from ICC_Mutations
 #Each line is a single patient count with the variant. exacAllelecount is the cell that has the same variant exac count
 #For any variants where exac allele count is NA, just put as 0? Check this assumption
 
-disease_data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
-# data = data_ref[data_ref$mut_protein!="NULL",]
 
 disease_cohort_variants = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.vcf", sep = "\t", stringsAsFactors = 0)
 
@@ -1092,7 +1090,7 @@ gnomad_rare_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.vcf"
 
 rare_disease_cohort_variants = data.frame()
 # disease_cohort_variants = disease_cohort_variants[1:10,]
-for (row in 1:nrow(disease_cohort_variants)){
+for (row in 1:nrow(disease_cohort_variants)){ #FINDING ONLY RARE VARIANTS BASED ON GNOMAD FREQUENCY
   if (
     paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_rare_variants$X.CHROM, gnomad_rare_variants$POS, gnomad_rare_variants$REF, gnomad_rare_variants$ALT)
     ){
@@ -1106,15 +1104,27 @@ for (row in 1:nrow(disease_cohort_variants)){
 colnames(rare_disease_cohort_variants)[1] = "#CHROM"
 write.table(rare_disease_cohort_variants, file = "data/LQTS/rare_disease_cohort_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
 
+#disease data
+
 disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
-disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x,]
-
-control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.noQC", "data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+disease_data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
+disease_data_ref$cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$cases = sapply(disease_data_ref$cases,function(x) x[1])
+disease_data_ref$total_cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$total_cases = sapply(disease_data_ref$total_cases,function(x) x[2])
 
 control_data_ref = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_with_customIDs.csv", sep = ",", stringsAsFactors = 0)
 control_data_ref  = control_data_ref[control_data_ref$Gene != "Gene",] #remove the extra header lines from when concatenated the separate gene csv files together
 
+
+
+
+
+
+disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x,]
+
+control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.noQC", "data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
 
 control_cohort_data = control_data_ref[control_data_ref$rsID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x,] #had to manually edit in custom IDs that were auto added during python vcf conversion
 
