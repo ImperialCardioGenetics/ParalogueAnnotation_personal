@@ -124,9 +124,9 @@ with open(input_file) as f:
 					".\n"
 					)
 			out_file3.write(
-				str(chrom)+"\t"+
-				str(pos)+"\t"+
-				str(ID)+"\t"+
+				str(chrom)+","+
+				str(pos)+","+
+				str(ID)+","+
 				str(csv_line[3])
 				)
 
