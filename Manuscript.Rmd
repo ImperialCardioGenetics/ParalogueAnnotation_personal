@@ -1121,7 +1121,16 @@ KCNE2_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "KCN
 KCNH2_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "KCNH2",]
 KCNQ1_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "KCNQ1",]
 SCN5A_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "SCN5A",]
-
+#total cases sequence for each gene
+control_total_variant_cases = data.frame(
+  genes = c("KCNE1","KCNE2","KCNH2","KCNQ1","SCN5A"), 
+  cases = c(
+    mean(as.numeric(KCNE1_control_all_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNE2_control_all_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNH2_control_all_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNQ1_control_all_variant_cases$Allele.Number))/2,
+    mean(as.numeric(SCN5A_control_all_variant_cases$Allele.Number))/2))
+#individual cases for rare variants
 
 #KCNE1_control_all_variant_cases = KCNE1_control_all_variant_cases$Allele.Number
 
