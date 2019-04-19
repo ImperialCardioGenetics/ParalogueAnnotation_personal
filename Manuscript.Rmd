@@ -926,12 +926,6 @@ All_variant_control.cases = data.frame(genes = c("MYH7","TNNT2","TNNI3","MYBPC3"
 
 # gene_EFs = list()
 
-cell_format = function(value,CI){
-  x = sapply(c(value,CI),format,digits=3,nsmall=3)
-  y = paste(x[1]," (",x[2],",",x[3],")",sep = "")
-  return(y)
-}
-
 gene_EFs = data.frame()
 for (gene in c("MYH7","MYBPC3","TNNT2","TPM1","MYL2","MYL3","TNNI3","ACTC1")){
 # for (gene in c("MYBPC3")){
@@ -1113,6 +1107,8 @@ disease_data_ref$cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
 disease_data_ref$cases = sapply(disease_data_ref$cases,function(x) x[1])
 disease_data_ref$total_cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
 disease_data_ref$total_cases = sapply(disease_data_ref$total_cases,function(x) x[2])
+
+
 
 control_data_ref = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_with_customIDs.csv", sep = ",", stringsAsFactors = 0)
 control_data_ref  = control_data_ref[control_data_ref$Gene != "Gene",] #remove the extra header lines from when concatenated the separate gene csv files together
