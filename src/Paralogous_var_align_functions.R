@@ -565,3 +565,9 @@ case_control_gene_split = function(data_df, patho_var_ids, gene){ #function for 
   }
   return(list("pa_predicted_gene_cases" = patho_gene_cases, "Total_gene_cases" = Total_gene_cases, "gene_data" = gene_data, "pa_predicted_gene_data" = patho_gene_data))
 }
+
+cell_format = function(value,CI){
+  x = sapply(c(value,CI),format,digits=3,nsmall=3)
+  y = paste(x[1]," (",x[2],",",x[3],")",sep = "")
+  return(y)
+}
