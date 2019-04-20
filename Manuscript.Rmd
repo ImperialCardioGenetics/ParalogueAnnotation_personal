@@ -1154,11 +1154,56 @@ SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_re
 
 
 ###Calculating EFs
+KCNE1_rare_EF = calc_EF(
+  KCNE1_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNE1", "cases"]-KCNE1_disease_rare_variant_cases,
+  KCNE1_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNE1", "cases"]-KCNE1_control_rare_variant_cases
+  )
+KCNE1_pa_EF = calc_EF(
+  KCNE1_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNE1", "cases"]-KCNE1_disease_pa_variant_cases,
+  KCNE1_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNE1", "cases"]-KCNE1_control_pa_variant_cases
+  )
+
+KCNE2_rare_EF = calc_EF(
+  KCNE2_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNE2", "cases"]-KCNE2_disease_rare_variant_cases,
+  KCNE2_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNE2", "cases"]-KCNE2_control_rare_variant_cases
+  )
+KCNE2_pa_EF = calc_EF(
+  KCNE2_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNE2", "cases"]-KCNE2_disease_pa_variant_cases,
+  KCNE2_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNE2", "cases"]-KCNE2_control_pa_variant_cases
+  )
+
+KCNH2_rare_EF = calc_EF(
+  KCNH2_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNH2", "cases"]-KCNH2_disease_rare_variant_cases,
+  KCNH2_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNH2", "cases"]-KCNH2_control_rare_variant_cases
+  )
+KCNH2_pa_EF = calc_EF(
+  KCNH2_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNH2", "cases"]-KCNH2_disease_pa_variant_cases,
+  KCNH2_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNH2", "cases"]-KCNH2_control_pa_variant_cases
+  )
+
 KCNQ1_rare_EF = calc_EF(
   KCNQ1_disease_rare_variant_cases,
   disease_total_variant_cases[disease_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_disease_rare_variant_cases,
   KCNQ1_control_rare_variant_cases,
   control_total_variant_cases[control_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_control_rare_variant_cases
+  )
+KCNQ1_pa_EF = calc_EF(
+  KCNQ1_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_disease_pa_variant_cases,
+  KCNQ1_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_control_pa_variant_cases
   )
 
 SCN5A_rare_EF = calc_EF(
@@ -1172,6 +1217,31 @@ SCN5A_pa_EF = calc_EF(
   disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
   SCN5A_control_pa_variant_cases,
   control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
+
+gene_EFs = data.frame(
+  gene = c("KCNE1","KCNE2","KCNH2","KCNQ1","SCN5A"),
+  rare_variant_OR = c(cell_format(KCNE1_rare_EF$OR, KCNE1_rare_EF$OR_CI),
+                      cell_format(KCNE2_rare_EF$OR, KCNE2_rare_EF$OR_CI),
+                      cell_format(KCNH2_rare_EF$OR, KCNH2_rare_EF$OR_CI),
+                      cell_format(KCNQ1_rare_EF$OR, KCNQ1_rare_EF$OR_CI),
+                      cell_format(SCN5A_rare_EF$OR, SCN5A_rare_EF$OR_CI)),
+  rare_variant_EF = c(cell_format(KCNE1_rare_EF$EF, KCNE1_rare_EF$EF_CI),
+                      cell_format(KCNE2_rare_EF$EF, KCNE2_rare_EF$EF_CI),
+                      cell_format(KCNH2_rare_EF$EF, KCNH2_rare_EF$EF_CI),
+                      cell_format(KCNQ1_rare_EF$EF, KCNQ1_rare_EF$EF_CI),
+                      cell_format(SCN5A_rare_EF$EF, SCN5A_rare_EF$EF_CI)),
+  pa_variant_OR = c(cell_format(KCNE1_pa_EF$OR, KCNE1_pa_EF$OR_CI),
+                    cell_format(KCNE2_pa_EF$OR, KCNE2_pa_EF$OR_CI),
+                    cell_format(KCNH2_pa_EF$OR, KCNH2_pa_EF$OR_CI),
+                    cell_format(KCNQ1_pa_EF$OR, KCNQ1_pa_EF$OR_CI),
+                    cell_format(SCN5A_pa_EF$OR, SCN5A_pa_EF$OR_CI)),
+  pa_variant_EF = c(cell_format(KCNE1_pa_EF$EF, KCNE1_pa_EF$EF_CI),
+                    cell_format(KCNE2_pa_EF$EF, KCNE2_pa_EF$EF_CI),
+                    cell_format(KCNH2_pa_EF$EF, KCNH2_pa_EF$EF_CI),
+                    cell_format(KCNQ1_pa_EF$EF, KCNQ1_pa_EF$EF_CI),
+                    cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
+  )
   )
 
 # disease_cohort_variants$check_in_rare_gnomad = ifelse(
