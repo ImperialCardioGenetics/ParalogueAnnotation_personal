@@ -1111,7 +1111,14 @@ KCNE2_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_
 KCNH2_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNH2" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
 KCNQ1_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNQ1" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
 SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
-
+#individual cases for variants predicted pathogenic by PA
+disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x,]
+KCNE1_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE1" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+KCNE2_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE2" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+KCNH2_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNH2" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+KCNQ1_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNQ1" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+SCN5A_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
 
 ###control cohort
 control_data_ref = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_with_customIDs.csv", sep = ",", stringsAsFactors = 0)
@@ -1136,23 +1143,36 @@ KCNE2_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_
 KCNH2_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNH2" & control_data_ref$rsID %in% gnomad_rare_variants$ID, "Allele.Count"]))
 KCNQ1_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNQ1" & control_data_ref$rsID %in% gnomad_rare_variants$ID, "Allele.Count"]))
 SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "SCN5A" & control_data_ref$rsID %in% gnomad_rare_variants$ID, "Allele.Count"]))
-#KCNE1_control_all_variant_cases = KCNE1_control_all_variant_cases$Allele.Number
-
-
-disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-
-disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x,]
-
+#individual cases for variants predicted pathogenic by PA
 control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.noQC", "data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+control_cohort_data = control_data_ref[control_data_ref$rsID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x,] 
+KCNE1_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE1" & control_data_ref$rsID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+KCNE2_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE2" & control_data_ref$rsID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+KCNH2_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNH2" & control_data_ref$rsID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+KCNQ1_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNQ1" & control_data_ref$rsID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "SCN5A" & control_data_ref$rsID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
 
-control_cohort_data = control_data_ref[control_data_ref$rsID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x,] #had to manually edit in custom IDs that were auto added during python vcf conversion
 
-###rare variant EFs
+###Calculating EFs
+KCNQ1_rare_EF = calc_EF(
+  KCNQ1_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_disease_rare_variant_cases,
+  KCNQ1_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_control_rare_variant_cases
+  )
 
-gene_EFs = data.frame()
-for (gene in c("KCNE1","KCNE2","KCNH2","KCNQ1","SCN5A")){
-
-}
+SCN5A_rare_EF = calc_EF(
+  SCN5A_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_rare_variant_cases,
+  SCN5A_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_rare_variant_cases
+  )
+SCN5A_pa_EF = calc_EF(
+  SCN5A_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+  SCN5A_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
 
 # disease_cohort_variants$check_in_rare_gnomad = ifelse(
 #   is.na(
