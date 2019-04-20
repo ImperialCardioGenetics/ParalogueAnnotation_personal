@@ -1116,22 +1116,26 @@ SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_
 ###control cohort
 control_data_ref = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_with_customIDs.csv", sep = ",", stringsAsFactors = 0)
 control_data_ref  = control_data_ref[control_data_ref$Gene != "Gene",] #remove the extra header lines from when concatenated the separate gene csv files together
-KCNE1_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "KCNE1",]
-KCNE2_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "KCNE2",]
-KCNH2_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "KCNH2",]
-KCNQ1_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "KCNQ1",]
-SCN5A_control_all_variant_cases = control_data_ref[control_data_ref$Gene == "SCN5A",]
+KCNE1_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "KCNE1",]
+KCNE2_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "KCNE2",]
+KCNH2_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "KCNH2",]
+KCNQ1_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "KCNQ1",]
+SCN5A_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "SCN5A",]
 #total cases sequence for each gene
 control_total_variant_cases = data.frame(
   genes = c("KCNE1","KCNE2","KCNH2","KCNQ1","SCN5A"), 
   cases = c(
-    mean(as.numeric(KCNE1_control_all_variant_cases$Allele.Number))/2,
-    mean(as.numeric(KCNE2_control_all_variant_cases$Allele.Number))/2,
-    mean(as.numeric(KCNH2_control_all_variant_cases$Allele.Number))/2,
-    mean(as.numeric(KCNQ1_control_all_variant_cases$Allele.Number))/2,
-    mean(as.numeric(SCN5A_control_all_variant_cases$Allele.Number))/2))
+    mean(as.numeric(KCNE1_control_total_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNE2_control_total_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNH2_control_total_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNQ1_control_total_variant_cases$Allele.Number))/2,
+    mean(as.numeric(SCN5A_control_total_variant_cases$Allele.Number))/2))
 #individual cases for rare variants
-
+KCNE1_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE1" & control_data_ref$rsID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+KCNE2_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE2" & control_data_ref$rsID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+KCNH2_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNH2" & control_data_ref$rsID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+KCNQ1_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNQ1" & control_data_ref$rsID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "SCN5A" & control_data_ref$rsID %in% gnomad_rare_variants$ID, "Allele.Count"]))
 #KCNE1_control_all_variant_cases = KCNE1_control_all_variant_cases$Allele.Number
 
 
