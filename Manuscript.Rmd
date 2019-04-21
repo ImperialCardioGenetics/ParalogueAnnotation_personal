@@ -296,8 +296,18 @@ write.table(unique(p.paralogous_var_align$Total_paralog_annotations$SYMBOL), fil
 var_in_genes = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")#,Overlap = 0)
 var_in_genes_unique_var = data.frame(table(var_in_genes$Unique_variant_annotations$Gene))
 write.table(var_in_genes_unique_var, file = "data/clinvar/genes_with_number_of_annotations_noQC.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
-x = var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL3A1" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
-y = data.frame(table(x$SYMBOL))
+#top 5 genes where PA performs best with clinvar data
+COL3A1_annotations = var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL3A1" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL3A1_annotations_genes = data.frame(table(COL3A1_annotations$SYMBOL))
+COL4A5_annotations = var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL4A5" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL4A5_annotations_genes = data.frame(table(COL4A5_annotations$SYMBOL))
+SCN1A_annotations = var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "SCN1A" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+SCN1A_annotations_genes = data.frame(table(SCN1A_annotations$SYMBOL))
+COL1A1_annotations = var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL1A1" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL1A1_annotations_genes = data.frame(table(COL1A1_annotations$SYMBOL))
+COL1A2_annotations = var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL1A2" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL1A2_annotations_genes = data.frame(table(COL1A2_annotations$SYMBOL))
+
 # var_in_genes_with_PA_noQC = data.frame(table())
 
 #para_con
