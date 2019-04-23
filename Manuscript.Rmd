@@ -516,17 +516,27 @@ Using the aforementioned quality control steps to increase the stringency of con
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 x = read.csv(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
 y = read.csv(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.vcf", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
-length(unique(x$V3))
-length(unique(y$V3))
+length(unique(x$V3)) #short one
+length(unique(y$V3)) #longer one
 setdiff(unique(y$V3),unique(x$V3))
 ```
 NB that 11 variants with IDs: 16549; 525690; 12282; 3882; 29695; 13538; 7226; 17114; 7366; 4576; and 504370 are actually deletions so VEP does not predict anything and does not output them in results. Hence out_paraloc file has 11 less lines than the vcf file
 
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
-x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#")
-x = distinct(x[c("Variant_pos", "ID", "Gene", "REF", "ALT")])
+x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
+x = distinct(x[c("Variant_pos", "ID", "REF", "ALT")])
+y = ddply(x[,c("Variant_pos", "ID", "REF", "ALT")],.(Variant_pos, ID, REF, ALT),nrow)
 ```
+NB theres 489 instances of variants lying in overlapping genes. 
+```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
+setdiff(unique(clinvar_P_LP_genes_w_paralogs),unique(x$Gene))
+# write.table(gene_EFs, file = "data/case_and_control/gene_EFs.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
+
+write.table(setdiff(unique(clinvar_P_LP_genes_w_paralogs),unique(x$Gene)), file = "data/clinvar/genes_in_out_paraloc_paralogs2.noQC.txt", row.names = FALSE, col.names = FALSE)
+```
+NB in clinvar_P_LP_genes_w_paralogs there are 3621 genes with paralogues but in the out_paraloc_paralogs file there are only 2485 genes. This is because there 1170 genes in clinvar_P_LP_genes_w_paralogs that are not in out_paraloc_paralogs because though there are variants in these genes they do not align to anything. There are also cases of over-lapping genes and so while one gene is reported the other might not. Also the same for some readthrough transcripts.
 
 ## Para-Z scores
 The filtering steps outlined above take a more binaray approach to taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores defined by @Lal2017 on the other hand takes a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. As shown by **fig.** \ref{fig:paraz}, one can use the Para-Z scores as cutoff thresholds for how paralogue conserved alignments must be before considering annotations. The more stringent the cutoff the lower the false positive rate is, but as expected the lower the sensitivity is also. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
