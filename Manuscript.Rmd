@@ -513,7 +513,6 @@ The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table
 Using the aforementioned quality control steps to increase the stringency of conservation across alignment columns in regards to reference and alternate amino acid alleles shows improvement to PPV and decrease in sensitivity over all for predicting pathogenic variants. But this does not help the case for predicting benign variants. The PPV does not improve significantly to a reliable level. Therefore, it can be concluded that at least with the dataset used in this study, paralogue annotation can be used as a variant classification method for predicting pathogenic variants, but not benign.
 
 
-
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 x = read.table(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
 y = read.table(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.vcf", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
@@ -522,6 +521,10 @@ length(unique(y$V3))
 setdiff(unique(y$V3),unique(x$V3))
 ```
 NB that 11 variants with IDs: 16549; 525690; 12282; 3882; 29695; 13538; 7226; 17114; 7366; 4576; and 504370 are actually deletions so VEP does not predict anything and does not output them in results. Hence out_paraloc file has 11 less lines than the vcf file
+
+```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+x = read.table(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
+```
 
 ## Para-Z scores
 The filtering steps outlined above take a more binaray approach to taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores defined by @Lal2017 on the other hand takes a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. As shown by **fig.** \ref{fig:paraz}, one can use the Para-Z scores as cutoff thresholds for how paralogue conserved alignments must be before considering annotations. The more stringent the cutoff the lower the false positive rate is, but as expected the lower the sensitivity is also. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
