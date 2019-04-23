@@ -513,6 +513,7 @@ The full analysis of clinvar variants is shown in **table \ref{fig:clinvar_table
 Using the aforementioned quality control steps to increase the stringency of conservation across alignment columns in regards to reference and alternate amino acid alleles shows improvement to PPV and decrease in sensitivity over all for predicting pathogenic variants. But this does not help the case for predicting benign variants. The PPV does not improve significantly to a reliable level. Therefore, it can be concluded that at least with the dataset used in this study, paralogue annotation can be used as a variant classification method for predicting pathogenic variants, but not benign.
 
 
+Looking at pipeline of study:
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 x = read.csv(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
 y = read.csv(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.vcf", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
@@ -532,11 +533,12 @@ NB theres 489 instances of variants lying in overlapping genes.
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
 setdiff(unique(clinvar_P_LP_genes_w_paralogs),unique(x$Gene))
+setdiff(unique(x$Gene),unique(clinvar_P_LP_genes_w_paralogs))
 # write.table(gene_EFs, file = "data/case_and_control/gene_EFs.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
 
 write.table(setdiff(unique(clinvar_P_LP_genes_w_paralogs),unique(x$Gene)), file = "data/clinvar/genes_in_out_paraloc_paralogs2.noQC.txt", row.names = FALSE, col.names = FALSE)
 ```
-NB in clinvar_P_LP_genes_w_paralogs there are 3621 genes with paralogues but in the out_paraloc_paralogs file there are only 2485 genes. This is because there 1170 genes in clinvar_P_LP_genes_w_paralogs that are not in out_paraloc_paralogs because though there are variants in these genes they do not align to anything. There are also cases of over-lapping genes and so while one gene is reported the other might not. Also the same for some readthrough transcripts.
+NB in clinvar_P_LP_genes_w_paralogs there are 3621 genes with paralogues but in the out_paraloc_paralogs file there are only 2485 genes. This is because there 1170 genes in clinvar_P_LP_genes_w_paralogs that are not in out_paraloc_paralogs because though there are variants in these genes they do not align to anything. There are also cases of over-lapping genes and so while one gene is reported the other might not. Also the same for some readthrough transcripts. Several genes with designation "AC######.#" go through non-sense mediated decay.
 
 ## Para-Z scores
 The filtering steps outlined above take a more binaray approach to taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores defined by @Lal2017 on the other hand takes a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. As shown by **fig.** \ref{fig:paraz}, one can use the Para-Z scores as cutoff thresholds for how paralogue conserved alignments must be before considering annotations. The more stringent the cutoff the lower the false positive rate is, but as expected the lower the sensitivity is also. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
