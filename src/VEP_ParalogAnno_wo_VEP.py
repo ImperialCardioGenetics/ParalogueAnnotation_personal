@@ -25,7 +25,7 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 		input_dir = input_dir+"/"
 	print(input_dir)
 
-	#reads through outfile of vep+plugin and tidies up data by extracting only variants that have paralogs and spits that out as another outfile
+	#reads through outfile of vep+plugin and tidies up data by extracting only variants that have paralogous positions and spits that out as another outfile
 	out_file = open(
 		output_file + "_paralogs", "w", encoding="utf-8")
 	if not flavour == "":
