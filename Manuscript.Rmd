@@ -534,6 +534,16 @@ x0 = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Like
 x = distinct(x0[c("Variant_pos", "ID", "REF", "ALT")])
 library(plyr)
 y = ddply(x0[,c("Variant_pos", "ID", "REF", "ALT")],.(Variant_pos, ID, REF, ALT),nrow)
+y = y[y$V1>1,]
+dim(y)
+
+
+b = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
+b0 = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
+b = distinct(b0[c("Variant_pos", "ID", "REF", "ALT")])
+c = ddply(b0[,c("Variant_pos", "ID", "REF", "ALT")],.(Variant_pos, ID, REF, ALT),nrow)
+c = c[c$V1>1,]
+dim(c)
 ```
 NB there's 435 unique variants lying in overlapping genes in the P/LP. Overall there's 489 instances of variants in a position that covers two genes (i.e. one instance of two gene overlapp)
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
