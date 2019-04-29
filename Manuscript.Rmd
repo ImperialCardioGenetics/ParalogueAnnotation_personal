@@ -363,8 +363,17 @@ var_removed = var_rem_matrix(conf$con_table, conf2$con_table, p2.paralogous_var_
 var_removed_b = var_rem_matrix(conf_b$con_table, conf_b2$con_table, ptob2.paralogous_var_align$paralog_data, btob2.paralogous_var_align$paralog_data)
 
 #finding out how many genes in para_con
-var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-p.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+var_in_genes_unique_var = data.frame(table(p2.paralogous_var_align$Unique_variant_gene_annotations$Gene))
+p2.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+not_var_in_genes_unique_var = data.frame(table(p2.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
+p2.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+length(intersect(p2.var_in_genes_unique_var$Var1, p2.not_var_in_genes_unique_var$Var1))
+
+var_in_genes_unique_var = data.frame(table(b2.paralogous_var_align$Unique_variant_gene_annotations$Gene))
+b2.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+not_var_in_genes_unique_var = data.frame(table(b2.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
+b2.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+length(intersect(b2.var_in_genes_unique_var$Var1, b2.not_var_in_genes_unique_var$Var1))
 
 #all_con
 p3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
