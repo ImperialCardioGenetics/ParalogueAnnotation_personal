@@ -336,7 +336,15 @@ length(intersect(b.var_in_genes_unique_var$Var1, b.not_var_in_genes_unique_var$V
 
 var_in_genes_unique_var = data.frame(table(ptob.paralogous_var_align$Unique_variant_gene_annotations$Gene))
 ptob.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+not_var_in_genes_unique_var = data.frame(table(ptob.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
+ptob.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+length(intersect(ptob.var_in_genes_unique_var$Var1, ptob.not_var_in_genes_unique_var$Var1))
 
+var_in_genes_unique_var = data.frame(table(btob.paralogous_var_align$Unique_variant_gene_annotations$Gene))
+btob.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+not_var_in_genes_unique_var = data.frame(table(btob.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
+btob.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+length(intersect(btob.var_in_genes_unique_var$Var1, btob.not_var_in_genes_unique_var$Var1))
 
 #para_con
 p2.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -353,6 +361,10 @@ write.table(unique(p2.paralogous_var_align$Total_paralog_annotations$SYMBOL), fi
 
 var_removed = var_rem_matrix(conf$con_table, conf2$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
 var_removed_b = var_rem_matrix(conf_b$con_table, conf_b2$con_table, ptob2.paralogous_var_align$paralog_data, btob2.paralogous_var_align$paralog_data)
+
+#finding out how many genes in para_con
+var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_gene_annotations$Gene))
+p.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
 
 #all_con
 p3.paralogous_var_align = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
