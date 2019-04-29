@@ -296,9 +296,11 @@ write.table(unique(p.paralogous_var_align$Total_paralog_annotations$SYMBOL), fil
 # var_in_genes = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")#,Overlap = 0)
 var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_gene_annotations$Gene))
 p.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+p.var_in_genes_unique_var = p.var_in_genes_unique_var[p.var_in_genes_unique_var$Var1 %in% clinvar_P_LP_tableized_genes,]
 write.table(p.var_in_genes_unique_var, file = "data/clinvar/genes_with_number_of_annotations_noQC.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
 not_var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
 p.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+p.not_var_in_genes_unique_var = p.not_var_in_genes_unique_var[p.not_var_in_genes_unique_var$Var1 %in% clinvar_P_LP_tableized_genes,]
 length(intersect(p.var_in_genes_unique_var$Var1, p.not_var_in_genes_unique_var$Var1))
 
 #top 5 genes where PA performs best with clinvar data
@@ -330,9 +332,11 @@ write.table(top_5_paralogues, file = "data/clinvar/Top_5_genes_with_number_of_an
 #carrying on finding out what genes are in the variants being annotated and not for the other parts of the confusion matrixes
 var_in_genes_unique_var = data.frame(table(b.paralogous_var_align$Unique_variant_gene_annotations$Gene))
 b.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+b.var_in_genes_unique_var = b.var_in_genes_unique_var[b.var_in_genes_unique_var$Var1 %in% clinvar_B_LB_tableized_genes,]
 dim(b.paralogous_var_align$Unique_variants_not_annotated)[1]
 not_var_in_genes_unique_var = data.frame(table(b.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
 b.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+b.not_var_in_genes_unique_var = b.not_var_in_genes_unique_var[b.not_var_in_genes_unique_var$Var1 %in% clinvar_B_LB_tableized_genes,]
 length(intersect(b.var_in_genes_unique_var$Var1, b.not_var_in_genes_unique_var$Var1))
 
 var_in_genes_unique_var = data.frame(table(ptob.paralogous_var_align$Unique_variant_gene_annotations$Gene))
@@ -606,11 +610,11 @@ x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likel
 setdiff(unique(clinvar_P_LP_genes_w_paralogs),unique(x$Gene))
 setdiff(unique(x$Gene),unique(clinvar_P_LP_genes_w_paralogs))
 # write.table(gene_EFs, file = "data/case_and_control/gene_EFs.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
-length(intersect(unique(x$Gene),unique(clinvar_P_LP_genes_w_paralogs)))
-write.table(setdiff(unique(clinvar_P_LP_genes_w_paralogs),unique(x$Gene)), file = "data/clinvar/genes_in_out_paraloc_paralogs2.noQC.txt", row.names = FALSE, col.names = FALSE)
+length(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes)))
+write.table(setdiff(unique(clinvar_P_LP_tableized_genes),unique(x$Gene)), file = "data/clinvar/genes_in_out_paraloc_paralogs2.noQC.txt", row.names = FALSE, col.names = FALSE)
 
 y = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
-length(intersect(unique(y$Gene),unique(clinvar_B_LB_genes_w_paralogs)))
+length(intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))
 ```
 NB in clinvar_P_LP_genes_w_paralogs there are 3621 genes with paralogues but in the out_paraloc_paralogs file there are only 2451 genes. This is because there 1170 genes in clinvar_P_LP_genes_w_paralogs that are not in out_paraloc_paralogs because though there are variants in these genes they do not align to anything. There are also cases of over-lapping genes and so while one gene is reported the other might not. Also the same for some readthrough transcripts. Several genes with designation "AC######.#" go through non-sense mediated decay.
 
