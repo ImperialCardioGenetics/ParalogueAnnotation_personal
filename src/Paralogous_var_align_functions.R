@@ -75,12 +75,17 @@ Paralogous_var_align = function(paralogs2_file,
   Unique_variant_gene_annotations = distinct(Unique_variant_annotations[c("Variant_pos", "ID.x", "Gene", "REF.x", "ALT.x")])
   Unique_variant_annotations = distinct(Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
   
+  # Unique_variants_not_annotated = distinct(Total_paralog_annotations[is.na(Total_paralog_annotations$ID.y),c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+  # Unique_variant_genes_not_annotated = distinct(Total_paralog_annotations[is.na(Total_paralog_annotations$ID.y),c("Variant_pos", "ID.x", "Gene", "REF.x", "ALT.x")])
+  
   true_num_of_paralog_anno = length(Unique_variant_annotations$Variant_pos)
   num_of_paralog_anno = sum(!is.na(Total_paralog_annotations$ID.y))
   return(list("paralog_data" = paralog_data, 
               "input_variants" = input_variants, 
               "Unique_variant_annotations" = Unique_variant_annotations,
               "Unique_variant_gene_annotations" = Unique_variant_gene_annotations,
+              # "Unique_variant_genes_not_annotated" = Unique_variant_genes_not_annotated,
+              # "Unique_variants_not_annotated" = Unique_variants_not_annotated,
               "gathered_paralog_data" = gathered_paralog_data, 
               "Total_paralog_annotations" = Total_paralog_annotations, 
               "num_of_paralog_anno" = num_of_paralog_anno, 
