@@ -210,6 +210,9 @@ in disease in Ensembl and their associated paralogues") + theme(axis.title = ele
     legend.title = element_text(size = 12))
 ggsave("images/Disease_genes_paralogs.png")
 
+#combined total protein and disease gene dsitributions
+disease_genes_wide$disease = "No"
+
 #see if Patho and Benign sets have same distribution of variants in genes with paralogues
 clinvar_P_LP_genes_w_paralogs = vector()
 clinvar_P_LP_genes_wo_paralogs = vector()
