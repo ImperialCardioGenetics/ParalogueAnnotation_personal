@@ -211,11 +211,22 @@ in disease in Ensembl and their associated paralogues") + theme(axis.title = ele
 ggsave("images/Disease_genes_paralogs.png")
 
 #combined total protein and disease gene dsitributions
+# disease_genes_wide[disease_genes_wide$paralogue == "Yes", "paralogue"] = "Disease_Yes"
+# disease_genes_wide[disease_genes_wide$paralogue == "No", "paralogue"] = "Disease_No"
+# all_protein_genes[all_protein_genes$paralogue == "Yes", "paralogue"] = "Total_Yes"
+# all_protein_genes[all_protein_genes$paralogue == "No", "paralogue"] = "Total_No"
 disease_genes_wide$disease = "Yes"
 all_protein_genes$disease = "No"
 total_plot_data = rbind(all_protein_genes, disease_genes_wide)
-dens = ggplot(total_plot_data, aes(x=number_of_paralogues, fill = disease)) + geom_histogram(binwidth = 1)
-dens2 = ggplot(disease_genes_wide, aes(x=number_of_paralogues)) + geom_density()
+dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) + 
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], fill = "red", alpha = 1, binwidth = 1) +
+    geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], fill = "blue", alpha = 0.5, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], fill = "green", alpha = 1, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "No",], fill = "orange", alpha = 0.5, binwidth = 1)
+
+  
+  aes(color = paralogue), fill = "white", positions = "identity", binwidth = 1, alpha = 0.5)
+# dens2 = ggplot(disease_genes_wide, aes(x=number_of_paralogues)) + geom_density()
 
 #see if Patho and Benign sets have same distribution of variants in genes with paralogues
 clinvar_P_LP_genes_w_paralogs = vector()
