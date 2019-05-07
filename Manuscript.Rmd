@@ -211,29 +211,35 @@ in disease in Ensembl and their associated paralogues") + theme(axis.title = ele
 ggsave("images/Disease_genes_paralogs.png")
 
 #combined total protein and disease gene dsitributions
-# disease_genes_wide[disease_genes_wide$paralogue == "Yes", "paralogue"] = "Disease_Yes"
-# disease_genes_wide[disease_genes_wide$paralogue == "No", "paralogue"] = "Disease_No"
-# all_protein_genes[all_protein_genes$paralogue == "Yes", "paralogue"] = "Total_Yes"
-# all_protein_genes[all_protein_genes$paralogue == "No", "paralogue"] = "Total_No"
+
 disease_genes_wide$disease = "Yes"
 all_protein_genes$disease = "No"
+
 total_plot_data = rbind(all_protein_genes, disease_genes_wide)
+total_plot_data[total_plot_data$disease == "No" & total_plot_data$paralogue == "No", "colour"] = "no_dis_no_para"
+total_plot_data[total_plot_data$disease == "No" & total_plot_data$paralogue == "Yes", "colour"] = "no_dis_yes_para"
+total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == "No", "colour"] = "yes_dis_no_para"
+total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == "Yes", "colour"] = "Yes_dis_Yes_para"
+
+
+cols = c("no_dis_no_para" = "red", "yes_dis_no_para" = "purple", "no_dis_yes_para" = "green", "Yes_dis_Yes_para" = "gold")
 dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) + 
-  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "No",], fill = "red", alpha = 0.5, binwidth = 1) +
-  geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], fill = "red", alpha = 1, binwidth = 1) +
-  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], fill = "blue", alpha = 0.5, binwidth = 1) +
-  geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], fill = "blue", alpha = 1, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "No",], aes(fill = "no_dis_no_para"), alpha = 0.8, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], aes(fill = "yes_dis_no_para"), alpha = 0.8, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], aes(fill = "no_dis_yes_para"), alpha = 0.8, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], aes(fill = "Yes_dis_Yes_para"), alpha = 0.8, binwidth = 1) +
+  scale_fill_manual(values = cols, labels = c("Non-disease gene, no paralogues", "Non-disease gene, has paralogues", "Disease gene, no paralogues",  "Disease gene, has paralogues")) +
   theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +labs(title = "Distribution of human protein coding genes involved in disease in Ensembl and their associated paralogues", 
     x = "number of paralogues", y = "number of genes", 
-    fill = "Has paralogues")+labs(title = "Distribution of human protein coding genes involved
+    fill = "")+labs(title = "Distribution of human protein coding genes involved
 in disease in Ensembl and their associated paralogues") + theme(axis.title = element_text(size = 15), 
     axis.text = element_text(size = 15), 
     plot.title = element_text(size = 15), 
     legend.text = element_text(size = 12), 
-    legend.title = element_text(size = 12))
-ggsave("images/Total_and_Disease_genes_paralogs.png")
+    legend.title = element_text(size = 12))+labs(fill = NULL)
+ggsave("images/Total_and_Disease_genes_paralogs.png", height = 5, width = 10)
 
 # dens2 = ggplot(disease_genes_wide, aes(x=number_of_paralogues)) + geom_density()
 
