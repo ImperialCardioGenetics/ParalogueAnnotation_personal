@@ -219,15 +219,15 @@ total_plot_data = rbind(all_protein_genes, disease_genes_wide)
 total_plot_data[total_plot_data$disease == "No" & total_plot_data$paralogue == "No", "colour"] = "no_dis_no_para"
 total_plot_data[total_plot_data$disease == "No" & total_plot_data$paralogue == "Yes", "colour"] = "no_dis_yes_para"
 total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == "No", "colour"] = "yes_dis_no_para"
-total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == "Yes", "colour"] = "Yes_dis_Yes_para"
+total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == "Yes", "colour"] = "yes_dis_yes_para"
 
 
-cols = c("no_dis_no_para" = "red", "yes_dis_no_para" = "orange", "no_dis_yes_para" = "blue", "Yes_dis_Yes_para" = "purple")
+cols = c("no_dis_no_para" = "red", "yes_dis_no_para" = "orange", "no_dis_yes_para" = "blue", "yes_dis_yes_para" = "purple")
 dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) + 
   geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "No",], aes(fill = "no_dis_no_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], aes(fill = "yes_dis_no_para"), alpha = 0.9, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], aes(fill = "no_dis_yes_para"), alpha = 0.4, binwidth = 1) +
-  geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], aes(fill = "Yes_dis_Yes_para"), alpha = 0.9, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], aes(fill = "yes_dis_yes_para"), alpha = 0.9, binwidth = 1) +
   scale_fill_manual(values = cols, labels = c("All genes, no paralogues", "All genes, has paralogues", "Only disease genes, no paralogues",  "Only disease genes, has paralogues")) +
   theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
