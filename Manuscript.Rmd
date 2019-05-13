@@ -224,9 +224,9 @@ total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == 
 
 cols = c("no_dis_no_para" = "red", "yes_dis_no_para" = "orange", "no_dis_yes_para" = "blue", "Yes_dis_Yes_para" = "purple")
 dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) + 
-  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "No",], aes(fill = "no_dis_no_para"), alpha = 0.7, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "No",], aes(fill = "no_dis_no_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], aes(fill = "yes_dis_no_para"), alpha = 0.9, binwidth = 1) +
-  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], aes(fill = "no_dis_yes_para"), alpha = 0.7, binwidth = 1) +
+  geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], aes(fill = "no_dis_yes_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], aes(fill = "Yes_dis_Yes_para"), alpha = 0.9, binwidth = 1) +
   scale_fill_manual(values = cols, labels = c("All genes, no paralogues", "All genes, has paralogues", "Only disease genes, no paralogues",  "Only disease genes, has paralogues")) +
   theme(plot.subtitle = element_text(vjust = 1),
