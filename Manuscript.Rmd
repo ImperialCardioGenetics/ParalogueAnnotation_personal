@@ -157,7 +157,9 @@ par(mfrow=c(2,2))
 # hist(protein_genes_w_paralogues_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="A) Overall distribution of genes with paralogues", cex.main = 0.7)
 
 protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
+protein_genes_wo_paralogues = protein_genes_wo_paralogues[!(protein_genes_wo_paralogues$external_gene_name %in% protein_genes_w_paralogues_genes),]
 protein_genes_wo_paralogues_genes = as.vector(unique(protein_genes_wo_paralogues$external_gene_name))
+
 # length(protein_genes_wo_paralogues)
 protein_genes_wo_paralogues_wide = protein_genes_wo_paralogues
 protein_genes_wo_paralogues_wide[is.na(protein_genes_wo_paralogues_wide)] = 0
@@ -172,9 +174,22 @@ clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized$SYMBOL))
 clinvar_B_LB_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 clinvar_B_LB_tableized_genes = as.vector(unique(clinvar_B_LB_tableized$SYMBOL))
 full_clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190114.vcf_tableized_org", sep = "\t", header = TRUE, stringsAsFactors = FALSE)
+
+overlapped_genes = vector()
+non_overlapped_genes = vector()
 for (x in unique(full_clinvar_tableized$GENEINFO)){
-  if "|" %in% x 
+  if (grepl("\\|", x)){
+    overlapped_genes = c(overlapped_genes, x)
+  } else {
+    non_overlapped_genes = c(non_overlapped_genes, x)
+  }
 }
+overlapped_genes = unique(unlist(sapply(overlapped_genes, strsplit, "\\|")))
+overlapped_genes = sapply(strsplit(overlapped_genes, "\\:"), "[", 1)
+non_overlapped_genes = unique(unlist(sapply(non_overlapped_genes, strsplit, "\\|")))
+non_overlapped_genes = sapply(strsplit(non_overlapped_genes, "\\:"), "[", 1)
+full_genes = unique(c(overlapped_genes, non_overlapped_genes))
+
 
 #total clinvar genes
 all_clinvar_genes = unique(c(clinvar_P_LP_tableized_genes, clinvar_B_LB_tableized_genes))
