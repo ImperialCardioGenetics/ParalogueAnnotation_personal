@@ -188,7 +188,7 @@ overlapped_genes = unique(unlist(sapply(overlapped_genes, strsplit, "\\|")))
 overlapped_genes = sapply(strsplit(overlapped_genes, "\\:"), "[", 1)
 non_overlapped_genes = unique(unlist(sapply(non_overlapped_genes, strsplit, "\\|")))
 non_overlapped_genes = sapply(strsplit(non_overlapped_genes, "\\:"), "[", 1)
-full_genes = unique(c(overlapped_genes, non_overlapped_genes))
+full_genes = unique(c(overlapped_genes, non_overlapped_genes)) #how many of these are in paralogues?
 
 
 #total clinvar genes
