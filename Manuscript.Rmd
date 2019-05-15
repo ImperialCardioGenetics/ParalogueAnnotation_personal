@@ -368,23 +368,23 @@ p.not_var_in_genes_unique_var = p.not_var_in_genes_unique_var[p.not_var_in_genes
 length(intersect(p.var_in_genes_unique_var$Var1, p.not_var_in_genes_unique_var$Var1))
 
 #top 5 genes where PA performs best with clinvar data
-COL3A1_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL3A1" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL3A1_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL3A1" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL3A1_annotations_genes = data.frame(table(COL3A1_annotations$SYMBOL))
 COL3A1_annotations_genes = arrange(COL3A1_annotations_genes, desc(Freq))
 COL3A1_annotations_genes$Gene = "COL3A1"
-COL4A5_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL4A5" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL4A5_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL4A5" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL4A5_annotations_genes = data.frame(table(COL4A5_annotations$SYMBOL))
 COL4A5_annotations_genes = arrange(COL4A5_annotations_genes, desc(Freq))
 COL4A5_annotations_genes$Gene = "COL4A5"
-SCN1A_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "SCN1A" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+SCN1A_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "SCN1A" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 SCN1A_annotations_genes = data.frame(table(SCN1A_annotations$SYMBOL))
 SCN1A_annotations_genes = arrange(SCN1A_annotations_genes, desc(Freq))
 SCN1A_annotations_genes$Gene = "SCN1A"
-COL1A1_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL1A1" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL1A1_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL1A1" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL1A1_annotations_genes = data.frame(table(COL1A1_annotations$SYMBOL))
 COL1A1_annotations_genes = arrange(COL1A1_annotations_genes, desc(Freq))
 COL1A1_annotations_genes$Gene = "COL1A1"
-COL1A2_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL1A2" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL1A2_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL1A2" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL1A2_annotations_genes = data.frame(table(COL1A2_annotations$SYMBOL))
 COL1A2_annotations_genes = arrange(COL1A2_annotations_genes, desc(Freq))
 COL1A2_annotations_genes$Gene = "COL1A2"
@@ -546,6 +546,57 @@ btob5.Unique_variant_annotations = distinct(btob5.Unique_variant_annotations[c("
 btob5.true_num_of_paralog_anno = length(btob5.Unique_variant_annotations$Variant_pos)
 
 conf_b5 = conf_matrix_benign(ptob5.true_num_of_paralog_anno, ptob.paralogous_var_align$input_variants, btob5.true_num_of_paralog_anno, btob.paralogous_var_align$input_variants)
+
+####
+#alt_con with para_con but without all_con
+#pathogenic to pathogenic
+p6.Total_paralog_annotations = p2.paralogous_var_align$Total_paralog_annotations[p2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+p6.Total_paralog_annotations = distinct(p6.Total_paralog_annotations)
+
+p6.num_of_paralog_anno = sum(!is.na(p6.Total_paralog_annotations$ID.y))
+p6.Unique_variant_annotations = p6.Total_paralog_annotations[!is.na(p6.Total_paralog_annotations$ID.y),]
+p6.Unique_variant_annotations = distinct(p6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p6.true_num_of_paralog_anno = length(p6.Unique_variant_annotations$Variant_pos)
+
+#benign to pathogenic
+b6.Total_paralog_annotations = b2.paralogous_var_align$Total_paralog_annotations[b2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+b6.Total_paralog_annotations = distinct(b6.Total_paralog_annotations)
+
+b6.num_of_paralog_anno = sum(!is.na(b6.Total_paralog_annotations$ID.y))
+b6.Unique_variant_annotations = b6.Total_paralog_annotations[!is.na(b6.Total_paralog_annotations$ID.y),]
+b6.Unique_variant_annotations = distinct(b6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b6.true_num_of_paralog_anno = length(b6.Unique_variant_annotations$Variant_pos)
+
+#pathogenic to benign
+ptob6.Total_paralog_annotations = ptob2.paralogous_var_align$Total_paralog_annotations[ptob2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==ptob2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+ptob6.Total_paralog_annotations = distinct(ptob6.Total_paralog_annotations)
+
+ptob6.num_of_paralog_anno = sum(!is.na(ptob6.Total_paralog_annotations$ID.y))
+ptob6.Unique_variant_annotations = ptob6.Total_paralog_annotations[!is.na(ptob6.Total_paralog_annotations$ID.y),]
+ptob6.Unique_variant_annotations = distinct(ptob6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+ptob6.true_num_of_paralog_anno = length(ptob6.Unique_variant_annotations$Variant_pos)
+
+#benign to benign
+btob6.Total_paralog_annotations = btob2.paralogous_var_align$Total_paralog_annotations[btob2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==btob2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+btob6.Total_paralog_annotations = distinct(btob6.Total_paralog_annotations)
+
+btob6.num_of_paralog_anno = sum(!is.na(btob6.Total_paralog_annotations$ID.y))
+btob6.Unique_variant_annotations = btob6.Total_paralog_annotations[!is.na(btob6.Total_paralog_annotations$ID.y),]
+btob6.Unique_variant_annotations = distinct(btob6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+btob6.true_num_of_paralog_anno = length(btob6.Unique_variant_annotations$Variant_pos)
+
+
+conf6 = conf_matrix(p6.true_num_of_paralog_anno, p2.paralogous_var_align$input_variants, b6.true_num_of_paralog_anno, b2.paralogous_var_align$input_variants)
+conf_b6 = conf_matrix_benign(ptob6.true_num_of_paralog_anno, ptob2.paralogous_var_align$input_variants, btob6.true_num_of_paralog_anno, btob2.paralogous_var_align$input_variants)
+# genes_after_QC3_w_QC1_no_QC2 = length(unique(p6.Total_paralog_annotations$Gene))
+# write.table(unique(p6.Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC3_w_QC1_no_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+# genes_with_PA_QC3_w_QC1_no_QC2 = length(unique(p6.Total_paralog_annotations$SYMBOL))
+# write.table(unique(p6.Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC3_w_QC1_no_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+
+var_removed4 = var_rem_matrix(conf2$con_table, conf6$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
+var_removed_b4 = var_rem_matrix(conf_b2$con_table, conf_b6$con_table, ptob2.paralogous_var_align$paralog_data, btob2.paralogous_var_align$paralog_data)
+
+####
 
 #Overall_table for predicting pathogenic variants
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
