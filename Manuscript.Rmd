@@ -964,7 +964,7 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5))
-ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2).png")
+ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2.png")
 
 
 
