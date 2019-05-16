@@ -605,9 +605,12 @@ Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),for
 Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),round(conf2$PPV, digits = 3), round(conf2$Sensitivity, digits = 3),round(conf2$Specificity, digits = 3), signif(conf2$Pvalue$p.value, digits = 3))
 Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),round(conf3$PPV, digits = 3),round(conf3$Sensitivity, digits = 3),round(conf3$Specificity, digits = 3),signif(conf3$Pvalue$p.value, digits = 3))
 Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),round(conf4$PPV, digits = 3),round(conf4$Sensitivity, digits = 3),round(conf4$Specificity, digits = 3),signif(conf4$Pvalue$p.value, digits = 3))
+Variants_remaining_after_PA_QC3_w_QC1_no_QC2 = c(format(conf6$con_table[2], scientific = FALSE),format(conf6$con_table[4], scientific = FALSE),round(conf6$PPV, digits = 3),round(conf6$Sensitivity, digits = 3),round(conf6$Specificity, digits = 3),signif(conf6$Pvalue$p.value, digits = 3))
+
 Variants_removed_after_PA_QC1 = c(format(var_removed$con_table[2], scientific = FALSE),format(var_removed$con_table[4], scientific = FALSE),round(var_removed$PPV, digits = 3),round(var_removed$Sensitivity, digits = 3),round(var_removed$Specificity, digits = 3),signif(var_removed$Pvalue$p.value, digits = 3))
 Variants_removed_after_PA_QC2 = c(format(var_removed2$con_table[2], scientific = FALSE),format(var_removed2$con_table[4], scientific = FALSE),round(var_removed2$PPV, digits = 3),round(var_removed2$Sensitivity, digits = 3),round(var_removed2$Specificity, digits = 3),signif(var_removed2$Pvalue$p.value, digits = 3))
 Variants_removed_after_PA_QC3 = c(format(var_removed3$con_table[2], scientific = FALSE),format(var_removed3$con_table[4], scientific = FALSE),round(var_removed3$PPV, digits = 3),round(var_removed3$Sensitivity, digits = 3),round(var_removed3$Specificity, digits = 3),signif(var_removed3$Pvalue$p.value, digits = 3))
+Variants_removed_after_PA_QC3_w_QC1_no_QC2 = c(format(var_removed4$con_table[2], scientific = FALSE),format(var_removed4$con_table[4], scientific = FALSE),round(var_removed4$PPV, digits = 3),round(var_removed4$Sensitivity, digits = 3),round(var_removed4$Specificity, digits = 3),signif(var_removed4$Pvalue$p.value, digits = 3))
 
 # Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
 # Variants_remaining_after_PA_QC1 = c(conf2$con_table[2],conf2$con_table[4],conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
@@ -624,14 +627,25 @@ clinvar_set = data.frame(#Variant,
                          Variants_remaining_after_PA_QC1,
                          Variants_remaining_after_PA_QC2,
                          Variants_remaining_after_PA_QC3,
+                         Variants_remaining_after_PA_QC3_w_QC1_no_QC2,
                          Variants_removed_after_PA_QC1,
                          Variants_removed_after_PA_QC2,
-                         Variants_removed_after_PA_QC3
+                         Variants_removed_after_PA_QC3,
+                         Variants_removed_after_PA_QC3_w_QC1_no_QC2
                          )
 
 clinvar_set = t(clinvar_set)
 colnames(clinvar_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
-rownames(clinvar_set) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed from QC2",  "Variants removed from QC3")
+rownames(clinvar_set) = c("Total variants", 
+                          "Paralogue Annotation", 
+                          "Variants remaining after QC1",
+                          "Variants remaining after QC2", 
+                          "Variants remaining after QC3", 
+                          "Variants remaining after QC3 + QC1, no QC2", 
+                          "Variants removed from QC1", 
+                          "Variants removed from QC2",  
+                          "Variants removed from QC3",
+                          "Variants removed from QC3 + QC1, no QC2")
 write.table(clinvar_set, file = "data/clinvar/clinvar_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 kable(clinvar_set)
 # pander(clinvar_set2)
@@ -1707,7 +1721,21 @@ b.normal_PA4$Unique_variant_annotations = b.normal_PA4$Total_paralog_annotations
 b.normal_PA4$Unique_variant_annotations = distinct(b.normal_PA4$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
 b.normal_PA4$true_num_of_paralog_anno = length(b.normal_PA4$Unique_variant_annotations$Variant_pos)
 normal_PA4_conf = conf_matrix(p.normal_PA4$true_num_of_paralog_anno, p.normal_PA3$input_variants, b.normal_PA4$true_num_of_paralog_anno, b.normal_PA3$input_variants)
-  
+
+#QC3+QC1, no QC2  
+p.normal_PA5 = list()
+p.normal_PA5$Total_paralog_annotations = p.normal_PA2$Total_paralog_annotations[p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+p.normal_PA5$Total_paralog_annotations = distinct(p.normal_PA5$Total_paralog_annotations)
+p.normal_PA5$Unique_variant_annotations = p.normal_PA5$Total_paralog_annotations[!is.na(p.normal_PA5$Total_paralog_annotations$ID.y),]
+p.normal_PA5$Unique_variant_annotations = distinct(p.normal_PA5$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p.normal_PA5$true_num_of_paralog_anno = length(p.normal_PA5$Unique_variant_annotations$Variant_pos)
+b.normal_PA5 = list()
+b.normal_PA5$Total_paralog_annotations = b.normal_PA2$Total_paralog_annotations[b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA5$Total_paralog_annotations = distinct(b.normal_PA5$Total_paralog_annotations)
+b.normal_PA5$Unique_variant_annotations = b.normal_PA5$Total_paralog_annotations[!is.na(b.normal_PA5$Total_paralog_annotations$ID.y),]
+b.normal_PA5$Unique_variant_annotations = distinct(b.normal_PA5$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b.normal_PA5$true_num_of_paralog_anno = length(b.normal_PA5$Unique_variant_annotations$Variant_pos)
+normal_PA4_conf = conf_matrix(p.normal_PA5$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA5$true_num_of_paralog_anno, b.normal_PA2$input_variants)
 
 # p.normal_PA = Subset_var_align_id(Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 # b.normal_PA = Subset_var_align_id(b.Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -1786,7 +1814,7 @@ other_tools_set = rbind(other_tools_set,paraz_set)
 rownames(other_tools_set) = c("Total","Sift","MCap","CADD","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)","Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
 write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 
-
+#for subsetting the massive dataframe above for easier graph making
 other_tools_data = data.frame(
   Precision = c(as.numeric(other_tools_set[2:9,3])),
   Precision_CI = c(as.numeric(other_tools_set[2:9,4])),
