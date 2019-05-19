@@ -259,7 +259,7 @@ dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], aes(fill = "yes_dis_no_para"), alpha = 0.9, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], aes(fill = "no_dis_yes_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], aes(fill = "yes_dis_yes_para"), alpha = 0.9, binwidth = 1) +
-  scale_fill_manual(values = cols, labels = c("All genes, no paralogues", "All genes, has paralogues", "Only disease genes, no paralogues",  "Only disease genes, has paralogues")) +
+  scale_fill_manual(values = cols, labels = c("All genes, no paralogues", "All genes, has paralogues", "Clinvar disease genes, no paralogues",  "Clinvar disease genes, has paralogues")) +
   theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +labs(title = "Distribution of human protein coding genes involved in disease in Ensembl and their associated paralogues", 
