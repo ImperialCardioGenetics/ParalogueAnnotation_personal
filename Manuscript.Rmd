@@ -953,6 +953,8 @@ prc_data[16,5]="QC1+QC2+QC3"
 prc_data = rbind(prc_data, c(as.numeric(conf6$PPV),as.numeric(1.96*conf6$PPV_SE),as.numeric(conf6$Sensitivity),as.numeric(1.96*conf6$Sensitivity_SE)))
 prc_data[17,5]="QC1+QC3"
 
+prc_data$Type = factor(prc_data$Type, levels = c("no QC", "QC1", "QC1+Para_Z", "QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+prc_data$Type[1:12] = "QC1+Para_Z"
 # gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
