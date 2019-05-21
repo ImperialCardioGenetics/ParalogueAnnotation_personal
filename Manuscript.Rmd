@@ -253,7 +253,7 @@ total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == 
 total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == "Yes", "colour"] = "yes_dis_yes_para"
 
 
-cols = c("no_dis_no_para" = "orange", "yes_dis_no_para" = "red", "no_dis_yes_para" = "purple", "yes_dis_yes_para" = "blue")
+cols = c("no_dis_no_para" = "purple", "yes_dis_no_para" = "orange", "no_dis_yes_para" = "blue", "yes_dis_yes_para" = "red")
 dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) + 
   geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "No",], aes(fill = "no_dis_no_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], aes(fill = "yes_dis_no_para"), alpha = 0.9, binwidth = 1) +
