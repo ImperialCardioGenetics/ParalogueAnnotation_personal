@@ -1557,7 +1557,7 @@ write.table(rare_disease_cohort_variants, file = "data/BrS/rare_disease_cohort_v
 
 
 ###disease cohort
-disease_data_ref = read.csv("data/BrS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
+disease_data_ref = read.csv("data/BrS/Mayo_BrS_variants.csv", sep = ",", stringsAsFactors = 0)
 disease_data_ref$cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
 disease_data_ref$cases = sapply(disease_data_ref$cases,function(x) x[1])
 disease_data_ref$total_cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
