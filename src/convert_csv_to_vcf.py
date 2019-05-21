@@ -118,7 +118,10 @@ with open(input_file) as f:
 				".\n"
 				)		
 			allele_freq = float(line[15])
-			if allele_freq <= 8.2e-06:
+
+			#if allele_freq <= 8.2e-06: #For LQTS according to https://www.nature.com/articles/gim201726/tables/1
+			if allele_freq <= 1e-05: #For BrS
+
 				out_file2.write(
 					str(chrom)+"\t"+
 					str(pos)+"\t"+
