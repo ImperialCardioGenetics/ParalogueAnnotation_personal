@@ -1572,7 +1572,7 @@ disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.para
 SCN5A_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
 
 ###control cohort
-control_data_ref = read.csv("data/BrS/gnomAD_v2.1.1_LQTS_variants_with_customIDs.csv", sep = ",", stringsAsFactors = 0)
+control_data_ref = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_with_customIDs.csv", sep = ",", stringsAsFactors = 0)
 control_data_ref  = control_data_ref[control_data_ref$Gene != "Gene",] #remove the extra header lines from when concatenated the separate gene csv files together
 
 gnomad_total_variants$X.CHROM = as.character(gnomad_total_variants$X.CHROM)
@@ -1588,7 +1588,7 @@ control_total_variant_cases = data.frame(
 #individual cases for rare variants
 SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "SCN5A" & control_data_ref$ID %in% gnomad_rare_variants$ID, "Allele.Count"]))
 #individual cases for variants predicted pathogenic by PA
-control.paralogous_var_align = Paralogous_var_align("data/BrS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.noQC", "data/BrS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+control.paralogous_var_align = Paralogous_var_align("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_paralogs2.noQC", "data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
 control_cohort_data = control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x,] 
 SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "SCN5A" & control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
 
