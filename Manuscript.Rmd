@@ -1574,8 +1574,8 @@ SCN5A_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_re
 ###control cohort
 control_data_ref = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_with_customIDs.csv", sep = ",", stringsAsFactors = 0, header = TRUE)
 
-gnomad_total_variants$X.CHROM = as.character(gnomad_total_variants$X.CHROM)
-gnomad_total_variants$POS = as.character(gnomad_total_variants$POS)
+gnomad_total_variants$X.CHROM = as.numeric(gnomad_total_variants$X.CHROM)
+gnomad_total_variants$POS = as.numeric(gnomad_total_variants$POS)
 control_data_ref = full_join(control_data_ref,gnomad_total_variants,by = c("Chromosome" = "X.CHROM", "Position" = "POS", "Reference" = "REF", "Alternate" = "ALT")) #IN ORDER TO FIX THE GODDAM CUSTOM IDS, JOIN WITH ORIGINAL CSV FILE AND USE ID INSTEAD OF rsID ###I don't think I actually need this for BrS as there's only one gene and no need to identify which variants belong to which gene
 
 SCN5A_control_total_variant_cases = control_data_ref
