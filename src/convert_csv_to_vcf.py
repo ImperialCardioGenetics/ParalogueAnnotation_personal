@@ -81,19 +81,19 @@ out_file2.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 
 out_file3 = open(input_file.rsplit(".", 1)[0]+"_with_customIDs.csv", "w")
 
-try:
-	gene = sys.argv[3]
-except IndexError:
-	pass
+# try:
+# 	gene = sys.argv[3]
+# except IndexError:
+# 	pass
 
 with open(input_file) as f:
 	ID_no = 1
-	header_out_file3_check = 0
+	# header_out_file3_check = 0
 	for og_line in f:
 		# print(line)
-		if header_out_file3_check == 0:
-			out_file3.write("Gene,"+og_line)
-			header_out_file3_check = 1
+		# if header_out_file3_check == 0:
+		# 	out_file3.write("Gene,"+og_line)
+		# 	header_out_file3_check = 1
 		if og_line[0].isdigit():
 			line = og_line.rstrip().split(",")
 			csv_line = og_line.split(",",3)
@@ -132,7 +132,7 @@ with open(input_file) as f:
 					".\n"
 					)
 			out_file3.write(
-				str(gene)+","+
+				# str(gene)+","+
 				str(chrom)+","+
 				str(pos)+","+
 				str(ID)+","+
