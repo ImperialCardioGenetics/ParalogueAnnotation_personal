@@ -1,0 +1,39 @@
+Gene,Diseases,Paralogue,number of predictions
+COL3A1,Ehlers-Danlos syndrome,COL1A1,190
+,,COL1A2,135
+,,COL2A1,68
+,,COL5A1,22
+,,COL11A1,16
+,,COL11A2,7
+,,COL5A2,7
+,,COL27A1,2
+COL4A5,Alport Syndrome ,COL4A3,58
+,,COL4A4,54
+,,COL4A1,38
+,,COL4A2,10
+SCN1A,Epilepsy,SCN2A,77
+,,SCN5A,63
+,,SCN4A,34
+,,SCN8A,32
+,,SCN9A,12
+,,CACNA1G,3
+,,SCN11A,3
+,,CACNA1H,2
+,,SCN3A,2
+,,SCN10A,1
+COL1A1,Caffey disease,COL3A1,145
+,Ehlers-Danlos syndrome,COL1A2,46
+,Osteogenesis imperfecta,COL2A1,34
+,,COL5A1,12
+,,COL11A1,3
+,,COL11A2,3
+,,COL5A2,2
+,,COL27A1,1
+COL1A2,Ehlers-Danlos syndrome,COL3A1,126
+,Osteogenesis imperfecta,COL1A1,59
+,,COL2A1,26
+,,COL5A1,8
+,,COL5A2,4
+,,COL11A1,2
+,,COL11A2,1
+,,COL27A1,1

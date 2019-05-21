@@ -171,8 +171,22 @@ protein_genes_wo_paralogues_wide = protein_genes_wo_paralogues_wide[!(protein_ge
 #testing to see how many genes in the clinvar dataset have paralogues
 clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized$SYMBOL))
+clinvar_P_LP_vcf_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_vcf_tableized_genes = as.vector(unique(clinvar_P_LP_vcf_tableized$GENEINFO))
+clinvar_P_LP_vcf_tableized_genes = unique(unlist(sapply(clinvar_P_LP_vcf_tableized_genes, strsplit, "\\|")))
+clinvar_P_LP_vcf_tableized_genes = sapply(strsplit(clinvar_P_LP_vcf_tableized_genes, "\\:"), "[", 1)
+
 clinvar_B_LB_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 clinvar_B_LB_tableized_genes = as.vector(unique(clinvar_B_LB_tableized$SYMBOL))
+clinvar_B_LB_vcf_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_B_LB_vcf_tableized_genes = as.vector(unique(clinvar_B_LB_vcf_tableized$GENEINFO))
+clinvar_B_LB_vcf_tableized_genes = unique(unlist(sapply(clinvar_B_LB_vcf_tableized_genes, strsplit, "\\|")))
+clinvar_B_LB_vcf_tableized_genes = sapply(strsplit(clinvar_B_LB_vcf_tableized_genes, "\\:"), "[", 1)
+
+#total clinvar genes in both P/LP and B/LB
+all_clinvar_genes = unique(c(clinvar_P_LP_tableized_genes, clinvar_B_LB_tableized_genes))
+
+#ALL clinvar genes including VUS, not just P/LP and B/LB
 full_clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190114.vcf_tableized_org", sep = "\t", header = TRUE, stringsAsFactors = FALSE)
 
 overlapped_genes = vector()
@@ -188,11 +202,9 @@ overlapped_genes = unique(unlist(sapply(overlapped_genes, strsplit, "\\|")))
 overlapped_genes = sapply(strsplit(overlapped_genes, "\\:"), "[", 1)
 non_overlapped_genes = unique(unlist(sapply(non_overlapped_genes, strsplit, "\\|")))
 non_overlapped_genes = sapply(strsplit(non_overlapped_genes, "\\:"), "[", 1)
-full_genes = unique(c(overlapped_genes, non_overlapped_genes))
+full_genes = unique(c(overlapped_genes, non_overlapped_genes)) 
+full_genes_w_paralogues = intersect(full_genes, protein_genes_w_paralogues_genes)
 
-
-#total clinvar genes
-all_clinvar_genes = unique(c(clinvar_P_LP_tableized_genes, clinvar_B_LB_tableized_genes))
 
 # Total protein genes
 all_protein_genes = dplyr::bind_rows(protein_genes_wo_paralogues_wide, protein_genes_w_paralogues_wide)
@@ -241,13 +253,13 @@ total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == 
 total_plot_data[total_plot_data$disease == "Yes" & total_plot_data$paralogue == "Yes", "colour"] = "yes_dis_yes_para"
 
 
-cols = c("no_dis_no_para" = "red", "yes_dis_no_para" = "orange", "no_dis_yes_para" = "blue", "yes_dis_yes_para" = "purple")
+cols = c("no_dis_no_para" = "orange", "yes_dis_no_para" = "red", "no_dis_yes_para" = "purple", "yes_dis_yes_para" = "blue")
 dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) + 
   geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "No",], aes(fill = "no_dis_no_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], aes(fill = "yes_dis_no_para"), alpha = 0.9, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], aes(fill = "no_dis_yes_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], aes(fill = "yes_dis_yes_para"), alpha = 0.9, binwidth = 1) +
-  scale_fill_manual(values = cols, labels = c("All genes, no paralogues", "All genes, has paralogues", "Only disease genes, no paralogues",  "Only disease genes, has paralogues")) +
+  scale_fill_manual(values = cols, labels = c("All genes, no paralogues", "All genes, has paralogues", "Clinvar disease genes, no paralogues",  "Clinvar disease genes, has paralogues")) +
   theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +labs(title = "Distribution of human protein coding genes involved in disease in Ensembl and their associated paralogues", 
@@ -356,23 +368,23 @@ p.not_var_in_genes_unique_var = p.not_var_in_genes_unique_var[p.not_var_in_genes
 length(intersect(p.var_in_genes_unique_var$Var1, p.not_var_in_genes_unique_var$Var1))
 
 #top 5 genes where PA performs best with clinvar data
-COL3A1_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL3A1" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL3A1_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL3A1" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL3A1_annotations_genes = data.frame(table(COL3A1_annotations$SYMBOL))
 COL3A1_annotations_genes = arrange(COL3A1_annotations_genes, desc(Freq))
 COL3A1_annotations_genes$Gene = "COL3A1"
-COL4A5_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL4A5" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL4A5_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL4A5" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL4A5_annotations_genes = data.frame(table(COL4A5_annotations$SYMBOL))
 COL4A5_annotations_genes = arrange(COL4A5_annotations_genes, desc(Freq))
 COL4A5_annotations_genes$Gene = "COL4A5"
-SCN1A_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "SCN1A" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+SCN1A_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "SCN1A" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 SCN1A_annotations_genes = data.frame(table(SCN1A_annotations$SYMBOL))
 SCN1A_annotations_genes = arrange(SCN1A_annotations_genes, desc(Freq))
 SCN1A_annotations_genes$Gene = "SCN1A"
-COL1A1_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL1A1" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL1A1_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL1A1" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL1A1_annotations_genes = data.frame(table(COL1A1_annotations$SYMBOL))
 COL1A1_annotations_genes = arrange(COL1A1_annotations_genes, desc(Freq))
 COL1A1_annotations_genes$Gene = "COL1A1"
-COL1A2_annotations = p.var_in_genes$Total_paralog_annotations[var_in_genes$Total_paralog_annotations$Gene == "COL1A2" & !is.na(var_in_genes$Total_paralog_annotations$ID.y),]
+COL1A2_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL1A2" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL1A2_annotations_genes = data.frame(table(COL1A2_annotations$SYMBOL))
 COL1A2_annotations_genes = arrange(COL1A2_annotations_genes, desc(Freq))
 COL1A2_annotations_genes$Gene = "COL1A2"
@@ -535,16 +547,70 @@ btob5.true_num_of_paralog_anno = length(btob5.Unique_variant_annotations$Variant
 
 conf_b5 = conf_matrix_benign(ptob5.true_num_of_paralog_anno, ptob.paralogous_var_align$input_variants, btob5.true_num_of_paralog_anno, btob.paralogous_var_align$input_variants)
 
+####
+#alt_con with para_con but without all_con
+#pathogenic to pathogenic
+p6.Total_paralog_annotations = p2.paralogous_var_align$Total_paralog_annotations[p2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+p6.Total_paralog_annotations = distinct(p6.Total_paralog_annotations)
+
+p6.num_of_paralog_anno = sum(!is.na(p6.Total_paralog_annotations$ID.y))
+p6.Unique_variant_annotations = p6.Total_paralog_annotations[!is.na(p6.Total_paralog_annotations$ID.y),]
+p6.Unique_variant_annotations = distinct(p6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p6.true_num_of_paralog_anno = length(p6.Unique_variant_annotations$Variant_pos)
+
+#benign to pathogenic
+b6.Total_paralog_annotations = b2.paralogous_var_align$Total_paralog_annotations[b2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+b6.Total_paralog_annotations = distinct(b6.Total_paralog_annotations)
+
+b6.num_of_paralog_anno = sum(!is.na(b6.Total_paralog_annotations$ID.y))
+b6.Unique_variant_annotations = b6.Total_paralog_annotations[!is.na(b6.Total_paralog_annotations$ID.y),]
+b6.Unique_variant_annotations = distinct(b6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b6.true_num_of_paralog_anno = length(b6.Unique_variant_annotations$Variant_pos)
+
+#pathogenic to benign
+ptob6.Total_paralog_annotations = ptob2.paralogous_var_align$Total_paralog_annotations[ptob2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==ptob2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+ptob6.Total_paralog_annotations = distinct(ptob6.Total_paralog_annotations)
+
+ptob6.num_of_paralog_anno = sum(!is.na(ptob6.Total_paralog_annotations$ID.y))
+ptob6.Unique_variant_annotations = ptob6.Total_paralog_annotations[!is.na(ptob6.Total_paralog_annotations$ID.y),]
+ptob6.Unique_variant_annotations = distinct(ptob6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+ptob6.true_num_of_paralog_anno = length(ptob6.Unique_variant_annotations$Variant_pos)
+
+#benign to benign
+btob6.Total_paralog_annotations = btob2.paralogous_var_align$Total_paralog_annotations[btob2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==btob2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+btob6.Total_paralog_annotations = distinct(btob6.Total_paralog_annotations)
+
+btob6.num_of_paralog_anno = sum(!is.na(btob6.Total_paralog_annotations$ID.y))
+btob6.Unique_variant_annotations = btob6.Total_paralog_annotations[!is.na(btob6.Total_paralog_annotations$ID.y),]
+btob6.Unique_variant_annotations = distinct(btob6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+btob6.true_num_of_paralog_anno = length(btob6.Unique_variant_annotations$Variant_pos)
+
+
+conf6 = conf_matrix(p6.true_num_of_paralog_anno, p2.paralogous_var_align$input_variants, b6.true_num_of_paralog_anno, b2.paralogous_var_align$input_variants)
+conf_b6 = conf_matrix_benign(ptob6.true_num_of_paralog_anno, ptob2.paralogous_var_align$input_variants, btob6.true_num_of_paralog_anno, btob2.paralogous_var_align$input_variants)
+# genes_after_QC3_w_QC1_no_QC2 = length(unique(p6.Total_paralog_annotations$Gene))
+# write.table(unique(p6.Total_paralog_annotations$Gene), file = "data/clinvar/genes_after_QC3_w_QC1_no_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+# genes_with_PA_QC3_w_QC1_no_QC2 = length(unique(p6.Total_paralog_annotations$SYMBOL))
+# write.table(unique(p6.Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC3_w_QC1_no_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+
+var_removed4 = var_rem_matrix(conf2$con_table, conf6$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
+var_removed_b4 = var_rem_matrix(conf_b2$con_table, conf_b6$con_table, ptob2.paralogous_var_align$paralog_data, btob2.paralogous_var_align$paralog_data)
+
+####
+
 #Overall_table for predicting pathogenic variants
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
 Total = c(dim(p.paralogous_var_align$input_variants)[1],dim(b.paralogous_var_align$input_variants)[1],"NA","NA","NA","NA")
-Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),round(conf$PPV, digits = 3),round(conf$Sensitivity, digits = 3),round(conf$Specificity, digits = 3),signif(conf$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),round(conf2$PPV, digits = 3), round(conf2$Sensitivity, digits = 3),round(conf2$Specificity, digits = 3), signif(conf2$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),round(conf3$PPV, digits = 3),round(conf3$Sensitivity, digits = 3),round(conf3$Specificity, digits = 3),signif(conf3$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),round(conf4$PPV, digits = 3),round(conf4$Sensitivity, digits = 3),round(conf4$Specificity, digits = 3),signif(conf4$Pvalue$p.value, digits = 3))
-Variants_removed_after_PA_QC1 = c(format(var_removed$con_table[2], scientific = FALSE),format(var_removed$con_table[4], scientific = FALSE),round(var_removed$PPV, digits = 3),round(var_removed$Sensitivity, digits = 3),round(var_removed$Specificity, digits = 3),signif(var_removed$Pvalue$p.value, digits = 3))
-Variants_removed_after_PA_QC2 = c(format(var_removed2$con_table[2], scientific = FALSE),format(var_removed2$con_table[4], scientific = FALSE),round(var_removed2$PPV, digits = 3),round(var_removed2$Sensitivity, digits = 3),round(var_removed2$Specificity, digits = 3),signif(var_removed2$Pvalue$p.value, digits = 3))
-Variants_removed_after_PA_QC3 = c(format(var_removed3$con_table[2], scientific = FALSE),format(var_removed3$con_table[4], scientific = FALSE),round(var_removed3$PPV, digits = 3),round(var_removed3$Sensitivity, digits = 3),round(var_removed3$Specificity, digits = 3),signif(var_removed3$Pvalue$p.value, digits = 3))
+Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),signif(conf$PPV, digits = 2),signif(conf$Sensitivity, digits = 2),signif(conf$Specificity, digits = 2),signif(conf$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),signif(conf2$PPV, digits = 2), signif(conf2$Sensitivity, digits = 2),signif(conf2$Specificity, digits = 2), signif(conf2$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),signif(conf3$PPV, digits = 2),signif(conf3$Sensitivity, digits = 2),signif(conf3$Specificity, digits = 2),signif(conf3$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),signif(conf4$PPV, digits = 2),signif(conf4$Sensitivity, digits = 2),signif(conf4$Specificity, digits = 2),signif(conf4$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC3_w_QC1_no_QC2 = c(format(conf6$con_table[2], scientific = FALSE),format(conf6$con_table[4], scientific = FALSE),signif(conf6$PPV, digits = 2),signif(conf6$Sensitivity, digits = 2),signif(conf6$Specificity, digits = 2),signif(conf6$Pvalue$p.value, digits = 2))
+
+Variants_removed_after_PA_QC1 = c(format(var_removed$con_table[2], scientific = FALSE),format(var_removed$con_table[4], scientific = FALSE),signif(var_removed$PPV, digits = 2),signif(var_removed$Sensitivity, digits = 2),signif(var_removed$Specificity, digits = 2),signif(var_removed$Pvalue$p.value, digits = 2))
+Variants_removed_after_PA_QC2 = c(format(var_removed2$con_table[2], scientific = FALSE),format(var_removed2$con_table[4], scientific = FALSE),signif(var_removed2$PPV, digits = 2),signif(var_removed2$Sensitivity, digits = 2),signif(var_removed2$Specificity, digits = 2),signif(var_removed2$Pvalue$p.value, digits = 2))
+Variants_removed_after_PA_QC3 = c(format(var_removed3$con_table[2], scientific = FALSE),format(var_removed3$con_table[4], scientific = FALSE),signif(var_removed3$PPV, digits = 2),signif(var_removed3$Sensitivity, digits = 2),signif(var_removed3$Specificity, digits = 2),signif(var_removed3$Pvalue$p.value, digits = 2))
+Variants_removed_after_PA_QC3_w_QC1_no_QC2 = c(format(var_removed4$con_table[2], scientific = FALSE),format(var_removed4$con_table[4], scientific = FALSE),signif(var_removed4$PPV, digits = 2),signif(var_removed4$Sensitivity, digits = 2),signif(var_removed4$Specificity, digits = 2),signif(var_removed4$Pvalue$p.value, digits = 2))
 
 # Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
 # Variants_remaining_after_PA_QC1 = c(conf2$con_table[2],conf2$con_table[4],conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
@@ -560,15 +626,26 @@ clinvar_set = data.frame(#Variant,
                          Paralogue_Annotation_no_QC,
                          Variants_remaining_after_PA_QC1,
                          Variants_remaining_after_PA_QC2,
+                         Variants_remaining_after_PA_QC3_w_QC1_no_QC2,
                          Variants_remaining_after_PA_QC3,
                          Variants_removed_after_PA_QC1,
                          Variants_removed_after_PA_QC2,
+                         Variants_removed_after_PA_QC3_w_QC1_no_QC2,
                          Variants_removed_after_PA_QC3
                          )
 
 clinvar_set = t(clinvar_set)
 colnames(clinvar_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
-rownames(clinvar_set) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed from QC2",  "Variants removed from QC3")
+rownames(clinvar_set) = c("Total variants", 
+                          "Paralogue Annotation", 
+                          "Variants remaining after QC1",
+                          "Variants remaining after QC1+QC2", 
+                          "Variants remaining after QC2+QC3", 
+                          "Variants remaining after QC1+QC2+QC3",
+                          "Variants removed from QC1", 
+                          "Variants removed from QC1+QC2",
+                          "Variants removed from QC1+QC3",
+                          "Variants removed from QC1+QC2+QC3")
 write.table(clinvar_set, file = "data/clinvar/clinvar_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 kable(clinvar_set)
 # pander(clinvar_set2)
@@ -582,13 +659,13 @@ kable(clinvar_set_genes)
 #Overall_table for predicting Benign variants
 Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
 Total = c(dim(p.paralogous_var_align$input_variants)[1],dim(b.paralogous_var_align$input)[1],"NA","NA","NA","NA")
-Paralogue_Annotation_no_QC = c(format(conf_b$con_table[2], scientific = FALSE),format(conf_b$con_table[4], scientific = FALSE),round(conf_b$PPV, digits = 3),round(conf_b$Sensitivity, digits = 3),round(conf_b$Specificity, digits = 3),signif(conf_b$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC1 = c(format(conf_b2$con_table[2], scientific = FALSE),format(conf_b2$con_table[4], scientific = FALSE),round(conf_b2$PPV, digits = 3), round(conf_b2$Sensitivity, digits = 3),round(conf_b2$Specificity, digits = 3), signif(conf_b2$Pvalue$p.value, digits = 3))
-Variants_removed_after_PA_QC1 = c(format(var_removed_b$con_table[2], scientific = FALSE),format(var_removed_b$con_table[4], scientific = FALSE),round(var_removed_b$PPV, digits = 3),round(var_removed_b$Sensitivity, digits = 3),round(var_removed_b$Specificity, digits = 3),signif(var_removed_b$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC2 = c(format(conf_b3$con_table[2], scientific = FALSE),format(conf_b3$con_table[4], scientific = FALSE),round(conf_b3$PPV, digits = 3),round(conf_b3$Sensitivity, digits = 3),round(conf_b3$Specificity, digits = 3),signif(conf_b3$Pvalue$p.value, digits = 3))
-Variants_removed_after_PA_QC2 = c(format(var_removed_b2$con_table[2], scientific = FALSE),format(var_removed_b2$con_table[4], scientific = FALSE),round(var_removed_b2$PPV, digits = 3),round(var_removed_b2$Sensitivity, digits = 3),round(var_removed_b2$Specificity, digits = 3),signif(var_removed_b2$Pvalue$p.value, digits = 3))
-Variants_remaining_after_PA_QC3 = c(format(conf_b4$con_table[2], scientific = FALSE),format(conf_b4$con_table[4], scientific = FALSE),round(conf_b4$PPV, digits = 3),round(conf_b4$Sensitivity, digits = 3),round(conf_b4$Specificity, digits = 3),signif(conf_b4$Pvalue$p.value, digits = 3))
-Variants_removed_after_PA_QC3 = c(format(var_removed_b3$con_table[2], scientific = FALSE),format(var_removed_b3$con_table[4], scientific = FALSE),round(var_removed_b3$PPV, digits = 3),round(var_removed_b3$Sensitivity, digits = 3),round(var_removed_b3$Specificity, digits = 3),signif(var_removed_b3$Pvalue$p.value, digits = 3))
+Paralogue_Annotation_no_QC = c(format(conf_b$con_table[2], scientific = FALSE),format(conf_b$con_table[4], scientific = FALSE),signif(conf_b$PPV, digits = 2),signif(conf_b$Sensitivity, digits = 2),signif(conf_b$Specificity, digits = 2),signif(conf_b$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC1 = c(format(conf_b2$con_table[2], scientific = FALSE),format(conf_b2$con_table[4], scientific = FALSE),signif(conf_b2$PPV, digits = 2), signif(conf_b2$Sensitivity, digits = 2),signif(conf_b2$Specificity, digits = 2), signif(conf_b2$Pvalue$p.value, digits = 2))
+Variants_removed_after_PA_QC1 = c(format(var_removed_b$con_table[2], scientific = FALSE),format(var_removed_b$con_table[4], scientific = FALSE),signif(var_removed_b$PPV, digits = 2),signif(var_removed_b$Sensitivity, digits = 2),signif(var_removed_b$Specificity, digits = 2),signif(var_removed_b$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC2 = c(format(conf_b3$con_table[2], scientific = FALSE),format(conf_b3$con_table[4], scientific = FALSE),signif(conf_b3$PPV, digits = 2),signif(conf_b3$Sensitivity, digits = 2),signif(conf_b3$Specificity, digits = 2),signif(conf_b3$Pvalue$p.value, digits = 2))
+Variants_removed_after_PA_QC2 = c(format(var_removed_b2$con_table[2], scientific = FALSE),format(var_removed_b2$con_table[4], scientific = FALSE),signif(var_removed_b2$PPV, digits = 2),signif(var_removed_b2$Sensitivity, digits = 2),signif(var_removed_b2$Specificity, digits = 2),signif(var_removed_b2$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC3 = c(format(conf_b4$con_table[2], scientific = FALSE),format(conf_b4$con_table[4], scientific = FALSE),signif(conf_b4$PPV, digits = 2),signif(conf_b4$Sensitivity, digits = 2),signif(conf_b4$Specificity, digits = 2),signif(conf_b4$Pvalue$p.value, digits = 2))
+Variants_removed_after_PA_QC3 = c(format(var_removed_b3$con_table[2], scientific = FALSE),format(var_removed_b3$con_table[4], scientific = FALSE),signif(var_removed_b3$PPV, digits = 2),signif(var_removed_b3$Sensitivity, digits = 2),signif(var_removed_b3$Specificity, digits = 2),signif(var_removed_b3$Pvalue$p.value, digits = 2))
 
 # Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),conf$PPV,conf$Sensitivity,conf$Pvalue$p.value)
 # Variants_remaining_after_PA_QC1 = c(conf2$con_table[2],conf2$con_table[4],conf2$PPV, conf2$Sensitivity, conf2$Pvalue$p.value)
@@ -863,29 +940,33 @@ ggsave("images/ROC_plot_paraz_with_QC1.png")
 
 # prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
 prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Precision_CI = PPV_CI_list, Sensitivity = Sensitivity_list, Sensitivity_CI = Sens_CI_list))
-prc_data$Type = "Para_z"
+prc_data$Type = "QC1+Para_z"
 
 prc_data = rbind(prc_data, c(as.numeric(conf$PPV),as.numeric(1.96*conf$PPV_SE),as.numeric(conf$Sensitivity),as.numeric(1.96*conf$Sensitivity_SE)))
-prc_data[13,5]="noQC"
+prc_data[13,5]="no QC"
 prc_data = rbind(prc_data, c(as.numeric(conf2$PPV),as.numeric(1.96*conf2$PPV_SE),as.numeric(conf2$Sensitivity),as.numeric(1.96*conf2$Sensitivity_SE)))
 prc_data[14,5]="QC1"
 prc_data = rbind(prc_data, c(as.numeric(conf3$PPV),as.numeric(1.96*conf3$PPV_SE),as.numeric(conf3$Sensitivity),as.numeric(1.96*conf3$Sensitivity_SE)))
-prc_data[15,5]="QC2"
-prc_data = rbind(prc_data, c(as.numeric(conf4$PPV),as.numeric(1.96*conf4$PPV_SE),as.numeric(conf4$Sensitivity),as.numeric(1.96*conf$Sensitivity_SE)))
-prc_data[16,5]="QC3"
+prc_data[15,5]="QC1+QC2"
+prc_data = rbind(prc_data, c(as.numeric(conf4$PPV),as.numeric(1.96*conf4$PPV_SE),as.numeric(conf4$Sensitivity),as.numeric(1.96*conf4$Sensitivity_SE)))
+prc_data[16,5]="QC1+QC2+QC3"
+prc_data = rbind(prc_data, c(as.numeric(conf6$PPV),as.numeric(1.96*conf6$PPV_SE),as.numeric(conf6$Sensitivity),as.numeric(1.96*conf6$Sensitivity_SE)))
+prc_data[17,5]="QC1+QC3"
 
+prc_data$Type = factor(prc_data$Type, levels = c("no QC", "QC1", "QC1+Para_Z", "QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+prc_data$Type[1:12] = "QC1+Para_Z"
 # gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
 gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
   geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=5) + geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,width=5) +
-  scale_shape_manual(values=c(15, 1, 16, 17, 18)) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+  scale_shape_manual(values=c(15, 16, 1, 17, 18, 19)) + xlim(0,0.25) + ylim(0.85,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5))
-ggsave("images/PRC_plot_paraz_with_QC1.png")
+    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25))
+ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2.png")
 
 
 
@@ -1202,7 +1283,7 @@ The Total case counts for gnomad would be the mean of all allele numbers of resp
 
 Using https://www.nature.com/articles/gim201726/tables/1 and using the upper CI level, e.g. for LQTS = 8.2 x 10−6. If the maximum filtering allele frequency (max out of all the sub populations, i.e. non-global) is smaller than 8.2 x 10-6 then that variant is considered "rare"
 
-OMGL data
+OMGL data - data incomplete, require case counts/allele numbers
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 #Each line is a single patient count with the variant. exacAllelecount is the cell that has the same variant exac count
 #For any variants where exac allele count is NA, just put as 0? Check this assumption
@@ -1644,7 +1725,21 @@ b.normal_PA4$Unique_variant_annotations = b.normal_PA4$Total_paralog_annotations
 b.normal_PA4$Unique_variant_annotations = distinct(b.normal_PA4$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
 b.normal_PA4$true_num_of_paralog_anno = length(b.normal_PA4$Unique_variant_annotations$Variant_pos)
 normal_PA4_conf = conf_matrix(p.normal_PA4$true_num_of_paralog_anno, p.normal_PA3$input_variants, b.normal_PA4$true_num_of_paralog_anno, b.normal_PA3$input_variants)
-  
+
+#QC3+QC1, no QC2  
+p.normal_PA5 = list()
+p.normal_PA5$Total_paralog_annotations = p.normal_PA2$Total_paralog_annotations[p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+p.normal_PA5$Total_paralog_annotations = distinct(p.normal_PA5$Total_paralog_annotations)
+p.normal_PA5$Unique_variant_annotations = p.normal_PA5$Total_paralog_annotations[!is.na(p.normal_PA5$Total_paralog_annotations$ID.y),]
+p.normal_PA5$Unique_variant_annotations = distinct(p.normal_PA5$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p.normal_PA5$true_num_of_paralog_anno = length(p.normal_PA5$Unique_variant_annotations$Variant_pos)
+b.normal_PA5 = list()
+b.normal_PA5$Total_paralog_annotations = b.normal_PA2$Total_paralog_annotations[b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA5$Total_paralog_annotations = distinct(b.normal_PA5$Total_paralog_annotations)
+b.normal_PA5$Unique_variant_annotations = b.normal_PA5$Total_paralog_annotations[!is.na(b.normal_PA5$Total_paralog_annotations$ID.y),]
+b.normal_PA5$Unique_variant_annotations = distinct(b.normal_PA5$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b.normal_PA5$true_num_of_paralog_anno = length(b.normal_PA5$Unique_variant_annotations$Variant_pos)
+normal_PA5_conf = conf_matrix(p.normal_PA5$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA5$true_num_of_paralog_anno, b.normal_PA2$input_variants)
 
 # p.normal_PA = Subset_var_align_id(Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 # b.normal_PA = Subset_var_align_id(b.Revel_tableized_data$ID,"data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -1674,12 +1769,16 @@ for (i in seq(0,11)){
 #pathogenic to pathogenic
 # p.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
   # p.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  p.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",other_tools_file$ID), "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  p.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",other_tools_file$ID),
+                                           # "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC",
+                                           "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
   
 #benign to pathogenic
 # b.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
   # b.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",b.Revel_tableized_data$ID), "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20181028_GRCh37_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  b.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",b.other_tools_file$ID), "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  b.paraz_var_align = Paralogous_var_align(paraz_cutoff = i, Subset = c("ID",b.other_tools_file$ID),
+                                           # "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC",
+                                           "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
   
   
   paraz.conf = conf_matrix(p.paraz_var_align$true_num_of_paralog_anno, p.paraz_var_align$paralog_data, b.paraz_var_align$true_num_of_paralog_anno, b.paraz_var_align$paralog_data)
@@ -1715,24 +1814,28 @@ other_tools_set = t(data.frame(
   PA.all_con = c(sapply(c(normal_PA3_conf$con_table[2],normal_PA3_conf$con_table[4]),format,scientific = FALSE),
                  sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$PPV_SE*1.96,normal_PA3_conf$Sensitivity,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)),
   PA.alt_con = c(sapply(c(normal_PA4_conf$con_table[2],normal_PA4_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3))
+                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3)),
+  PA.alt_con_w_para_con_no_all_con = c(sapply(c(normal_PA5_conf$con_table[2],normal_PA5_conf$con_table[4]),format,scientific = FALSE),
+                 sapply(c(normal_PA5_conf$PPV,normal_PA5_conf$PPV_SE*1.96,normal_PA5_conf$Sensitivity,normal_PA5_conf$Sensitivity_SE*1.96,normal_PA5_conf$Specificity,normal_PA5_conf$Pvalue$p.value),signif,digits=3))
 ))
 colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value")
 paraz_set = paraz_set[-1,]
 other_tools_set = rbind(other_tools_set,paraz_set)
-rownames(other_tools_set) = c("Total","Sift","MCap","CADD","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)","Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
-write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
+rownames(other_tools_set) = c("Total","Sift","MCap","CADD","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)", "Paralogue Annotation (QC3, no QC2)", "Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
+# write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
+write.table(other_tools_set, file = "data/other_tools_set_w_paraz_afterQC1.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 
 
+#for subsetting the massive dataframe above for easier graph making
 other_tools_data = data.frame(
   Precision = c(as.numeric(other_tools_set[2:9,3])),
   Precision_CI = c(as.numeric(other_tools_set[2:9,4])),
   Sensitivity = c(as.numeric(other_tools_set[2:9,5])),
   Sensitivity_CI = c(as.numeric(other_tools_set[2:9,6]))
   )
-other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "noQC", "QC1" ,"QC2", "QC3")
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1" ,"QC1+QC2", "QC1+QC2+QC3")
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
-other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "noQC", "QC1" ,"QC2", "QC3"))
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1" ,"QC1+QC2", "QC1+QC2+QC3"))
 
 gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
   geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
@@ -1744,6 +1847,48 @@ gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) #+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
 ggsave("images/PRC_with_other_tools_plot.png")
+
+other_tools_data = data.frame(
+  Precision = c(as.numeric(other_tools_set[2:10,3])),
+  Precision_CI = c(as.numeric(other_tools_set[2:10,4])),
+  Sensitivity = c(as.numeric(other_tools_set[2:10,5])),
+  Sensitivity_CI = c(as.numeric(other_tools_set[2:10,6]))
+  )
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1" ,"QC1+QC2", "QC1+QC2+QC3", "QC1+QC3")
+# other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel","no QC", "QC1" ,"QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+
+gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+  geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+  geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
+  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 19, 18)) +
+  xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
+    plot.caption = element_text(vjust = 1), 
+    axis.title = element_text(size = 16), 
+    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
+    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) #+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
+ggsave("images/PRC_with_other_tools_with_QC3_QC1_no_QC2.png")
+
+other_tools_data = data.frame(
+  Precision = c(as.numeric(other_tools_set[6:10,3])),
+  Precision_CI = c(as.numeric(other_tools_set[6:10,4])),
+  Sensitivity = c(as.numeric(other_tools_set[6:10,5])),
+  Sensitivity_CI = c(as.numeric(other_tools_set[6:10,6]))
+  )
+other_tools_data$Type = c("noQC", "QC1" ,"QC2", "QC3", "QC3 (skipped QC2)")
+# other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("noQC", "QC1" ,"QC2", "QC3", "QC3 (skipped QC2)"))
+
+gg6 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+  geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+  geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
+  scale_shape_manual(values=c(15, 16, 17, 18, 19)) +
+  xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
+    plot.caption = element_text(vjust = 1), 
+    axis.title = element_text(size = 16), 
+    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
+    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) #+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
+ggsave("images/PRC_with_QC3_QC1_no_QC2.png")
 
 ```
 
@@ -1808,8 +1953,20 @@ b.normal_PA4$Unique_variant_annotations = b.normal_PA4$Total_paralog_annotations
 b.normal_PA4$Unique_variant_annotations = distinct(b.normal_PA4$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
 b.normal_PA4$true_num_of_paralog_anno = length(b.normal_PA4$Unique_variant_annotations$Variant_pos)
 normal_PA4_conf = conf_matrix(p.normal_PA4$true_num_of_paralog_anno, p.normal_PA3$input_variants, b.normal_PA4$true_num_of_paralog_anno, b.normal_PA3$input_variants)
-  
 
+p.normal_PA5 = list()
+p.normal_PA5$Total_paralog_annotations = p.normal_PA2$Total_paralog_annotations[p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+p.normal_PA5$Total_paralog_annotations = distinct(p.normal_PA5$Total_paralog_annotations)
+p.normal_PA5$Unique_variant_annotations = p.normal_PA5$Total_paralog_annotations[!is.na(p.normal_PA5$Total_paralog_annotations$ID.y),]
+p.normal_PA5$Unique_variant_annotations = distinct(p.normal_PA5$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p.normal_PA5$true_num_of_paralog_anno = length(p.normal_PA5$Unique_variant_annotations$Variant_pos)
+b.normal_PA5 = list()
+b.normal_PA5$Total_paralog_annotations = b.normal_PA2$Total_paralog_annotations[b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA5$Total_paralog_annotations = distinct(b.normal_PA5$Total_paralog_annotations)
+b.normal_PA5$Unique_variant_annotations = b.normal_PA5$Total_paralog_annotations[!is.na(b.normal_PA5$Total_paralog_annotations$ID.y),]
+b.normal_PA5$Unique_variant_annotations = distinct(b.normal_PA5$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b.normal_PA5$true_num_of_paralog_anno = length(b.normal_PA5$Unique_variant_annotations$Variant_pos)
+normal_PA5_conf = conf_matrix(p.normal_PA5$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA5$true_num_of_paralog_anno, b.normal_PA2$input_variants)
 
 # #ParaZ
 # Sensitivity_list = vector()
@@ -1866,7 +2023,9 @@ other_tools_set = t(data.frame(
   PA.all_con = c(sapply(c(normal_PA3_conf$con_table[2],normal_PA3_conf$con_table[4]),format,scientific = FALSE),
                  sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$PPV_SE*1.96,normal_PA3_conf$Sensitivity,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)),
   PA.alt_con = c(sapply(c(normal_PA4_conf$con_table[2],normal_PA4_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3))
+                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3)),
+  PA.alt_con_w_QC1_no_QC2 = c(sapply(c(normal_PA5_conf$con_table[2],normal_PA5_conf$con_table[4]),format,scientific = FALSE),
+                 sapply(c(normal_PA5_conf$PPV,normal_PA5_conf$PPV_SE*1.96,normal_PA5_conf$Sensitivity,normal_PA5_conf$Sensitivity_SE*1.96,normal_PA5_conf$Specificity,normal_PA5_conf$Pvalue$p.value),signif,digits=3))
 ))
 colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value")
 ##REMINDER TO FIX APPENDING OF PARAZ SET AS HAVE NOT YET ADDED CI FOR PPV AND SENS
@@ -1877,24 +2036,24 @@ colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV
 # 
 
 other_tools_data = data.frame(
-  Precision = c(as.numeric(other_tools_set[6:9,3])),
-  Precision_CI = c(as.numeric(other_tools_set[6:9,4])),
-  Sensitivity = c(as.numeric(other_tools_set[6:9,5])),
-  Sensitivity_CI = c(as.numeric(other_tools_set[6:9,6]))
+  Precision = c(as.numeric(other_tools_set[2:10,3])),
+  Precision_CI = c(as.numeric(other_tools_set[2:10,4])),
+  Sensitivity = c(as.numeric(other_tools_set[2:10,5])),
+  Sensitivity_CI = c(as.numeric(other_tools_set[2:10,6]))
   )
-other_tools_data$Type = c("noQC", "QC1" ,"QC2", "QC3")
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1" ,"QC1+QC2", "QC1+QC2+QC3", "QC1+QC3")
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
-other_tools_data$Type = factor(other_tools_data$Type, levels = c("noQC", "QC1" ,"QC2", "QC3"))
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1" ,"QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
 gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
   geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
-  scale_shape_manual(values=c(15, 16, 17, 18)) +
+  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 19, 18)) +
   xlim(0,1) + ylim(0.75,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) 
+    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25)) 
 ggsave("images/PRC_of_SCN5A.png")
 
 ```
@@ -1913,6 +2072,11 @@ p.normal_PA4$Total_paralog_annotations = p.normal_PA3$Total_paralog_annotations[
 b.normal_PA4 = list()
 b.normal_PA4$Total_paralog_annotations = b.normal_PA3$Total_paralog_annotations[b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
 normal_PA4 = Alt_con_PA(p.normal_PA4$Total_paralog_annotations,b.normal_PA4$Total_paralog_annotations)
+p.normal_PA5 = list()
+p.normal_PA5$Total_paralog_annotations = p.normal_PA2$Total_paralog_annotations[p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA5 = list()
+b.normal_PA5$Total_paralog_annotations = b.normal_PA2$Total_paralog_annotations[b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+normal_PA5 = Alt_con_PA(p.normal_PA5$Total_paralog_annotations,b.normal_PA5$Total_paralog_annotations)
 
 other_tools = read.csv(file="data/TP53-TA/4704961/TP53-TA_deleterious.vcf.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
 p.num_of_revel = length(which(other_tools$REVEL_score > 0.5))
@@ -1940,26 +2104,27 @@ normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, other_tools, 
 normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools, b.normal_PA2$true_num_of_paralog_anno, b.other_tools)
 normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools, b.normal_PA3$true_num_of_paralog_anno, b.other_tools)
 normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA5$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
 
 df1 = data.frame(
-  Type = c("Sift","Mcap","Cadd","Revel","noQC","QC1","QC2","QC3"),
-  Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV),
-  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96),
-  Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity,normal_PA2_conf$Sensitivity,normal_PA3_conf$Sensitivity,normal_PA4_conf$Sensitivity),
-  Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA4_conf$Sensitivity_SE*1.96)
+  Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
+  Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
+  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
+  Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity,normal_PA2_conf$Sensitivity,normal_PA3_conf$Sensitivity,normal_PA4_conf$Sensitivity,normal_PA5_conf$Sensitivity),
+  Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA5_conf$Sensitivity_SE*1.96)
 )
 
-df1$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "noQC", "QC1" ,"QC2", "QC3"))
+df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
 gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
   geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
-  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 18)) +
+  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 18, 19)) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) 
+    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25)) 
 ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_of_TP53-TA_with_other_tools_plot.png")
 
 
