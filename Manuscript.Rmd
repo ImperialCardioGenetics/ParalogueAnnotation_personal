@@ -1617,7 +1617,7 @@ gene_EFs = data.frame(
   pa_variant_EF = c(
                     cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
   )
-write.table(gene_EFs, file = "data/BrS/Ackerman_LQTS_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 
 # disease_cohort_variants$check_in_rare_gnomad = ifelse(
@@ -2282,9 +2282,10 @@ df2 = data.frame(
 
 ```
 
-## CALM genes exampl
+## CALM genes example
 PMID papers with pathogenic variants that have genetic evidence:
 ```{r CALM_genes, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+#for making the VCF file, only run once
 CALM_variants = read.csv(file="data/CALM_genes/CALM_gene_variants.csv", sep = ",", header=TRUE, stringsAsFactors=FALSE) 
 CALM_variants = CALM_variants[2:18,]
 CALM_variants$ID = paste0("custom_",1:17)
@@ -2297,8 +2298,9 @@ names(CALM_variants)[1:4] = c("#CHROM","POS","REF","ALT")
 CALM_variants = CALM_variants[c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")]
 write.table(CALM_variants,file="data/CALM_genes/CALM_gene_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
 
+#actual analysis
 CALM_pa = Paralogous_var_align("data/CALM_genes/CALM_gene_variants.out_paraloc_paralogs2.noQC", "data/CALM_genes/CALM_gene_variants.out_paraloc_tableized",
-                               "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+                               "data/clinvar/clinvar_20190520_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 ```
 
