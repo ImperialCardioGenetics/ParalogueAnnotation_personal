@@ -1,0 +1,3 @@
+CHROM	POS	REF	ALT	ID	FILTER	SYMBOL	Protein_position	Amino_acids	Codons	BIOTYPE	Paralogue_Vars	Para_Z_score
+2	47388893	A	G	custom_5	.	CALM2	130	D	gaT/gaC	protein_coding	NA	11
+14	90870832	A	T	custom_7	.	CALM1	132	NA	NA	protein_coding	NA	NA
