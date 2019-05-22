@@ -1,4 +1,4 @@
-chromosome	position	reference	alternate	ID	QUAL	FILTER	INFO
+#CHROM	position	reference	alternate	ID	QUAL	FILTER	INFO
 14	90870295	T	C	custom_1	.	.	24076290,GRCh37,CALM1,p.F90L
 14	90871033	A	G	custom_2	.	.	26969752,GRCh37,CALM1,p.E141G
 14	90871037	C	G	custom_3	.	.	26969752,GRCh37,CALM1,p.F142L
