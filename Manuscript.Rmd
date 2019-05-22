@@ -2292,7 +2292,7 @@ CALM_variants$QUAL = "."
 CALM_variants$FILTER = "."
 CALM_variants$INFO = paste(CALM_variants$PMID, CALM_variants$build.coord, CALM_variants$gene, CALM_variants$variant, sep = ",")
 CALM_variants = dplyr::select(CALM_variants, select = -c("PMID","build.coord","gene","variant"))
-write.table(CALM_variants,file="data/CALM_gene_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
+write.table(CALM_variants,file="data/CALM_gene_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
 
 ```
 
