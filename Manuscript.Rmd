@@ -2282,6 +2282,20 @@ df2 = data.frame(
 
 ```
 
+## CALM genes exampl
+PMID papers with pathogenic variants that have genetic evidence:
+```{r CALM_genes, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+CALM_variants = read.csv(file="data/CALM_gene_variants.csv", sep = ",", header=TRUE, stringsAsFactors=FALSE) 
+CALM_variants = CALM_variants[2:18,]
+```
+2338815 - NA
+24076290 - GRCh37 CALM1 p.F90L chr14	90870295	T	C
+26969752 - GRCh37 CALM1 p.E141G 
+27374306
+24917665
+28491681
+25460178
+
 # References
 
 
