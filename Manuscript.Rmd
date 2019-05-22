@@ -2285,18 +2285,20 @@ df2 = data.frame(
 ## CALM genes exampl
 PMID papers with pathogenic variants that have genetic evidence:
 ```{r CALM_genes, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
-CALM_variants = read.csv(file="data/CALM_gene_variants.csv", sep = ",", header=TRUE, stringsAsFactors=FALSE) 
+CALM_variants = read.csv(file="data/CALM_genes/CALM_gene_variants.csv", sep = ",", header=TRUE, stringsAsFactors=FALSE) 
 CALM_variants = CALM_variants[2:18,]
 CALM_variants$ID = paste0("custom_",1:17)
 CALM_variants$QUAL = "."
 CALM_variants$FILTER = "."
-CALM_variants$INFO = paste(CALM_variants$PMID, CALM_variants$build.coord, CALM_variants$gene, CALM_variants$variant, sep = ",")
+# CALM_variants$INFO = paste(CALM_variants$PMID, CALM_variants$build.coord, CALM_variants$gene, CALM_variants$variant, sep = ",")
+CALM_variants$INFO = "."
 CALM_variants = dplyr::select(CALM_variants, select = -c("PMID","build.coord","gene","variant"))
 names(CALM_variants)[1] = "#CHROM"
 CALM_variants = CALM_variants[c("#CHROM","position","ID","reference","alternate","QUAL","FILTER","INFO")]
-write.table(CALM_variants,file="data/CALM_gene_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
+write.table(CALM_variants,file="data/CALM_genes/CALM_gene_variants.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE)
 
-CALM_pa = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+CALM_pa = Paralogous_var_align("data/CALM_genes/CALM_gene_variants.out_paraloc_paralogs2.noQC", "data/CALM_genes/CALM_gene_variants.out_paraloc_tableized",
+                               "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 ```
 
