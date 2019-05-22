@@ -1,4 +1,4 @@
-#CHROM	position	ID	reference	alternate	QUAL	FILTER	INFO
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 14	90870295	custom_1	T	C	.	.	.
 14	90871033	custom_2	A	G	.	.	.
 14	90871037	custom_3	C	G	.	.	.
