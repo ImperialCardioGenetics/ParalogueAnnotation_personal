@@ -2305,6 +2305,72 @@ CALM_pa = Paralogous_var_align("data/CALM_genes/CALM_gene_variants.out_paraloc_p
 ```
 
 
+
+## COL3A1
+```{r COL3A1, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+#PA
+p.normal_PA = Paralogous_var_align(Subset = c("Gene", "COL3A1"),"data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align(Subset = c("Gene", "COL3A1"),"data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, p.normal_PA$input_variants, b.normal_PA$true_num_of_paralog_anno, b.normal_PA$input_variants)
+
+p.normal_PA2 = Paralogous_var_align(Subset = c("Gene", "COL3A1"), "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA2 = Paralogous_var_align(Subset = c("Gene", "COL3A1"), "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA2$true_num_of_paralog_anno, b.normal_PA2$input_variants)
+
+p.normal_PA3 = Paralogous_var_align(Subset = c("Gene", "COL3A1"), "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA3 = Paralogous_var_align(Subset = c("Gene", "COL3A1"), "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, p.normal_PA3$input_variants, b.normal_PA3$true_num_of_paralog_anno, b.normal_PA3$input_variants)
+
+p.normal_PA4 = list()
+p.normal_PA4$Total_paralog_annotations = p.normal_PA3$Total_paralog_annotations[p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+p.normal_PA4$Total_paralog_annotations = distinct(p.normal_PA4$Total_paralog_annotations)
+p.normal_PA4$Unique_variant_annotations = p.normal_PA4$Total_paralog_annotations[!is.na(p.normal_PA4$Total_paralog_annotations$ID.y),]
+p.normal_PA4$Unique_variant_annotations = distinct(p.normal_PA4$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p.normal_PA4$true_num_of_paralog_anno = length(p.normal_PA4$Unique_variant_annotations$Variant_pos)
+b.normal_PA4 = list()
+b.normal_PA4$Total_paralog_annotations = b.normal_PA3$Total_paralog_annotations[b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA4$Total_paralog_annotations = distinct(b.normal_PA4$Total_paralog_annotations)
+b.normal_PA4$Unique_variant_annotations = b.normal_PA4$Total_paralog_annotations[!is.na(b.normal_PA4$Total_paralog_annotations$ID.y),]
+b.normal_PA4$Unique_variant_annotations = distinct(b.normal_PA4$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b.normal_PA4$true_num_of_paralog_anno = length(b.normal_PA4$Unique_variant_annotations$Variant_pos)
+normal_PA4_conf = conf_matrix(p.normal_PA4$true_num_of_paralog_anno, p.normal_PA3$input_variants, b.normal_PA4$true_num_of_paralog_anno, b.normal_PA3$input_variants)
+
+p.normal_PA5 = list()
+p.normal_PA5$Total_paralog_annotations = p.normal_PA2$Total_paralog_annotations[p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+p.normal_PA5$Total_paralog_annotations = distinct(p.normal_PA5$Total_paralog_annotations)
+p.normal_PA5$Unique_variant_annotations = p.normal_PA5$Total_paralog_annotations[!is.na(p.normal_PA5$Total_paralog_annotations$ID.y),]
+p.normal_PA5$Unique_variant_annotations = distinct(p.normal_PA5$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p.normal_PA5$true_num_of_paralog_anno = length(p.normal_PA5$Unique_variant_annotations$Variant_pos)
+b.normal_PA5 = list()
+b.normal_PA5$Total_paralog_annotations = b.normal_PA2$Total_paralog_annotations[b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA5$Total_paralog_annotations = distinct(b.normal_PA5$Total_paralog_annotations)
+b.normal_PA5$Unique_variant_annotations = b.normal_PA5$Total_paralog_annotations[!is.na(b.normal_PA5$Total_paralog_annotations$ID.y),]
+b.normal_PA5$Unique_variant_annotations = distinct(b.normal_PA5$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b.normal_PA5$true_num_of_paralog_anno = length(b.normal_PA5$Unique_variant_annotations$Variant_pos)
+normal_PA5_conf = conf_matrix(p.normal_PA5$true_num_of_paralog_anno, p.normal_PA2$input_variants, b.normal_PA5$true_num_of_paralog_anno, b.normal_PA2$input_variants)
+
+# Overall dataframe
+other_tools_set = t(data.frame(
+  # Total = c(sapply(c(revel_conf$con_table[1],revel_conf$con_table[3]),format,scientific = FALSE),"NA","NA","NA","NA"),
+  Total = c(sapply(c(dim(p.normal_PA$input_variants)[1],dim(b.normal_PA$input_variants)[1]),format,scientific = FALSE),"NA","NA","NA","NA","NA","NA"),
+  PA.noQC = c(sapply(c(normal_PA_conf$con_table[2],normal_PA_conf$con_table[4]),format,scientific = FALSE),
+         sapply(c(normal_PA_conf$PPV,normal_PA_conf$PPV_SE*1.96,normal_PA_conf$Sensitivity,normal_PA_conf$Sensitivity_SE*1.96,normal_PA_conf$Specificity,normal_PA_conf$Pvalue$p.value),signif,digits=3)),
+  PA.para_con = c(sapply(c(normal_PA2_conf$con_table[2],normal_PA2_conf$con_table[4]),format,scientific = FALSE),
+                  sapply(c(normal_PA2_conf$PPV,normal_PA2_conf$PPV_SE*1.96,normal_PA2_conf$Sensitivity,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA2_conf$Specificity,normal_PA2_conf$Pvalue$p.value),signif,digits=3)),
+  PA.all_con = c(sapply(c(normal_PA3_conf$con_table[2],normal_PA3_conf$con_table[4]),format,scientific = FALSE),
+                 sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$PPV_SE*1.96,normal_PA3_conf$Sensitivity,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)),
+  PA.alt_con = c(sapply(c(normal_PA4_conf$con_table[2],normal_PA4_conf$con_table[4]),format,scientific = FALSE),
+                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3)),
+  PA.alt_con_w_QC1_no_QC2 = c(sapply(c(normal_PA5_conf$con_table[2],normal_PA5_conf$con_table[4]),format,scientific = FALSE),
+                 sapply(c(normal_PA5_conf$PPV,normal_PA5_conf$PPV_SE*1.96,normal_PA5_conf$Sensitivity,normal_PA5_conf$Sensitivity_SE*1.96,normal_PA5_conf$Specificity,normal_PA5_conf$Pvalue$p.value),signif,digits=3))
+))
+colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value")
+
+
+
+```
+
+
 # References
 
 
