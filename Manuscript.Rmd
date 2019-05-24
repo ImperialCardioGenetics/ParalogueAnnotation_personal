@@ -2437,10 +2437,41 @@ patho_protein_pos = unique(p.normal_PA$Total_paralog_annotations[!is.na(p.normal
 aligned_clinvar_and_patho_protein_pos = intersect(clinvar_P_LP_tableized_protein_pos,patho_protein_pos)
 
 clinvar_COL3A1_variants = data.frame(
-  name = "c"
-  source = "."
-  
+  name = "Clinvar_variants",
+  source = "Jalview",
+  type = "Clinvar_variants",
+  start = clinvar_P_LP_tableized_protein_pos,
+  end = clinvar_P_LP_tableized_protein_pos,
+  score = 0.0,
+  strand = ".",
+  phase = "."
 ) 
+write.table(clinvar_COL3A1_variants,"data/all_possible_mutations/COL3A1/clinvar_COL3A1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
+
+all_patho_pred_COL3A1_variants = data.frame(
+  name = "all_patho_pred_variants",
+  source = "Jalview",
+  type = "all_patho_pred_variants",
+  start = patho_protein_pos,
+  end = patho_protein_pos,
+  score = 0.0,
+  strand = ".",
+  phase = "."
+) 
+write.table(all_patho_pred_COL3A1_variants,"data/all_possible_mutations/COL3A1/all_patho_pred_COL3A1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
+
+aligned_clinvar_and_patho_COL3A1_variants = data.frame(
+  name = "aligned_clinvar_and_patho_protein_variants",
+  source = "Jalview",
+  type = "aligned_clinvar_and_patho_protein_variants",
+  start = aligned_clinvar_and_patho_protein_pos,
+  end = aligned_clinvar_and_patho_protein_pos,
+  score = 0.0,
+  strand = ".",
+  phase = "."
+) 
+write.table(aligned_clinvar_and_patho_COL3A1_variants,"data/all_possible_mutations/COL3A1/aligned_clinvar_and_patho_COL3A1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
+
 ```
 
 
