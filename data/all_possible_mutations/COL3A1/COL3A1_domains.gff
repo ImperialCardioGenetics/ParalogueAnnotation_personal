@@ -1,0 +1,12 @@
+##gff-version 2
+COL3A1-201	Jalview	VWFC_domain	30	89	0	.	.
+COL3A1-201	Jalview	Collagen_triple_helix_repeat	171	226	0	.	.
+COL3A1-201	Jalview	Collagen_triple_helix_repeat	294	352	0	.	.
+COL3A1-201	Jalview	Collagen_triple_helix_repeat	354	412	0	.	.
+COL3A1-201	Jalview	Collagen_triple_helix_repeat	474	532	0	.	.
+COL3A1-201	Jalview	Collagen_triple_helix_repeat	534	592	0	.	.
+COL3A1-201	Jalview	Collagen_triple_helix_repeat	959	1015	0	.	.
+COL3A1-201	Jalview	Collagen_triple_helix_repeat	1077	1135	0	.	.
+COL3A1-201	Jalview	Collagen_triple_helix_repeat	1137	1195	0	.	.
+COL3A1-201	Jalview	C-terminal	1231	1466	0	.	.
+COL3A1-201	Jalview	Singal_Peptide	1	23	0	.	.
