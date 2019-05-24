@@ -2435,6 +2435,12 @@ all_protein_pos = unique(p.normal_PA$Total_paralog_annotations[,"Protein_positio
 patho_protein_pos = unique(p.normal_PA$Total_paralog_annotations[!is.na(p.normal_PA$Total_paralog_annotations$ID.y),"Protein_position.x"])
 
 aligned_clinvar_and_patho_protein_pos = intersect(clinvar_P_LP_tableized_protein_pos,patho_protein_pos)
+
+clinvar_COL3A1_variants = data.frame(
+  name = "c"
+  source = "."
+  
+) 
 ```
 
 
