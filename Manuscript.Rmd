@@ -2424,8 +2424,17 @@ other_tools_set = t(data.frame(
 ))
 colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value")
 
+##all possible missense
+p.normal_PA = Paralogous_var_align("data/all_possible_mutations/COL3A1/synthetic.vep.cov.table_chrom2_onlyCOL3A1_variants.out_paraloc_paralogs2.noQC", "data/all_possible_mutations/COL3A1/synthetic.vep.cov.table_chrom2_onlyCOL3A1_variants.out_paraloc_tableized", "data/clinvar/clinvar_20190520_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
+clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190520_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_tableized = clinvar_P_LP_tableized[clinvar_P_LP_tableized$SYMBOL == "COL3A1",]
+clinvar_P_LP_tableized_protein_pos = as.numeric(unique(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Protein_position) & !(grepl("-", clinvar_P_LP_tableized$Protein_position)),"Protein_position"]))
 
+all_protein_pos = unique(p.normal_PA$Total_paralog_annotations[,"Protein_position.x"])
+patho_protein_pos = unique(p.normal_PA$Total_paralog_annotations[!is.na(p.normal_PA$Total_paralog_annotations$ID.y),"Protein_position.x"])
+
+aligned_clinvar_and_patho_protein_pos = intersect(clinvar_P_LP_tableized_protein_pos,patho_protein_pos)
 ```
 
 
