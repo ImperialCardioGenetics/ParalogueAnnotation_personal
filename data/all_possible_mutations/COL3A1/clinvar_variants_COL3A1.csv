@@ -1,0 +1,7 @@
+Pathogenic variants,Benign variants,PPV,PPV CI,Sensitivity,Sens CI,Specificity,P value
+Total variants,318,21,NA,NA,NA,NA,NA,NA
+Paralogue Annotation,241,6,0.976,0.0192,0.758,0.0471,0.714,1.55e-05
+Variants remaining after QC1,237,3,0.988,0.0141,0.745,0.0479,0.857,4.26e-08
+Variants remaining after QC1+QC2,215,0,1,0,0.676,0.0514,1,2.1e-10
+Variants remaining after QC2+QC3,61,0,1,0,0.192,0.0433,1,0.019
+Variants remaining after QC1+QC2+QC3,57,0,1,0,0.179,0.0422,1,0.0318
