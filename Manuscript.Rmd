@@ -2529,9 +2529,9 @@ write.table(aligned_benign_clinvar_and_benign_COL3A1_variants,"data/all_possible
 
 aligned_clinvar_and_benign_protein_pos = intersect(clinvar_B_LB_tableized_protein_pos, patho_protein_pos)
 aligned_clinvar_and_benign_COL3A1_variants = data.frame(
-  name = "aligned_clinvar_and_benign_protein_pos",
+  name = "aligned_clinvar_and_benign_protein_variants",
   source = "Jalview",
-  type = "aligned_clinvar_and_benign_protein_pos",
+  type = "aligned_clinvar_and_benign_protein_variants",
   start = aligned_clinvar_and_benign_protein_pos,
   end = aligned_clinvar_and_benign_protein_pos,
   score = 0.0,
