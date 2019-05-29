@@ -2525,7 +2525,7 @@ aligned_benign_clinvar_and_benign_COL3A1_variants = data.frame(
   phase = "."
 ) 
 write("##gff-version 2","data/all_possible_mutations/COL3A1/aligned_benign_clinvar_and_benign_COL3A1_variants.gff")
-write.table(aligned_benign_clinvar_and_benign_protein_pos,"data/all_possible_mutations/COL3A1/aligned_benign_clinvar_and_benign_COL3A1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
+write.table(aligned_benign_clinvar_and_benign_COL3A1_variants,"data/all_possible_mutations/COL3A1/aligned_benign_clinvar_and_benign_COL3A1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
 
 aligned_clinvar_and_benign_protein_pos = intersect(clinvar_B_LB_tableized_protein_pos, patho_protein_pos)
 aligned_clinvar_and_benign_COL3A1_variants = data.frame(
