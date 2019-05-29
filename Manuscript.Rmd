@@ -2527,19 +2527,19 @@ aligned_benign_clinvar_and_benign_COL3A1_variants = data.frame(
 write("##gff-version 2","data/all_possible_mutations/COL3A1/aligned_benign_clinvar_and_benign_COL3A1_variants.gff")
 write.table(aligned_benign_clinvar_and_benign_COL3A1_variants,"data/all_possible_mutations/COL3A1/aligned_benign_clinvar_and_benign_COL3A1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
 
-aligned_clinvar_and_benign_protein_pos = intersect(clinvar_B_LB_tableized_protein_pos, patho_protein_pos)
-aligned_clinvar_and_benign_COL3A1_variants = data.frame(
-  name = "aligned_clinvar_and_benign_protein_variants",
+aligned_benign_clinvar_and_patho_pred_protein_pos = intersect(clinvar_B_LB_tableized_protein_pos, patho_protein_pos)
+aligned_benign_clinvar_and_patho_pred_variants = data.frame(
+  name = "aligned_benign_clinvar_and_patho_pred_variants",
   source = "Jalview",
-  type = "aligned_clinvar_and_benign_protein_variants",
-  start = aligned_clinvar_and_benign_protein_pos,
-  end = aligned_clinvar_and_benign_protein_pos,
+  type = "aligned_benign_clinvar_and_patho_pred_variants",
+  start = aligned_benign_clinvar_and_patho_pred_protein_pos,
+  end = aligned_benign_clinvar_and_patho_pred_protein_pos,
   score = 0.0,
   strand = ".",
   phase = "."
 ) 
-write("##gff-version 2","data/all_possible_mutations/COL3A1/aligned_clinvar_and_benign_COL3A1_variants.gff")
-write.table(aligned_clinvar_and_benign_COL3A1_variants,"data/all_possible_mutations/COL3A1/aligned_clinvar_and_benign_COL3A1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
+write("##gff-version 2","data/all_possible_mutations/COL3A1/aligned_benign_clinvar_and_patho_pred_COL3A1_variants.gff")
+write.table(aligned_benign_clinvar_and_patho_pred_variants,"data/all_possible_mutations/COL3A1/aligned_benign_clinvar_and_patho_pred_COL3A1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
 
 #QC1 patho
 p.normal_PA = Paralogous_var_align("data/all_possible_mutations/COL3A1/synthetic.vep.cov.table_chrom2_onlyCOL3A1_variants.out_paraloc_paralogs2.para_con", "data/all_possible_mutations/COL3A1/synthetic.vep.cov.table_chrom2_onlyCOL3A1_variants.out_paraloc_tableized", "data/clinvar/clinvar_20190520_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -2549,9 +2549,9 @@ clinvar_P_LP_tableized_protein_pos = as.numeric(unique(clinvar_P_LP_tableized[!i
 patho_protein_pos = unique(p.normal_PA$Total_paralog_annotations[!is.na(p.normal_PA$Total_paralog_annotations$ID.y),"Protein_position.x"])
 aligned_clinvar_and_patho_protein_pos = intersect(clinvar_P_LP_tableized_protein_pos,patho_protein_pos)
 clinvar_COL3A1_variants = data.frame(
-  name = "Clinvar_variants",
+  name = "Clinvar_variants_QC1",
   source = "Jalview",
-  type = "Clinvar_variants",
+  type = "Clinvar_variants_QC1",
   start = clinvar_P_LP_tableized_protein_pos,
   end = clinvar_P_LP_tableized_protein_pos,
   score = 0.0,
@@ -2562,9 +2562,9 @@ write("##gff-version 2","data/all_possible_mutations/COL3A1/clinvar_COL3A1_QC1_v
 write.table(clinvar_COL3A1_variants,"data/all_possible_mutations/COL3A1/clinvar_COL3A1_QC1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
 
 all_patho_pred_COL3A1_variants = data.frame(
-  name = "all_patho_pred_variants",
+  name = "all_patho_pred_variants_QC1",
   source = "Jalview",
-  type = "all_patho_pred_variants",
+  type = "all_patho_pred_variants_QC1",
   start = patho_protein_pos,
   end = patho_protein_pos,
   score = 0.0,
@@ -2575,9 +2575,9 @@ write("##gff-version 2","data/all_possible_mutations/COL3A1/all_patho_pred_COL3A
 write.table(all_patho_pred_COL3A1_variants,"data/all_possible_mutations/COL3A1/all_patho_pred_COL3A1_QC1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
 
 aligned_clinvar_and_patho_COL3A1_variants = data.frame(
-  name = "aligned_clinvar_and_patho_protein_variants",
+  name = "aligned_clinvar_and_patho_protein_variants_QC1",
   source = "Jalview",
-  type = "aligned_clinvar_and_patho_protein_variants",
+  type = "aligned_clinvar_and_patho_protein_variants_QC1",
   start = aligned_clinvar_and_patho_protein_pos,
   end = aligned_clinvar_and_patho_protein_pos,
   score = 0.0,
