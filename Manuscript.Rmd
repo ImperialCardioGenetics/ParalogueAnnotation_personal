@@ -1634,6 +1634,8 @@ gene_EFs = data.frame(
   pa_variant_EF = c(
                     cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
   )
+gene_EFs = add_column(gene_EFs, "rare_p-values" = signif(SCN5A_rare_EF$OR_p_value, digits = 2), .after = "rare_variant_EF")
+gene_EFs = add_column(gene_EFs, "pa_p-values" = signif(SCN5A_pa_EF$OR_p_value, digits = 2), .after = "pa_variant_EF")
 write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 
