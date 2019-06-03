@@ -288,6 +288,7 @@ for (gene in clinvar_P_LP_tableized_genes){
   }
 }
 clinvar_P_LP_genes_w_paralogs_wide = protein_genes_w_paralogues_wide[protein_genes_w_paralogues_wide$external_gene_name %in% clinvar_P_LP_genes_w_paralogs,]
+clinvar_P_LP_genes_wo_paralogs_wide = protein_genes_wo_paralogues_wide[protein_genes_wo_paralogues_wide$external_gene_name %in% clinvar_P_LP_genes_wo_paralogs,]
 # hist(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="B) Distribution of genes with pathogenic/likely pathogenic variants", cex.main = 0.7)
 
 
@@ -324,6 +325,10 @@ ks = ks.test(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues, clinvar_B_
 all_clinvar_gene_wo_paralogs = unique(c(clinvar_P_LP_genes_wo_paralogs, clinvar_B_LB_genes_wo_paralogs))
 all_clinvar_gene_w_paralogs = unique(c(clinvar_P_LP_genes_w_paralogs, clinvar_B_LB_genes_w_paralogs))
 write.table(all_clinvar_gene_w_paralogs,file="data/clinvar/all_clinvar_gene_w_paralogs.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+
+#2 sided KS test for disease and non-disease genes
+clinvar_P_LP_genes = dplyr::bind_rows(clinvar_P_LP_genes_wo_paralogs_wide, clinvar_P_LP_genes_w_paralogs_wide)
+ks2 = ks.test(clinvar_P_LP_genes$number_of_paralogues, all_protein_genes$number_of_paralogues)
 ```
 
 According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues_genes)` protein coding genes did not have paralogues. Of those genes with paralogues (**fig.** \ref{fig:paralog_dist}a) the mean had `r round(mean(protein_genes_w_paralogues_wide$number_of_paralogues), 3)` paralogues with a standard deviation of `r round(sd(protein_genes_w_paralogues_wide$number_of_paralogues), 3)`. The maximum number of paralogues a gene had was `r max(protein_genes_w_paralogues_wide$number_of_paralogues)`. The zinc finger family of proteins have highest number of paralogues
