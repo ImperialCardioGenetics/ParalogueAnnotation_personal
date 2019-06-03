@@ -1526,7 +1526,7 @@ gene_EFs = data.frame(
                     cell_format(KCNQ1_pa_EF$EF, KCNQ1_pa_EF$EF_CI),
                     cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
   )
-add_column()
+add_column(gene_EFs, c(KCNE1_rare_EF$OR_p_value, KCNE2_rare_EF$OR_p_value, KCNH2_rare_EF$OR_p_value, KCNQ1_rare_EF$OR_p_value, SCN5A_rare_EF$OR_p_value), .after = "rare_variant_EF")
 write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 
