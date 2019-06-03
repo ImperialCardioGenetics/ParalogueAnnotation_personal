@@ -369,7 +369,7 @@ b.genes_with_PA_noQC = length(unique(b.paralogous_var_align$Total_paralog_annota
 # var_in_genes = Paralogous_var_align("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")#,Overlap = 0)
 var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_gene_annotations$Gene))
 p.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
-p.var_in_genes_unique_var = p.var_in_genes_unique_var[p.var_in_genes_unique_var$Var1 %in% clinvar_P_LP_tableized_genes,]
+p.var_in_genes_unique_var = p.var_in_genes_unique_var[p.var_in_genes_unique_var$Var1 %in% clinvar_P_LP_tableized_genes,] #802 HERE!!!
 write.table(p.var_in_genes_unique_var, file = "data/clinvar/genes_with_number_of_annotations_noQC.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
 not_var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
 p.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
@@ -725,6 +725,7 @@ setdiff(unique(y1$V3),unique(x1$V3))
 NB that in P/LP 11 variants with IDs: 16549; 525690; 12282; 3882; 29695; 13538; 7226; 17114; 7366; 4576; and 504370 are actually deletions so VEP does not predict anything and does not output them in results. Hence out_paraloc file has 11 less lines than the vcf file.
 For B/LB theres 295 dels.
 
+Finding overlapping genes:
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
 x0 = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
