@@ -515,6 +515,8 @@ calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiolo
     # d = d + 0.5
     OR = "NA"
     OR_CI = "NA"
+    OR_Z_value = "NA"
+    OR_p_value = "NA"
     EF = "NA"
     EF_CI = "NA"
   } else {
@@ -523,7 +525,8 @@ calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiolo
   
   SE_ln_OR = sqrt((1/a)+(1/b)+(1/c)+(1/d))
   
-  OR_p_value = log(OR)/SE_ln_OR #Wald's test
+  OR_Z_value = log(OR)/SE_ln_OR #Wald's test
+  OR_p_value = pnorm(-abs(OR_Z_value))
   
   OR_CI = c(
     exp(log(OR) - 1.96 * SE_ln_OR),
@@ -555,6 +558,7 @@ calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiolo
               # "N_1" = N_1,
               "OR" = OR, 
               "OR_CI" = OR_CI, 
+              "OR_Z_value" = OR_Z_value,
               "OR_p_value" = OR_p_value,
               "EF" = EF, 
               "EF_CI" = EF_CI

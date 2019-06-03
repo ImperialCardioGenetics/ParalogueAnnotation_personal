@@ -1526,6 +1526,7 @@ gene_EFs = data.frame(
                     cell_format(KCNQ1_pa_EF$EF, KCNQ1_pa_EF$EF_CI),
                     cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
   )
+add_column()
 write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 
