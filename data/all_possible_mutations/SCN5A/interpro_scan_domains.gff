@@ -1,0 +1,12 @@
+##gff-version 3
+SCN5A-001	Pfam	protein_match	1204	1479	1.2E-64	+	.	date=04-06-2019;Target=SCN5A-001 1204 1479;Ontology_term="GO:0005216","GO:0006811","GO:0016020","GO:0055085";ID=match$8_1204_1479;signature_desc=Ion transport protein;Name=PF00520;status=T;Dbxref="InterPro:IPR005821"
+SCN5A-001	Pfam	protein_match	1528	1782	3.3E-53	+	.	date=04-06-2019;Target=SCN5A-001 1528 1782;Ontology_term="GO:0005216","GO:0006811","GO:0016020","GO:0055085";ID=match$8_1528_1782;signature_desc=Ion transport protein;Name=PF00520;status=T;Dbxref="InterPro:IPR005821"
+SCN5A-001	Pfam	protein_match	718	943	2.2E-53	+	.	date=04-06-2019;Target=SCN5A-001 718 943;Ontology_term="GO:0005216","GO:0006811","GO:0016020","GO:0055085";ID=match$8_718_943;signature_desc=Ion transport protein;Name=PF00520;status=T;Dbxref="InterPro:IPR005821"
+SCN5A-001	Pfam	protein_match	130	422	5.4E-84	+	.	date=04-06-2019;Target=SCN5A-001 130 422;Ontology_term="GO:0005216","GO:0006811","GO:0016020","GO:0055085";ID=match$8_130_422;signature_desc=Ion transport protein;Name=PF00520;status=T;Dbxref="InterPro:IPR005821"
+SCN5A-001	Gene3D	protein_match	708	827	3.3E-33	+	.	date=04-06-2019;Target=SCN5A-001 708 827;ID=match$7_708_827;Name=G3DSA:1.20.120.350;status=T;Dbxref="InterPro:IPR027359"
+SCN5A-001	Gene3D	protein_match	1195	1318	5.9E-29	+	.	date=04-06-2019;Target=SCN5A-001 1195 1318;ID=match$7_1195_1318;Name=G3DSA:1.20.120.350;status=T;Dbxref="InterPro:IPR027359"
+SCN5A-001	Gene3D	protein_match	1520	1640	1.1E-39	+	.	date=04-06-2019;Target=SCN5A-001 1520 1640;ID=match$7_1520_1640;Name=G3DSA:1.20.120.350;status=T;Dbxref="InterPro:IPR027359"
+SCN5A-001	Gene3D	protein_match	123	234	2.5E-24	+	.	date=04-06-2019;Target=SCN5A-001 123 234;ID=match$77_123_234;Name=G3DSA:1.20.120.350;status=T;Dbxref="InterPro:IPR027359"
+SCN5A-001	Pfam	protein_match	478	667	2.2E-52	+	.	date=04-06-2019;Target=SCN5A-001 478 667;ID=match$26_478_667;signature_desc=Cytoplasmic domain of voltage-gated Na+ ion channel;Name=PF11933;status=T;Dbxref="InterPro:IPR024583","Reactome:R-HSA-445095","Reactome:R-HSA-5576892"
+SCN5A-001	Phobius	protein_match	1	126	.	+	.	date=04-06-2019;Target=SCN5A-001 1 126;ID=match$67_1_126;signature_desc=Region of a membrane-bound protein predicted to be outside the membrane, in the cytoplasm.;Name=CYTOPLASMIC_DOMAIN;status=T
+SCN5A-001	Phobius	protein_match	1773	2016	.	+	.	date=04-06-2019;Target=SCN5A-001 1773 2016;ID=match$71_1773_2016;signature_desc=Region of a membrane-bound protein predicted to be outside the membrane, in the cytoplasm.;Name=CYTOPLASMIC_DOMAIN;status=T
