@@ -2492,6 +2492,7 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25)) 
+ggsave("images/PRC_of_SSC_with_other_tools_plot.png")
 ```
 
 
