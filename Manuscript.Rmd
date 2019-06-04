@@ -2324,7 +2324,7 @@ f = read.csv("data/J_Li_data/J_Li_data.csv", sep = ",", stringsAsFactors = F, he
 PPARG = f[f$Data.source=="PPARG",-c(1,4)]
 PPARG = add_column(PPARG, "ID" = paste0("custom_",1:dim(PPARG)[1]), .after = "Start")
 
-PPARG$Chr = unlist(strsplit(PPARG$Chr, "chr"))[2]
+PPARG$Chr = sapply(strsplit(PPARG$Chr, "chr"), "[", 2)
 colnames(PPARG)[1:5] = c("#CHROM", "POS", "ID", "REF", "ALT")
 PPARG_patho_vcf = PPARG[PPARG$Label == "pathogenic",1:5]
 PPARG_benign_vcf = PPARG[PPARG$Label == "not pathogenic",1:5]
@@ -2408,7 +2408,7 @@ ggsave("images/PRC_of_PPARG_with_other_tools_plot.png")
 SSC = f[f$Data.source=="SSC",-c(1,4)]
 SSC = add_column(SSC, "ID" = paste0("custom_",1:dim(SSC)[1]), .after = "Start")
 
-SSC$Chr = unlist(strsplit(SSC$Chr, "chr"))[2]
+SSC$Chr = sapply(strsplit(SSC$Chr, "chr"), "[", 2)
 colnames(SSC)[1:5] = c("#CHROM", "POS", "ID", "REF", "ALT")
 SSC_patho_vcf = SSC[SSC$Label == "asd",1:5]
 SSC_benign_vcf = SSC[SSC$Label == "control",1:5]
