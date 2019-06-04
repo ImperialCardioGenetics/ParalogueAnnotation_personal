@@ -2323,13 +2323,21 @@ Looking at PPARG:
 f = read.csv("data/J_Li_data/J_Li_data.csv", sep = ",", stringsAsFactors = F, header = T)
 PPARG = f[f$Data.source=="PPARG",-c(1,4)]
 PPARG = add_column(PPARG, "ID" = paste0("custom_",1:dim(PPARG)[1]), .after = "Start")
-colnames(PPARG)[1:5] = c("CHROM", "POS", "ID", "REF", "ALT")
-PPARG$CHROM = unlist(strsplit(PPARG$CHROM, "chr"))[2]
-PPARG_vcf = PPARG[,1:5]
-PPARG_vcf$QUAl = "."
-PPARG_vcf$FILTER = "."
-PPARG_vcf$INFO = "."
-write.table(PPARG_vcf, file = "data/J_Li_data/PPARG.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+
+PPARG$Chr = unlist(strsplit(PPARG$Chr, "chr"))[2]
+colnames(PPARG)[1:5] = c("#CHROM", "POS", "ID", "REF", "ALT")
+PPARG_patho_vcf = PPARG[PPARG$Label == "pathogenic",1:5]
+PPARG_benign_vcf = PPARG[PPARG$Label == "not pathogenic",1:5]
+PPARG_patho_vcf$QUAl = "."
+PPARG_patho_vcf$FILTER = "."
+PPARG_patho_vcf$INFO = "."
+PPARG_benign_vcf$QUAl = "."
+PPARG_benign_vcf$FILTER = "."
+PPARG_benign_vcf$INFO = "."
+write.table(PPARG_patho_vcf, file = "data/J_Li_data/PPARG_patho.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(PPARG_benign_vcf, file = "data/J_Li_data/PPARG_benign.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+
+p.normal_PA = Paralogous_var_align("data/J_Li_data/PPARG.out_paraloc_paralogs2.noQC", "data/J_Li_data/PPARG.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 ```
 
 
