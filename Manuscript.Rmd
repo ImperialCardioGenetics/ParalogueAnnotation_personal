@@ -2337,7 +2337,59 @@ PPARG_benign_vcf$INFO = "."
 write.table(PPARG_patho_vcf, file = "data/J_Li_data/PPARG_patho.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
 write.table(PPARG_benign_vcf, file = "data/J_Li_data/PPARG_benign.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
 
-p.normal_PA = Paralogous_var_align("data/J_Li_data/PPARG.out_paraloc_paralogs2.noQC", "data/J_Li_data/PPARG.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
+p.normal_PA = Paralogous_var_align("data/J_Li_data/PPARG_patho.out_paraloc_paralogs2.noQC", "data/J_Li_data/PPARG_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align("data/J_Li_data/PPARG_benign.out_paraloc_paralogs2.noQC", "data/J_Li_data/PPARG_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA2 = Paralogous_var_align("data/J_Li_data/PPARG_patho.out_paraloc_paralogs2.para_con", "data/J_Li_data/PPARG_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA2 = Paralogous_var_align("data/J_Li_data/PPARG_benign.out_paraloc_paralogs2.para_con", "data/J_Li_data/PPARG_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA3 = Paralogous_var_align("data/J_Li_data/PPARG_patho.out_paraloc_paralogs2.all_con", "data/J_Li_data/PPARG_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA3 = Paralogous_var_align("data/J_Li_data/PPARG_benign.out_paraloc_paralogs2.all_con", "data/J_Li_data/PPARG_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA4 = list()
+p.normal_PA4$Total_paralog_annotations = p.normal_PA3$Total_paralog_annotations[p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA4 = list()
+b.normal_PA4$Total_paralog_annotations = b.normal_PA3$Total_paralog_annotations[b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+normal_PA4 = Alt_con_PA(p.normal_PA4$Total_paralog_annotations,b.normal_PA4$Total_paralog_annotations)
+p.normal_PA5 = list()
+p.normal_PA5$Total_paralog_annotations = p.normal_PA2$Total_paralog_annotations[p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA5 = list()
+b.normal_PA5$Total_paralog_annotations = b.normal_PA2$Total_paralog_annotations[b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+normal_PA5 = Alt_con_PA(p.normal_PA5$Total_paralog_annotations,b.normal_PA5$Total_paralog_annotations)
+
+other_tools = read.csv(file="data/J_Li_data/PPARG_patho.vcf.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
+p.num_of_revel = length(which(other_tools$REVEL_score > 0.5))
+p.num_of_sift = length(which(other_tools$SIFT_pred == "D"))
+p.num_of_mcap = length(which(other_tools$M.CAP_pred == "D"))
+p.num_of_cadd = length(which(other_tools$CADD_phred > 15))
+
+b.other_tools = read.csv(file="data/J_Li_data/PPARG_benign.vcf.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
+b.num_of_revel = length(which(b.other_tools$REVEL_score > 0.5))
+b.num_of_sift = length(which(b.other_tools$SIFT_pred == "D"))
+b.num_of_mcap = length(which(b.other_tools$M.CAP_pred == "D"))
+b.num_of_cadd = length(which(b.other_tools$CADD_phred > 15))
+
+sift1_conf = conf_matrix(p.num_of_sift,other_tools,b.num_of_sift,b.other_tools)
+mcap1_conf = conf_matrix(p.num_of_mcap,other_tools,b.num_of_mcap,b.other_tools)
+revel1_conf = conf_matrix(p.num_of_revel,other_tools,b.num_of_revel,b.other_tools)
+cadd1_conf = conf_matrix(p.num_of_cadd,other_tools,b.num_of_cadd,b.other_tools)
+
+normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, other_tools, b.normal_PA$true_num_of_paralog_anno, b.other_tools)
+normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools, b.normal_PA2$true_num_of_paralog_anno, b.other_tools)
+normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools, b.normal_PA3$true_num_of_paralog_anno, b.other_tools)
+normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA5$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+
+df1 = data.frame(
+  Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
+  Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
+  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
+  Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity,normal_PA2_conf$Sensitivity,normal_PA3_conf$Sensitivity,normal_PA4_conf$Sensitivity,normal_PA5_conf$Sensitivity),
+  Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA5_conf$Sensitivity_SE*1.96)
+)
+
+df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+
+esr
+
 ```
 
 
