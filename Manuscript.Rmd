@@ -2320,8 +2320,16 @@ df2 = data.frame(
 
 Looking at PPARG:
 ```{r cf_PPARG, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
-f = read.csv("data/J_Li_data.csv", sep = ",", stringsAsFactors = F, header = T)
-PPARG = f[f$Data.source=="PPARG",]
+f = read.csv("data/J_Li_data/J_Li_data.csv", sep = ",", stringsAsFactors = F, header = T)
+PPARG = f[f$Data.source=="PPARG",-c(1,4)]
+PPARG = add_column(PPARG, "ID" = paste0("custom_",1:dim(PPARG)[1]), .after = "Start")
+colnames(PPARG)[1:5] = c("CHROM", "POS", "ID", "REF", "ALT")
+PPARG$CHROM = unlist(strsplit(PPARG$CHROM, "chr"))[2]
+PPARG_vcf = PPARG[,1:5]
+PPARG_vcf$QUAl = "."
+PPARG_vcf$FILTER = "."
+PPARG_vcf$INFO = "."
+write.table(PPARG_vcf, file = "data/J_Li_data/PPARG.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
 ```
 
 
