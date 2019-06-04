@@ -2318,7 +2318,7 @@ df2 = data.frame(
 
 ```
 
-Looking at PPARG:
+Looking at PPARG and SSC:
 ```{r cf_PPARG, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 f = read.csv("data/J_Li_data/J_Li_data.csv", sep = ",", stringsAsFactors = F, header = T)
 PPARG = f[f$Data.source=="PPARG",-c(1,4)]
@@ -2402,6 +2402,26 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25)) 
 ggsave("images/PRC_of_PPARG_with_other_tools_plot.png")
+
+
+#SSC
+SSC = f[f$Data.source=="SSC",-c(1,4)]
+SSC = add_column(SSC, "ID" = paste0("custom_",1:dim(SSC)[1]), .after = "Start")
+
+SSC$Chr = unlist(strsplit(SSC$Chr, "chr"))[2]
+colnames(SSC)[1:5] = c("#CHROM", "POS", "ID", "REF", "ALT")
+SSC_patho_vcf = SSC[SSC$Label == "asd",1:5]
+SSC_benign_vcf = SSC[SSC$Label == "control",1:5]
+SSC_patho_vcf$QUAl = "."
+SSC_patho_vcf$FILTER = "."
+SSC_patho_vcf$INFO = "."
+SSC_benign_vcf$QUAl = "."
+SSC_benign_vcf$FILTER = "."
+SSC_benign_vcf$INFO = "."
+write.table(SSC_patho_vcf, file = "data/J_Li_data/SSC_patho.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(SSC_benign_vcf, file = "data/J_Li_data/SSC_benign.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+
+
 ```
 
 
