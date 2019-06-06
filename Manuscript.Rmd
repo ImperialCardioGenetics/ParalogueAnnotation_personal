@@ -756,7 +756,7 @@ dens = ggplot(data2, aes(x = variants, y = annotations)) +
     legend.text = element_text(size = 12), 
     legend.title = element_text(size = 12))
   
-ggsave("images/average_number_of_annotations_per_variant.png", height = 5, width = 10)
+ggsave("images/average_number_of_annotations_per_variant.png", height = 10, width = 8)
 ```
 
 Prior to annotation, there were `r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])` variants that aligned to at least one paralogous equivalent position according to ensembl (`r length(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),1])/length(clinvar_P_LP_tableized$CHROM)`)
@@ -853,7 +853,7 @@ dens2 = ggplot(data2, aes(x = genes, y = variants)) +
     legend.text = element_text(size = 12), 
     legend.title = element_text(size = 12))
   
-ggsave("images/average_number_of_variants_per_genes.png", height = 5, width = 10)
+ggsave("images/average_number_of_variants_per_genes.png", height = 10, width = 8)
 ```
 NB there's 435 unique variants lying in overlapping genes in the P/LP. Overall there's 489 instances of variants in a position that covers two genes (i.e. one instance of two gene overlapp)
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
