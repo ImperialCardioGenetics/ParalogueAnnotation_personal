@@ -71,6 +71,7 @@ Paralogous_var_align = function(paralogs2_file,
   
   Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
   Total_paralog_annotations = distinct(Total_paralog_annotations)
+  Total_paralog_annotations = Total_paralog_annotations[Total_paralog_annotations$Gene != Total_paralog_annotations$SYMBOL,]
   Unique_variant_annotations = Total_paralog_annotations[!is.na(Total_paralog_annotations$ID.y),]
   Unique_variant_gene_annotations = distinct(Unique_variant_annotations[c("Variant_pos", "ID.x", "Gene", "REF.x", "ALT.x")])
   Unique_variant_annotations = distinct(Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
