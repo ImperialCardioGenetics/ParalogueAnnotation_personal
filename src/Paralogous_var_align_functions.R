@@ -37,7 +37,7 @@ Paralogous_var_align = function(paralogs2_file,
   paralog_data = left_join(paralog_data,paralog_tableized_data, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
   
   paralog_data = distinct(paralog_data)
-  input_variants = distinct(paralog_data[c("Variant_pos", "ID", "REF", "ALT")])
+  paralog_data = paralog_data[!is.na(paralog_data$Protein_position) & !(grepl("-",paralog_data$Protein_position)),]
   
   if (Overlap == 0){
     n_occur = data.frame(table(paralog_data$ID))
@@ -57,6 +57,8 @@ Paralogous_var_align = function(paralogs2_file,
     paralog_data = paralog_data
   }
   
+  input_variants = distinct(paralog_data[c("Variant_pos", "ID", "REF", "ALT")])
+  
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
   
   joining_tableized_data = read.csv(file=joining_tableized_file, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
@@ -67,11 +69,21 @@ Paralogous_var_align = function(paralogs2_file,
   joining_tableized_data$REF_Amino_acids = sapply(joining_tableized_data[,"REF_Amino_acids"],function(x) x[1])
   joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"Amino_acids"],strsplit, "/")
   joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
+  joining_tableized_data = joining_tableized_data[!is.na(joining_tableized_data$Protein_position) & 
+                                                    !(grepl("-", joining_tableized_data$Protein_position)) &
+                                                    grepl("/", joining_tableized_data$Amino_acids) &
+                                                    str_count(joining_tableized_data$Amino_acids) == 3,]
   ref_data = joining_tableized_data
   
   Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
   Total_paralog_annotations = distinct(Total_paralog_annotations)
-  Total_paralog_annotations = Total_paralog_annotations[Total_paralog_annotations$Gene != Total_paralog_annotations$SYMBOL,]
+  Total_paralog_annotations = Total_paralog_annotations[Total_paralog_annotations$ID.x != Total_paralog_annotations$ID.y,]# & #remove self annotations that arise from overlapping genes that are paralogues to itself
+                                                          # Total_paralog_annotations$Gene != Total_paralog_annotations$SYMBOL,] #&
+                                                          # !is.na(Total_paralog_annotations$Protein_position.x) & #remove variants that are not protein coding
+                                                          # !(grepl("-",p.paralogous_var_align$Total_paralog_annotations$Protein_position.x)),] #remove variants that are not snv
+  
+  # input_variants = distinct(Total_paralog_annotations[c("Variant_pos","ID.x","REF.x","ALT.x")])
+  
   Unique_variant_annotations = Total_paralog_annotations[!is.na(Total_paralog_annotations$ID.y),]
   Unique_variant_gene_annotations = distinct(Unique_variant_annotations[c("Variant_pos", "ID.x", "Gene", "REF.x", "ALT.x")])
   Unique_variant_annotations = distinct(Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
