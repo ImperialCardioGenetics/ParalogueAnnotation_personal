@@ -196,7 +196,7 @@ clinvar_B_LB_vcf_tableized_genes = unique(unlist(sapply(clinvar_B_LB_vcf_tableiz
 clinvar_B_LB_vcf_tableized_genes = sapply(strsplit(clinvar_B_LB_vcf_tableized_genes, "\\:"), "[", 1) #counts genes that overlap as single gene
 
 #total clinvar genes in both P/LP and B/LB
-all_clinvar_genes = unique(c(clinvar_P_LP_tableized_genes, clinvar_B_LB_tableized_genes))
+all_clinvar_genes = unique(c(clinvar_P_LP_tableized_genes, clinvar_B_LB_tableized_genes)) #6284 here
 
 #ALL clinvar genes including VUS, not just P/LP and B/LB
 full_clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190114.vcf_tableized_org", sep = "\t", header = TRUE, stringsAsFactors = FALSE)
@@ -895,7 +895,7 @@ y = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_be
 length(intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))
 
 
-
+length(unique(c(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes)), intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes))))) #3123 here
 setdiff(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes)), intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))
 ```
 NB in clinvar_P_LP_genes_w_paralogs there are 3621 genes with paralogues but in the out_paraloc_paralogs file there are only 2451 genes. This is because there 1170 genes in clinvar_P_LP_genes_w_paralogs that are not in out_paraloc_paralogs because though there are variants in these genes they do not align to anything. There are also cases of over-lapping genes and so while one gene is reported the other might not. Also the same for some readthrough transcripts. Several genes with designation "AC######.#" go through non-sense mediated decay.
