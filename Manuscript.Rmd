@@ -1040,6 +1040,7 @@ Specificity_list = vector()
 ##Table##
 paraz_set = t(data.frame(Variant,Total))
 roc_data = data.frame()
+prc_data = data.frame()
 ####
 
 #### PA methods with para_z setting to 0 in order to have same number of starting variants
@@ -1150,12 +1151,22 @@ prc_data[16,5]="QC1+QC2+QC3"
 prc_data = rbind(prc_data, c(as.numeric(conf6$PPV),as.numeric(1.96*conf6$PPV_SE),as.numeric(conf6$Sensitivity),as.numeric(1.96*conf6$Sensitivity_SE)))
 prc_data[17,5]="QC1+QC3"
 
+# prc_data[18:21,5]=c("Sift", "MCap", "CADD", "Revel")
+
 prc_data$Type = factor(prc_data$Type, levels = c("no QC", "QC1", "QC1+Para_Z", "QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+# prc_data$Type = factor(prc_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+Para_Z", "QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+
 prc_data$Type[1:12] = "QC1+Para_Z"
 # gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
+cols = c("QC1+Para_Z" = "#4D5656", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("QC1+Para_Z" = 6, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+
+# cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+# shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+
 gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=5) + 
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,width=5) +
@@ -1163,11 +1174,12 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
   
-  scale_shape_manual(values=c(15, 16, 1, 17, 18, 19)) + xlim(0,0.25) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
+  xlim(0,0.25) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25))
+    plot.title = element_text(size = 14)) +labs(y = "PPV", x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25))
 ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2.png")
 
 
@@ -2167,24 +2179,27 @@ other_tools_data = data.frame(
   Sensitivity = c(as.numeric(other_tools_set[2:10,5])),
   Sensitivity_CI = c(as.numeric(other_tools_set[2:10,6]))
   )
-other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1" ,"QC1+QC2", "QC1+QC2+QC3", "QC1+QC3")
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+QC2", "QC1+QC2+QC3", "QC1+QC3")
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
 other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel","no QC", "QC1" ,"QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=7) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
   
-  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 19, 18)) +
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
   xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
-    axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) #+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
-ggsave("images/PRC_with_other_tools_with_QC3_QC1_no_QC2.png")
+    axis.title = element_text(size = 20), 
+    plot.title = element_text(size = 14)) + theme(axis.text = element_text(size = 16)) + theme(plot.title = element_text(hjust = 0.5)) + 
+  theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank())#+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
+ggsave("images/PRC_with_other_tools_with_QC3_QC1_no_QC2.png", width = 6, height = 8)
 
 other_tools_data = data.frame(
   Precision = c(as.numeric(other_tools_set[6:10,3])),
@@ -2364,18 +2379,29 @@ other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap",
 # other_tools_data$Precision_CI_min = other_tools_data$Precision - other_tools_data$Precision_CI
 # other_tools_data$Precision_CI_max = sapply(other_tools_data$Precision + other_tools_data$Precision_CI, min, 1)
 
-
-gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=7) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
-  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 19, 18)) +
-  xlim(0,1) + ylim(0.75,1)  + theme(plot.subtitle = element_text(vjust = 1),
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
+  xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25)) 
-ggsave("images/PRC_of_SCN5A.png")
+    plot.title = element_text(size = 14)) +labs(y = "PPV", x = "Sensitivity") + theme(legend.position="none", axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(legend.key.size = unit(2,"line"))
+ggsave("images/PRC_of_SCN5A.png", width = 6, height = 8)
 
+gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=7) + 
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
+  xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
+    plot.caption = element_text(vjust = 1), 
+    axis.title = element_text(size = 16), 
+    plot.title = element_text(size = 14)) +labs(y = "PPV", x = "Sensitivity") + theme(legend.text=element_text(size=16), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(2,"line"))
+ggsave("images/PRC_of_SCN5A_with_legend.png", width = 8, height = 8)
 ```
 
 
@@ -2436,22 +2462,25 @@ df1 = data.frame(
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=7) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
   
-  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 18, 19)) +
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25)) 
-ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/images/PRC_of_TP53-TA_with_other_tools_plot.png")
+    plot.title = element_text(size = 14),
+    legend.position="none", axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) 
+ggsave("images/PRC_of_TP53-TA_with_other_tools_plot.png", width = 6, height = 8)
 
-
+##################
 p.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 b.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 p.normal_PA2 = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.para_con", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -2571,20 +2600,22 @@ df1 = data.frame(
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=7) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
   
-  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 18, 19)) +
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25)) 
-ggsave("images/PRC_of_PPARG_with_other_tools_plot.png")
+    plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) 
+ggsave("images/PRC_of_PPARG_with_other_tools_plot.png", width = 6, height = 8)
 
 
 #SSC
@@ -2662,20 +2693,22 @@ df1 = data.frame(
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=7) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
   
-  scale_shape_manual(values=c(0, 1, 2, 5, 15, 16, 17, 18, 19)) +
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
-    x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.25)) 
-ggsave("images/PRC_of_SSC_with_other_tools_plot.png")
+    plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) 
+ggsave("images/PRC_of_SSC_with_other_tools_plot.png", width = 6, height = 8)
 ```
 
 
