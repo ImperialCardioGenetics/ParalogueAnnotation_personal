@@ -51,13 +51,13 @@ Paralogous_var_align = function(paralogs2_file,
     n_occur = NA
   }
   
+  input_variants = distinct(paralog_data[c("Variant_pos", "ID", "REF", "ALT")])
+  
   if (!(paraz_cutoff == "NA")){
     paralog_data = paralog_data[!is.na(paralog_data$Para_Z_score) & paralog_data$Para_Z_score >= paraz_cutoff,]
   } else {
     paralog_data = paralog_data
   }
-  
-  input_variants = distinct(paralog_data[c("Variant_pos", "ID", "REF", "ALT")])
   
   gathered_paralog_data = filter(gather(paralog_data, paralog, paralog_pos, paste("paralog", 1:max_no_col, sep = ""), factor_key = TRUE), paralog_pos != "")
   
