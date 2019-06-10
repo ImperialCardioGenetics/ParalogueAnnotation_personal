@@ -520,18 +520,21 @@ raw_conf_matrix = function(num_patho_pred_patho, p.tableized_data, num_benign_pr
   return(list("con_table" = con_table, "Accuracy" = con_table_ACC, "PPV" = con_table_PPV, "Sensitivity" = con_table_Sensitivty, "Specificity" = con_table_Specificity, "FPR" = con_table_FPR,"Pvalue" = con_table_p_value, "TP" = con_table_TP, "FP" = con_table_FP, "TN" = con_table_TN, "FN" = con_table_FN))
 }
 
-calc_EF = function(a, b, c, d){ #function for calculating Odds Ratios and Etiological Fractions
+calc_EF = function(a, b, c, d, add_0.5 = 0){ #function for calculating Odds Ratios and Etiological Fractions
   if (a == 0 | b == 0 | c == 0 | d == 0){
-    # a = a + 0.5
-    # b = b + 0.5
-    # c = c + 0.5
-    # d = d + 0.5
+    if (add_0.5 == 0){
     OR = "NA"
     OR_CI = "NA"
     OR_Z_value = "NA"
     OR_p_value = "NA"
     EF = "NA"
     EF_CI = "NA"
+    } else if (add_0.5 == 1){
+      a = a + 0.5
+      b = b + 0.5
+      c = c + 0.5
+      d = d + 0.5
+    }
   } else {
   
   OR = (a/b)/(c/d)
