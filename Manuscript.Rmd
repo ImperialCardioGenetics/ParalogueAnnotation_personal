@@ -3076,10 +3076,20 @@ ggsave("images/PRC_of_SSC_with_other_tools_plot.png", width = 10, height = 11)
 SSC_variants = f[f$Data.source=="SSC",-c(1,4)]
 SSC_variants$CHROM = substr(SSC_variants$Chr, 4, str_count(SSC_variants$Chr))
 SSC_variants$SUM = paste(SSC_variants$CHROM, SSC_variants$Start, SSC_variants$Ref, SSC_variants$Alt, sep = " ")
-clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190520_GRCh37.vcf_tableized_org", sep ="\t", header = T, stringsAsFactors = F)
+p.SSC_variants = SSC_variants[SSC_variants$Label=="asd",]
+b.SSC_variants = SSC_variants[SSC_variants$Label=="control",]
+clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190520_GRCh37.vcf_tableized_org2", sep ="\t", header = T, stringsAsFactors = F)
 clinvar_tableized$SUM = paste(clinvar_tableized$CHROM, clinvar_tableized$POS, clinvar_tableized$REF, clinvar_tableized$ALT, sep = " ")
-clinvar_tableized = clinvar_tableized[clinvar_tableized$SUM %in% SSC_variants$SUM &
-                                        !(grepl("Conflicting_interpretations_of_pathogenicity", clinvar_tableized$CLNSIG)),]
+p.clinvar_tableized = clinvar_tableized[clinvar_tableized$SUM %in% p.SSC_variants$SUM,]# &
+                                        !(grepl("Conflicting_interpretations_of_pathogenicity", clinvar_tableized$CLNSIG)) &
+                                        !(grepl("Uncertain_significance", clinvar_tableized$CLNSIG)) &
+                                        !(grepl("Benign", clinvar_tableized$CLNSIG)) &
+                                        !(grepl("Likely_benign", clinvar_tableized$CLNSIG)),]
+b.clinvar_tableized = clinvar_tableized[clinvar_tableized$SUM %in% b.SSC_variants$SUM,]# &
+                                        !(grepl("Conflicting_interpretations_of_pathogenicity", clinvar_tableized$CLNSIG)) &
+                                        !(grepl("Uncertain_significance", clinvar_tableized$CLNSIG)) &
+                                        !(grepl("Pathogenic", clinvar_tableized$CLNSIG)) &
+                                        !(grepl("Likely_pathogenic", clinvar_tableized$CLNSIG)),]
 ```
 
 
