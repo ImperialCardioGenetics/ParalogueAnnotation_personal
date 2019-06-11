@@ -805,14 +805,36 @@ For B/LB theres 295 dels.
 
 Finding overlapping genes and distribution of variants among genes in test set:
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
-x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
+# x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
 x0 = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
-x = distinct(x0[c("Variant_pos", "ID", "REF", "ALT")])
+# x = distinct(x0[c("Variant_pos", "ID", "REF", "ALT")])
 library(plyr)
 y = ddply(x0[,c("Variant_pos", "ID", "REF", "ALT")],.(Variant_pos, ID, REF, ALT),nrow)
 y = y[y$V1>1,]
 dim(y)
 z = x0[x0$ID %in% y$ID,]
+
+out_paraloc_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep="\t", quote="", stringsAsFactors = 0)
+p.overlapp_genes = Paralogous_var_align(Overlap = 1, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.overlapp_genes = p.overlapp_genes$paralog_data[,c("ID", "Gene")]
+p.overlapp_genes = unique(p.overlapp_genes$ID)
+overlapp_genes = data.frame(
+  # CHROM = c(),
+  # POS = c(),
+  # REF = c(),
+  # ALT = c(),
+  # ID = c(),
+  # SYMBOL = c()
+)
+for (i in p.overlapp_genes){
+  x = out_paraloc_tableized[grepl(paste("\\b",i,"\\b", sep = ""),out_paraloc_tableized$ID, perl = T), c("CHROM","POS","REF","ALT","ID","SYMBOL")]
+  # tmp_df = data.frame(
+  #   id = i,
+  #   genes = x
+  # )
+  overlapp_genes= rbind(overlapp_genes, x)
+}
+overlapp_genes %>% spread(SYMBOL, SYMBOL)
 
 ### Analysing average number of variants per gene
 num_of_var = vector()
