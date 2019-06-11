@@ -42,8 +42,8 @@ Paralogous_var_align = function(paralogs2_file,
   if (Overlap == 0){
     n_occur = data.frame(table(paralog_data$ID))
     
-    overlapp_genes = n_occur[n_occur$Freq>1,]
-    
+    # overlapp_genes = n_occur[n_occur$Freq>1,]
+    # overlapp_genes = filter(paralog_data, ID %in% overlapp_genes$Var1)
     
     n_occur = n_occur[n_occur$Freq==1,]
     paralog_data = filter(paralog_data, ID %in% n_occur$Var1)
