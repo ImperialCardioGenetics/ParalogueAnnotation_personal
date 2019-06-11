@@ -834,7 +834,9 @@ for (i in p.overlapp_genes){
   # )
   overlapp_genes= rbind(overlapp_genes, x)
 }
-overlapp_genes %>% spread(SYMBOL, SYMBOL)
+overlapp_genes = aggregate(SYMBOL ~., overlapp_genes, toString)
+names(overlapp_genes)[6] = "GENES"
+write.table(overlapp_genes, file = "data/clinvar/variants_in_overlapp_genes.csv", na=".", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
 
 ### Analysing average number of variants per gene
 num_of_var = vector()
