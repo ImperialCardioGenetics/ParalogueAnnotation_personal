@@ -2497,10 +2497,10 @@ gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
-  theme(axis.text = element_text(size = 25)) + 
+  theme(axis.text = element_text(size = 35)) + 
   theme(plot.title = element_text(hjust = 0.5)) + 
   theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank())#+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
-ggsave("images/PRC_with_other_tools_with_QC3_QC1_no_QC2.png", width = 8, height = 9)
+ggsave("images/PRC_with_other_tools_with_QC3_QC1_no_QC2.png", width = 10, height = 11)
 
 other_tools_data = data.frame(
   Precision = c(as.numeric(other_tools_set[6:10,3])),
@@ -2694,10 +2694,10 @@ gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sha
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
-  theme(legend.position="none", axis.text = element_text(size = 25), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(legend.key.size = unit(2,"line"))
-ggsave("images/PRC_of_SCN5A.png", width = 8, height = 9)
+  theme(legend.position="none", axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(legend.key.size = unit(2,"line"))
+ggsave("images/PRC_of_SCN5A.png", width = 10, height = 11)
 
-gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=7) + 
+gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
   scale_shape_manual(values = shapes) +
@@ -2710,8 +2710,8 @@ gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sha
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
-  theme(legend.text=element_text(size=16), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(5,"line"))
-ggsave("images/PRC_of_SCN5A_with_legend.png", width = 8, height = 9)
+  theme(legend.text=element_text(size=25), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(5,"line"))
+ggsave("images/PRC_of_SCN5A_with_legend.png", width = 10, height = 11)
 ```
 
 
@@ -2788,7 +2788,7 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14),
     legend.position="none", 
-    axis.text = element_text(size = 25), 
+    axis.text = element_text(size = 35), 
     axis.title.x=element_blank(), 
     axis.title.y=element_blank()) + 
    theme(plot.background = element_blank(),
@@ -2796,7 +2796,7 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
   theme(plot.title = element_text(hjust = 0.25)) 
-ggsave("images/PRC_of_TP53-TA_with_other_tools_plot.png", width = 8, height = 9)
+ggsave("images/PRC_of_TP53-TA_with_other_tools_plot.png", width = 10, height = 11)
 
 ##################
 p.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -2932,13 +2932,13 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 25), axis.title.x=element_blank(), axis.title.y=element_blank()) +
+    plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) +
    theme(plot.background = element_blank(),
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
   theme(plot.title = element_text(hjust = 0.25)) 
-ggsave("images/PRC_of_PPARG_with_other_tools_plot.png", width = 8, height = 9)
+ggsave("images/PRC_of_PPARG_with_other_tools_plot.png", width = 10, height = 11)
 
 
 #SSC
@@ -3030,13 +3030,13 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 25), axis.title.x=element_blank(), axis.title.y=element_blank()) +
+    plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) +
    theme(plot.background = element_blank(),
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
   theme(plot.title = element_text(hjust = 0.25)) 
-ggsave("images/PRC_of_SSC_with_other_tools_plot.png", width = 8, height = 9)
+ggsave("images/PRC_of_SSC_with_other_tools_plot.png", width = 10, height = 11)
 ```
 
 
