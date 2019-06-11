@@ -2823,18 +2823,22 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
 ggsave("images/PRC_of_TP53-TA_with_other_tools_plot.png", width = 10, height = 11)
 
 #checking if any of the variants are in clinvar
+TP53_variants = other_tools[,c("CHROM","POS","REF","ALT")]
+TP53_variants$Chr = substr(TP53_variants$CHROM, 4, str_count(TP53_variants$CHROM))
+TP53_variants$SUM = paste(TP53_variants$Chr, TP53_variants$POS, TP53_variants$REF, TP53_variants$ALT, sep = " ")
 clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190520_GRCh37.vcf_tableized_org", sep ="\t", header = T, stringsAsFactors = F)
-clinvar_tableized = clinvar_tableized[grepl("TP53:",clinvar_tableized$GENEINFO) &
-                                        clinvar_tableized$POS %in% other_tools$POS
+clinvar_tableized$SUM = paste(clinvar_tableized$CHROM, clinvar_tableized$POS, clinvar_tableized$REF, clinvar_tableized$ALT, sep = " ")
+clinvar_tableized = clinvar_tableized[clinvar_tableized$SUM %in% TP53_variants$SUM &
+                                        !(grepl("Conflicting_interpretations_of_pathogenicity", clinvar_tableized$CLNSIG))
                                       ,]
 
 ##################
-p.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-p.normal_PA2 = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.para_con", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA2 = Paralogous_var_align("data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.para_con", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-p.normal_PA3 = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.all_con", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.normal_PA3 = Paralogous_var_align("data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.all_con", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA = Paralogous_var_align(Overlap = 0, "data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align(Overlap = 0, "data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA2 = Paralogous_var_align(Overlap = 0, "data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.para_con", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA2 = Paralogous_var_align(Overlap = 0, "data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.para_con", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA3 = Paralogous_var_align(Overlap = 0, "data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.all_con", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA3 = Paralogous_var_align(Overlap = 0, "data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.all_con", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 p.normal_PA4 = list()
 p.normal_PA4$Total_paralog_annotations = p.normal_PA3$Total_paralog_annotations[p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
 b.normal_PA4 = list()
@@ -2866,7 +2870,7 @@ cadd1_conf = conf_matrix(p.num_of_cadd,other_tools,b.num_of_cadd,b.other_tools)
 normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, other_tools, b.normal_PA$true_num_of_paralog_anno, b.other_tools)
 normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools, b.normal_PA2$true_num_of_paralog_anno, b.other_tools)
 normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools, b.normal_PA3$true_num_of_paralog_anno, b.other_tools)
-  normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
 
 df2 = data.frame(
   Type = c("Sift","Mcap","Cadd","Revel","noQC","QC1","QC2","QC3"),
@@ -3067,6 +3071,15 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
         axis.line.y = element_line(color="black", size = 2)) +
   theme(plot.title = element_text(hjust = 0.25)) 
 ggsave("images/PRC_of_SSC_with_other_tools_plot.png", width = 10, height = 11)
+
+#checking if any of the variants are in clinvar
+SSC_variants = f[f$Data.source=="SSC",-c(1,4)]
+SSC_variants$CHROM = substr(SSC_variants$Chr, 4, str_count(SSC_variants$Chr))
+SSC_variants$SUM = paste(SSC_variants$CHROM, SSC_variants$Start, SSC_variants$Ref, SSC_variants$Alt, sep = " ")
+clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190520_GRCh37.vcf_tableized_org", sep ="\t", header = T, stringsAsFactors = F)
+clinvar_tableized$SUM = paste(clinvar_tableized$CHROM, clinvar_tableized$POS, clinvar_tableized$REF, clinvar_tableized$ALT, sep = " ")
+clinvar_tableized = clinvar_tableized[clinvar_tableized$SUM %in% SSC_variants$SUM &
+                                        !(grepl("Conflicting_interpretations_of_pathogenicity", clinvar_tableized$CLNSIG)),]
 ```
 
 
