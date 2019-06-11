@@ -1,11 +1,11 @@
 Pathogenic variants,Benign variants,PPV,Sensitivity,Specificity,P value
 Total variants,23894,14617,NA,NA,NA,NA
-Paralogue Annotation,4594,533,0.9,0.19,0.96,0
-Variants remaining after QC1,3877,155,0.96,0.16,0.99,0
-Variants remaining after QC1+QC2,2090,27,0.99,0.087,1,0
+Paralogue Annotation,4234,366,0.92,0.18,0.97,0
+Variants remaining after QC1,3641,121,0.97,0.15,0.99,0
+Variants remaining after QC1+QC2,1983,24,0.99,0.083,1,0
 Variants remaining after QC1+QC3,1318,17,0.99,0.055,1,2.3e-248
 Variants remaining after QC1+QC2+QC3,675,4,0.99,0.028,1,1e-133
-Variants removed from QC1,717,378,0.65,0.03,0.97,0.018
-Variants removed from QC1+QC2,1787,128,0.93,0.075,0.99,4.1e-231
-Variants removed from QC1+QC3,2559,138,0.95,0.11,0.99,0
-Variants removed from QC1+QC2+QC3,1415,23,0.98,0.059,1,5e-260
+Variants removed from QC1,593,245,0.71,0.025,0.98,9.4e-08
+Variants removed from QC1+QC2,1658,97,0.94,0.069,0.99,1.8e-231
+Variants removed from QC1+QC3,2323,104,0.96,0.097,0.99,0
+Variants removed from QC1+QC2+QC3,1308,20,0.98,0.055,1,8.8e-242
