@@ -2822,6 +2822,12 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   theme(plot.title = element_text(hjust = 0.25)) 
 ggsave("images/PRC_of_TP53-TA_with_other_tools_plot.png", width = 10, height = 11)
 
+#checking if any of the variants are in clinvar
+clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190520_GRCh37.vcf_tableized_org", sep ="\t", header = T, stringsAsFactors = F)
+clinvar_tableized = clinvar_tableized[grepl("TP53:",clinvar_tableized$GENEINFO) &
+                                        clinvar_tableized$POS %in% other_tools$POS
+                                      ,]
+
 ##################
 p.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_deleterious.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 b.normal_PA = Paralogous_var_align("data/UniFun/4704955/UniFun_benign.out_paraloc_paralogs2.noQC", "data/UniFun/4704955/UniFun_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
