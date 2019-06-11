@@ -75,6 +75,8 @@ Paralogous_var_align = function(paralogs2_file,
   joining_tableized_data$ALT_Amino_acids = sapply(joining_tableized_data[,"ALT_Amino_acids"],function(x) x[2])
   joining_tableized_data = joining_tableized_data[!is.na(joining_tableized_data$Protein_position) & 
                                                     !(grepl("-", joining_tableized_data$Protein_position)) &
+                                                    !(grepl("-", joining_tableized_data$Amino_acids)) &
+                                                    !(grepl("\\*", joining_tableized_data$Amino_acids)) &
                                                     grepl("/", joining_tableized_data$Amino_acids) &
                                                     str_count(joining_tableized_data$Amino_acids) == 3,]
   ref_data = joining_tableized_data
