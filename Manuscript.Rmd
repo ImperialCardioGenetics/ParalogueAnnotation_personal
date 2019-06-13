@@ -772,7 +772,7 @@ dens = ggplot(data2, aes(x = variants, y = annotations)) +
   coord_trans(y="log2") +
   scale_y_continuous(breaks = c(1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000)) +
   scale_x_continuous(breaks = c(0,500,1000,1500,2000,2500,3000), limits = c(0,3000)) +
-  ylab(expression(log[10](number~of~annotations~per~variant))) + xlab("number of variants") + theme(axis.title = element_text(size = 15), 
+  ylab("number~of~annotations~per~variant") + xlab("number of variants") + theme(axis.title = element_text(size = 15), 
     axis.text = element_text(size = 15), 
     plot.title = element_text(size = 15), 
     legend.text = element_text(size = 12), 
@@ -790,6 +790,9 @@ Using the aforementioned quality control steps to increase the stringency of con
 
 Looking at pipeline of study:
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+dim(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Amino_acids) & !(grepl("-", clinvar_P_LP_tableized$Amino_acids)) & !(grepl("-", clinvar_P_LP_tableized$Protein_position)) & !(grepl("\\*", clinvar_P_LP_tableized$Amino)) & grepl("/", clinvar_P_LP_tableized$Amino_acids) & str_count(clinvar_P_LP_tableized$Amino_acids) == 3,])
+
+
 x = read.csv(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
 y = read.csv(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.vcf", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
 length(unique(x$V3)) #short one
@@ -893,7 +896,7 @@ dens2 = ggplot(data2, aes(x = genes, y = variants)) +
   geom_hline(yintercept = mean(b.data$variants),linetype="dashed", color = "red") + 
   coord_trans(y="log10") +
   scale_y_continuous(breaks = c(1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,600)) +
-  ylab(expression(log[10](number~of~variants~per~gene))) + xlab("number of genes") + theme(axis.title = element_text(size = 15), 
+  ylab("number of variants per gene") + xlab("number of genes") + theme(axis.title = element_text(size = 15), 
     axis.text = element_text(size = 15), 
     plot.title = element_text(size = 15), 
     legend.text = element_text(size = 12), 
@@ -1932,7 +1935,7 @@ disease_data_ref$total_cases = sapply(disease_data_ref$total_cases,function(x) x
 disease_data_ref$Protein_position = substr(disease_data_ref$mut_protein, 4, str_count(disease_data_ref$mut_protein)-1)
 
 #total cases sequenced for each gene
-disease_total_variant_cases = data.frame(genes = c("SCN5A"), cases = c(2111))
+disease_total_variant_cases = data.frame(genes = c("SCN5A"), cases = c(2500))
 #individual cases for rare variants #finding only protein positions that are not transmembrane domains identified by pfam
 SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID &
                                                                      (disease_data_ref$Protein_position < 132 |
@@ -2005,7 +2008,18 @@ Protein_pos_select = control.paralogous_var_align$Total_paralog_annotations[!is.
 control_cohort_data = control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x & control_data_ref$ID %in% Protein_pos_select$ID.x,] 
 SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x & control_data_ref$ID %in% Protein_pos_select$ID.x, "Allele.Count"]))
 
-
+###raw numbers
+LQTS_nTM_SCN5A_rare_rn = c(
+  SCN5A_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_rare_variant_cases,
+  SCN5A_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_rare_variant_cases
+  )
+LQTS_nTM_SCN5A_pa_rn = c(SCN5A_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+  SCN5A_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
 ###Calculating EFs
 SCN5A_rare_EF = calc_EF(
   SCN5A_disease_rare_variant_cases,
@@ -2021,7 +2035,7 @@ SCN5A_pa_EF = calc_EF(
   )
 
 gene_EFs = data.frame(
-  gene = c("SCN5A"),
+  gene = c("LQTS_nTM_SCN5A"),
   rare_variant_OR = c(
                       cell_format(SCN5A_rare_EF$OR, SCN5A_rare_EF$OR_CI)),
   rare_variant_EF = c(
@@ -2034,6 +2048,7 @@ gene_EFs = data.frame(
 gene_EFs = add_column(gene_EFs, "rare_p-values" = signif(SCN5A_rare_EF$OR_p_value, digits = 2), .after = "rare_variant_EF")
 gene_EFs = add_column(gene_EFs, "pa_p-values" = signif(SCN5A_pa_EF$OR_p_value, digits = 2), .after = "pa_variant_EF")
 write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_onlySCN5A_interlinker_domains_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+LQTS_nTM_SCN5A_EF = gene_EFs
 ```
 looking at only variants in Voltage-gated Na+ ion channel, cytoplasmic domain in scn5a for BrS
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
@@ -2144,7 +2159,18 @@ Protein_pos_select = control.paralogous_var_align$Total_paralog_annotations[!is.
 control_cohort_data = control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x & control_data_ref$ID %in% Protein_pos_select$ID.x,] 
 SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x & control_data_ref$ID %in% Protein_pos_select$ID.x, "Allele.Count"]))
 
-
+###raw numbers
+BrS_nTM_SCN5A_rare_rn = c(
+  SCN5A_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_rare_variant_cases,
+  SCN5A_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_rare_variant_cases
+  )
+BrS_nTM_SCN5A_pa_rn = c(SCN5A_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+  SCN5A_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
 ###Calculating EFs
 SCN5A_rare_EF = calc_EF(
   SCN5A_disease_rare_variant_cases,
@@ -2160,7 +2186,7 @@ SCN5A_pa_EF = calc_EF(
   )
 
 gene_EFs = data.frame(
-  gene = c("SCN5A"),
+  gene = c("BrS_nTM_SCN5A"),
   rare_variant_OR = c(
                       cell_format(SCN5A_rare_EF$OR, SCN5A_rare_EF$OR_CI)),
   rare_variant_EF = c(
@@ -2173,6 +2199,7 @@ gene_EFs = data.frame(
 gene_EFs = add_column(gene_EFs, "rare_p-values" = signif(SCN5A_rare_EF$OR_p_value, digits = 2), .after = "rare_variant_EF")
 gene_EFs = add_column(gene_EFs, "pa_p-values" = signif(SCN5A_pa_EF$OR_p_value, digits = 2), .after = "pa_variant_EF")
 write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_onlySCN5A_interlinker_domains_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+BrS_nTM_SCN5A_EF = gene_EFs
 ```
 
 ## Comparison to other tools
@@ -3721,7 +3748,31 @@ write.table(aligned_benign_clinvar_and_patho_pred_variants,"data/all_possible_mu
 
 aligned_benign_clinvar_and_patho_clinvar_and_patho_pred_protein_pos = intersect(aligned_benign_clinvar_and_patho_pred_protein_pos, aligned_clinvar_and_patho_protein_pos)
 
+##% increase of residues with "information"
+num_clinvar_P_LP = length(clinvar_P_LP_tableized_protein_pos)
+num_PA_pred_patho = length(patho_protein_pos)-length(aligned_clinvar_and_patho_protein_pos)
+perc_inc = (num_PA_pred_patho + num_clinvar_P_LP)/num_clinvar_P_LP
 
+
+#QC1+QC3 patho
+p.normal_PA = Paralogous_var_align("data/all_possible_mutations/SCN5A/synthetic.vep.cov.table_chrom3_onlySCN5A_variants.out_paraloc_paralogs2.para_con", "data/all_possible_mutations/SCN5A/synthetic.vep.cov.table_chrom3_onlySCN5A_variants.out_paraloc_tableized", "data/clinvar/clinvar_20190520_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
+QC1_QC3_patho_protein_pos = unique(p.normal_PA$Total_paralog_annotations[!is.na(p.normal_PA$Total_paralog_annotations$ID.y) & p.normal_PA$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA$Total_paralog_annotations$ALT_Amino_acids.y,"Protein_position.x"])
+
+QC1_QC3_aligned_clinvar_and_patho_protein_pos = intersect(clinvar_P_LP_tableized_protein_pos,QC1_QC3_patho_protein_pos)
+
+QC1_QC3_num_PA_pred_patho = length(QC1_QC3_patho_protein_pos)-length(QC1_QC3_aligned_clinvar_and_patho_protein_pos)
+QC1_QC3_perc_inc = (QC1_QC3_num_PA_pred_patho + num_clinvar_P_LP)/num_clinvar_P_LP
+
+#QC1+QC2+QC3
+p.normal_PA = Paralogous_var_align("data/all_possible_mutations/SCN5A/synthetic.vep.cov.table_chrom3_onlySCN5A_variants.out_paraloc_paralogs2.all_con", "data/all_possible_mutations/SCN5A/synthetic.vep.cov.table_chrom3_onlySCN5A_variants.out_paraloc_tableized", "data/clinvar/clinvar_20190520_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
+QC1_QC2_QC3_patho_protein_pos = unique(p.normal_PA$Total_paralog_annotations[!is.na(p.normal_PA$Total_paralog_annotations$ID.y) & p.normal_PA$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA$Total_paralog_annotations$ALT_Amino_acids.y,"Protein_position.x"])
+
+aligned_clinvar_and_patho_QC1_QC2_QC3_protein_pos = intersect(clinvar_P_LP_tableized_protein_pos,QC1_QC2_QC3_patho_protein_pos)
+
+QC1_QC2_QC3_num_PA_pred_patho = length(QC1_QC2_QC3_patho_protein_pos)-length(aligned_clinvar_and_patho_QC1_QC2_QC3_protein_pos)
+QC1_QC2_QC3_perc_inc = (QC1_QC2_QC3_num_PA_pred_patho + num_clinvar_P_LP)/num_clinvar_P_LP
 ```
 
 
