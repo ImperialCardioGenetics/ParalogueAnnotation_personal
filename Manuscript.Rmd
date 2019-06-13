@@ -390,7 +390,7 @@ clinvar_B_LB_tableized_genes = as.vector(unique(clinvar_B_LB_tableized$SYMBOL))
 
 var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_gene_annotations$Gene))
 p.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
-p.var_in_genes_unique_var = p.var_in_genes_unique_var[p.var_in_genes_unique_var$Var1 %in% clinvar_P_LP_tableized_genes,] #802 HERE!!!
+p.var_in_genes_unique_var = p.var_in_genes_unique_var[p.var_in_genes_unique_var$Var1 %in% clinvar_P_LP_tableized_genes,] #643 HERE!!!
 write.table(p.var_in_genes_unique_var, file = "data/clinvar/genes_with_number_of_annotations_noQC.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
 not_var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
 p.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
@@ -790,7 +790,14 @@ Using the aforementioned quality control steps to increase the stringency of con
 
 Looking at pipeline of study:
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
-dim(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Amino_acids) & !(grepl("-", clinvar_P_LP_tableized$Amino_acids)) & !(grepl("-", clinvar_P_LP_tableized$Protein_position)) & !(grepl("\\*", clinvar_P_LP_tableized$Amino)) & grepl("/", clinvar_P_LP_tableized$Amino_acids) & str_count(clinvar_P_LP_tableized$Amino_acids) == 3,])
+clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+
+num_only_missense = length(unique(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Amino_acids) & 
+                             !(grepl("-", clinvar_P_LP_tableized$Amino_acids)) &
+                             !(grepl("-", clinvar_P_LP_tableized$Protein_position)) &
+                             !(grepl("\\*", clinvar_P_LP_tableized$Amino_acids)) &
+                             grepl("/", clinvar_P_LP_tableized$Amino_acids) &
+                             str_count(clinvar_P_LP_tableized$Amino_acids) == 3,"ID"]))
 
 
 x = read.csv(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc", sep = "\t", header=0, stringsAsFactors = 0, fill=FALSE, quote="", na.strings=".", comment.char="#")
@@ -908,26 +915,50 @@ NB there's 435 unique variants lying in overlapping genes in the P/LP. Overall t
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 clinvar_P_LP_only_snv_missense_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 clinvar_P_LP_only_snv_missense_tableized = clinvar_P_LP_only_snv_missense_tableized[!is.na(clinvar_P_LP_only_snv_missense_tableized$Protein_position) &
+                                                                                      !is.na(clinvar_P_LP_only_snv_missense_tableized$Amino_acids) &
                                                                                       !(grepl("-", clinvar_P_LP_only_snv_missense_tableized$Protein_position)) &
+                                                                                      !(grepl("-", clinvar_P_LP_only_snv_missense_tableized$Amino_acids)) &
+                                                                                      !(grepl("\\*", clinvar_P_LP_only_snv_missense_tableized$Amino_acids)) &
                                                                                       grepl("/", clinvar_P_LP_only_snv_missense_tableized$Amino_acids) &
                                                                                       str_count(clinvar_P_LP_only_snv_missense_tableized$Amino_acids) == 3,]
+
+num_of_var_clinvar_P_LP_only_snv_missense_tableized = length(unique(clinvar_P_LP_only_snv_missense_tableized$ID)) #43136
+num_of_genes_clinvar_P_LP_only_snv_missense_tableized = length(unique(clinvar_P_LP_only_snv_missense_tableized$SYMBOL)) #3631
 
 x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
 setdiff(unique(clinvar_P_LP_genes_w_paralogs),unique(x$Gene))
 setdiff(unique(x$Gene),unique(clinvar_P_LP_genes_w_paralogs))
 # write.table(gene_EFs, file = "data/case_and_control/gene_EFs.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
 # Number of disease protein coding genes that have at least 1 paralogue and at least 1 P/LP variant aligning to a non-gap position
-length(unique(x$Gene))
+length(unique(x$Gene)) #2485
 # Number of disease protein coding genes that have at least 1 paralogue and at least 1 P/LP variant aligning to a non-gap position of another disease gene
 length(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes))) 
 write.table(setdiff(unique(clinvar_P_LP_tableized_genes),unique(x$Gene)), file = "data/clinvar/genes_in_out_paraloc_paralogs2.noQC.txt", row.names = FALSE, col.names = FALSE)
 length(unique(intersect(x$Gene, clinvar_P_LP_only_snv_missense_tableized$SYMBOL))) #2451
 
+p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+length(unique(intersect(p.paralogous_var_align$Total_paralog_annotations$SYMBOL, clinvar_P_LP_tableized$SYMBOL)))
+
+clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_tableized$Variant_pos = paste(clinvar_P_LP_tableized$CHROM,clinvar_P_LP_tableized$POS, sep = " ")
+paralog_data = left_join(x,clinvar_P_LP_tableized, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
+  paralog_data = paralog_data[!is.na(paralog_data$Protein_position) & !(grepl("-",paralog_data$Protein_position)),]
+
+
+
 clinvar_B_LB_only_snv_missense_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 clinvar_B_LB_only_snv_missense_tableized = clinvar_B_LB_only_snv_missense_tableized[!is.na(clinvar_B_LB_only_snv_missense_tableized$Protein_position) &
+                                                                                      !is.na(clinvar_B_LB_only_snv_missense_tableized$Amino_acids) &
                                                                                       !(grepl("-", clinvar_B_LB_only_snv_missense_tableized$Protein_position)) &
+                                                                                      !(grepl("-", clinvar_B_LB_only_snv_missense_tableized$Amino_acids)) &
+                                                                                      !(grepl("\\*", clinvar_B_LB_only_snv_missense_tableized$Amino_acids)) &
                                                                                       grepl("/", clinvar_B_LB_only_snv_missense_tableized$Amino_acids) &
                                                                                       str_count(clinvar_B_LB_only_snv_missense_tableized$Amino_acids) == 3,]
+
+num_of_var_clinvar_B_LB_only_snv_missense_tableized = length(unique(clinvar_B_LB_only_snv_missense_tableized$ID)) #19112
+num_of_genes_clinvar_B_LB_only_snv_missense_tableized = length(unique(clinvar_B_LB_only_snv_missense_tableized$SYMBOL)) #3007
+
+total_num_of_genes_clinvar_P_LP_B_LB_only_snv_missense_tableized = length(unique(c(unique(clinvar_P_LP_only_snv_missense_tableized$SYMBOL), unique(clinvar_B_LB_only_snv_missense_tableized$SYMBOL))))
 
 y = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
 length(intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))
