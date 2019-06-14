@@ -771,6 +771,10 @@ p.data = data.frame(
   variant = "pathogenic",
   annotations = summary_num_of_anno$Freq
 )
+p.data = rbind(p.data, data.frame(
+  variant = "pathogenic",
+  annotations = integer(19660)
+))
 p.data$variant = as.factor(p.data$variant)
 
 num_of_anno = vector()
@@ -786,6 +790,10 @@ b.data = data.frame(
   variant = "benign",
   annotations = summary_num_of_anno$Freq
 )
+b.data = rbind(b.data, data.frame(
+  variant = "benign",
+  annotations = integer(14251)
+))
 b.data$variant = as.factor(b.data$variant)
 
 data = rbind(p.data, b.data)
@@ -799,14 +807,19 @@ dens = ggplot(data, aes(x = variant, y = annotations)) +
   coord_trans(y="log10") +
   scale_y_continuous(breaks = c(1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,600))
 
+data2 = rbind(data2, 
+              data.frame(annotations = c(0,0),
+                         variants = c(19660,14251),
+                         label = c("pathogenic","benign")))
+
 dens = ggplot(data2, aes(x = variants, y = annotations)) +
   geom_point(aes(colour = label, shape = label)) + 
-  geom_hline(yintercept = mean(p.data$annotations),linetype="dashed", color = "blue") + 
-  geom_hline(yintercept = mean(b.data$annotations),linetype="dashed", color = "red") + 
-  coord_trans(y="log2") +
-  scale_y_continuous(breaks = c(1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000)) +
-  scale_x_continuous(breaks = c(0,500,1000,1500,2000,2500,3000), limits = c(0,3000)) +
-  ylab("number~of~annotations~per~variant") + xlab("number of variants") + theme(axis.title = element_text(size = 15), 
+  # geom_hline(yintercept = mean(p.data$annotations),linetype="dashed", color = "blue") +
+  # geom_hline(yintercept = mean(b.data$annotations),linetype="dashed", color = "red") +
+  # coord_trans(y="log2") +
+  # scale_y_continuous(breaks = c(1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,1000)) +
+  # scale_x_continuous(breaks = c(0,500,1000,1500,2000,2500,3000), limits = c(0,3000)) +
+  ylab("number of annotations per variant") + xlab("number of variants") + theme(axis.title = element_text(size = 15), 
     axis.text = element_text(size = 15), 
     plot.title = element_text(size = 15), 
     legend.text = element_text(size = 12), 
@@ -933,8 +946,8 @@ dens2 = ggplot(data, aes(x = gene, y = variants)) +
   
 dens2 = ggplot(data2, aes(x = genes, y = variants)) +
   geom_point(aes(colour = label, shape = label)) + 
-  geom_hline(yintercept = mean(p.data$variants),linetype="dashed", color = "blue") + 
-  geom_hline(yintercept = mean(b.data$variants),linetype="dashed", color = "red") + 
+  # geom_hline(yintercept = mean(p.data$variants),linetype="dashed", color = "blue") + 
+  # geom_hline(yintercept = mean(b.data$variants),linetype="dashed", color = "red") + 
   coord_trans(y="log10") +
   scale_y_continuous(breaks = c(1,2,3,4,5,10,20,30,40,50,100,200,300,400,500,600)) +
   ylab("number of variants per gene") + xlab("number of genes") + theme(axis.title = element_text(size = 15), 
@@ -1658,7 +1671,8 @@ write.table(vcf_Total_var, file = "data/LQTS/All_variants.vcf", sep = "\t", quot
 ```
 
 Ackerman data from ICC_Mutations
-LQTS
+LQTS 
+rare vs rare+pa
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 
 #Finding only rare variants
@@ -1855,7 +1869,8 @@ write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_EFs.csv", na="", row.names
 
 # vcf_conv = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv", sep = ",", stringsAsFactors = 0)
 ```
-BrS
+BrS 
+rare vs rare+pa
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 
 #Finding only rare variants
@@ -1963,7 +1978,289 @@ write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_EFs.csv", na="", row.names =
 
 # vcf_conv = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv", sep = ",", stringsAsFactors = 0)
 ```
+
+LQTS 
+not rare+pa vs rare+pa
+```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+#Finding only rare variants
+disease_cohort_variants = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.vcf", sep = "\t", stringsAsFactors = 0)
+gnomad_total_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants.vcf", sep = "\t", stringsAsFactors = 0)
+gnomad_rare_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.vcf", sep = "\t", stringsAsFactors = 0) #RUN PA ON THIS FILE
+rare_disease_cohort_variants = data.frame()
+# disease_cohort_variants = disease_cohort_variants[1:10,]
+for (row in 1:nrow(disease_cohort_variants)){ #FINDING ONLY RARE VARIANTS BASED ON GNOMAD FREQUENCY
+  if (
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_rare_variants$X.CHROM, gnomad_rare_variants$POS, gnomad_rare_variants$REF, gnomad_rare_variants$ALT)
+    ){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  } else if (!(
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_total_variants$X.CHROM, gnomad_total_variants$POS, gnomad_total_variants$REF, gnomad_total_variants$ALT)
+  )){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  }
+}
+colnames(rare_disease_cohort_variants)[1] = "#CHROM"
+###disease cohort
+disease_data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
+disease_data_ref$cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$cases = sapply(disease_data_ref$cases,function(x) x[1])
+disease_data_ref$total_cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$total_cases = sapply(disease_data_ref$total_cases,function(x) x[2])
+#total cases sequenced for each gene
+disease_total_variant_cases = data.frame(genes = c("KCNE1","KCNE2","KCNH2","KCNQ1","SCN5A"), cases = c(2500,2500,2500,2500,2500))
+#individual cases for rare variants
+KCNE1_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE1" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
+KCNE2_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE2" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
+KCNH2_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNH2" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
+KCNQ1_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNQ1" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
+SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
+#individual cases for variants predicted pathogenic by PA
+disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x,]
+KCNE1_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE1" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+KCNE2_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE2" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+KCNH2_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNH2" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+KCNQ1_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNQ1" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+SCN5A_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+#individual cases for rare variants and not annotated by PA
+KCNE1_disease_not_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE1" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID & !(disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x), "cases"]))
+KCNE2_disease_not_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE2" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID & !(disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x), "cases"]))
+KCNH2_disease_not_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNH2" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID & !(disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x), "cases"]))
+KCNQ1_disease_not_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNQ1" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID & !(disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x), "cases"]))
+SCN5A_disease_not_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID & !(disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x), "cases"]))
+
+
+###control cohort
+control_data_ref = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_with_customIDs.csv", sep = ",", stringsAsFactors = 0)
+control_data_ref  = control_data_ref[control_data_ref$Gene != "Gene",] #remove the extra header lines from when concatenated the separate gene csv files together
+
+gnomad_total_variants$X.CHROM = as.character(gnomad_total_variants$X.CHROM)
+gnomad_total_variants$POS = as.character(gnomad_total_variants$POS)
+control_data_ref = full_join(control_data_ref,gnomad_total_variants,by = c("Chromosome" = "X.CHROM", "Position" = "POS", "Reference" = "REF", "Alternate" = "ALT")) #IN ORDER TO FIX THE GODDAM CUSTOM IDS, JOIN WITH ORIGINAL CSV FILE AND USE ID INSTEAD OF rsID
+
+KCNE1_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "KCNE1",]
+KCNE2_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "KCNE2",]
+KCNH2_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "KCNH2",]
+KCNQ1_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "KCNQ1",]
+SCN5A_control_total_variant_cases = control_data_ref[control_data_ref$Gene == "SCN5A",]
+#total cases sequence for each gene
+control_total_variant_cases = data.frame(
+  genes = c("KCNE1","KCNE2","KCNH2","KCNQ1","SCN5A"), 
+  cases = c(
+    mean(as.numeric(KCNE1_control_total_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNE2_control_total_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNH2_control_total_variant_cases$Allele.Number))/2,
+    mean(as.numeric(KCNQ1_control_total_variant_cases$Allele.Number))/2,
+    mean(as.numeric(SCN5A_control_total_variant_cases$Allele.Number))/2))
+#individual cases for rare variants
+KCNE1_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE1" & control_data_ref$ID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+KCNE2_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE2" & control_data_ref$ID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+KCNH2_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNH2" & control_data_ref$ID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+KCNQ1_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNQ1" & control_data_ref$ID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "SCN5A" & control_data_ref$ID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+#individual cases for variants predicted pathogenic by PA
+control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.noQC", "data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+control_cohort_data = control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x,] 
+KCNE1_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE1" & control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+KCNE2_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE2" & control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+KCNH2_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNH2" & control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+KCNQ1_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNQ1" & control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "SCN5A" & control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+#individual cases for rare variants and not annotated by PA
+KCNE1_control_not_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE1" & control_data_ref$ID %in% gnomad_rare_variants$ID & !(control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x), "Allele.Count"]))
+KCNE2_control_not_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNE2" & control_data_ref$ID %in% gnomad_rare_variants$ID & !(control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x), "Allele.Count"]))
+KCNH2_control_not_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNH2" & control_data_ref$ID %in% gnomad_rare_variants$ID & !(control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x), "Allele.Count"]))
+KCNQ1_control_not_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "KCNQ1" & control_data_ref$ID %in% gnomad_rare_variants$ID & !(control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x), "Allele.Count"]))
+SCN5A_control_not_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$Gene == "SCN5A" & control_data_ref$ID %in% gnomad_rare_variants$ID & !(control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x), "Allele.Count"]))
+
+###Calculating EFs
+KCNE1_not_pa_EF = calc_EF(
+  KCNE1_disease_not_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNE1", "cases"]-KCNE1_disease_not_pa_variant_cases,
+  KCNE1_control_not_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNE1", "cases"]-KCNE1_control_not_pa_variant_cases
+  )
+KCNE1_pa_EF = calc_EF(
+  KCNE1_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNE1", "cases"]-KCNE1_disease_pa_variant_cases,
+  KCNE1_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNE1", "cases"]-KCNE1_control_pa_variant_cases
+  )
+
+KCNE2_not_pa_EF = calc_EF(
+  KCNE2_disease_not_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNE2", "cases"]-KCNE2_disease_not_pa_variant_cases,
+  KCNE2_control_not_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNE2", "cases"]-KCNE2_control_not_pa_variant_cases
+  )
+KCNE2_pa_EF = calc_EF(
+  KCNE2_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNE2", "cases"]-KCNE2_disease_pa_variant_cases,
+  KCNE2_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNE2", "cases"]-KCNE2_control_pa_variant_cases
+  )
+
+KCNH2_not_pa_EF = calc_EF(
+  KCNH2_disease_not_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNH2", "cases"]-KCNH2_disease_not_pa_variant_cases,
+  KCNH2_control_not_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNH2", "cases"]-KCNH2_control_not_pa_variant_cases
+  )
+KCNH2_pa_EF = calc_EF(
+  KCNH2_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNH2", "cases"]-KCNH2_disease_pa_variant_cases,
+  KCNH2_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNH2", "cases"]-KCNH2_control_pa_variant_cases
+  )
+
+KCNQ1_not_pa_EF = calc_EF(
+  KCNQ1_disease_not_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_disease_not_pa_variant_cases,
+  KCNQ1_control_not_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_control_not_pa_variant_cases
+  )
+KCNQ1_pa_EF = calc_EF(
+  KCNQ1_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_disease_pa_variant_cases,
+  KCNQ1_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "KCNQ1", "cases"]-KCNQ1_control_pa_variant_cases
+  )
+
+SCN5A_not_pa_EF = calc_EF(
+  SCN5A_disease_not_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_not_pa_variant_cases,
+  SCN5A_control_not_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_not_pa_variant_cases
+  )
+SCN5A_pa_EF = calc_EF(
+  SCN5A_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+  SCN5A_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
+
+gene_EFs = data.frame(
+  gene = c("KCNE1","KCNE2","KCNH2","KCNQ1","SCN5A"),
+  not_pa_variant_OR = c(cell_format(KCNE1_not_pa_EF$OR, KCNE1_not_pa_EF$OR_CI),
+                      cell_format(KCNE2_not_pa_EF$OR, KCNE2_not_pa_EF$OR_CI),
+                      cell_format(KCNH2_not_pa_EF$OR, KCNH2_not_pa_EF$OR_CI),
+                      cell_format(KCNQ1_not_pa_EF$OR, KCNQ1_not_pa_EF$OR_CI),
+                      cell_format(SCN5A_not_pa_EF$OR, SCN5A_not_pa_EF$OR_CI)),
+  not_pa_variant_EF = c(cell_format(KCNE1_not_pa_EF$EF, KCNE1_not_pa_EF$EF_CI),
+                      cell_format(KCNE2_not_pa_EF$EF, KCNE2_not_pa_EF$EF_CI),
+                      cell_format(KCNH2_not_pa_EF$EF, KCNH2_not_pa_EF$EF_CI),
+                      cell_format(KCNQ1_not_pa_EF$EF, KCNQ1_not_pa_EF$EF_CI),
+                      cell_format(SCN5A_not_pa_EF$EF, SCN5A_not_pa_EF$EF_CI)),
+  pa_variant_OR = c(cell_format(KCNE1_pa_EF$OR, KCNE1_pa_EF$OR_CI),
+                    cell_format(KCNE2_pa_EF$OR, KCNE2_pa_EF$OR_CI),
+                    cell_format(KCNH2_pa_EF$OR, KCNH2_pa_EF$OR_CI),
+                    cell_format(KCNQ1_pa_EF$OR, KCNQ1_pa_EF$OR_CI),
+                    cell_format(SCN5A_pa_EF$OR, SCN5A_pa_EF$OR_CI)),
+  pa_variant_EF = c(cell_format(KCNE1_pa_EF$EF, KCNE1_pa_EF$EF_CI),
+                    cell_format(KCNE2_pa_EF$EF, KCNE2_pa_EF$EF_CI),
+                    cell_format(KCNH2_pa_EF$EF, KCNH2_pa_EF$EF_CI),
+                    cell_format(KCNQ1_pa_EF$EF, KCNQ1_pa_EF$EF_CI),
+                    cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
+  )
+gene_EFs = add_column(gene_EFs, "rare_p-values" = sapply(c(KCNE1_not_pa_EF$OR_p_value, KCNE2_not_pa_EF$OR_p_value, KCNH2_not_pa_EF$OR_p_value, KCNQ1_not_pa_EF$OR_p_value, SCN5A_not_pa_EF$OR_p_value), signif, digits = 2), .after = "not_pa_variant_EF")
+gene_EFs = add_column(gene_EFs, "pa_p-values" = c(KCNE1_pa_EF$OR_p_value, KCNE2_pa_EF$OR_p_value, sapply(c(KCNH2_pa_EF$OR_p_value, KCNQ1_pa_EF$OR_p_value, SCN5A_pa_EF$OR_p_value), signif, digits = 2)), .after = "pa_variant_EF")
+write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_EFs_pa_vs_not_pa.tsv", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+```
+BrS 
+not rare+pa vs rare+pa
+```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+#Finding only rare variants
+disease_cohort_variants = read.csv("data/BrS/Mayo_BrS_variants_for_vcf_conversion.vcf", sep = "\t", stringsAsFactors = 0)
+gnomad_total_variants = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A.vcf", sep = "\t", stringsAsFactors = 0)
+gnomad_rare_variants = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.vcf", sep = "\t", stringsAsFactors = 0) #RUN PA ON THIS FILE
+rare_disease_cohort_variants = data.frame()
+# disease_cohort_variants = disease_cohort_variants[1:10,]
+for (row in 1:nrow(disease_cohort_variants)){ #FINDING ONLY RARE VARIANTS BASED ON GNOMAD FREQUENCY
+  if (
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_rare_variants$X.CHROM, gnomad_rare_variants$POS, gnomad_rare_variants$REF, gnomad_rare_variants$ALT)
+    ){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  } else if (!(
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_total_variants$X.CHROM, gnomad_total_variants$POS, gnomad_total_variants$REF, gnomad_total_variants$ALT)
+  )){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  }
+}
+colnames(rare_disease_cohort_variants)[1] = "#CHROM"
+
+###disease cohort
+disease_data_ref = read.csv("data/BrS/Mayo_BrS_variants.csv", sep = ",", stringsAsFactors = 0)
+disease_data_ref$cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$cases = sapply(disease_data_ref$cases,function(x) x[1])
+disease_data_ref$total_cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$total_cases = sapply(disease_data_ref$total_cases,function(x) x[2])
+#total cases sequenced for each gene
+disease_total_variant_cases = data.frame(genes = c("SCN5A"), cases = c(2111))
+#individual cases for rare variants
+SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
+#individual cases for variants predicted pathogenic by PA
+disease.paralogous_var_align = Paralogous_var_align("data/BrS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/BrS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x,]
+SCN5A_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x, "cases"]))
+#individual cases for rare variants and not annotated by PA
+SCN5A_disease_not_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID & !(disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x), "cases"]))
+
+
+###control cohort
+control_data_ref = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_with_customIDs.csv", sep = ",", stringsAsFactors = 0, header = TRUE)
+
+gnomad_total_variants$X.CHROM = as.numeric(gnomad_total_variants$X.CHROM)
+gnomad_total_variants$POS = as.numeric(gnomad_total_variants$POS)
+control_data_ref = full_join(control_data_ref,gnomad_total_variants,by = c("Chromosome" = "X.CHROM", "Position" = "POS", "Reference" = "REF", "Alternate" = "ALT")) #IN ORDER TO FIX THE GODDAM CUSTOM IDS, JOIN WITH ORIGINAL CSV FILE AND USE ID INSTEAD OF rsID ###I don't think I actually need this for BrS as there's only one gene and no need to identify which variants belong to which gene
+
+SCN5A_control_total_variant_cases = control_data_ref
+#total cases sequence for each gene
+control_total_variant_cases = data.frame(
+  genes = c("SCN5A"), 
+  cases = c(
+    mean(as.numeric(SCN5A_control_total_variant_cases$Allele.Number))/2))
+#individual cases for rare variants
+SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% gnomad_rare_variants$ID, "Allele.Count"]))
+#individual cases for variants predicted pathogenic by PA
+control.paralogous_var_align = Paralogous_var_align("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_paralogs2.noQC", "data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+control_cohort_data = control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x,] 
+SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x, "Allele.Count"]))
+#individual cases for rare variants and not annotated by PA
+SCN5A_control_not_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% gnomad_rare_variants$ID & !(control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x), "Allele.Count"]))
+
+###Calculating EFs
+SCN5A_not_pa_EF = calc_EF(
+  SCN5A_disease_not_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_not_pa_variant_cases,
+  SCN5A_control_not_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_not_pa_variant_cases
+  )
+SCN5A_pa_EF = calc_EF(
+  SCN5A_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+  SCN5A_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
+
+gene_EFs = data.frame(
+  gene = c("SCN5A"),
+  rare_variant_OR = c(
+                      cell_format(SCN5A_not_pa_EF$OR, SCN5A_not_pa_EF$OR_CI)),
+  rare_variant_EF = c(
+                      cell_format(SCN5A_not_pa_EF$EF, SCN5A_not_pa_EF$EF_CI)),
+  pa_variant_OR = c(
+                    cell_format(SCN5A_pa_EF$OR, SCN5A_pa_EF$OR_CI)),
+  pa_variant_EF = c(
+                    cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
+  )
+gene_EFs = add_column(gene_EFs, "rare_p-values" = signif(SCN5A_not_pa_EF$OR_p_value, digits = 2), .after = "rare_variant_EF")
+gene_EFs = add_column(gene_EFs, "pa_p-values" = signif(SCN5A_pa_EF$OR_p_value, digits = 2), .after = "pa_variant_EF")
+write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_EFs_pa_vs_not_pa.tsv", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+```
+
 looking at only variants in Voltage-gated Na+ ion channel, cytoplasmic domain in scn5a for LQTS
+rare vs rare+pa
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 
 #Finding only rare variants
@@ -2116,6 +2413,7 @@ write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_onlySCN5A_interlinker_doma
 LQTS_nTM_SCN5A_EF = gene_EFs
 ```
 looking at only variants in Voltage-gated Na+ ion channel, cytoplasmic domain in scn5a for BrS
+rare vs rare+pa
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 
 #Finding only rare variants
@@ -2265,6 +2563,254 @@ gene_EFs = add_column(gene_EFs, "rare_p-values" = signif(SCN5A_rare_EF$OR_p_valu
 gene_EFs = add_column(gene_EFs, "pa_p-values" = signif(SCN5A_pa_EF$OR_p_value, digits = 2), .after = "pa_variant_EF")
 write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_onlySCN5A_interlinker_domains_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 BrS_nTM_SCN5A_EF = gene_EFs
+```
+
+looking at only variants in c terminal in scn5a for LQTS
+rare vs rare+pa
+```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+
+#Finding only rare variants
+disease_cohort_variants = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.vcf", sep = "\t", stringsAsFactors = 0)
+
+gnomad_total_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants.vcf", sep = "\t", stringsAsFactors = 0)
+gnomad_rare_variants = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.vcf", sep = "\t", stringsAsFactors = 0) #RUN PA ON THIS FILE
+
+rare_disease_cohort_variants = data.frame()
+# disease_cohort_variants = disease_cohort_variants[1:10,]
+for (row in 1:nrow(disease_cohort_variants)){ #FINDING ONLY RARE VARIANTS BASED ON GNOMAD FREQUENCY
+  if (
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_rare_variants$X.CHROM, gnomad_rare_variants$POS, gnomad_rare_variants$REF, gnomad_rare_variants$ALT)
+    ){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  } else if (!(
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_total_variants$X.CHROM, gnomad_total_variants$POS, gnomad_total_variants$REF, gnomad_total_variants$ALT)
+  )){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  }
+}
+colnames(rare_disease_cohort_variants)[1] = "#CHROM"
+
+###disease cohort
+disease_data_ref = read.csv("data/LQTS/Mayo_LQTS_variants.csv", sep = ",", stringsAsFactors = 0)
+disease_data_ref$cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$cases = sapply(disease_data_ref$cases,function(x) x[1])
+disease_data_ref$total_cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$total_cases = sapply(disease_data_ref$total_cases,function(x) x[2])
+
+#isolate protein position
+disease_data_ref$Protein_position = substr(disease_data_ref$mut_protein, 4, str_count(disease_data_ref$mut_protein)-1)
+
+#total cases sequenced for each gene
+disease_total_variant_cases = data.frame(genes = c("SCN5A"), cases = c(2500))
+#individual cases for rare variants #finding only protein positions that are not transmembrane domains identified by pfam
+SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID &
+                                                                        disease_data_ref$Protein_position > 1771, "cases"]))
+#individual cases for variants predicted pathogenic by PA
+disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#finding only protein positions that are not transmembrane domains identified by pfam
+Protein_pos_select = disease.paralogous_var_align$Total_paralog_annotations[!is.na(disease.paralogous_var_align$Total_paralog_annotations$Protein_position.x) &
+                                                                                 disease.paralogous_var_align$Total_paralog_annotations$Protein_position.x > 1771,]
+
+disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x & disease_data_ref$mut_id %in% Protein_pos_select$ID.x,]
+SCN5A_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x & disease_data_ref$mut_id %in% Protein_pos_select$ID.x, "cases"]))
+
+# SCN5A_disease_not_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID &
+                                                                       #  disease_data_ref$Protein_position > 1771 &
+                                                                       # !(disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x), "cases"]))
+
+
+###control cohort
+control_data_ref = read.csv("data/LQTS/gnomAD_v2.1.1_LQTS_variants_with_customIDs.csv", sep = ",", stringsAsFactors = 0, header = TRUE)
+control_data_ref  = control_data_ref[control_data_ref$Gene != "Gene",] #remove the extra header lines from when concatenated the separate gene csv files together
+
+gnomad_total_variants$X.CHROM = as.character(gnomad_total_variants$X.CHROM)
+gnomad_total_variants$POS = as.character(gnomad_total_variants$POS)
+control_data_ref = full_join(control_data_ref,gnomad_total_variants,by = c("Chromosome" = "X.CHROM", "Position" = "POS", "Reference" = "REF", "Alternate" = "ALT")) #IN ORDER TO FIX THE GODDAM CUSTOM IDS, JOIN WITH ORIGINAL CSV FILE AND USE ID INSTEAD OF rsID ###I don't think I actually need this for BrS as there's only one gene and no need to identify which variants belong to which gene
+
+#isolate protein position
+control_data_ref$Protein_position = substr(control_data_ref$Consequence, 6, str_count(control_data_ref$Consequence)-3)
+control_data_ref[control_data_ref$Protein_position == "2017ArgextTe", "Protein_position"] = 2017
+
+SCN5A_control_total_variant_cases = control_data_ref
+#total cases sequence for each gene
+control_total_variant_cases = data.frame(
+  genes = c("SCN5A"), 
+  cases = c(
+    mean(as.numeric(SCN5A_control_total_variant_cases$Allele.Number))/2))
+#individual cases for rare variants #finding only protein positions that are not transmembrane domains identified by pfam
+SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% gnomad_rare_variants$ID &
+                                                                        control_data_ref$Protein_position > 1771
+                                                                     , "Allele.Count"]))
+#individual cases for variants predicted pathogenic by PA
+control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.noQC", "data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+#finding only protein positions that are not transmembrane domains identified by pfam
+Protein_pos_select = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$Protein_position.x) &
+                                                                                 control.paralogous_var_align$Total_paralog_annotations$Protein_position.x > 1771,]
+
+control_cohort_data = control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x & control_data_ref$ID %in% Protein_pos_select$ID.x,] 
+SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x & control_data_ref$ID %in% Protein_pos_select$ID.x, "Allele.Count"]))
+
+###raw numbers
+# LQTS_nTM_SCN5A_rare_rn = c(
+#   SCN5A_disease_rare_variant_cases,
+#   disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_rare_variant_cases,
+#   SCN5A_control_rare_variant_cases,
+#   control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_rare_variant_cases
+#   )
+# LQTS_nTM_SCN5A_pa_rn = c(SCN5A_disease_pa_variant_cases,
+#   disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+#   SCN5A_control_pa_variant_cases,
+#   control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+#   )
+###Calculating EFs
+SCN5A_rare_EF = calc_EF(
+  SCN5A_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_rare_variant_cases,
+  SCN5A_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_rare_variant_cases
+  )
+SCN5A_pa_EF = calc_EF(
+  SCN5A_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+  SCN5A_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
+
+gene_EFs = data.frame(
+  gene = c("LQTS_Cter_SCN5A"),
+  rare_variant_OR = c(
+                      cell_format(SCN5A_rare_EF$OR, SCN5A_rare_EF$OR_CI)),
+  rare_variant_EF = c(
+                      cell_format(SCN5A_rare_EF$EF, SCN5A_rare_EF$EF_CI)),
+  pa_variant_OR = c(
+                    cell_format(SCN5A_pa_EF$OR, SCN5A_pa_EF$OR_CI)),
+  pa_variant_EF = c(
+                    cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
+  )
+gene_EFs = add_column(gene_EFs, "rare_p-values" = signif(SCN5A_rare_EF$OR_p_value, digits = 2), .after = "rare_variant_EF")
+gene_EFs = add_column(gene_EFs, "pa_p-values" = signif(SCN5A_pa_EF$OR_p_value, digits = 2), .after = "pa_variant_EF")
+write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_onlySCN5A_C_terminal_EFs.tsv", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+```
+looking at only variants in c terminal in scn5a for BrS
+rare vs rare+pa
+```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+
+#Finding only rare variants
+disease_cohort_variants = read.csv("data/BrS/Mayo_BrS_variants_for_vcf_conversion.vcf", sep = "\t", stringsAsFactors = 0)
+
+gnomad_total_variants = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A.vcf", sep = "\t", stringsAsFactors = 0)
+gnomad_rare_variants = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.vcf", sep = "\t", stringsAsFactors = 0) #RUN PA ON THIS FILE
+
+rare_disease_cohort_variants = data.frame()
+# disease_cohort_variants = disease_cohort_variants[1:10,]
+for (row in 1:nrow(disease_cohort_variants)){ #FINDING ONLY RARE VARIANTS BASED ON GNOMAD FREQUENCY
+  if (
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_rare_variants$X.CHROM, gnomad_rare_variants$POS, gnomad_rare_variants$REF, gnomad_rare_variants$ALT)
+    ){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  } else if (!(
+    paste0(disease_cohort_variants[row,"X.CHROM"], disease_cohort_variants[row,"POS"], disease_cohort_variants[row,"REF"], disease_cohort_variants[row,"ALT"]) %in% paste0(gnomad_total_variants$X.CHROM, gnomad_total_variants$POS, gnomad_total_variants$REF, gnomad_total_variants$ALT)
+  )){
+    rare_disease_cohort_variants = rbind(rare_disease_cohort_variants, disease_cohort_variants[row,])
+  }
+}
+colnames(rare_disease_cohort_variants)[1] = "#CHROM"
+
+###disease cohort
+disease_data_ref = read.csv("data/BrS/Mayo_BrS_variants.csv", sep = ",", stringsAsFactors = 0)
+disease_data_ref$cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$cases = sapply(disease_data_ref$cases,function(x) x[1])
+disease_data_ref$total_cases = sapply(disease_data_ref$rep_patients,strsplit,"/")
+disease_data_ref$total_cases = sapply(disease_data_ref$total_cases,function(x) x[2])
+
+#isolate protein position
+disease_data_ref$Protein_position = substr(disease_data_ref$mut_protein, 4, str_count(disease_data_ref$mut_protein)-1)
+
+#total cases sequenced for each gene
+disease_total_variant_cases = data.frame(genes = c("SCN5A"), cases = c(2111))
+#individual cases for rare variants #finding only protein positions that are not transmembrane domains identified by pfam
+SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID &
+                                                                        disease_data_ref$Protein_position > 1771
+                                                                     , "cases"]))
+#individual cases for variants predicted pathogenic by PA
+disease.paralogous_var_align = Paralogous_var_align("data/BrS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/BrS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#finding only protein positions that are not transmembrane domains identified by pfam
+Protein_pos_select = disease.paralogous_var_align$Total_paralog_annotations[!is.na(disease.paralogous_var_align$Total_paralog_annotations$Protein_position.x) &
+                                                                                 disease.paralogous_var_align$Total_paralog_annotations$Protein_position.x > 1771,]
+
+disease_cohort_data = disease_data_ref[disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x & disease_data_ref$mut_id %in% Protein_pos_select$ID.x,]
+SCN5A_disease_pa_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "SCN5A" & disease_data_ref$mut_id %in% disease.paralogous_var_align$Unique_variant_annotations$ID.x & disease_data_ref$mut_id %in% Protein_pos_select$ID.x, "cases"]))
+
+###control cohort
+control_data_ref = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_with_customIDs.csv", sep = ",", stringsAsFactors = 0, header = TRUE)
+
+gnomad_total_variants$X.CHROM = as.numeric(gnomad_total_variants$X.CHROM)
+gnomad_total_variants$POS = as.numeric(gnomad_total_variants$POS)
+control_data_ref = full_join(control_data_ref,gnomad_total_variants,by = c("Chromosome" = "X.CHROM", "Position" = "POS", "Reference" = "REF", "Alternate" = "ALT")) #IN ORDER TO FIX THE GODDAM CUSTOM IDS, JOIN WITH ORIGINAL CSV FILE AND USE ID INSTEAD OF rsID ###I don't think I actually need this for BrS as there's only one gene and no need to identify which variants belong to which gene
+
+#isolate protein position
+control_data_ref$Protein_position = substr(control_data_ref$Consequence, 6, str_count(control_data_ref$Consequence)-3)
+control_data_ref[control_data_ref$Protein_position == "2017ArgextTe", "Protein_position"] = 2017
+
+SCN5A_control_total_variant_cases = control_data_ref
+#total cases sequence for each gene
+control_total_variant_cases = data.frame(
+  genes = c("SCN5A"), 
+  cases = c(
+    mean(as.numeric(SCN5A_control_total_variant_cases$Allele.Number))/2))
+#individual cases for rare variants #finding only protein positions that are not transmembrane domains identified by pfam
+SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% gnomad_rare_variants$ID &
+                                                                        control_data_ref$Protein_position > 1771
+                                                                     , "Allele.Count"]))
+#individual cases for variants predicted pathogenic by PA
+control.paralogous_var_align = Paralogous_var_align("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_paralogs2.noQC", "data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+#finding only protein positions that are not transmembrane domains identified by pfam
+Protein_pos_select = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$Protein_position.x) &
+                                                                                 control.paralogous_var_align$Total_paralog_annotations$Protein_position.x > 1771,]
+
+control_cohort_data = control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x & control_data_ref$ID %in% Protein_pos_select$ID.x,] 
+SCN5A_control_pa_variant_cases = sum(as.numeric(control_data_ref[control_data_ref$ID %in% control.paralogous_var_align$Unique_variant_annotations$ID.x & control_data_ref$ID %in% Protein_pos_select$ID.x, "Allele.Count"]))
+
+###raw numbers
+BrS_nTM_SCN5A_rare_rn = c(
+  SCN5A_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_rare_variant_cases,
+  SCN5A_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_rare_variant_cases
+  )
+BrS_nTM_SCN5A_pa_rn = c(SCN5A_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+  SCN5A_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
+###Calculating EFs
+SCN5A_rare_EF = calc_EF(
+  SCN5A_disease_rare_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_rare_variant_cases,
+  SCN5A_control_rare_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_rare_variant_cases
+  )
+SCN5A_pa_EF = calc_EF(
+  SCN5A_disease_pa_variant_cases,
+  disease_total_variant_cases[disease_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_disease_pa_variant_cases,
+  SCN5A_control_pa_variant_cases,
+  control_total_variant_cases[control_total_variant_cases$genes == "SCN5A", "cases"]-SCN5A_control_pa_variant_cases
+  )
+
+gene_EFs = data.frame(
+  gene = c("BrS_nTM_SCN5A"),
+  rare_variant_OR = c(
+                      cell_format(SCN5A_rare_EF$OR, SCN5A_rare_EF$OR_CI)),
+  rare_variant_EF = c(
+                      cell_format(SCN5A_rare_EF$EF, SCN5A_rare_EF$EF_CI)),
+  pa_variant_OR = c(
+                    cell_format(SCN5A_pa_EF$OR, SCN5A_pa_EF$OR_CI)),
+  pa_variant_EF = c(
+                    cell_format(SCN5A_pa_EF$EF, SCN5A_pa_EF$EF_CI))
+  )
+gene_EFs = add_column(gene_EFs, "rare_p-values" = signif(SCN5A_rare_EF$OR_p_value, digits = 2), .after = "rare_variant_EF")
+gene_EFs = add_column(gene_EFs, "pa_p-values" = signif(SCN5A_pa_EF$OR_p_value, digits = 2), .after = "pa_variant_EF")
+write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_onlySCN5A_C_terminal_EFs.tsv", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
 ```
 
 ## Comparison to other tools
