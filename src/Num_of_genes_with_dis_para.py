@@ -46,4 +46,4 @@ with open(input_file, "r", encoding="utf-8") as f:
 					gene_check_list.append(gene)
 
 print(len(set(gene_check_list)))
-		
+# 1831 Number of disease protein coding genes that have at least 1 paralogue and at least 1 P/LP variant aligning to a non-gap position of another disease gene
