@@ -6,3 +6,5 @@ src/__pycache__
 src/*.pyc
 *.xlsx#
 *.csv#
+data/gnomad_exome_r202_sites/*.noQC
+data/gnomad_exome_r202_sites/*tableized
