@@ -32,11 +32,19 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 		with codecs.open(	#changed "open" to "codecs.open" to solve unicode error. Changed back maybe
 			output_file, encoding="utf-8"
 			) as infile:
+		ID_no = 1
 			for line in infile:
 				if not line.startswith("#"):
 					line = line.split("CSQ=")
-					CSQ = line[0]
+					variant_info_line = line[0].split(None,3)
+					# CSQ = line[0]
 					# print(CSQ)	#print query variant #commented out to avoid unicode error
+					variant_id = variant_info_line[2]
+					if variant_id == ".":
+						ID = "custom_" + str(ID_no)
+						ID_no += 1
+					else:
+						ID = variant_id
 					line = line[1].split(",")
 					# print(line, "\n")
 					for x in line:
@@ -50,7 +58,9 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 						if paralog_check == 1:
 							# print(x, "\n")	#commented out to avoid unicode error
 							out_file.write(
-								str(CSQ)+"PARALOGS->"
+								#str(CSQ)
+								str(variant_info_line[0])+"\t"+str(variant_info_line[1])+"\t"+str(ID)+"\t"+str(variant_info_line[3])
+								+"PARALOGS->"
 								+str(x)+"\n"
 								)
 				else:
