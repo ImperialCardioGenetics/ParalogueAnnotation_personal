@@ -32,7 +32,7 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 		with codecs.open(	#changed "open" to "codecs.open" to solve unicode error. Changed back maybe
 			output_file, encoding="utf-8"
 			) as infile:
-		ID_no = 1
+			ID_no = 1
 			for line in infile:
 				if not line.startswith("#"):
 					line = line.split("CSQ=")
