@@ -25,9 +25,33 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 		input_dir = input_dir+"/"
 	print(input_dir)
 
+	#Create custom IDs here
+	out_file = open(
+		output_file + "_tmp", "w", encoding="utf-8")
+	with codecs.open(	#changed "open" to "codecs.open" to solve unicode error. Changed back maybe
+		output_file, encoding="utf-8"
+		) as infile:
+		ID_no = 1
+		for line in infile:
+			if not line.startswith("#"):
+				variant_info_line = line.split(None,3)
+				variant_id = variant_info_line[2]
+				if variant_id == ".":
+					ID = "custom_" + str(ID_no)
+					ID_no += 1
+				else:
+					ID = variant_id
+				out_file.write(str(variant_info_line[0])+"\t"+str(variant_info_line[1])+"\t"+str(ID)+"\t"+str(variant_info_line[3]))
+			else:
+				out_file.write(line)
+	out_file.close()
+
 	#reads through outfile of vep+plugin and tidies up data by extracting only variants that have paralogous positions and spits that out as another outfile
 	out_file = open(
 		output_file + "_paralogs", "w", encoding="utf-8")
+
+	output_file = output_file + "_tmp"
+
 	if not flavour == "":
 		with codecs.open(	#changed "open" to "codecs.open" to solve unicode error. Changed back maybe
 			output_file, encoding="utf-8"
@@ -67,4 +91,6 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 					out_file.write(line)
 	out_file.close()
 	
+	os.system("rm "+output_file)
+
 	print("VEP_ParalogAnno Done!")
