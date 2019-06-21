@@ -45,13 +45,12 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 			else:
 				out_file.write(line)
 	out_file.close()
+	os.system("mv "+output_file+" "+output_file+"_org")
+	os.system("mv "+output_file+"_tmp "+output_file)
 
 	#reads through outfile of vep+plugin and tidies up data by extracting only variants that have paralogous positions and spits that out as another outfile
 	out_file = open(
 		output_file + "_paralogs", "w", encoding="utf-8")
-
-	output_file = output_file + "_tmp"
-
 	if not flavour == "":
 		with codecs.open(	#changed "open" to "codecs.open" to solve unicode error. Changed back maybe
 			output_file, encoding="utf-8"
@@ -90,7 +89,5 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 				else:
 					out_file.write(line)
 	out_file.close()
-	
-	os.system("rm "+output_file)
 
 	print("VEP_ParalogAnno Done!")
