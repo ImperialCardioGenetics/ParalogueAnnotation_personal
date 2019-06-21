@@ -81,6 +81,7 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 		print(offline_command)
 		os.system(offline_command)
 	
+	#report statistics from summary file
 	with open(
 		output_file + 
 		"_summary.html"
@@ -99,6 +100,29 @@ def VEP_Plugin_run(input_file, flavour=2, genome_build="GRCh38", VEPversion=90, 
 					# print(m.group())
 					run_time = m.group().split("</td><td>")[1].rstrip("</td>")
 					print(run_time, "\n")
+
+	#Create custom IDs here
+	out_file = open(
+		output_file + "_tmp", "w", encoding="utf-8")
+	with codecs.open(	#changed "open" to "codecs.open" to solve unicode error. Changed back maybe
+		output_file, encoding="utf-8"
+		) as infile:
+		ID_no = 1
+		for line in infile:
+			if not line.startswith("#"):
+				variant_info_line = line.split(None,3)
+				variant_id = variant_info_line[2]
+				if variant_id == ".":
+					ID = "custom_" + str(ID_no)
+					ID_no += 1
+				else:
+					ID = variant_id
+				out_file.write(str(variant_info_line[0])+"\t"+str(variant_info_line[1])+"\t"+str(ID)+"\t"+str(variant_info_line[3]))
+			else:
+				out_file.write(line)
+	out_file.close()
+	os.system("mv "+output_file+" "+output_file+"_org")
+	os.system("mv "+output_file+"_tmp "+output_file)
 
 	###TESTED THE BELOW WITH VEP90#### MIGHT NOT WORK WITH OTHER VERSIONS
 	#reads through outfile of vep+plugin and tidies up data by extracting only variants that have paralogs and spits that out as another outfile
