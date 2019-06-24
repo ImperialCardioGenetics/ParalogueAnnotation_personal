@@ -404,7 +404,7 @@ conf_b = conf_matrix_benign(ptob.paralogous_var_align$true_num_of_paralog_anno, 
 genes_before_PA = length(unique(p.paralogous_var_align$Total_paralog_annotations$Gene))
 write.table(unique(p.paralogous_var_align$Total_paralog_annotations$Gene), file = "data/clinvar/genes_before_paralogue_annotation.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 genes_with_PA_noQC = length(unique(p.paralogous_var_align$Total_paralog_annotations$SYMBOL))
-write.table(unique(p.paralogous_var_align$Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_paralogue_annotation_noQC.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+write.table(unique(p.paralogous_var_align$Total_paralog_annotations[!is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),"Gene"]), file = "data/clinvar/genes_with_paralogue_annotation_noQC.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 b.genes_before_PA = length(unique(b.paralogous_var_align$Total_paralog_annotations$Gene))
 b.genes_with_PA_noQC = length(unique(b.paralogous_var_align$Total_paralog_annotations$SYMBOL))
