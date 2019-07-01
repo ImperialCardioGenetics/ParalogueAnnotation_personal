@@ -4500,6 +4500,19 @@ write.table(aligned_benign_clinvar_and_patho_pred_variants,"data/all_possible_mu
 ```
 
 
+## GO protein classes of clinvar P/LP variants with PA noQC
+
+Using GO Panther enrichment analysis (http://pantherdb.org/) to identify common protein classes among the genes that had paralogue annotations.
+
+```{r GO_protein_class, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+protein_classes = read.csv(file="data/clinvar/genes_with_paralogue_annotation_noQC_GO_protein_class.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+protein_classes$V4 = as.numeric(sub("%", "", protein_classes$V4))
+protein_classes$V5 = as.numeric(sub("%", "", protein_classes$V5))
+protein_classes = protein_classes[,2:5]
+colnames(protein_classes) = c("Category name (Accession)", "number of genes", "Percent of gene hit against total number of genes", "Percent of gene hit against total number of Protein Class hits")
+
+```
+
 # References
 
 
