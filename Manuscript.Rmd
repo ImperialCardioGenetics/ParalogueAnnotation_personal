@@ -196,6 +196,8 @@ clinvar_B_LB_vcf_tableized_genes = sapply(strsplit(clinvar_B_LB_vcf_tableized_ge
 
 #total clinvar genes in both P/LP and B/LB
 all_clinvar_genes = unique(c(clinvar_P_LP_tableized_genes, clinvar_B_LB_tableized_genes)) #6284 here
+write.table(all_clinvar_genes,file="data/clinvar/6284_all_clinvar_genes.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+
 
 #ALL clinvar genes including VUS, not just P/LP and B/LB
 full_clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190114.vcf_tableized_org", sep = "\t", header = TRUE, stringsAsFactors = FALSE)
@@ -350,7 +352,7 @@ ks2 = ks.test(clinvar_P_LP_genes$number_of_paralogues, all_protein_genes$number_
 
 #discrepency between clinvar genes and ensembl genes
 genes_not_in_ens = setdiff(clinvar_P_LP_vcf_tableized_genes, disease_genes)
-write.table(genes_not_in_ens,file="data/clinvar/genes_not_in_ens.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+write.table(genes_not_in_ens,file="data/clinvar/genes_not_in_ens.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE) #list of genes not in ensembl but in clinvar
 
 
 #aggregated paralogues 
@@ -893,7 +895,7 @@ for (i in p.overlapp_genes){
 }
 overlapp_genes = aggregate(SYMBOL ~., overlapp_genes, toString)
 names(overlapp_genes)[6] = "GENES"
-write.table(overlapp_genes, file = "data/clinvar/variants_in_overlapp_genes.csv", na=".", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
+write.table(overlapp_genes, file = "data/clinvar/variants_in_overlapp_genes.csv", na=".", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE) #list of overlapping genes
 
 ### Analysing average number of variants per gene
 num_of_var = vector()
@@ -1012,6 +1014,7 @@ length(intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))
 length(unique(intersect(y$Gene, clinvar_B_LB_only_snv_missense_tableized$SYMBOL))) # 2210
 
 length(unique(c(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes)), intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes))))) #3123 here
+write.table(unique(c(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes)), intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))),file="data/clinvar/3123_genes_w_paralogues_w_aln_pos.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 setdiff(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes)), intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))
 
 
@@ -4505,12 +4508,38 @@ write.table(aligned_benign_clinvar_and_patho_pred_variants,"data/all_possible_mu
 Using GO Panther enrichment analysis (http://pantherdb.org/) to identify common protein classes among the genes that had paralogue annotations.
 
 ```{r GO_protein_class, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+#Panther GO
 protein_classes = read.csv(file="data/clinvar/genes_with_paralogue_annotation_noQC_GO_protein_class.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
 protein_classes$V4 = as.numeric(sub("%", "", protein_classes$V4))
 protein_classes$V5 = as.numeric(sub("%", "", protein_classes$V5))
 protein_classes = protein_classes[,2:5]
-colnames(protein_classes) = c("Category name (Accession)", "number of genes", "Percent of gene hit against total number of genes", "Percent of gene hit against total number of Protein Class hits")
+colnames(protein_classes) = c("Protein_class", "number_of_genes", "Percent_of_gene_hit_against_total_number_of_genes", "Percent_of_gene_hit_against_total_number_of_Protein_Class_hits")
+protein_classes = protein_classes[order(protein_classes$number_of_genes, decreasing = T),] 
+# protein_classes = rbind(protein_classes, data.frame(Protein_class = "", number_of_genes = 0, Percent_of_gene_hit_against_total_number_of_genes = 0, Percent_of_gene_hit_against_total_number_of_Protein_Class_hits = 0))
+gg_protein_class = ggplot(protein_classes, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes))) +
+  geom_bar(stat="identity", position = "dodge") +
+  coord_flip() +
+  # geom_point() + 
+  # geom_text(aes(label=Protein_class, position = "dodge"), position = position_dodge(width = 0), hjust =0 , vjust=0, angle = 20) +
+  theme(
+  #   axis.text.x = element_text(angle = -45, hjust = -0),
+  #   plot.margin = unit(c(5.5, 5.5, 5.5, 10), "points")
+    axis.title.y=element_blank(),
+    legend.position="none"
+    # axis.text.x=element_blank()
+    # axis.ticks.x=element_blank()
+    ) 
+#control - all clinvar P/LP 
+clinvar_P_LP_vcf_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 
+
+
+
+#gprofiler
+library(gprofiler2)
+p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+gostres = gost(unique(p.paralogous_var_align$Total_paralog_annotations[!is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),"Gene"]), user_threshold = 1e-16)
+gostplot(gostres, interactive = TRUE)
 ```
 
 # References
