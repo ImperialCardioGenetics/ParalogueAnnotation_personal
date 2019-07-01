@@ -838,6 +838,7 @@ Using the aforementioned quality control steps to increase the stringency of con
 
 
 Looking at pipeline of study:
+
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 
@@ -1007,7 +1008,9 @@ clinvar_B_LB_only_snv_missense_tableized = clinvar_B_LB_only_snv_missense_tablei
 num_of_var_clinvar_B_LB_only_snv_missense_tableized = length(unique(clinvar_B_LB_only_snv_missense_tableized$ID)) #19112
 num_of_genes_clinvar_B_LB_only_snv_missense_tableized = length(unique(clinvar_B_LB_only_snv_missense_tableized$SYMBOL)) #3007
 
-total_num_of_genes_clinvar_P_LP_B_LB_only_snv_missense_tableized = length(unique(c(unique(clinvar_P_LP_only_snv_missense_tableized$SYMBOL), unique(clinvar_B_LB_only_snv_missense_tableized$SYMBOL))))
+total_num_of_genes_clinvar_P_LP_B_LB_only_snv_missense_tableized = length(unique(c(unique(clinvar_P_LP_only_snv_missense_tableized$SYMBOL), unique(clinvar_B_LB_only_snv_missense_tableized$SYMBOL)))) #4340
+write.table(unique(c(unique(clinvar_P_LP_only_snv_missense_tableized$SYMBOL), unique(clinvar_B_LB_only_snv_missense_tableized$SYMBOL))),file="data/clinvar/4340_clinvar_genes_w_only_missense.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+
 
 y = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
 length(intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))
@@ -4515,8 +4518,27 @@ protein_classes$V5 = as.numeric(sub("%", "", protein_classes$V5))
 protein_classes = protein_classes[,2:5]
 colnames(protein_classes) = c("Protein_class", "number_of_genes", "Percent_of_gene_hit_against_total_number_of_genes", "Percent_of_gene_hit_against_total_number_of_Protein_Class_hits")
 protein_classes = protein_classes[order(protein_classes$number_of_genes, decreasing = T),] 
-# protein_classes = rbind(protein_classes, data.frame(Protein_class = "", number_of_genes = 0, Percent_of_gene_hit_against_total_number_of_genes = 0, Percent_of_gene_hit_against_total_number_of_Protein_Class_hits = 0))
-gg_protein_class = ggplot(protein_classes, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes))) +
+protein_classes$stage = "noQC"
+#control - 3123 genes with paralogues and aligned positions
+protein_classes2 = read.csv(file="data/clinvar/3123_genes_w_paralogues_w_aln_pos_GO_protein_class.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+protein_classes2$V4 = as.numeric(sub("%", "", protein_classes2$V4))
+protein_classes2$V5 = as.numeric(sub("%", "", protein_classes2$V5))
+protein_classes2 = protein_classes2[,2:5]
+colnames(protein_classes2) = c("Protein_class", "number_of_genes", "Percent_of_gene_hit_against_total_number_of_genes", "Percent_of_gene_hit_against_total_number_of_Protein_Class_hits")
+protein_classes2 = protein_classes2[order(protein_classes2$number_of_genes, decreasing = T),] 
+protein_classes2$stage = "para_genes"
+#control - 4340 clinvar genes with only missense
+protein_classes3 = read.csv(file="data/clinvar/4340_clinvar_genes_w_only_missense_GO_protein_class.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+protein_classes3$V4 = as.numeric(sub("%", "", protein_classes3$V4))
+protein_classes3$V5 = as.numeric(sub("%", "", protein_classes3$V5))
+protein_classes3 = protein_classes3[,2:5]
+colnames(protein_classes3) = c("Protein_class", "number_of_genes", "Percent_of_gene_hit_against_total_number_of_genes", "Percent_of_gene_hit_against_total_number_of_Protein_Class_hits")
+protein_classes3 = protein_classes3[order(protein_classes3$number_of_genes, decreasing = T),] 
+protein_classes3$stage = "mis_clinvar"
+#Total_plot
+total_protein_class = rbind(protein_classes, protein_classes2, protein_classes3)
+
+gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = stage)) +
   geom_bar(stat="identity", position = "dodge") +
   coord_flip() +
   # geom_point() + 
@@ -4529,10 +4551,6 @@ gg_protein_class = ggplot(protein_classes, aes(y=number_of_genes, x=reorder(Prot
     # axis.text.x=element_blank()
     # axis.ticks.x=element_blank()
     ) 
-#control - all clinvar P/LP 
-clinvar_P_LP_vcf_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-
-
 
 
 #gprofiler
