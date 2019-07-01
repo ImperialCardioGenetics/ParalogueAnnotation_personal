@@ -4537,8 +4537,9 @@ protein_classes3 = protein_classes3[order(protein_classes3$number_of_genes, decr
 protein_classes3$stage = "mis_clinvar"
 #Total_plot
 total_protein_class = rbind(protein_classes, protein_classes2, protein_classes3)
+# total_protein_class[total_protein_class$Protein_class=="transmembrane receptor regulatory/adaptor protein (PC00226)", "Protein_class"]
 
-gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = stage)) +
+gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = factor(stage, levels=c("noQC","para_genes","mis_clinvar")))) +
   geom_bar(stat="identity", position = "dodge") +
   coord_flip() +
   # geom_point() + 
@@ -4547,17 +4548,22 @@ gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(
   #   axis.text.x = element_text(angle = -45, hjust = -0),
   #   plot.margin = unit(c(5.5, 5.5, 5.5, 10), "points")
     axis.title.y=element_blank(),
-    legend.position="none"
+    legend.title=element_blank()
+    # legend.position="none"
     # axis.text.x=element_blank()
     # axis.ticks.x=element_blank()
-    ) 
+    ) +
+  scale_fill_manual(values=c( "#BB8FCE", "#85C1E9","#76D7C4")) + 
+  guides(fill = guide_legend(reverse=TRUE)) +
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350,400))
+ggsave("images/GO_protein_classes_of_genes.png", height = 8, width = 12)
 
 
 #gprofiler
-library(gprofiler2)
-p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-gostres = gost(unique(p.paralogous_var_align$Total_paralog_annotations[!is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),"Gene"]), user_threshold = 1e-16)
-gostplot(gostres, interactive = TRUE)
+# library(gprofiler2)
+# p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# gostres = gost(unique(p.paralogous_var_align$Total_paralog_annotations[!is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),"Gene"]), user_threshold = 1e-16)
+# gostplot(gostres, interactive = TRUE)
 ```
 
 # References
