@@ -273,7 +273,7 @@ dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "No",], aes(fill = "yes_dis_no_para"), alpha = 0.9, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], aes(fill = "no_dis_yes_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], aes(fill = "yes_dis_yes_para"), alpha = 0.9, binwidth = 1) +
-  scale_fill_manual(values = cols, labels = c("All genes, no paralogues", "All genes, has paralogues", "Clinvar disease genes, no paralogues",  "Clinvar disease genes, has paralogues")) +
+  scale_fill_manual(values = cols, labels = c("All genes,\nno paralogues (n=5644)", "All genes,\nhas paralogues (n=14514)", "Clinvar disease genes,\nno paralogues (n=1496)",  "Clinvar disease genes,\nhas paralogues (n=3621)")) +
   theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +
@@ -283,7 +283,13 @@ dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) +
     axis.text = element_text(size = 15), 
     plot.title = element_text(size = 15), 
     legend.text = element_text(size = 12), 
-    legend.title = element_text(size = 12))+labs(fill = NULL)
+    legend.title = element_text(size = 12)) +
+  labs(fill = NULL) + 
+  guides(fill=guide_legend(
+                 keywidth=0.2,
+                 keyheight=0.5,
+                 default.unit="inch")
+      )
 ggsave("images/Total_and_Disease_genes_paralogs.png", height = 5, width = 10)
 
 # dens2 = ggplot(disease_genes_wide, aes(x=number_of_paralogues)) + geom_density()
