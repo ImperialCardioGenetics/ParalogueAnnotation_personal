@@ -4562,7 +4562,7 @@ colnames(protein_classes2) = c("Protein_class", "number_of_genes", "Percent_of_g
 protein_classes2 = protein_classes2[order(protein_classes2$number_of_genes, decreasing = T),] 
 protein_classes2$stage = "Only Paralogue\ngenes"
 #control - 4340 clinvar genes with only missense
-protein_classes3 = read.csv(file="data/clinvar/4340_clinvar_genes_w_only_missense_GO_protein_class.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+protein_classes3 = read.csv(file="data/clinvar/4225_clinvar_genes_w_only_missense_GO_protein_class.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
 protein_classes3$V4 = as.numeric(sub("%", "", protein_classes3$V4))
 protein_classes3$V5 = as.numeric(sub("%", "", protein_classes3$V5))
 protein_classes3 = protein_classes3[,2:5]
