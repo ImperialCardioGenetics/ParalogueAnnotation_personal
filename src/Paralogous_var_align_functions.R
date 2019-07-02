@@ -78,6 +78,7 @@ Paralogous_var_align = function(paralogs2_file,
                                                     !(grepl("-", joining_tableized_data$Amino_acids)) &
                                                     !(grepl("\\*", joining_tableized_data$Amino_acids)) &
                                                     grepl("/", joining_tableized_data$Amino_acids) &
+                                                    str_count(joining_tableized_data$REF) == str_count(joining_tableized_data$ALT) &
                                                     str_count(joining_tableized_data$Amino_acids) == 3,]
   ref_data = joining_tableized_data
   
