@@ -4479,7 +4479,7 @@ write("##gff-version 2","data/all_possible_mutations/KCNQ1/benign_clinvar_KCNQ1_
 write.table(benign_clinvar_KCNQ1_variants,"data/all_possible_mutations/KCNQ1/benign_clinvar_KCNQ1_variants.gff", quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
 
 
-aligned_benign_clinvar_and_patho_pred_protein_pos = intersect(clinvar_B_LB_tableized_protein_pos, patho_protein_pos)
+aligned_benign_clinvar_and_patho_pred_protein_pos = intersect(clinvar_B_LB_tableized_protein_pos, patho_protein_pos) #0
 aligned_benign_clinvar_and_patho_pred_variants = data.frame(
   name = "aligned_benign_clinvar_and_patho_pred_variants_QC1",
   source = "Jalview",
