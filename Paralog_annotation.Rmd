@@ -271,7 +271,7 @@ Here **Paralogue Annotation** is tested further on a (Likely) Pathogenic/Benign 
 
 
 ### Material and Methods
-
+o
 The Paralog Annotation algorithm was wriiten by Erica as a perl script plugin (called __ParalogueAnno_plugin_cleanup.pm__) for Ensembl's VEP version 90 (https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html). 
 
 The plugin has two arguments:
@@ -680,7 +680,7 @@ EFs calculated from OMGL and LMM datasets taken from previous @Walsh2017 publica
 
 Exac and Gnomad data from @Lek2016. 
 
-For Gnomad run: 
+For Gnomad 2.0.2 run: 
 ```{r eval = FALSE}
 library(DiagrammeR)
 Gnomad_dataset_split = DiagrammeR::grViz("
@@ -697,6 +697,64 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 
 }")
 Gnomad_dataset_split
+```
+
+
+For Gnomad 2.1.1 run on RBH:
+```{r eval = FALSE}
+RBH_run = data.frame(
+  file = c(
+"gnomad.exomes.r2.1.1.sites.vcf_split00_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split01_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split02_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split03_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split04_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split05_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split06_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split07_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split08_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split09_only_var_info",
+"gnomad.exomes.r2.1.1.sites.vcf_split10_only_var_info"
+),
+done = c(0,0,0,0,0,0,0,0,0,0,0)
+)
+```
+
+For all missense synthetic exome run on HPC:
+```{r eval = FALSE}
+HPC_run_chrom1 = data.frame(
+  file = c(
+"0-9",
+"10-30",
+"31-70",
+"71-99",
+"100-200",
+"201-360"
+),
+done = c(1,1,1,1,1,1)
+)
+
+HPC_run_chrom2 = data.frame(
+  file = c(
+"0-9",
+"10-99"
+),
+done = c(1,0)
+)
+
+HPC_run_chrom3 = data.frame(
+  file = c(
+"0-9"
+),
+done = c(0)
+)
+
+HPC_run_chrom4 = data.frame(
+  file = c(
+"0-9"
+),
+done = c(0)
+)
 ```
 
 #### Benchmarking performance of the plugin
