@@ -1,0 +1,12 @@
+##gff-version 2
+KCNQ1-001	transmembrane	transmembrane	122	142	0	.	.
+KCNQ1-001	transmembrane	transmembrane	148	168	0	.	.
+KCNQ1-001	transmembrane	transmembrane	197	217	0	.	.
+KCNQ1-001	transmembrane	transmembrane	226	248	0	.	.
+KCNQ1-001	transmembrane	transmembrane	262	282	0	.	.
+KCNQ1-001	transmembrane	transmembrane	328	348	0	.	.
+KCNQ1-001	intramembrane	intramembrane	300	320	0	.	.
+KCNQ1-001	interaction_w_KCNE1	interaction_w_KCNE1	535	572	0	.	.
+KCNQ1-001	interaction_w_AKAP9	interaction_w_AKAP9	588	616	0	.	.
+
+
