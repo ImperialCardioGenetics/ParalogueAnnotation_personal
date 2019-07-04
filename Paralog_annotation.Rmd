@@ -700,7 +700,7 @@ Gnomad_dataset_split
 ```
 
 
-For Gnomad 2.1.1 run on RBH:
+For Gnomad 2.1.1 run on RBH, used bash for loop and direct paralogue_annotate_master_script.py inside qsub -I:
 ```{r eval = FALSE}
 RBH_run = data.frame(
   file = c(
@@ -720,7 +720,7 @@ done = c(0,0,0,0,0,0,0,0,0,0,0)
 )
 ```
 
-For all missense synthetic exome run on HPC:
+For all missense synthetic exome run on HPC, used qsub_scripts:
 ```{r eval = FALSE}
 HPC_run_chrom1 = data.frame(
   file = c(
