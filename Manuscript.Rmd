@@ -2874,7 +2874,7 @@ write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_onlySCN5A_C_terminal_EFs.tsv
 
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T)
-NDD = NDD[]
+NDD = NDD[grepl("missense_variant", NDD$Consequence),]
 
 ```
 
