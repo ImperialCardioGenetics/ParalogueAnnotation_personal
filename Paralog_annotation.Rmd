@@ -737,23 +737,26 @@ done = c(1,1,1,1,1,1)
 HPC_run_chrom2 = data.frame(
   file = c(
 "0-9",
+"10-99",
+"100-263"
+),
+done = c(1,1,0)
+)
+
+HPC_run_chrom3 = data.frame(
+  file = c(
+"0-9",
 "10-99"
 ),
 done = c(1,0)
 )
 
-HPC_run_chrom3 = data.frame(
-  file = c(
-"0-9"
-),
-done = c(0)
-)
-
 HPC_run_chrom4 = data.frame(
   file = c(
-"0-9"
+"0-9",
+"10-99"
 ),
-done = c(0)
+done = c(1,0)
 )
 ```
 
