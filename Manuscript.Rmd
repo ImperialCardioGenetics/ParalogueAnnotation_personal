@@ -993,7 +993,7 @@ setdiff(unique(x$Gene),unique(clinvar_P_LP_genes_w_paralogs))
 # Number of disease protein coding genes that have at least 1 paralogue and at least 1 P/LP variant aligning to a non-gap position
 length(unique(x$Gene)) #2485
 # Number of disease protein coding genes that have at least 1 paralogue and at least 1 P/LP variant aligning to a non-gap position of another disease gene
-length(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes))) 
+length(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes))) #2451
 
 # write.table(setdiff(unique(clinvar_P_LP_tableized_genes),unique(x$Gene)), file = "data/clinvar/genes_in_out_paraloc_paralogs2.noQC.txt", row.names = FALSE, col.names = FALSE)
 length(unique(intersect(x$Gene, clinvar_P_LP_only_snv_missense_tableized$SYMBOL))) #2451 actually 2450
