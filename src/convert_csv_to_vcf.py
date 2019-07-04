@@ -1,6 +1,7 @@
 import  os, sys, subprocess, re
 
 #SCRIPT FOR CSV TO VCF
+#ALSO FILTERS FOR ONLY "RARE" VARIANTS
 # input_file = sys.argv[1]	#path of HCM csv file e.g. /media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/HCM_missense_LMM_OMGL_chr.csv
 # dir1 = input_file.rsplit("/", 1)[0]
 # input_file2 = sys.argv[2]	#path of ExAC csv file e.g. /media/nick/Data/Users/N/Documents/PhD/Paralogues/data_files/case_controls/ExAC_missense_sarcomeric_chr.csv
