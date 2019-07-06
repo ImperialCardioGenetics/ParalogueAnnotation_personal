@@ -714,7 +714,8 @@ RBH_run = data.frame(
 "gnomad.exomes.r2.1.1.sites.vcf_split07_only_var_info",
 "gnomad.exomes.r2.1.1.sites.vcf_split08_only_var_info",
 "gnomad.exomes.r2.1.1.sites.vcf_split09_only_var_info",
-"gnomad.exomes.r2.1.1.sites.vcf_split10_only_var_info"
+"gnomad.exomes.r2.1.1.sites.vcf_split10_only_var_info",
+"11-20"
 ),
 done = c(1,1,1,1,1,1,1,1,1,1,0)
 )
