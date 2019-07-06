@@ -34,7 +34,7 @@ source("src/Paralogous_var_align_functions.R")
 * Apply Paralogue annotation on other datasets
     + "Genome Wide" - Clinvar dataset and ALL possible exome variants (get from `/data/Mirror/ExAC_release/release0.3.1/manuscript_data/all_possible_variants`)
     + Cardiomyopathy genes - [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1] -CHECK CODE TO SEE IF ALL MISSENSE CM VARIANTS REALLY DO NOT APPEAR IN ANY OF THESE GENES AS EG. MYH6 SHOULD HAVE SOME
-    + Channelopathy genes - [KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2]
+    + Channelopathy goenes - [KCNQ1, KCNH2, SCN5A, KCNE1, KCNE2, RYR2]
 * Improve precision via increasing conservation of ref/alt alleles
     + pairwise QC - ignore any individual pairwise alignments where ref alleles are not conserved
     + pairwise QC and family QC - ignore entire alignment columns if the entire family ref alleles are not conserved; NB analogous to para z scores
@@ -716,7 +716,7 @@ RBH_run = data.frame(
 "gnomad.exomes.r2.1.1.sites.vcf_split09_only_var_info",
 "gnomad.exomes.r2.1.1.sites.vcf_split10_only_var_info"
 ),
-done = c(0,0,0,0,0,0,0,0,0,0,0)
+done = c(1,1,1,1,1,1,1,1,1,1,0)
 )
 ```
 
@@ -740,23 +740,25 @@ HPC_run_chrom2 = data.frame(
 "10-99",
 "100-263"
 ),
-done = c(1,1,0)
+done = c(1,1,1)
 )
 
 HPC_run_chrom3 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99",
+"100-204"
 ),
-done = c(1,0)
+done = c(1,1,0)
 )
 
 HPC_run_chrom4 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99",
+"100-139"
 ),
-done = c(1,0)
+done = c(1,1,0)
 )
 ```
 
