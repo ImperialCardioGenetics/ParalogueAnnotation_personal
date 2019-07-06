@@ -1,0 +1,15 @@
+V1,V2,V3,V4,V5,V6
+Variant,Pathogenic variants,Benign variants,PPV,Sensitivity,Specificity,P value
+Total,23894,14617,NA,NA,NA,NA
+PA_threshold_row,3084,89,0.97,0.13,0.99,0
+PA_threshold_row,3043,85,0.97,0.13,0.99,0
+PA_threshold_row,3028,85,0.97,0.13,0.99,0
+PA_threshold_row,3021,84,0.97,0.13,0.99,0
+PA_threshold_row,2956,80,0.97,0.12,0.99,0
+PA_threshold_row,2861,71,0.98,0.12,1,0
+PA_threshold_row,2786,64,0.98,0.12,1,0
+PA_threshold_row,2713,51,0.98,0.11,1,0
+PA_threshold_row,2584,47,0.98,0.11,1,0
+PA_threshold_row,2450,38,0.98,0.1,1,0
+PA_threshold_row,2292,29,0.99,0.096,1,0
+PA_threshold_row,2239,29,0.99,0.094,1,0

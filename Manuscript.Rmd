@@ -1357,8 +1357,9 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
 ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2.png")
 
 
+write.table(paraz_set, file = "data/clinvar/paraz_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 
-kable(paraz_set)
+# kable(paraz_set)
 ```
 
 ## Case example: lack of paralogue annotation on 8 sarcomeric genes subset and use of etiological fractions as alternate validation 
