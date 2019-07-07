@@ -1363,15 +1363,32 @@ write.table(paraz_set, file = "data/clinvar/paraz_set.csv", na="", row.names = T
 ```
 
 ## visual graph of main clinvar and para_z table
-```{r line_plot_of_clinvar_paraz_set, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+```{r plot_of_clinvar_paraz_set, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 clinvar_set_csv = read.csv("data/clinvar/clinvar_set.csv", sep=",", header = T)
-clinvar_set_top = clinvar_set_csv[1:3,1:2]
-para_z_set_csv = read.csv("data/clinvar/paraz_set.csv", sep = ",", header = F)
-para_z_set_middle = para_z_set_csv[4:15,2:3]
-names(para_z_set_middle) = names(clinvar_set_top)
-row.names(para_z_set_middle) = paste("ParaZ_threshold_", seq(0,11), sep = "")
-clinvar_set_bottom = clinvar_set_csv[4:6,1:2]
-Overall_clinvar_paraz_set = rbind(clinvar_set_top,para_z_set_middle,clinvar_set_bottom)
+clinvar_set_only_P = data.frame(bar = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
+           Pathogenic_var = clinvar_set_csv[1:6,1],
+           Stage = "Pathogenic")
+clinvar_set_only_P$Stage = factor(clinvar_set_only_P$Stage, levels = c("Pathogenic"))
+clinvar_set_only_B = data.frame(bar = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
+           Pathogenic_var = clinvar_set_csv[1:6,2],
+           Stage = "Benign")
+clinvar_set_only_B$Stage = factor(clinvar_set_only_B$Stage, levels = c("Benign"))
+Total_clinvar_set = rbind(clinvar_set_only_P,clinvar_set_only_B)
+Total_clinvar_set$bar = factor(Total_clinvar_set$bar, levels = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"))
+# Total_clinvar_set[Total_clinvar_set$bar=="Total variants","Pathogenic_var"] = Total_clinvar_set[Total_clinvar_set$bar=="Total variants","Pathogenic_var"] - 9000
+
+# clinvar_set_top = clinvar_set_csv[1:3,1:2]
+# para_z_set_csv = read.csv("data/clinvar/paraz_set.csv", sep = ",", header = F)
+# para_z_set_middle = para_z_set_csv[4:15,2:3]
+# names(para_z_set_middle) = names(clinvar_set_top)
+# row.names(para_z_set_middle) = paste("ParaZ_threshold_", seq(0,11), sep = "")
+# clinvar_set_bottom = clinvar_set_csv[4:6,1:2]
+# Overall_clinvar_paraz_set = rbind(clinvar_set_top,para_z_set_middle,clinvar_set_bottom)
+
+
+bar_chart = ggplot(Total_clinvar_set, aes(y=Pathogenic_var, x=bar, fill=Stage)) + geom_bar(stat="identity", position="dodge") + 
+  scale_y_log10() 
+  # scale_y_continuous(expand = c(0,0), breaks = c(0:4500,14000:24000))
 ```
 
 ## Case example: lack of paralogue annotation on 8 sarcomeric genes subset and use of etiological fractions as alternate validation 
@@ -2893,9 +2910,10 @@ write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_onlySCN5A_C_terminal_EFs.tsv
 ## EFs for NDD+E
 
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t")
 NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T)
 NDD = NDD[grepl("missense_variant", NDD$Consequence),]
-
+NDD$Chrom = sapply(strsplit(as.character(NDD$Location),":"),"[",1)
 ```
 
 
