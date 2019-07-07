@@ -1375,7 +1375,7 @@ clinvar_set_only_B = data.frame(bar = c("Total variants", "Paralogue Annotation"
 clinvar_set_only_B$Stage = factor(clinvar_set_only_B$Stage, levels = c("Benign"))
 Total_clinvar_set = rbind(clinvar_set_only_P,clinvar_set_only_B)
 Total_clinvar_set$bar = factor(Total_clinvar_set$bar, levels = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"))
-# Total_clinvar_set[Total_clinvar_set$bar=="Total variants","Pathogenic_var"] = Total_clinvar_set[Total_clinvar_set$bar=="Total variants","Pathogenic_var"] - 9000
+# Total_clinvar_set[Total_clinvar_set$bar=="Total variants","Pathogenic_var"] = Total_clinvar_set[Total_clinvar_set$bar=="Total variants","Pathogenic_var"] - 10000
 
 # clinvar_set_top = clinvar_set_csv[1:3,1:2]
 # para_z_set_csv = read.csv("data/clinvar/paraz_set.csv", sep = ",", header = F)
@@ -1386,8 +1386,8 @@ Total_clinvar_set$bar = factor(Total_clinvar_set$bar, levels = c("Total variants
 # Overall_clinvar_paraz_set = rbind(clinvar_set_top,para_z_set_middle,clinvar_set_bottom)
 
 
-bar_chart = ggplot(Total_clinvar_set, aes(y=Pathogenic_var, x=bar, fill=Stage)) + geom_bar(stat="identity", position="dodge") + 
-  scale_y_log10() 
+bar_chart = ggplot(Total_clinvar_set, aes(y=Pathogenic_var, x=bar, fill=Stage)) + geom_bar(stat="identity", position="dodge")
+  # scale_y_log10() 
   # scale_y_continuous(expand = c(0,0), breaks = c(0:4500,14000:24000))
 ```
 
