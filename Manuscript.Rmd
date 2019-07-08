@@ -86,9 +86,9 @@ where:
 
 $a =$ number of variants predicted to be pathogenic by paralogue annotation in the diseased cohort
 
-$b =$ number of variants not predicted to be pathogenic by paralogue annotation in the diseased cohort
+$b =$ number of varaints predicted to be pathogenic by paralogue annotation in the control cohort
 
-$c =$ number of varaints predicted to be pathogenic by paralogue annotation in the control cohort
+$c =$ number of variants not predicted to be pathogenic by paralogue annotation in the diseased cohort
 
 $d =$ number of variants not predicted to be pathogenic by paralogue annotation in the control cohort
 
@@ -285,7 +285,8 @@ dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) +
     axis.text = element_text(size = 15), 
     plot.title = element_text(size = 15), 
     legend.text = element_text(size = 12), 
-    legend.title = element_text(size = 12)) +
+    legend.title = element_text(size = 12),
+    legend.position = c(0.875,0.75)) +
   labs(fill = NULL) + 
   guides(fill=guide_legend(
                  keywidth=0.2,
@@ -1392,12 +1393,37 @@ Total_clinvar_set$bar = factor(Total_clinvar_set$bar, levels = c("Paralogue Anno
 Total_variants = data.frame(Clnsig = c("P/LP","B/LB"),
   Total.variants=t(clinvar_set_csv[1,1:2]))
 Total_variants$Clnsig = factor(Total_variants$Clnsig, levels = c("P/LP","B/LB"))
-Total_variants_bar = ggplot(Total_variants, aes(y=Total.variants, x=Clnsig, fill = Clnsig, colour = Clnsig)) + 
-  geom_bar(stat="identity", position="dodge") + 
-  scale_fill_manual(values = c("P/LP"="#F8CECC", "B/LB"="#D5E8D4")) +
-  scale_color_manual(values = c("P/LP"="#B85450", "B/LB"="#82B366"))
 
-bar_chart = ggplot(Total_clinvar_set, aes(y=Pathogenic_var, x=bar, fill=Stage)) + geom_bar(stat="identity", position="dodge")
+Total_variants_bar = ggplot(Total_variants, aes(y=Total.variants, x=Clnsig, fill = Clnsig, colour = Clnsig)) + 
+  geom_bar(stat="identity", width = 0.9) + 
+  scale_fill_manual(values = c("P/LP"="#F8CECC", "B/LB"="#D5E8D4")) +
+  scale_color_manual(values = c("P/LP"="#B85450", "B/LB"="#82B366")) +
+  theme(aspect.ratio = 2/1,
+        legend.position = "none",
+        axis.text = element_text(size=14),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(colour = "black"),
+        axis.title.y = element_text(size=20)) + ylab("Total variants") +
+  scale_x_discrete(labels = c("Pathogenic/\nLikely pathogenic","Benign/\nLikely benign")) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,25000)) +
+  geom_text(aes(label=Total.variants), position=position_dodge(width=0.9), vjust=-0.25, size = 7, color = "black")
+ggsave("images/clinvar_total_variants_bar_chart.png")
+
+
+bar_chart = ggplot(Total_clinvar_set, aes(y=Pathogenic_var, x=bar, fill = Stage, colour = Stage)) + geom_bar(stat="identity", position="dodge") +
+  scale_fill_manual(values = c("Pathogenic"="#F8CECC", "Benign"="#D5E8D4"), labels = c("P/LP","B/LB")) +
+  scale_color_manual(values = c("Pathogenic"="#B85450", "Benign"="#82B366"), labels = c("P/LP","B/LB")) +
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(3,"line"),
+        legend.position = c(0.95,0.92),
+        legend.text = element_text(size=20),
+        axis.text = element_text(size=16),
+        axis.text.x = element_text(colour = "black"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size=20)) + ylab("Variants predicted pathogenic") +
+  scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4200), expand = c(0,0)) +
+  geom_text(aes(label=Pathogenic_var), position=position_dodge(width=0.9), vjust=-0.25, size = 7, color = "black")
+ggsave("images/clinvar_set_bar_chart.png", height = 8, width = 14)
   # scale_y_log10() 
   # scale_y_continuous(expand = c(0,0), breaks = c(0:4500,14000:24000))
 ```
@@ -4746,18 +4772,20 @@ gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(
     # axis.text.x=element_blank()
     # axis.ticks.x=element_blank()
     ) +
-  scale_fill_manual(values= c(alpha("red",0.9), alpha("blue",0.4))) + 
+  scale_fill_manual(values= c(alpha("red",0.9), alpha("blue",0.4)), labels = c("Only genes with Paralogue\nAnnotations (n=535)","Disease genes with disease\nparalogues (n=1648)")) + 
   guides(fill = guide_legend(reverse=TRUE)) +
-  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350,400), limits = c(0,200), expand = c(0,0)) +
+  scale_y_continuous(breaks = c(0,50,100,150,200), limits = c(0,205), expand = c(0,0), position = "right") +
   xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) +ylab("Number of Genes") +
   theme(axis.text.x = element_text(size = 16), 
         axis.text.y = element_text(size=11),
         legend.text = element_text(size=16),
-        axis.title = element_text(size=15)) + 
+        axis.title = element_text(size=15),
+        legend.position = c(0.84,0.07)) + 
   guides(fill=guide_legend(
                  keywidth=0.2,
                  keyheight=0.5,
-                 default.unit="inch"))
+                 default.unit="inch",
+                 reverse = TRUE))
 ggsave("images/GO_protein_classes_of_genes2.png", height = 8, width = 12)
 
 
