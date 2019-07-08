@@ -1948,6 +1948,7 @@ KCNQ1_EF_data$type = factor(KCNQ1_EF_data$type, levels = c("rare and\nparalogue 
 
 gg = ggplot(KCNQ1_EF_data, aes(y=type, x=OR, colour = type, shape = type)) + 
   geom_point(size=9) + 
+  scale_color_manual(values=c("rare variants" = "#000000", "rare and\nparalogue annotated" = "#000000")) +
    geom_errorbarh(aes(xmin=CI_lower, xmax=CI_upper),colour="black",linetype=1,size=.2,height=.5) +
   # theme_bw() + 
   theme(#panel.grid.major = element_blank(), 
