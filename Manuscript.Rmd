@@ -1303,7 +1303,7 @@ prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Precision_CI = P
 prc_data$Type = "conserved AA +\nPara_z"
 
 prc_data = rbind(prc_data, c(as.numeric(conf$PPV),as.numeric(1.96*conf$PPV_SE),as.numeric(conf$Sensitivity),as.numeric(1.96*conf$Sensitivity_SE)))
-prc_data[13,5]="any"
+prc_data[13,5]="none"
 prc_data = rbind(prc_data, c(as.numeric(conf2$PPV),as.numeric(1.96*conf2$PPV_SE),as.numeric(conf2$Sensitivity),as.numeric(1.96*conf2$Sensitivity_SE)))
 prc_data[14,5]="conserved AA"
 prc_data = rbind(prc_data, c(as.numeric(conf3$PPV),as.numeric(1.96*conf3$PPV_SE),as.numeric(conf3$Sensitivity),as.numeric(1.96*conf3$Sensitivity_SE)))
@@ -1315,7 +1315,7 @@ prc_data[17,5]="conserved AA +\nconserved variants"
 
 # prc_data[18:21,5]=c("Sift", "MCap", "CADD", "Revel")
 
-prc_data$Type = factor(prc_data$Type, levels = c("any", "conserved AA", "conserved AA +\nPara_z", "full conserved AA", "conserved AA +\nconserved variants", "full conseerved AA +\nconserved variants"))
+prc_data$Type = factor(prc_data$Type, levels = c("none", "conserved AA", "conserved AA +\nPara_z", "full conserved AA", "conserved AA +\nconserved variants", "full conseerved AA +\nconserved variants"))
 # prc_data$Type = factor(prc_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+Para_Z", "QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
 prc_data$Type[1:12] = "conserved AA +\nPara_z"
@@ -1323,8 +1323,8 @@ prc_data$Type[1:12] = "conserved AA +\nPara_z"
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
-cols = c("conserved AA +\nPara_z" = "#4D5656", "any" = "#58D68D", "conserved AA" = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conseerved AA +\nconserved variants" = "#EC7063")
-shapes = c("conserved AA +\nPara_z" = 6, "any" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conseerved AA +\nconserved variants" = 19)
+cols = c("conserved AA +\nPara_z" = "#4D5656", "none" = "#58D68D", "conserved AA" = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conseerved AA +\nconserved variants" = "#EC7063")
+shapes = c("conserved AA +\nPara_z" = 6, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conseerved AA +\nconserved variants" = 19)
 
 # cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 # shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
@@ -1350,7 +1350,9 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
-  theme(legend.text=element_text(size=16), legend.key.size = unit(3,"line"))
+  theme(legend.text=element_text(size=16), legend.title=element_text(size=16), legend.key.size = unit(3,"line")) +
+  guides(shape = guide_legend(override.aes = list(size = 8))) +
+  labs(shape="conservation stringency", color="conservation stringency")
   
  # theme(legend.text=element_text(size=25), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(5,"line"))
 
@@ -3440,14 +3442,14 @@ other_tools_data = data.frame(
   Sensitivity = c(as.numeric(other_tools_set[2:10,5])),
   Sensitivity_CI = c(as.numeric(other_tools_set[2:10,6]))
   )
-other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "any", "conserved AA" ,"full conserved AA", "full conserved AA +\nconserved variants", "conserved AA +\nconserved variants")
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "none", "conserved AA" ,"full conserved AA", "full conserved AA +\nconserved variants", "conserved AA +\nconserved variants")
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
-other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "any", "conserved AA" , "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"))
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("none", "conserved AA" , "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants", "Sift", "MCap", "CADD", "Revel"))
 # other_tools_data$Precision_CI_min = other_tools_data$Precision - other_tools_data$Precision_CI
 # other_tools_data$Precision_CI_max = sapply(other_tools_data$Precision + other_tools_data$Precision_CI, min, 1)
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "any" = "#58D68D", "conserved AA"  = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conserved AA +\nconserved variants" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "any" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conserved AA +\nconserved variants" = 19)
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "#58D68D", "conserved AA"  = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conserved AA +\nconserved variants" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conserved AA +\nconserved variants" = 19)
 gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
@@ -3476,7 +3478,7 @@ gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sha
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
-  theme(legend.text=element_text(size=25), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(5,"line"))
+  theme(legend.text=element_text(size=25), legend.title=element_blank(), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(5,"line"))
 ggsave("images/PRC_of_SCN5A_with_legend.png", width = 10, height = 11)
 ```
 
