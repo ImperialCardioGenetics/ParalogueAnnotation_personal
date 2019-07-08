@@ -274,6 +274,8 @@ dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="No" & total_plot_data$paralogue == "Yes",], aes(fill = "no_dis_yes_para"), alpha = 0.4, binwidth = 1) +
   geom_histogram(data = total_plot_data[total_plot_data$disease=="Yes" & total_plot_data$paralogue == "Yes",], aes(fill = "yes_dis_yes_para"), alpha = 0.9, binwidth = 1) +
   scale_fill_manual(values = cols, labels = c("All genes,\nno paralogues (n=5644)", "All genes,\nhas paralogues (n=14514)", "Clinvar disease genes,\nno paralogues (n=1496)",  "Clinvar disease genes,\nhas paralogues (n=3621)")) +
+  # scale_y_continuous(expand = c(0,0)) +
+  # scale_x_continuous(expand = c(0,0)) +
   theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +
@@ -1367,16 +1369,16 @@ write.table(paraz_set, file = "data/clinvar/paraz_set.csv", na="", row.names = T
 ## visual graph of main clinvar and para_z table
 ```{r plot_of_clinvar_paraz_set, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 clinvar_set_csv = read.csv("data/clinvar/clinvar_set.csv", sep=",", header = T)
-clinvar_set_only_P = data.frame(bar = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
-           Pathogenic_var = clinvar_set_csv[1:6,1],
+clinvar_set_only_P = data.frame(bar = c("Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
+           Pathogenic_var = clinvar_set_csv[2:6,1],
            Stage = "Pathogenic")
 clinvar_set_only_P$Stage = factor(clinvar_set_only_P$Stage, levels = c("Pathogenic"))
-clinvar_set_only_B = data.frame(bar = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
-           Pathogenic_var = clinvar_set_csv[1:6,2],
+clinvar_set_only_B = data.frame(bar = c("Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
+           Pathogenic_var = clinvar_set_csv[2:6,2],
            Stage = "Benign")
 clinvar_set_only_B$Stage = factor(clinvar_set_only_B$Stage, levels = c("Benign"))
 Total_clinvar_set = rbind(clinvar_set_only_P,clinvar_set_only_B)
-Total_clinvar_set$bar = factor(Total_clinvar_set$bar, levels = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"))
+Total_clinvar_set$bar = factor(Total_clinvar_set$bar, levels = c("Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"))
 # Total_clinvar_set[Total_clinvar_set$bar=="Total variants","Pathogenic_var"] = Total_clinvar_set[Total_clinvar_set$bar=="Total variants","Pathogenic_var"] - 10000
 
 # clinvar_set_top = clinvar_set_csv[1:3,1:2]
@@ -1387,6 +1389,10 @@ Total_clinvar_set$bar = factor(Total_clinvar_set$bar, levels = c("Total variants
 # clinvar_set_bottom = clinvar_set_csv[4:6,1:2]
 # Overall_clinvar_paraz_set = rbind(clinvar_set_top,para_z_set_middle,clinvar_set_bottom)
 
+Total_variants = data.frame(Clnsig = c("P/LP","B/LB"),
+  Total.variants=t(clinvar_set_csv[1,1:2]))
+Total_variants$Clnsig = factor(Total_variants$Clnsig, levels = c("P/LP","B/LB"))
+Total_variants_bar = ggplot(Total_variants, aes(y=Total.variants, x=Clnsig, fill = Clnsig)) + geom_bar(stat="identity", position="dodge")
 
 bar_chart = ggplot(Total_clinvar_set, aes(y=Pathogenic_var, x=bar, fill=Stage)) + geom_bar(stat="identity", position="dodge")
   # scale_y_log10() 
@@ -4734,10 +4740,18 @@ gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(
     # axis.text.x=element_blank()
     # axis.ticks.x=element_blank()
     ) +
-  scale_fill_manual(values=c( "#BB8FCE", "#85C1E9")) + 
+  scale_fill_manual(values= c(alpha("red",0.9), alpha("blue",0.4))) + 
   guides(fill = guide_legend(reverse=TRUE)) +
-  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350,400)) +
-  xlab("PANTHER Protein Class") + theme(legend.key.size = unit(2,"line")) +ylab("Number of Genes")
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350,400), limits = c(0,200), expand = c(0,0)) +
+  xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) +ylab("Number of Genes") +
+  theme(axis.text.x = element_text(size = 16), 
+        axis.text.y = element_text(size=11),
+        legend.text = element_text(size=16),
+        axis.title = element_text(size=15)) + 
+  guides(fill=guide_legend(
+                 keywidth=0.2,
+                 keyheight=0.5,
+                 default.unit="inch"))
 ggsave("images/GO_protein_classes_of_genes2.png", height = 8, width = 12)
 
 
