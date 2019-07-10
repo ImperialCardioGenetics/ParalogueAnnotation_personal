@@ -749,27 +749,30 @@ HPC_run_chrom2 = data.frame(
   file = c(
 "0-9",
 "10-99",
-"100-263" #174, 175, 228, 261, 262 EXCEEDED MEM
+"100-263", #174, 175, 228, 261, 262 EXCEEDED MEM
+"174,175,228,261,262"
 ),
-done = c(1,1,0)
+done = c(1,1,1,0)
 )
 
 HPC_run_chrom3 = data.frame(
   file = c(
 "0-9",
 "10-99",
-"100-204" #186 EXCEEDED MEM
+"100-204", #186 EXCEEDED MEM
+"186"
 ),
-done = c(1,1,0)
+done = c(1,1,1,1)
 )
 
 HPC_run_chrom4 = data.frame(
   file = c(
 "0-9",
 "10-99",
-"100-139" #135 EXCEEDED MEM
+"100-139", #135 EXCEEDED MEM
+"135"
 ),
-done = c(1,1,0)
+done = c(1,1,1,1)
 )
 
 HPC_run_chrom5 = data.frame(
