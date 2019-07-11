@@ -191,6 +191,13 @@ In bash, a way to iteratively check if a directory with wildcard exists is:
 for i in {0..360}; do if ls *\[$i\].pbs 1> /dev/null 2>&1; then echo $i "exists"; else echo $i "does not exists"; fi; done
 ```
 
+To check if run had any errors by looking at log files. Can then also use it to rerun the ones that failed.
+```{bash eval = FALSE, include = TRUE}
+grep -E "Too many connections" *.sh.e* -l | cut -d "." -f4
+
+grep -E "Too many connections" *.sh.e* -l | cut -d "." -f4 | while read i; do echo $i "CODE TO RUN HERE" ; done
+```
+
 ### Manuscript Plan
 * New tool to show (more likely Erica will write up)
 * Contrast to previous studies, is genome wide validated
@@ -752,7 +759,7 @@ HPC_run_chrom2 = data.frame(
 "100-263", #174, 175, 228, 261, 262 EXCEEDED MEM
 "174,175,228,261,262"
 ),
-done = c(1,1,1,0)
+done = c(1,1,1,1)
 )
 
 HPC_run_chrom3 = data.frame(
@@ -778,15 +785,17 @@ done = c(1,1,1,1)
 HPC_run_chrom5 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99", #68 EXCEEDED MEM #SOME FAILED - TOO MANY CONNECTIONS
+"68",#REMEMBER TO RENAME FOLDER
+"100-159"
 ),
-done = c(1,0)
+done = c(1,0,1,0)
 )
 
 HPC_run_chrom6 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99" #SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -794,7 +803,7 @@ done = c(1,0)
 HPC_run_chrom7 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99" #SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -802,7 +811,7 @@ done = c(1,0)
 HPC_run_chrom8 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99" #SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -810,7 +819,7 @@ done = c(1,0)
 HPC_run_chrom9 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99" #SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -818,7 +827,7 @@ done = c(1,0)
 HPC_run_chrom10 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99" #SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -826,7 +835,7 @@ done = c(1,0)
 HPC_run_chrom11 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99" #SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -842,14 +851,15 @@ done = c(1,0)
 HPC_run_chrom13 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99" #SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
 
 HPC_run_chrom14 = data.frame(
   file = c(
-"0-9"
+"0-9",
+"10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -857,7 +867,7 @@ done = c(1,0)
 HPC_run_chrom15 = data.frame(
   file = c(
 "0-9", #RUN 4 EXCEEDED MEM
-"10-99"
+"10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(0,0)
 )
@@ -866,7 +876,7 @@ done = c(0,0)
 HPC_run_chrom16 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -874,7 +884,7 @@ done = c(1,0)
 HPC_run_chrom17 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -882,7 +892,7 @@ done = c(1,0)
 HPC_run_chrom18 = data.frame(
   file = c(
 "0-9",
-"10-56"
+"10-56"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -890,7 +900,7 @@ done = c(1,0)
 HPC_run_chrom19 = data.frame(
   file = c(
 "0-9" #RUN 7 EXCEEDED MEM
-"10-99"
+"10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(0,0)
 )
@@ -898,7 +908,7 @@ done = c(0,0)
 HPC_run_chrom20 = data.frame(
   file = c(
 "0-9",
-"10-85"
+"10-85"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -906,7 +916,7 @@ done = c(1,0)
 HPC_run_chrom21 = data.frame(
   file = c(
 "0-9",
-"10-36"
+"10-36"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -914,7 +924,7 @@ done = c(1,0)
 HPC_run_chrom22 = data.frame(
   file = c(
 "0-9",
-"10-77"
+"10-77"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -922,7 +932,7 @@ done = c(1,0)
 HPC_run_chromX = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
@@ -930,7 +940,7 @@ done = c(1,0)
 HPC_run_chromY = data.frame(
   file = c(
 "0-9",
-"10-11"
+"10-11"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(1,0)
 )
