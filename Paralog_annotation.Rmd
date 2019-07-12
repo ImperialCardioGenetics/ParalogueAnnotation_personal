@@ -30,7 +30,7 @@ always_allow_html: yes
 source("src/Paralogous_var_align_functions.R")
 ```
 
-### Aims
+# Aims
 * Apply Paralogue annotation on other datasets
     + "Genome Wide" - Clinvar dataset and ALL possible exome variants (get from `/data/Mirror/ExAC_release/release0.3.1/manuscript_data/all_possible_variants`)
     + Cardiomyopathy genes - [MYH7, MYBPC3, TNNT2, TPM1, MYL2, MYL3, TNNI3, ACTC1] -CHECK CODE TO SEE IF ALL MISSENSE CM VARIANTS REALLY DO NOT APPEAR IN ANY OF THESE GENES AS EG. MYH6 SHOULD HAVE SOME
@@ -42,13 +42,13 @@ source("src/Paralogous_var_align_functions.R")
 * investigate para z scores
 * investigate pfam meta domains
 
-### Some interesting things to look at maybe
+# Some interesting things to look at maybe
 * "Ohnologs"
 * Perform PA on paralogs from CPG (from @Modos2016) and non-CPG and see difference? 
 * Integrating ortholog data to increase confidence calling 
 * Gene Ontology packages - topGO?
 
-### OBSTACLES TO GET DONE:
+# OBSTACLES TO GET DONE:
 * Maybe look at which diseases Paralogue Annotation best performs in
     + Have found which genes have most paralogue annotations, now need to find where these reference variants come from - which genes are they from
 * REVEL scores for b38 do exist in annovar, perhaps redo
@@ -104,7 +104,7 @@ source("src/Paralogous_var_align_functions.R")
 * Make all input data reproducible
 * Look at bioconductor biomart package - easier to extract paralogue info from ensembl biomart
 
-### Useful code tips:
+# Useful code tips:
 If comparing 2 dataframes and wanting to check what rows exist in one but not the other - first check if there are any multiple duplicated rows, i.e. 3x, 4x, etc. as these tend to be the causes (https://stackoverflow.com/questions/18201074/find-how-many-times-duplicated-rows-repeat-in-r-data-frame):
 
 ```{r eval = FALSE, include = TRUE}
@@ -198,7 +198,7 @@ grep -E "Too many connections" *.sh.e* -l | cut -d "." -f4
 grep -E "Too many connections" *.sh.e* -l | cut -d "." -f4 | while read i; do echo $i "CODE TO RUN HERE" ; done
 ```
 
-### Manuscript Plan
+# Manuscript Plan
 * New tool to show (more likely Erica will write up)
 * Contrast to previous studies, is genome wide validated
 * Describe implementation and how to use
@@ -219,7 +219,7 @@ grep -E "Too many connections" *.sh.e* -l | cut -d "." -f4 | while read i; do ec
     + integrated into gnomad
 * Pfam domains - separate paper?
 
-#### Paper Layout 
+## Paper Layout 
 **Abstract**
 
 * *do last as usual...*
@@ -274,7 +274,7 @@ grep -E "Too many connections" *.sh.e* -l | cut -d "." -f4 | while read i; do ec
 * Novel idea of variant classification by homologous prediction
 * Future work to be done
 
-### Introduction
+# Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as pathogenic or benign requires supporting evidence, which does not always exists especially if the variant novel. 
 Previously Ware *et al.* have developed **Paralogue Annotation** [@Ware2012; @Walsh2014], which utilizes information from paralogues (evolutionarily related genes from the same species) to help classify pathogenic variants. They verified its use in LQTS genes on variants acquired from patient cohorts.
 
@@ -283,7 +283,7 @@ Here **Paralogue Annotation** is tested further on a (Likely) Pathogenic/Benign 
 <span style="color:red">Also have a look at @Barshir2018 for more info about paralogs in diseases.</span>
 
 
-### Material and Methods
+# Material and Methods
 
 The Paralog Annotation algorithm was wriiten by Erica as a perl script plugin (called __ParalogueAnno_plugin_cleanup.pm__) for Ensembl's VEP version 90 (https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html). 
 
@@ -684,7 +684,7 @@ os.system("mv " + input_file + "_tableized_temp " + input_file + "_tableized")
 
 It is worth noting that using VEP with different versions of perl will result in slight different outputs. The difference do not seem to be detrimental to the end result as it appears that only VEP is affect but not the Plugin.
 
-#### Datasets
+## Datasets
 Clinvar Likely Pathogenic/Pathogenic and Likely Benign/Benign variant vcf files were extracted and downloaded via the method developed by Zhang *et al.* [@Zhang2017]. 
 
 Clinical significance definitions of variants defined according to Clinvar [@landrum2015clinvar].
@@ -946,7 +946,7 @@ done = c(1,0)
 )
 ```
 
-#### Benchmarking performance of the plugin
+## Benchmarking performance of the plugin
 
 __/data/Share/nick/Paralog_Anno/multi_vcf_extractor_benchmark.py__ is used to demonstrate speed at which VEP+Plugin takes to run
 ```{python eval = FALSE, include = FALSE}
@@ -1037,7 +1037,7 @@ plt.savefig(dir1+"benchmark_"+str(flavour)+"_"+str(VEPversion)+".png")
 plt.gcf().clear()
 ```
 
-#### Scripts pipeline
+## Scripts pipeline
 
 ```{r eval = FALSE}
 library(DiagrammeR)
@@ -1057,12 +1057,12 @@ node [shape = plaintext, fillcolor = orange, style=filled, fixedsize=false]
 pipeline
 ```
 
-#### Statistical terms
+## Statistical terms
 In context of is there a pathogenic paralogue alignment? A TP = pathogenic query variant with a paralogous pathogenic hit; FP = benign query variant with a paralogous pathogenic hit; FN = pathogenic query variant with no paralogous pathogenic hit; and TN= benign query variant with no paralogous pathogenic hit.
 
 Likewise for a benign paralogous alignment, a TP = benign query variant with a paralogous benign hit; FP = pathogenic query variant with a paralogous benign hit; FN = benign query variant with no paralogous benign hit; and TN = pathogenic query variant with no paralogous benign hit.
 
-#### Annotation of Clinvar
+## Annotation of Clinvar
 The Clinvar file __clinvar_20171029.vcf__ was downloaded from ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/. Note that since the initial look at what was available there's been updated Clinvar files. 
 
 NOTE that I have noticed some descrepencies between the plugin annotations which call REFID = 1/0 and that of comparing the REF amino acid by VEP in the dataset to itself. This is due to the fact that the paralogous variant VEP is referring to is simply not in the dataset that I am annotating back to. As a result, it is best to make sure that the ref alleles are indeed the same when processing in R.
@@ -1312,7 +1312,7 @@ On the other hand, channelopathy genes did annotate well suggesting that their p
 
 Looking at alt alleles. Taking only pairwise alignments where the alt allele is conserved leaves only 1115 individual pairwise alignments. The number of actual unique variants this equates to is less - 825.
 
-#### Annotation of all possible missense variations in the 8 sarcomeric genes and calculation of EF
+## Annotation of all possible missense variations in the 8 sarcomeric genes and calculation of EF
 
 For calculating the EFs, run the all possible missense variants through VEP+plugin and return paraloc locations. Then join those locations with pathogenic clinvar variants as before. This indicates which variants from all possible missense variants are likely to be pathogenic. Then we check to see if any of these variants are present in the cases and controls. Hopefully the controls will be less but there is more control data than cases bare in mind. Calculate the EFs using that. Remember though the EFs are based on how many times an allele is seen, not the number of different alleles by themselves.
 
@@ -1331,21 +1331,21 @@ Significance level	P < 0.0001
 Attributable Risk Percent: 92.7% 
 95 % CI: 79.6 to 100
 
-#### Paralogue stats
+## Paralogue stats
 The additional statistics were calculated by programmatically extracting the genes of interest (using `src/check_what_clinvar_genes.py` and `src/Find_unique_genes.py`) and then retrieving relevant information manually from [Ensembl's Bioimart](https://www.ensembl.org/biomart)
 
 Alternatively, this can be reproduced using biomaRt package
                  
-#### Para-Z scores
+## Para-Z scores
 For the para-z scores, will need to extract amino acid position from VEP output as well. Then look up the gene in question in para-z score folder, and using the position identify the para-z score. From my understanding, the para-z score is the same across aligned amino acids in the same gene family. Therefore, we could use a cut-off threshold to further improve our confidence in calling variants pathogenic etc. We could also then calculate ROC curves by altering the cut-off to see how that affects sensitivity/PPV.
 
 All available para-z scores were retreived from https://git-r3lab.uni.lu/genomeanalysis/paralogs/tree/master/data [@Lal2017]. Para-Z score cutoff thresholds were used to remove any annotation alignments in question. Amino Acid positions that had a para-z score below the chosen cutoff threshold were not used for annotations.
 
-#### Ohnologs
+## Ohnologs
 The "2R"" hypothesis states that some 500 million years ago, early vertebrates went through 2 rounds of whole genome duplication (WGD)[@Ohno1968]. Paralogues that arose from this WGD are known as ohnologs. @Singh2014 showed that monogenic disease genes to be enriched in ohnologs than other paralogs that arose from small scale duplications.
 
 
-#### Comparison to SIFT, REVEL and other scores
+## Comparison to SIFT, REVEL and other scores
 SIFT and REVEL scores were retreived using ANNOVAR with dbnsfp30a [@wang2010annovar,@liu2016dbnsfp] and from https://sites.google.com/site/revelgenomics/downloads [@ioannidis2016revel] respectively.
 
 As REVEL only has scores for GRCh37 coordinates, had rerun PA with said coords. Then the SIFT scores were annotated with ANNOVAR on the __clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs__. ANNOVAR didn't like empty lines in the file so they were removed first using some simple bash. 
@@ -1367,9 +1367,9 @@ python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Shar
 The revel scores were converted from csv to tsv using some bash and binary indexed using tabix for faster lookup. Then python script (on Imeperial HPC) __/rds/general/user/nyl112/home/WORK/data/REVEL_scores/extract_revel_score.py__ was used to annotate the tableized file with the revel scores.
 
 
-### Results and Discussion
+# Results and Discussion
 
-#### Paralogue stats
+## Paralogue stats
 
 ```{r paralog_dist, cache=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"}
 ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
@@ -1450,7 +1450,7 @@ Performing a simple kolmogorov smirnov test between the distribution of pathogen
 
 
 
-#### Testing for overlapping genes in ensembl
+## Testing for overlapping genes in ensembl
 
 What defines an overlapping gene, especially in ensembl? For example, the UGT1A family of "genes" and "pseudogenes". Many of them share the same exons and could be classified as alternate transcripts rather than actual genes.
 
@@ -1475,7 +1475,7 @@ x2 = ddply(x,.(Variant_pos,ID),nrow)
 ```
 
 
-#### Annotation of Clinvar
+## Annotation of Clinvar
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 # library(knitr)
 #noQC
@@ -1587,7 +1587,7 @@ Using the aforementioned quality control steps to increase the stringency of con
 
 
 
-#### Para-Z scores
+## Para-Z scores
 
 ```{r message=FALSE, cache=TRUE, warning=FALSE, echo=FALSE}
 Sensitivity_list = vector()
@@ -1616,7 +1616,7 @@ ggplot(roc_data, aes(x=FPR, y=Sensitivity, colour = cutoff)) + geom_point() + xl
 
 The filtering steps outlined above take a more binaray path into taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores on the other hand take a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
 
-#### Subset of 8 sarcomeric genes and calculation of EF
+## Subset of 8 sarcomeric genes and calculation of EF
 Taking only the 8 sarcomeric genes:
 ```{r echo = FALSE, cache=TRUE, results='asis', warning=FALSE}
 #noQC
@@ -1883,4 +1883,4 @@ Infact performing the analysis on all possible missesnse mutations for these set
 Hence we calculated EFs in order to see for those few variants that are predicted to be pathogenic, how often do they appear to be causative of disease in a disease cohort case control study. Segway to HCM validation.
 
 
-#### References
+# References
