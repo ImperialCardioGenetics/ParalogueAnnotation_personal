@@ -284,7 +284,7 @@ Here **Paralogue Annotation** is tested further on a (Likely) Pathogenic/Benign 
 
 
 ### Material and Methods
-o
+
 The Paralog Annotation algorithm was wriiten by Erica as a perl script plugin (called __ParalogueAnno_plugin_cleanup.pm__) for Ensembl's VEP version 90 (https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html). 
 
 The plugin has two arguments:
