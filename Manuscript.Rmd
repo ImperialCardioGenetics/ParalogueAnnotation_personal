@@ -1358,9 +1358,29 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
   labs(shape="conservation stringency", color="conservation stringency")
   
  # theme(legend.text=element_text(size=25), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(5,"line"))
-
 ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2.png")
 
+gg3 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
+  
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
+  
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
+  xlim(0,0.2) + ylim(0.9,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+    plot.caption = element_text(vjust = 1), 
+    axis.title = element_text(size = 20), 
+    plot.title = element_text(size = 14)) +labs(y = "Precision", x = "Sensitivity") + 
+  theme(axis.text = element_text(size = 18)) + 
+  theme(plot.background = element_blank(),
+         panel.grid.minor = element_blank())+
+  theme(axis.line.x = element_line(color="black", size = 2),
+        axis.line.y = element_line(color="black", size = 2)) +
+  theme(legend.text=element_text(size=16), legend.title=element_text(size=16), legend.key.size = unit(3,"line")) +
+  guides(shape = guide_legend(override.aes = list(size = 8))) +
+  labs(shape="conservation\nstringency", color="conservation\nstringency") + 
+  theme(legend.position="none") 
+ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2_for_poster.png", height = 10, width = 10)
 
 write.table(paraz_set, file = "data/clinvar/paraz_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 
@@ -1411,21 +1431,42 @@ ggsave("images/clinvar_total_variants_bar_chart.png")
 
 
 bar_chart = ggplot(Total_clinvar_set, aes(y=Pathogenic_var, x=bar, fill = Stage, colour = Stage)) + geom_bar(stat="identity", position="dodge") +
-  scale_fill_manual(values = c("Pathogenic"="#F8CECC", "Benign"="#D5E8D4"), labels = c("P/LP","B/LB")) +
-  scale_color_manual(values = c("Pathogenic"="#B85450", "Benign"="#82B366"), labels = c("P/LP","B/LB")) +
+  scale_fill_manual(values = c("Pathogenic"="#F8CECC", "Benign"="#D5E8D4"), labels = c("Pathogenic/\nLikely Pathogenic","Benign/\nLikely Benign")) +
+  scale_color_manual(values = c("Pathogenic"="#B85450", "Benign"="#82B366"), labels = c("Pathogenic/\nLikely Pathogenic","Benign/\nLikely Benign")) +
   theme(legend.title = element_blank(),
-        legend.key.size = unit(3,"line"),
-        legend.position = c(0.95,0.92),
+        legend.key.size = unit(5,"line"),
+        legend.position = c(0.85,0.92),
         legend.text = element_text(size=20),
-        axis.text = element_text(size=16),
-        axis.text.x = element_text(colour = "black"),
+        axis.text = element_text(size=25),
+        axis.text.x = element_text(colour = "black", angle=45, hjust = 1),
         axis.title.x = element_blank(),
-        axis.title.y = element_text(size=20)) + ylab("Variants predicted pathogenic") +
+        axis.title.y = element_text(size=25)) + ylab("Variants predicted pathogenic") +
   scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4200), expand = c(0,0)) +
-  geom_text(aes(label=Pathogenic_var), position=position_dodge(width=0.9), vjust=-0.25, size = 7, color = "black")
-ggsave("images/clinvar_set_bar_chart.png", height = 8, width = 14)
+  geom_text(aes(label=Pathogenic_var), position=position_dodge(width=0.9), vjust=-0.25, size = 10, color = "black")
+ggsave("images/clinvar_set_bar_chart.png", height = 14, width = 12)
   # scale_y_log10() 
   # scale_y_continuous(expand = c(0,0), breaks = c(0:4500,14000:24000))
+
+All_in_one = Total_clinvar_set
+All_in_one = rbind(
+                   data.frame(bar="Total",Pathogenic_var=23894,Stage="Pathogenic"),
+                   data.frame(bar="Total",Pathogenic_var=14617,Stage="Benign"),
+                   Total_clinvar_set)
+
+All_in_one_chart = ggplot(All_in_one, aes(y=Pathogenic_var, x=bar, fill = Stage, colour = Stage)) + geom_bar(stat="identity", position="dodge") +
+  scale_fill_manual(values = c("Pathogenic"="#F8CECC", "Benign"="#D5E8D4"), labels = c("Pathogenic/\nLikely Pathogenic","Benign/\nLikely Benign")) +
+  scale_color_manual(values = c("Pathogenic"="#B85450", "Benign"="#82B366"), labels = c("Pathogenic/\nLikely Pathogenic","Benign/\nLikely Benign")) +
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(5,"line"),
+        legend.position = c(0.91,0.91),
+        legend.text = element_text(size=20),
+        axis.text = element_text(size=25),
+        axis.text.x = element_text(colour = "black", angle=45, hjust = 1),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size=25)) + ylab("Variants predicted pathogenic") +
+  scale_y_continuous(limits = c(0,25200), expand = c(0,0)) +
+  geom_text(aes(label=Pathogenic_var), position=position_dodge(width=0.9), vjust=-0.25, size = 10, color = "black")
+ggsave("images/clinvar_set_allinone_bar_chart.png", height = 14, width = 20)
 ```
 
 ## Case example: lack of paralogue annotation on 8 sarcomeric genes subset and use of etiological fractions as alternate validation 
@@ -3287,12 +3328,12 @@ other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap",
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
-gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
+gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
-  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
-  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
@@ -3489,9 +3530,9 @@ other_tools_data$Type = factor(other_tools_data$Type, levels = c("none", "conser
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "#58D68D", "conserved AA"  = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conserved AA +\nconserved variants" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conserved AA +\nconserved variants" = 19)
-gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
-  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
-  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
+gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
   xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
@@ -3581,12 +3622,12 @@ df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
-  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
-  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
@@ -3737,12 +3778,12 @@ df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
-  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
-  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
@@ -3835,12 +3876,12 @@ df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
-  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
-  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
@@ -4646,6 +4687,7 @@ write("##gff-version 2","data/all_possible_mutations/KCNQ1/aligned_benign_clinva
 
 ## Gnomad
 ```{r gnomad, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+p.normal_PA = Paralogous_var_align("data/J_Li_data/SSC_patho.out_paraloc_paralogs2.noQC", "data/J_Li_data/SSC_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 
 
@@ -4788,8 +4830,36 @@ gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(
                  reverse = TRUE))
 ggsave("images/GO_protein_classes_of_genes2.png", height = 8, width = 12)
 
-
-
+total_protein_class_poster = total_protein_class[total_protein_class$Protein_class != "transmembrane receptor\nregulatory/adaptor protein (PC00226)",]
+gg_protein_class_poster = ggplot(total_protein_class_poster, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = stage)) +
+  geom_bar(stat="identity", position = "dodge") +
+  coord_flip() +
+  # geom_point() + 
+  # geom_text(aes(label=Protein_class, position = "dodge"), position = position_dodge(width = 0), hjust =0 , vjust=0, angle = 20) +
+  theme(
+  #   axis.text.x = element_text(angle = -45, hjust = -0),
+  #   plot.margin = unit(c(5.5, 5.5, 5.5, 10), "points")
+    # axis.title.y=element_blank(),
+    legend.title=element_blank()
+    # legend.position="none"
+    # axis.text.x=element_blank()
+    # axis.ticks.x=element_blank()
+    ) +
+  scale_fill_manual(values= c(alpha("red",0.9), alpha("blue",0.4)), labels = c("Only genes with Paralogue\nAnnotations (n=535)","Disease genes with disease\nparalogues (n=1648)")) + 
+  guides(fill = guide_legend(reverse=TRUE)) +
+  scale_y_continuous(breaks = c(0,50,100,150,200), limits = c(0,205), expand = c(0,0), position = "right") +
+  xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) +ylab("Number of Genes") +
+  theme(axis.text.x = element_text(size = 16), 
+        axis.text.y = element_text(size=15),
+        legend.text = element_text(size=16),
+        axis.title = element_text(size=15),
+        legend.position = c(0.75,0.07)) + 
+  guides(fill=guide_legend(
+                 keywidth=0.2,
+                 keyheight=0.5,
+                 default.unit="inch",
+                 reverse = TRUE))
+ggsave("images/GO_protein_classes_of_genes2_for_poster.png", height = 8, width = 10)
 
 #gprofiler
 # library(gprofiler2)
