@@ -1369,9 +1369,9 @@ gg3 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
   scale_color_manual(values = cols) +
   xlim(0,0.2) + ylim(0.9,1)  + theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
-    axis.title = element_text(size = 20), 
+    axis.title = element_text(size = 35), 
     plot.title = element_text(size = 14)) +labs(y = "Precision", x = "Sensitivity") + 
-  theme(axis.text = element_text(size = 18)) + 
+  theme(axis.text = element_text(size = 30)) + 
   theme(plot.background = element_blank(),
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
