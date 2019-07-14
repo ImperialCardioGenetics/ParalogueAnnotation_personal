@@ -39,7 +39,7 @@ Paralogous_var_align = function(paralogs2_file,
   paralog_data = distinct(paralog_data)
   paralog_data = paralog_data[!is.na(paralog_data$Protein_position) & !(grepl("-",paralog_data$Protein_position)),]
   
-  if (Overlap == 0){
+  if (Overlap == 0){#CAN UPDATE THIS TO WORK ON rsID or "." by first pasting together variant pos and gene symbol and then n_occur on that new coloumn
     n_occur = data.frame(table(paralog_data$ID))
     
     # overlapp_genes = n_occur[n_occur$Freq>1,]
