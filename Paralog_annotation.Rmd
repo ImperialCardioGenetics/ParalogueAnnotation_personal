@@ -785,11 +785,11 @@ done = c(1,1,1,1)
 HPC_run_chrom5 = data.frame(
   file = c(
 "0-9",
-"10-99", #68 EXCEEDED MEM #SOME FAILED - TOO MANY CONNECTIONS
-"68",#REMEMBER TO RENAME FOLDER
+"10-99", 
+"68",
 "100-159"
 ),
-done = c(1,0,1,1)
+done = c(1,1,1,1)
 )
 
 HPC_run_chrom6 = data.frame(
