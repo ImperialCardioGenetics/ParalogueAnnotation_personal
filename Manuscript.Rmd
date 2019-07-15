@@ -1127,7 +1127,7 @@ bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat=
         axis.text.y = element_text(colour = "black"),
         axis.title.y = element_blank(),
         axis.title.x = element_text(size=25)) + ylab("Variants predicted pathogenic") +
-  scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4100), expand = c(0,0))
+  scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4100), expand = c(0,0), position = "right")
   # scale_x_discrete(expand = c(0,0)) 
 ggsave("images/reclassified_vus_clinvar_set_bar_chart.png", height = 3, width = 14)
 ```
