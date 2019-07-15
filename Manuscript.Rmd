@@ -1099,9 +1099,9 @@ df = data.frame(Type = factor(c("none", "conserved AA", "full conserved AA", "co
                 bar = c("VUS","VUS","VUS","VUS","VUS"))
 
 bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat="identity",position = "identity",width = 0.1) +
-  scale_fill_manual(values = c("none"="#648FFF", "conserved AA"="#785EF0", "full conserved AA"="#DC267F", "conserved AA +\nconserved variants"="#FE6100", "full conserved AA +\nconserved variants"="#FFB000"), labels = c("none (n=3508)", "conserved AA\n(n=1871)", "full conserved AA\n(n=708)", "conserved AA +\nconserved variants\n(n=510)", "full conserved AA +\nconserved variants\n(n=185)")) +
+  scale_fill_manual(values = c("none"="#648FFF", "conserved AA"="#785EF0", "full conserved AA"="#DC267F", "conserved AA +\nconserved variants"="#FE6100", "full conserved AA +\nconserved variants"="#FFB000"), labels = c("none\n(n=3508)", "conserved AA\n(n=1871)", "full conserved AA\n(n=708)", "conserved AA +\nconserved variants\n(n=510)", "full conserved AA +\nconserved variants\n(n=185)")) +
   # scale_color_manual(values = c("#000000","#000000","#000000","#000000","#000000")) +
-  theme(legend.title = element_blank(),
+  theme(legend.title = element_text(size=23),
         legend.key.size = unit(5,"line"),
         # legend.position = c(0.85,0.91),
         legend.text = element_text(size=20),
@@ -1110,6 +1110,7 @@ bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat=
         axis.title.x = element_blank(),
         axis.title.y = element_text(size=25)) + ylab("Variants predicted pathogenic") +
   scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4100), expand = c(0,0)) +
+  labs(fill="conservation stringency") + 
   # scale_x_discrete(expand = c(0,0.5)) +
   geom_text(aes(label=reclassified_vus), size = 10, color = "black")
 ggsave("images/reclassified_vus_clinvar_set_bar_chart_with_legend.png", height = 14, width = 12)
