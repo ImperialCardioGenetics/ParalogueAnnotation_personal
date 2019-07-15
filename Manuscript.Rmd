@@ -386,6 +386,34 @@ for (row in 1:nrow(protein_genes_w_paralogues_aggregate)){
     potential_anno = potential_anno + length(missense_var) #There's 178378 potentially informative annotations
   }
 }
+#looking only at 1947 disease genes
+for (row in 1:nrow(protein_genes_w_paralogues_aggregate)){
+# for (row in 1:5){
+  gene = protein_genes_w_paralogues_aggregate$external_gene_name[row]
+  paralogs = unlist(str_split(protein_genes_w_paralogues_aggregate$hsapiens_paralog_associated_gene_name[row], ", "))
+  if (gene %in% unique(x$Gene)){
+    para_check = 0
+    for (paralog in paralogs){
+      if (paralog %in% clinvar_P_LP_tableized_genes){
+        para_check = 1
+      }
+    }
+    if (para_check == 1){
+      dis_genes_w_dis_para = c(dis_genes_w_dis_para,gene)
+    }
+  }
+}
+potential_anno = 0
+for (row in 1:nrow(protein_genes_w_paralogues_aggregate)){
+  gene = protein_genes_w_paralogues_aggregate$external_gene_name[row]
+  if (gene %in% dis_genes_w_dis_para){
+    paralogs = unlist(str_split(protein_genes_w_paralogues_aggregate$hsapiens_paralog_associated_gene_name[row], ", "))
+    for (paralog in paralogs){
+      missense_var = clinvar_P_LP_only_snv_missense_tableized[clinvar_P_LP_only_snv_missense_tableized$SYMBOL == paralog,"ID"]
+      potential_anno = potential_anno + length(missense_var) #There's 83125 potentially informative annotations
+    }
+  }
+}
 
 ```
 
