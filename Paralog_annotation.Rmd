@@ -795,7 +795,8 @@ done = c(1,1,1,1)
 HPC_run_chrom6 = data.frame(
   file = c(
 "0-9",
-"10-99" #SOME FAILED - TOO MANY CONNECTIONS
+# "10-99" #SOME FAILED - TOO MANY CONNECTIONS EVEN WHEN CHROM6 RUNNING BY ITSELF
+"10-50"
 ),
 done = c(1,0)
 )
