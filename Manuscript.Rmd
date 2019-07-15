@@ -4688,6 +4688,12 @@ write("##gff-version 2","data/all_possible_mutations/KCNQ1/aligned_benign_clinva
 ## Gnomad
 There's 17.2 million variants in gnomad
 ```{r gnomad, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+# p.normal_PA = Paralogous_var_align("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split00_only_var_info.out_paraloc_paralogs2.noQC",
+#                                    "data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split00_only_var_info.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# 
+# p.normal_PA2 = Paralogous_var_align("data/gnomad_exome_r2.1.1/testing/gnomad.exomes.r2.1.1.sites_split00_only_var_info_forTESTING_with_customIDs.out_paraloc_paralogs2.noQC",
+#                                    "data/gnomad_exome_r2.1.1/testing/gnomad.exomes.r2.1.1.sites_split00_only_var_info_forTESTING_with_customIDs.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
 num_of_var_pred_patho = 0
 var_pred_patho = data.frame()
 for (i in 0:9){
