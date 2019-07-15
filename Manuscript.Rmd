@@ -393,7 +393,7 @@ According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein codin
 
 In the clinvar pathogenic and likely pathogenic dataset, there were `r length(unique(clinvar_P_LP_tableized$ID))` variants from `r length(clinvar_P_LP_tableized_genes)` genes. `r length(clinvar_P_LP_genes_wo_paralogs)` of these did not have paralogs and therefore the `r length(clinvar_P_LP_variants_wo_paralogs)` variants lying within these genes were not used for annotation, leaving `r length(clinvar_P_LP_tableized$CHROM) - length(clinvar_P_LP_variants_wo_paralogs)` for use in the analysis. The distribution of number of paralogues for these set of genes is shown in **fig.** \ref{fig:paralog_dist}b. The mean number of paralogues was `r round(mean(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)` with a standard deviation `r round(sd(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)`.
 
-For variants in the clinvar benign and likely benign dataset, there were `r length(clinvar_B_LB_tableized$CHROM)` variants from `r length(clinvar_B_LB_tableized_genes)` genes. `r length(clinvar_B_LB_tableized$CHROM) - length(clinvar_B_LB_variants_wo_paralogs)` variants resided in `r length(clinvar_B_LB_genes_w_paralogs)` genes with paralogs. Their respective distribution is shown in **fig.** \ref{fig:paralog_dist}c, with a mean of `r round(mean(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)` paralogues and a standard deviation of `r round(sd(clinvar_P_LP_genes_w_paralogs_wide$number_of_paralogues), 3)`.
+For variants in the clinvar benign and likely benign dataset, there were `r length(clinvar_B_LB_tableized$CHROM)` variants from `r length(clinvar_B_LB_tableized_genes)` genes. `r length(clinvar_B_LB_tableized$CHROM) - length(clinvar_B_LB_variants_wo_paralogs)` variants resided in `r length(clinvar_B_LB_genes_w_paralogs)` genes with paralogs. Their respective distribution is shown in **fig.** \ref{fig:paralog_dist}c, with a mean of `r round(mean(clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues), 3)` paralogues and a standard deviation of `r round(sd(clinvar_B_LB_genes_w_paralogs_wide$number_of_paralogues), 3)`.
 
 Performing a simple kolmogorov smirnov test between the distribution of pathogenic variants in genes with paralogues and benign variants shows a p-value of `r ks$p.value` suggesting that the null hypothesis of the distributions being identical cannot be rejected. From this, there appears to be no statistical difference between pathogenic variants being more likely to lie in genes that have more paralogs compared to benign, at least in regards to the definitions of clinical significance made by clinvar.
 
@@ -1065,6 +1065,56 @@ setdiff(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes)), intersec
 
 ```
 NB in clinvar_P_LP_genes_w_paralogs there are 3621 genes with paralogues but in the out_paraloc_paralogs file there are only 2451 genes. This is because there 1170 genes in clinvar_P_LP_genes_w_paralogs that are not in out_paraloc_paralogs because though there are variants in these genes they do not align to anything. There are also cases of over-lapping genes and so while one gene is reported the other might not. Also the same for some readthrough transcripts. Several genes with designation "AC######.#" go through non-sense mediated decay.
+
+Reclassifying VUS:
+```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
+#noQC
+p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyVUS.out_paraloc_paralogs2.noQC",
+                                              "data/clinvar/clinvar_20190114_GRCh38_onlyVUS.out_paraloc_tableized",
+                                              "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p2.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyVUS.out_paraloc_paralogs2.para_con",
+                                              "data/clinvar/clinvar_20190114_GRCh38_onlyVUS.out_paraloc_tableized",
+                                              "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p3.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyVUS.out_paraloc_paralogs2.all_con",
+                                              "data/clinvar/clinvar_20190114_GRCh38_onlyVUS.out_paraloc_tableized",
+                                              "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
+p4.Total_paralog_annotations = p2.paralogous_var_align$Total_paralog_annotations[p2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+p4.Total_paralog_annotations = distinct(p4.Total_paralog_annotations)
+p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
+p4.Unique_variant_annotations = p4.Total_paralog_annotations[!is.na(p4.Total_paralog_annotations$ID.y),]
+p4.Unique_variant_annotations = distinct(p4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p4.true_num_of_paralog_anno = length(p4.Unique_variant_annotations$Variant_pos)
+
+p5.Total_paralog_annotations = p3.paralogous_var_align$Total_paralog_annotations[p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+p5.Total_paralog_annotations = distinct(p5.Total_paralog_annotations)
+p5.num_of_paralog_anno = sum(!is.na(p5.Total_paralog_annotations$ID.y))
+p5.Unique_variant_annotations = p5.Total_paralog_annotations[!is.na(p5.Total_paralog_annotations$ID.y),]
+p5.Unique_variant_annotations = distinct(p5.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p5.true_num_of_paralog_anno = length(p5.Unique_variant_annotations$Variant_pos)
+
+
+df = data.frame(Type = factor(c("none", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"), levels = c("none", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants")),
+                reclassified_vus = c(p.paralogous_var_align$true_num_of_paralog_anno,p2.paralogous_var_align$true_num_of_paralog_anno,p3.paralogous_var_align$true_num_of_paralog_anno,p4.true_num_of_paralog_anno,p5.true_num_of_paralog_anno),
+                bar = c("VUS","VUS","VUS","VUS","VUS"))
+
+bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat="identity",position = "identity",width = 0.3) +
+  # scale_fill_manual(values = c("Pathogenic"="#F8CECC", "Benign"="#D5E8D4"), labels = c("Pathogenic/\nLikely Pathogenic","Benign/\nLikely Benign")) +
+  # scale_color_manual(values = c("Pathogenic"="#B85450", "Benign"="#82B366"), labels = c("Pathogenic/\nLikely Pathogenic","Benign/\nLikely Benign")) +
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(5,"line"),
+        # legend.position = c(0.85,0.91),
+        legend.text = element_text(size=20),
+        axis.text = element_text(size=25),
+        axis.text.x = element_text(colour = "black"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size=25)) + ylab("Variants predicted pathogenic") +
+  scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4200), expand = c(0,0)) +
+  geom_text(aes(label=reclassified_vus), size = 10, color = "black")
+ggsave("images/reclassified_vus_clinvar_set_bar_chart.png", height = 14, width = 12)
+```
+127080 missense VUS in clinvar
+
 
 ## Para-Z scores
 The filtering steps outlined above take a more binaray approach to taking account the conservativeness of amino acid positions in the alignments. They only consider if amino acids in question share the the same amino acid or not. The Para-Z scores defined by @Lal2017 on the other hand takes a more quantitative approach to this by representing a numeric integer value of how conserved each amino acid position is across the same paralogue family. As shown by **fig.** \ref{fig:paraz}, one can use the Para-Z scores as cutoff thresholds for how paralogue conserved alignments must be before considering annotations. The more stringent the cutoff the lower the false positive rate is, but as expected the lower the sensitivity is also. Regardless both methods validate the concept that the more conserved amino acid positions are when transfering annotation the more likely annotations will be true positives as one would expect.
@@ -4698,25 +4748,25 @@ num_of_var_pred_patho = 0
 var_pred_patho = data.frame()
 for (i in 0:9){
 p.normal_PA = Paralogous_var_align(
-  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_paralogs2.noQC"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 num_of_var_pred_patho = num_of_var_pred_patho + p.normal_PA$true_num_of_paralog_anno
 var_pred_patho = rbind(var_pred_patho,p.normal_PA$Unique_variant_annotations[c("Variant_pos","REF.x","ALT.x")])
 }
 for (i in 10:17){
 p.normal_PA = Paralogous_var_align(
-  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.noQC"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 num_of_var_pred_patho = num_of_var_pred_patho + p.normal_PA$true_num_of_paralog_anno
 var_pred_patho = rbind(var_pred_patho,p.normal_PA$Unique_variant_annotations[c("Variant_pos","REF.x","ALT.x")])
 }
 for (i in 18:25){
 p.normal_PA = Paralogous_var_align(
-  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.noQC"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 num_of_var_pred_patho = num_of_var_pred_patho + p.normal_PA$true_num_of_paralog_anno
 var_pred_patho = rbind(var_pred_patho,p.normal_PA$Unique_variant_annotations[c("Variant_pos","REF.x","ALT.x")])
 }
 for (i in 26:34){
 p.normal_PA = Paralogous_var_align(
-  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.noQC"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 num_of_var_pred_patho = num_of_var_pred_patho + p.normal_PA$true_num_of_paralog_anno
 var_pred_patho = rbind(var_pred_patho,p.normal_PA$Unique_variant_annotations[c("Variant_pos","REF.x","ALT.x")])
 }
