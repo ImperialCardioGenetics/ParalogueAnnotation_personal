@@ -1099,7 +1099,7 @@ df = data.frame(Type = factor(c("none", "conserved AA", "full conserved AA", "co
                 bar = c("VUS","VUS","VUS","VUS","VUS"))
 
 bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat="identity",position = "identity",width = 0.1) +
-  scale_fill_manual(values = c("none"="#ccff33", "conserved AA"="#ffff00", "full conserved AA"="#ffcc00", "conserved AA +\nconserved variants"="#ff6600", "full conserved AA +\nconserved variants"="#ff0000")) +
+  scale_fill_manual(values = c("none"="#648FFF", "conserved AA"="#785EF0", "full conserved AA"="#DC267F", "conserved AA +\nconserved variants"="#FE6100", "full conserved AA +\nconserved variants"="#FFB000"), labels = c("none (n=3508)", "conserved AA\n(n=1871)", "full conserved AA\n(n=708)", "conserved AA +\nconserved variants\n(n=510)", "full conserved AA +\nconserved variants\n(n=185)")) +
   # scale_color_manual(values = c("#000000","#000000","#000000","#000000","#000000")) +
   theme(legend.title = element_blank(),
         legend.key.size = unit(5,"line"),
@@ -1115,8 +1115,8 @@ bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat=
 ggsave("images/reclassified_vus_clinvar_set_bar_chart_with_legend.png", height = 14, width = 12)
 
 
-bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat="identity",position = "identity",width = 0.1) +
-  scale_fill_manual(values = c("none"="#ccff33", "conserved AA"="#ffff00", "full conserved AA"="#ffcc00", "conserved AA +\nconserved variants"="#ff6600", "full conserved AA +\nconserved variants"="#ff0000")) +
+bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat="identity",position = "identity",width = 0.5) +
+  scale_fill_manual(values = c("none"="#648FFF", "conserved AA"="#785EF0", "full conserved AA"="#DC267F", "conserved AA +\nconserved variants"="#FE6100", "full conserved AA +\nconserved variants"="#FFB000")) +
   # scale_color_manual(values = c("Pathogenic"="#B85450", "Benign"="#82B366"), labels = c("Pathogenic/\nLikely Pathogenic","Benign/\nLikely Benign")) +
   theme(legend.title = element_blank(),
         legend.key.size = unit(5,"line"),
@@ -1126,8 +1126,8 @@ bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat=
         axis.text.x = element_text(colour = "black"),
         axis.title.x = element_blank(),
         axis.title.y = element_text(size=25)) + ylab("Variants predicted pathogenic") +
-  scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4100), expand = c(0,0)) +
-  scale_x_discrete(expand = c(0,0)) 
+  scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4100), expand = c(0,0))
+  # scale_x_discrete(expand = c(0,0)) 
 ggsave("images/reclassified_vus_clinvar_set_bar_chart.png", height = 14, width = 3)
 ```
 127080 missense VUS in clinvar
