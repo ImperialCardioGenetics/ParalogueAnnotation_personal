@@ -3453,7 +3453,7 @@ other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+
 other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel","no QC", "QC1" ,"QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 20)
 gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
@@ -3655,7 +3655,7 @@ other_tools_data$Type = factor(other_tools_data$Type, levels = c("none", "conser
 # other_tools_data$Precision_CI_max = sapply(other_tools_data$Precision + other_tools_data$Precision_CI, min, 1)
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "#58D68D", "conserved AA"  = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conserved AA +\nconserved variants" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conserved AA +\nconserved variants" = 19)
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conserved AA +\nconserved variants" = 20)
 gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
@@ -4102,29 +4102,6 @@ df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC
 df1$test_set = "TP53"
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
-# gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
-#   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
-#   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
-#   
-#   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
-#   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
-#   
-#   scale_shape_manual(values = shapes) +
-#   scale_color_manual(values = cols) +
-#   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
-#     plot.caption = element_text(vjust = 1), 
-#     axis.title = element_text(size = 16), 
-#     plot.title = element_text(size = 14),
-#     legend.position="none", 
-#     axis.text = element_text(size = 35), 
-#     axis.title.x=element_blank(), 
-#     axis.title.y=element_blank()) + 
-#    theme(plot.background = element_blank(),
-#          panel.grid.minor = element_blank())+
-#   theme(axis.line.x = element_line(color="black", size = 2),
-#         axis.line.y = element_line(color="black", size = 2)) +
-#   theme(plot.title = element_text(hjust = 0.25)) 
-# ggsave("images/PRC_of_TP53-TA_with_other_tools_plot.png", width = 10, height = 11)
 
 ###PPARG
 f = read.csv("data/J_Li_data/J_Li_data.csv", sep = ",", stringsAsFactors = F, header = T)
@@ -4198,26 +4175,6 @@ df2$test_set = "PPARG"
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
-# gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
-#   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
-#   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
-#   
-#   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
-#   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
-#   
-#   scale_shape_manual(values = shapes) +
-#   scale_color_manual(values = cols) +
-#   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
-#     plot.caption = element_text(vjust = 1), 
-#     axis.title = element_text(size = 16), 
-#     plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) +
-#    theme(plot.background = element_blank(),
-#          panel.grid.minor = element_blank())+
-#   theme(axis.line.x = element_line(color="black", size = 2),
-#         axis.line.y = element_line(color="black", size = 2)) +
-#   theme(plot.title = element_text(hjust = 0.25)) 
-# ggsave("images/PRC_of_PPARG_with_other_tools_plot.png", width = 10, height = 11)
-
 
 ###SSC
 SSC = f[f$Data.source=="SSC",-c(1,4)]
@@ -4294,18 +4251,18 @@ df3 = data.frame(
 
 df3$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 df3$test_set = "ASD"
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
 
+cols = c("TP53" = "#004D40", "PPARG" = "#1E88E5", "ASD" = "#D81B60")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 20)
 
 df_all = rbind(df1,df2,df3)
 
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) +
+gg = ggplot(df_all, aes(x=Sensitivity, y=Precision, colour = test_set, shape = Type)) + geom_point(size=15,stroke=2,alpha=0.6) +
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
 
-  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
-  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
 
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
@@ -4318,7 +4275,27 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
   theme(plot.title = element_text(hjust = 0.25))
-ggsave("images/PRC_of_SSC_with_other_tools_plot.png", width = 10, height = 11)
+ggsave("images/PRC_of_TP53_PPARG_SSC_with_other_tools_plot.png", width = 10, height = 12)
+
+gg = ggplot(df_all, aes(x=Sensitivity, y=Precision, colour = test_set, shape = Type)) + geom_point(size=15,stroke=2,alpha=0.6) +
+  # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+  # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
+
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
+
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
+  xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
+    plot.caption = element_text(vjust = 1),
+    axis.title = element_text(size = 16),
+    plot.title = element_text(size = 14)) + theme(legend.key.size = unit(5,"line"),axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) +
+   theme(plot.background = element_blank(),
+         panel.grid.minor = element_blank())+
+  theme(axis.line.x = element_line(color="black", size = 2),
+        axis.line.y = element_line(color="black", size = 2)) +
+  theme(plot.title = element_text(hjust = 0.25),legend.text=element_text(size=25)) +guides(shape=FALSE)
+ggsave("images/PRC_of_TP53_PPARG_SSC_with_other_tools_plot_with_legend.png", width = 10, height = 11)
 ```
 
 
