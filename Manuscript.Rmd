@@ -1177,6 +1177,7 @@ bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat=
   scale_fill_manual(values = c("none"="#648FFF", "conserved AA"="#785EF0", "full conserved AA"="#DC267F", "conserved AA +\nconserved variants"="#FE6100", "full conserved AA +\nconserved variants"="#FFB000")) + coord_flip() +
   # scale_color_manual(values = c("Pathogenic"="#B85450", "Benign"="#82B366"), labels = c("Pathogenic/\nLikely Pathogenic","Benign/\nLikely Benign")) +
   theme(legend.title = element_blank(),
+        plot.margin = unit(c(1,1,1,1), "cm"),
         legend.key.size = unit(5,"line"),
         legend.position = "none",
         legend.text = element_text(size=20),
