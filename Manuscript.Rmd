@@ -1158,10 +1158,10 @@ df = data.frame(Type = factor(c("none", "conserved AA", "full conserved AA", "co
 bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat="identity",position = "identity",width = 0.1) +
   scale_fill_manual(values = c("none"="#648FFF", "conserved AA"="#785EF0", "full conserved AA"="#DC267F", "conserved AA +\nconserved variants"="#FE6100", "full conserved AA +\nconserved variants"="#FFB000"), labels = c("none\n(n=3508)", "conserved AA\n(n=1871)", "full conserved AA\n(n=708)", "conserved AA +\nconserved variants\n(n=510)", "full conserved AA +\nconserved variants\n(n=185)")) +
   # scale_color_manual(values = c("#000000","#000000","#000000","#000000","#000000")) +
-  theme(legend.title = element_text(size=25),
+  theme(legend.title = element_text(size=50),
         legend.key.size = unit(6,"line"),
         # legend.position = c(0.85,0.91),
-        legend.text = element_text(size=25),
+        legend.text = element_text(size=45),
         axis.text = element_text(size=25),
         axis.text.x = element_text(colour = "black"),
         axis.title.x = element_blank(),
@@ -1169,7 +1169,11 @@ bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat=
   scale_y_continuous(breaks = c(0,1000,2000,3000,4000), limits = c(0,4100), expand = c(0,0)) +
   labs(fill="conservation stringency") + 
   # scale_x_discrete(expand = c(0,0.5)) +
-  geom_text(aes(label=reclassified_vus), size = 10, color = "black")
+  geom_text(aes(label=reclassified_vus), size = 10, color = "black") +
+  guides(fill=guide_legend(
+                 keywidth=0.5,
+                 keyheight=2.5,
+                 default.unit="inch"))
 ggsave("images/reclassified_vus_clinvar_set_bar_chart_with_legend.png", height = 14, width = 12)
 
 
@@ -3477,6 +3481,29 @@ gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
   theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank())#+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
 ggsave("images/PRC_with_other_tools_with_QC3_QC1_no_QC2.png", width = 10, height = 11) #THIS ONE IS BEING USED IN PAPER
 
+gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2) + 
+  # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+  # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
+  
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+  # scale_x_continuous(limits = c(0,1.5)) +
+  scale_shape_manual(values = shapes) +
+  scale_color_manual(values = cols) +
+  xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
+    plot.caption = element_text(vjust = 1), 
+    axis.title = element_text(size = 20), 
+    plot.title = element_text(size = 14),
+    plot.margin = unit(c(1,1,1,1), "cm"),) + 
+  theme(plot.background = element_blank(),
+         panel.grid.minor = element_blank())+
+  theme(axis.line.x = element_line(color="black", size = 2),
+        axis.line.y = element_line(color="black", size = 2)) +
+  theme(axis.text = element_text(size = 50)) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank())#+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
+ggsave("images/PRC_with_other_tools_with_QC3_QC1_no_QC2_for_poster.png", width = 10, height = 11) #THIS ONE IS BEING USED IN PAPER
+
 other_tools_data = data.frame(
   Precision = c(as.numeric(other_tools_set[6:10,3])),
   Precision_CI = c(as.numeric(other_tools_set[6:10,4])),
@@ -4270,13 +4297,14 @@ gg = ggplot(df_all, aes(x=Sensitivity, y=Precision, colour = test_set, shape = T
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1),
     axis.title = element_text(size = 16),
-    plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) +
+    plot.title = element_text(size = 14),
+    plot.margin = unit(c(1,1,1,1), "cm")) + theme(legend.position="none", axis.text = element_text(size = 50), axis.title.x=element_blank(), axis.title.y=element_blank()) +
    theme(plot.background = element_blank(),
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
   theme(plot.title = element_text(hjust = 0.25))
-ggsave("images/PRC_of_TP53_PPARG_SSC_with_other_tools_plot.png", width = 10, height = 12)
+ggsave("images/PRC_of_TP53_PPARG_SSC_with_other_tools_plot.png", width = 10, height = 11)
 
 gg = ggplot(df_all, aes(x=Sensitivity, y=Precision, colour = test_set, shape = Type)) + geom_point(size=15,stroke=2,alpha=0.6) +
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
