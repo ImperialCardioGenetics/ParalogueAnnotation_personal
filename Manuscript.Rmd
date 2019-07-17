@@ -1563,7 +1563,7 @@ bar_chart = ggplot(Total_clinvar_set, aes(y=Pathogenic_var, x=bar, fill = Stage,
         legend.position = c(0.81,0.89),
         legend.text = element_text(size=30),
         axis.text = element_text(size=35),
-        axis.text.x = element_text(colour = "black", angle=45, hjust = 1),
+        axis.text.x = element_text(colour = "black", angle=35, hjust = 1),
         axis.title.x = element_blank(),
         axis.title.y = element_text(size=35, vjust = 6),
         plot.margin = unit(c(1,1,1,1), "cm")) + ylab("Variants predicted pathogenic") +
@@ -4042,8 +4042,9 @@ b.clinvar_tableized = clinvar_tableized[clinvar_tableized$SUM %in% b.SSC_variant
                                         !(grepl("Likely_pathogenic", clinvar_tableized$CLNSIG)),]
 ```
 
-TP53-TA, PPARG and SSC all in one:
+TP53-TA, PPARG and SSC combined all in one:
 ```{r cf_UniFun_TP53-TA, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+###TP53
 p.normal_PA = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_paralogs2.noQC", "data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 b.normal_PA = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_paralogs2.noQC", "data/TP53-TA/4704961/TP53-TA_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 p.normal_PA2 = Paralogous_var_align("data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_paralogs2.para_con", "data/TP53-TA/4704961/TP53-TA_deleterious.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -4098,43 +4099,226 @@ df1 = data.frame(
 )
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+df1$test_set = "TP53"
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+# gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
+#   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+#   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
+#   
+#   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+#   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+#   
+#   scale_shape_manual(values = shapes) +
+#   scale_color_manual(values = cols) +
+#   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
+#     plot.caption = element_text(vjust = 1), 
+#     axis.title = element_text(size = 16), 
+#     plot.title = element_text(size = 14),
+#     legend.position="none", 
+#     axis.text = element_text(size = 35), 
+#     axis.title.x=element_blank(), 
+#     axis.title.y=element_blank()) + 
+#    theme(plot.background = element_blank(),
+#          panel.grid.minor = element_blank())+
+#   theme(axis.line.x = element_line(color="black", size = 2),
+#         axis.line.y = element_line(color="black", size = 2)) +
+#   theme(plot.title = element_text(hjust = 0.25)) 
+# ggsave("images/PRC_of_TP53-TA_with_other_tools_plot.png", width = 10, height = 11)
+
+###PPARG
+f = read.csv("data/J_Li_data/J_Li_data.csv", sep = ",", stringsAsFactors = F, header = T)
+PPARG = f[f$Data.source=="PPARG",-c(1,4)]
+PPARG = add_column(PPARG, "ID" = paste0("custom_",1:dim(PPARG)[1]), .after = "Start")
+
+PPARG$Chr = sapply(strsplit(PPARG$Chr, "chr"), "[", 2)
+colnames(PPARG)[1:5] = c("#CHROM", "POS", "ID", "REF", "ALT")
+PPARG_patho_vcf = PPARG[PPARG$Label == "pathogenic",1:5]
+PPARG_benign_vcf = PPARG[PPARG$Label == "not pathogenic",1:5]
+PPARG_patho_vcf$QUAl = "."
+PPARG_patho_vcf$FILTER = "."
+PPARG_patho_vcf$INFO = "."
+PPARG_benign_vcf$QUAl = "."
+PPARG_benign_vcf$FILTER = "."
+PPARG_benign_vcf$INFO = "."
+write.table(PPARG_patho_vcf, file = "data/J_Li_data/PPARG_patho.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(PPARG_benign_vcf, file = "data/J_Li_data/PPARG_benign.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+
+
+p.normal_PA = Paralogous_var_align("data/J_Li_data/PPARG_patho.out_paraloc_paralogs2.noQC", "data/J_Li_data/PPARG_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align("data/J_Li_data/PPARG_benign.out_paraloc_paralogs2.noQC", "data/J_Li_data/PPARG_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA2 = Paralogous_var_align("data/J_Li_data/PPARG_patho.out_paraloc_paralogs2.para_con", "data/J_Li_data/PPARG_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA2 = Paralogous_var_align("data/J_Li_data/PPARG_benign.out_paraloc_paralogs2.para_con", "data/J_Li_data/PPARG_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA3 = Paralogous_var_align("data/J_Li_data/PPARG_patho.out_paraloc_paralogs2.all_con", "data/J_Li_data/PPARG_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA3 = Paralogous_var_align("data/J_Li_data/PPARG_benign.out_paraloc_paralogs2.all_con", "data/J_Li_data/PPARG_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA4 = list()
+p.normal_PA4$Total_paralog_annotations = p.normal_PA3$Total_paralog_annotations[p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA4 = list()
+b.normal_PA4$Total_paralog_annotations = b.normal_PA3$Total_paralog_annotations[b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+normal_PA4 = Alt_con_PA(p.normal_PA4$Total_paralog_annotations,b.normal_PA4$Total_paralog_annotations)
+p.normal_PA5 = list()
+p.normal_PA5$Total_paralog_annotations = p.normal_PA2$Total_paralog_annotations[p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA5 = list()
+b.normal_PA5$Total_paralog_annotations = b.normal_PA2$Total_paralog_annotations[b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+normal_PA5 = Alt_con_PA(p.normal_PA5$Total_paralog_annotations,b.normal_PA5$Total_paralog_annotations)
+
+other_tools = read.csv(file="data/J_Li_data/PPARG_patho.vcf.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
+p.num_of_revel = length(which(other_tools$REVEL_score > 0.5))
+p.num_of_sift = length(which(other_tools$SIFT_pred == "D"))
+p.num_of_mcap = length(which(other_tools$M.CAP_pred == "D"))
+p.num_of_cadd = length(which(other_tools$CADD_phred > 15))
+
+b.other_tools = read.csv(file="data/J_Li_data/PPARG_benign.vcf.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
+b.num_of_revel = length(which(b.other_tools$REVEL_score > 0.5))
+b.num_of_sift = length(which(b.other_tools$SIFT_pred == "D"))
+b.num_of_mcap = length(which(b.other_tools$M.CAP_pred == "D"))
+b.num_of_cadd = length(which(b.other_tools$CADD_phred > 15))
+
+sift1_conf = conf_matrix(p.num_of_sift,other_tools,b.num_of_sift,b.other_tools)
+mcap1_conf = conf_matrix(p.num_of_mcap,other_tools,b.num_of_mcap,b.other_tools)
+revel1_conf = conf_matrix(p.num_of_revel,other_tools,b.num_of_revel,b.other_tools)
+cadd1_conf = conf_matrix(p.num_of_cadd,other_tools,b.num_of_cadd,b.other_tools)
+
+normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, other_tools, b.normal_PA$true_num_of_paralog_anno, b.other_tools)
+normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools, b.normal_PA2$true_num_of_paralog_anno, b.other_tools)
+normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools, b.normal_PA3$true_num_of_paralog_anno, b.other_tools)
+normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA5$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+
+df2 = data.frame(
+  Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
+  Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
+  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
+  Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity,normal_PA2_conf$Sensitivity,normal_PA3_conf$Sensitivity,normal_PA4_conf$Sensitivity,normal_PA5_conf$Sensitivity),
+  Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA5_conf$Sensitivity_SE*1.96)
+)
+
+df2$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+df2$test_set = "PPARG"
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
+# gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
+#   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
+#   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
+#   
+#   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+#   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+#   
+#   scale_shape_manual(values = shapes) +
+#   scale_color_manual(values = cols) +
+#   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
+#     plot.caption = element_text(vjust = 1), 
+#     axis.title = element_text(size = 16), 
+#     plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) +
+#    theme(plot.background = element_blank(),
+#          panel.grid.minor = element_blank())+
+#   theme(axis.line.x = element_line(color="black", size = 2),
+#         axis.line.y = element_line(color="black", size = 2)) +
+#   theme(plot.title = element_text(hjust = 0.25)) 
+# ggsave("images/PRC_of_PPARG_with_other_tools_plot.png", width = 10, height = 11)
+
+
+###SSC
+SSC = f[f$Data.source=="SSC",-c(1,4)]
+SSC = add_column(SSC, "ID" = paste0("custom_",1:dim(SSC)[1]), .after = "Start")
+
+SSC$Chr = sapply(strsplit(SSC$Chr, "chr"), "[", 2)
+colnames(SSC)[1:5] = c("#CHROM", "POS", "ID", "REF", "ALT")
+SSC_patho_vcf = SSC[SSC$Label == "asd",1:5]
+SSC_benign_vcf = SSC[SSC$Label == "control",1:5]
+SSC_patho_vcf$QUAl = "."
+SSC_patho_vcf$FILTER = "."
+SSC_patho_vcf$INFO = "."
+SSC_benign_vcf$QUAl = "."
+SSC_benign_vcf$FILTER = "."
+SSC_benign_vcf$INFO = "."
+write.table(SSC_patho_vcf, file = "data/J_Li_data/SSC_patho.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(SSC_benign_vcf, file = "data/J_Li_data/SSC_benign.vcf", sep = "\t", quote = FALSE, row.names = FALSE)
+
+
+p.normal_PA = Paralogous_var_align("data/J_Li_data/SSC_patho.out_paraloc_paralogs2.noQC", "data/J_Li_data/SSC_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA = Paralogous_var_align("data/J_Li_data/SSC_benign.out_paraloc_paralogs2.noQC", "data/J_Li_data/SSC_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA2 = Paralogous_var_align("data/J_Li_data/SSC_patho.out_paraloc_paralogs2.para_con", "data/J_Li_data/SSC_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA2 = Paralogous_var_align("data/J_Li_data/SSC_benign.out_paraloc_paralogs2.para_con", "data/J_Li_data/SSC_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA3 = Paralogous_var_align("data/J_Li_data/SSC_patho.out_paraloc_paralogs2.all_con", "data/J_Li_data/SSC_patho.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.normal_PA3 = Paralogous_var_align("data/J_Li_data/SSC_benign.out_paraloc_paralogs2.all_con", "data/J_Li_data/SSC_benign.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+p.normal_PA4 = list()
+p.normal_PA4$Total_paralog_annotations = p.normal_PA3$Total_paralog_annotations[p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA4 = list()
+b.normal_PA4$Total_paralog_annotations = b.normal_PA3$Total_paralog_annotations[b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA3$Total_paralog_annotations$ALT_Amino_acids.y,]
+normal_PA4 = Alt_con_PA(p.normal_PA4$Total_paralog_annotations,b.normal_PA4$Total_paralog_annotations)
+p.normal_PA5 = list()
+p.normal_PA5$Total_paralog_annotations = p.normal_PA2$Total_paralog_annotations[p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==p.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+b.normal_PA5 = list()
+b.normal_PA5$Total_paralog_annotations = b.normal_PA2$Total_paralog_annotations[b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.x==b.normal_PA2$Total_paralog_annotations$ALT_Amino_acids.y,]
+normal_PA5 = Alt_con_PA(p.normal_PA5$Total_paralog_annotations,b.normal_PA5$Total_paralog_annotations)
+
+
+normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, other_tools, b.normal_PA$true_num_of_paralog_anno, b.other_tools)
+normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools, b.normal_PA2$true_num_of_paralog_anno, b.other_tools)
+normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools, b.normal_PA3$true_num_of_paralog_anno, b.other_tools)
+normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA5$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+
+other_tools = read.csv(file="data/J_Li_data/SSC_patho.vcf.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
+p.num_of_revel = length(which(other_tools$REVEL_score > 0.5))
+p.num_of_sift = length(which(other_tools$SIFT_pred == "D"))
+p.num_of_mcap = length(which(other_tools$M.CAP_pred == "D"))
+p.num_of_cadd = length(which(other_tools$CADD_phred > 15))
+
+b.other_tools = read.csv(file="data/J_Li_data/SSC_benign.vcf.hg19_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
+b.num_of_revel = length(which(b.other_tools$REVEL_score > 0.5))
+b.num_of_sift = length(which(b.other_tools$SIFT_pred == "D"))
+b.num_of_mcap = length(which(b.other_tools$M.CAP_pred == "D"))
+b.num_of_cadd = length(which(b.other_tools$CADD_phred > 15))
+
+sift1_conf = conf_matrix(p.num_of_sift,other_tools,b.num_of_sift,b.other_tools)
+mcap1_conf = conf_matrix(p.num_of_mcap,other_tools,b.num_of_mcap,b.other_tools)
+revel1_conf = conf_matrix(p.num_of_revel,other_tools,b.num_of_revel,b.other_tools)
+cadd1_conf = conf_matrix(p.num_of_cadd,other_tools,b.num_of_cadd,b.other_tools)
+
+normal_PA_conf = conf_matrix(p.normal_PA$true_num_of_paralog_anno, other_tools, b.normal_PA$true_num_of_paralog_anno, b.other_tools)
+normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools, b.normal_PA2$true_num_of_paralog_anno, b.other_tools)
+normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools, b.normal_PA3$true_num_of_paralog_anno, b.other_tools)
+normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA5$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+
+df3 = data.frame(
+  Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
+  Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
+  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
+  Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity,normal_PA2_conf$Sensitivity,normal_PA3_conf$Sensitivity,normal_PA4_conf$Sensitivity,normal_PA5_conf$Sensitivity),
+  Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA5_conf$Sensitivity_SE*1.96)
+)
+
+df3$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
+df3$test_set = "ASD"
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+
+
+df_all = rbind(df1,df2,df3)
+
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) +
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
-  
+
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
-  
+
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
-    plot.caption = element_text(vjust = 1), 
-    axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14),
-    legend.position="none", 
-    axis.text = element_text(size = 35), 
-    axis.title.x=element_blank(), 
-    axis.title.y=element_blank()) + 
+    plot.caption = element_text(vjust = 1),
+    axis.title = element_text(size = 16),
+    plot.title = element_text(size = 14)) + theme(legend.position="none", axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) +
    theme(plot.background = element_blank(),
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
-  theme(plot.title = element_text(hjust = 0.25)) 
-ggsave("images/PRC_of_TP53-TA_with_other_tools_plot.png", width = 10, height = 11)
-
-#checking if any of the variants are in clinvar
-TP53_variants = other_tools[,c("CHROM","POS","REF","ALT")]
-TP53_variants$Chr = substr(TP53_variants$CHROM, 4, str_count(TP53_variants$CHROM))
-TP53_variants$SUM = paste(TP53_variants$Chr, TP53_variants$POS, TP53_variants$REF, TP53_variants$ALT, sep = " ")
-clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190520_GRCh37.vcf_tableized_org", sep ="\t", header = T, stringsAsFactors = F)
-clinvar_tableized$SUM = paste(clinvar_tableized$CHROM, clinvar_tableized$POS, clinvar_tableized$REF, clinvar_tableized$ALT, sep = " ")
-clinvar_tableized = clinvar_tableized[clinvar_tableized$SUM %in% TP53_variants$SUM &
-                                        !(grepl("Conflicting_interpretations_of_pathogenicity", clinvar_tableized$CLNSIG))
-                                      ,]
-
+  theme(plot.title = element_text(hjust = 0.25))
+ggsave("images/PRC_of_SSC_with_other_tools_plot.png", width = 10, height = 11)
 ```
 
 
@@ -5122,18 +5306,18 @@ gg_protein_class_poster = ggplot(total_protein_class_poster, aes(y=number_of_gen
     # axis.text.x=element_blank()
     # axis.ticks.x=element_blank()
     ) +
-  scale_fill_manual(values= c(alpha("red",0.9), alpha("blue",0.4)), labels = c("Genes with Paralogue\nAnnotations (hits=535)","Disease genes with disease\nparalogues (hits=1648)")) + 
+  scale_fill_manual(values= c(alpha("red",0.9), alpha("blue",0.4)), labels = c("Genes with Paralogue\nAnnotations\n(hits=535)","Disease genes with\ndisease paralogues\n(hits=1648)")) + 
   guides(fill = guide_legend(reverse=TRUE)) +
-  scale_y_continuous(breaks = c(0,50,100,150,200), limits = c(0,205), expand = c(0,0), position = "right") +
+  scale_y_continuous(breaks = c(0,50,100,150,200), limits = c(0,210), expand = c(0,0), position = "right") +
   xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) +ylab("Number of Genes") +
   theme(axis.text.x = element_text(size = 21), 
-        axis.text.y = element_text(size=20),
+        axis.text.y = element_text(size=23),
         legend.text = element_text(size=25),
         axis.title = element_text(size=25),
-        legend.position = c(0.66,0.12)) + 
+        legend.position = c(0.7,0.165)) + 
   guides(fill=guide_legend(
                  keywidth=0.2,
-                 keyheight=0.8,
+                 keyheight=1.2,
                  default.unit="inch",
                  reverse = TRUE))
 ggsave("images/GO_protein_classes_of_genes2_for_poster.png", height = 8, width = 12)
