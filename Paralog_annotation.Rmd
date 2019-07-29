@@ -733,7 +733,7 @@ RBH_run = data.frame(
 ),
 done = c(1,1,1,1,1,1,1,1,1,1,
          1,
-         0)
+         1)
 )
 ```
 
@@ -796,9 +796,11 @@ HPC_run_chrom6 = data.frame(
   file = c(
 "0-9",
 # "10-99" #SOME FAILED - TOO MANY CONNECTIONS EVEN WHEN CHROM6 RUNNING BY ITSELF
-"10-50"
+"10-50",
+"51-99",
+"100-179"
 ),
-done = c(1,0)
+done = c(1,1,0)
 )
 
 HPC_run_chrom7 = data.frame(
