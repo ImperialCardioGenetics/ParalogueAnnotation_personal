@@ -102,17 +102,82 @@ out_file.close()
 out_file2.close()
 out_file3.close()
 
-'''
-input_file = sys.argv[1]	#path of ICC MUTATION csv file to convert to vcf e.g. /media/nick/Data/PhD/Paralogues/ParalogueAnnotation_personal/data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv
-disease_cohort = input_file.rsplit(".", 1)[0]+".vcf"
-input_file2 = sys.argv[2]	#path of gnomad csv file to convert to vcf e.g. /media/nick/Data/PhD/Paralogues/ParalogueAnnotation_personal/data/LQTS/gnomAD_v2.1.1_ENSG00000180509_2019_03_31_15_09_18_KCNE1.csv
-gnomad_cohort = input_file2.rsplit(".", 1)[0]+".vcf"
-gnomad_cohort_rare = input_file2.rsplit(".", 1)[0]+"_rare.vcf"
 
-with open(gnomad_cohort_rare) as f2:
-	ref_variants = f2.readlines()
-	print(ref_variants)
-	with open(disease_cohort) as f:
-		for line in f:
-			if line[0].isdigit():
-'''				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##Goal:
+#given a list of genomic coordinates of variants, return the requested field infomation
+#e.g given the genomic coordinates of variants (chr_pos_ntref_ntalt_aaref_aaalt), return the requested field information
+
+#Annotate query variant file with REVEL scores
+
+import os, sys, subprocess, re, shlex, subprocess, codecs, pysam, gzip, argparse
+
+input_file1 = sys.argv[1]   #path of query variants tableized input file
+input_file2 = sys.argv[2]   #path of tabix indexed file (.tab.gz file)
+tabix_file = pysam.TabixFile(input_file2)
+out_file_name = input_file1+"_w_REVEL"
+
+out_file = open(out_file_name, "w")
+
+def get_info_value(db_file,chrom,pos,ref_nt,alt_nt,ref_aa,alt_aa):
+    # position_found = False
+    REVEL= ""
+    for row in db_file.fetch(chrom, pos - 1, pos):
+        row_column = row.split('\t')
+        if str(pos) != row_column[1]:
+            continue
+        # position_found = True
+        row_ref_nt = row_column[2]
+        row_alt_nt = row_column[3]
+        row_ref_aa = row_column[4]
+        row_alt_aa = row_column[5]
+        #print row_ref_nt,row_alt_nt,row_ref_aa,row_alt_aa
+        #print ref_nt,alt_nt,ref_aa,alt_aa
+        if row_ref_nt == ref_nt and row_alt_nt == alt_nt and row_ref_aa == ref_aa and row_alt_aa ==alt_aa:
+            REVEL = row_column[6]
+        elif row_ref_nt == ref_nt and row_alt_nt == alt_nt:
+            REVEL = row_column[6]
+    # print(REVEL)
+    while not isinstance(REVEL, str):
+        REVEL = REVEL[0]
+    REVEL = [REVEL]
+    return REVEL
+
+with open(input_file1, "r") as f:
+    for line in f:
+        if line.startswith("CHROM"):
+        	out_file.write(line.rstrip()+"\tREVEL_score\n")
+        if not line.startswith("CHROM"):
+            line = line.split()
+            if not "/" in line[8]:
+            	out_file.write(str("\t".join(line+["NA"]))+"\n")
+            	continue
+            chrom = line[0]
+            pos = int(line[1])
+            ntref = line[2]
+            ntalt = line[3]
+            aaref = line[8].split("/")[0]
+            aaalt = line[8].split("/")[1]
+            print(chrom,pos,ntref,ntalt,aaref,aaalt)
+            REVEL_score = get_info_value(tabix_file,chrom,pos,ntref,ntalt,aaref,aaalt)
+            print(REVEL_score)
+            new_line = "\t".join(line+REVEL_score)
+            out_file.write(str(new_line)+"\n")
+
+tabix_file.close()
+out_file.close()
