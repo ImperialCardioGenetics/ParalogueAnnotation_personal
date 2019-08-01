@@ -390,7 +390,7 @@ ks2 = ks.test(clinvar_P_LP_genes$number_of_paralogues, all_protein_genes$number_
 genes_not_in_ens = setdiff(clinvar_P_LP_vcf_tableized_genes, disease_genes)
 write.table(genes_not_in_ens,file="data/clinvar/genes_not_in_ens.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE) #list of genes not in ensembl but in clinvar
 
-
+##Potential annotations using clinvar P/LP
 #aggregated paralogues 
 protein_genes_w_paralogues_aggregate = aggregate(hsapiens_paralog_associated_gene_name ~., protein_genes_w_paralogues, toString)
 # Number of P/LP missense variants in paralogues of genes that have P/LP 
@@ -443,6 +443,8 @@ for (row in 1:nrow(protein_genes_w_paralogues_aggregate)){
     }
   }
 }
+
+clinvar_P_LP_paraloc_paralogs_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
 
 ```
 
