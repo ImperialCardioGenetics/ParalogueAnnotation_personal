@@ -445,6 +445,7 @@ for (row in 1:nrow(protein_genes_w_paralogues_aggregate)){
 }
 
 clinvar_P_LP_paraloc_paralogs_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_paraloc_paralogs_tableized$Paralogue_Vars = 
 
 ```
 
