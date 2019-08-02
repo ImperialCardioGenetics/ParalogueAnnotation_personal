@@ -445,8 +445,8 @@ for (row in 1:nrow(protein_genes_w_paralogues_aggregate)){
 }
 
 clinvar_P_LP_paraloc_paralogs_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-clinvar_P_LP_paraloc_paralogs_tableized$Paralogue_Vars = 
-
+clinvar_P_LP_paraloc_paralogs_tableized$N_of_paralogues = str_count(clinvar_P_LP_paraloc_paralogs_tableized$Paralogue_Vars, "REFID=")
+potential_anno = sum(clinvar_P_LP_paraloc_paralogs_tableized$N_of_paralogues) #176033
 ```
 
 According to ensembl, `r length(protein_genes_w_paralogues_genes)` protein coding genes are defined to have paralogues. While `r length(protein_genes_wo_paralogues_genes)` protein coding genes did not have paralogues. Of those genes with paralogues (**fig.** \ref{fig:paralog_dist}a) the mean had `r round(mean(protein_genes_w_paralogues_wide$number_of_paralogues), 3)` paralogues with a standard deviation of `r round(sd(protein_genes_w_paralogues_wide$number_of_paralogues), 3)`. The maximum number of paralogues a gene had was `r max(protein_genes_w_paralogues_wide$number_of_paralogues)`. The zinc finger family of proteins have highest number of paralogues
