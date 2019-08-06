@@ -842,7 +842,7 @@ HPC_run_chrom10 = data.frame(
 "10-99",
 "100-145"
 ),
-done = c(1,1,0)
+done = c(1,1,1)
 )
 
 HPC_run_chrom11 = data.frame(
