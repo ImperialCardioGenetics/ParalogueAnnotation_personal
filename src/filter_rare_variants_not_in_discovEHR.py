@@ -2,12 +2,12 @@ import  os, sys, subprocess, re,  shlex, subprocess, codecs, pysam, gzip, argpar
 
 #SCRIPT FOR FILTERING OUT RARE VARIANTS DEFINED AS NOT BEING IN discovEHR
 
-input_file1 = sys.argv[1]   #path of query variants tableized input file
-input_file2 = sys.argv[2]   #path of tabix indexed file (.tab.gz file)
-tabix_file = pysam.TabixFile(input_file2)
-out_file_name = input_file1+"_w_REVEL"
+input_file1 = sys.argv[1]   #path of tabix indexed file (.tab.gz file)
+# input_file2 = sys.argv[2]  #path of query variants tableized input file 
+tabix_file = pysam.TabixFile(input_file1)
+# out_file_name = input_file1+"_w_REVEL"
 
-out_file = open(out_file_name, "w")
+# out_file = open(out_file_name, "w")
 
 def get_info_value(db_file,chrom,pos,ref_nt,alt_nt,ref_aa,alt_aa):
     # position_found = False
@@ -33,35 +33,33 @@ def get_info_value(db_file,chrom,pos,ref_nt,alt_nt,ref_aa,alt_aa):
     REVEL = [REVEL]
     return REVEL
 
-with open(input_file1, "r") as f:
-    for line in f:
-        if line.startswith("CHROM"):
-        	out_file.write(line.rstrip()+"\tREVEL_score\n")
-        if not line.startswith("CHROM"):
-            line = line.split()
-            if not "/" in line[8]:
-            	out_file.write(str("\t".join(line+["NA"]))+"\n")
-            	continue
-            chrom = line[0]
-            pos = int(line[1])
-            ntref = line[2]
-            ntalt = line[3]
-            aaref = line[8].split("/")[0]
-            aaalt = line[8].split("/")[1]
-            print(chrom,pos,ntref,ntalt,aaref,aaalt)
-            REVEL_score = get_info_value(tabix_file,chrom,pos,ntref,ntalt,aaref,aaalt)
-            print(REVEL_score)
-            new_line = "\t".join(line+REVEL_score)
-            out_file.write(str(new_line)+"\n")
+chrom = 1
+pos = 69088
 
-tabix_file.close()
-out_file.close()
+for row in db_file.fetch(chrom, pos - 1, pos):
+	print(row)
 
+        # if line.startswith("CHROM"):
+        # 	out_file.write(line.rstrip()+"\tREVEL_score\n")
+        # if not line.startswith("CHROM"):
+            # line = line.split()
+            # if not "/" in line[8]:
+            # 	out_file.write(str("\t".join(line+["NA"]))+"\n")
+            # 	continue
+            # chrom = line[0]
+            # pos = int(line[1])
+            # ntref = line[2]
+            # ntalt = line[3]
+            # aaref = line[8].split("/")[0]
+            # aaalt = line[8].split("/")[1]
+            # print(chrom,pos,ntref,ntalt,aaref,aaalt)
+            # REVEL_score = get_info_value(tabix_file,chrom,pos,ntref,ntalt,aaref,aaalt)
+            # print(REVEL_score)
+            # new_line = "\t".join(line+REVEL_score)
+            # out_file.write(str(new_line)+"\n")
 
-
-
-
-
+# tabix_file.close()
+# out_file.close()
 
 
 
@@ -72,6 +70,12 @@ out_file.close()
 
 
 
+
+
+
+
+
+'''
 input_file = sys.argv[1]	#path of discovEHR vcf file to convert to vcf e.g. /media/nick/Data/PhD/Paralogues/Henrike's_data/discovEHR/GHS_Freeze_50.L3DP10.pVCF.frq.vcf
 dir1 = input_file.rsplit("/", 1)[0]
 
@@ -171,7 +175,7 @@ with open(input_file) as f:
 out_file.close()
 out_file2.close()
 out_file3.close()
-
+'''
 
 
 
