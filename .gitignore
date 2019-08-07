@@ -11,3 +11,4 @@ data/gnomad_exome_r202_sites/*tableized
 data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split10_only_var_info.out_paraloc_tableized
 data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split30_only_var_info.out_paraloc_tableized
 data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split31_only_var_info.out_paraloc_tableized
+data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites.AFlessthan0.001PASSFilter_only_var_info.vcf.gz
