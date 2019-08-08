@@ -870,7 +870,7 @@ HPC_run_chrom13 = data.frame(
 #"10-99" #SOME FAILED - TOO MANY CONNECTIONS
 "10-63"
 ),
-done = c(1,0)
+done = c(1,1)
 )
 
 #TRY RUNNING 14+15 MULTI QSUB SCRIPT
