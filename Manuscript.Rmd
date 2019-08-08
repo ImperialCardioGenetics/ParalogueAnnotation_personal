@@ -5138,8 +5138,11 @@ There's 17.2 million variants in gnomad
 #                                    "data/gnomad_exome_r2.1.1/testing/gnomad.exomes.r2.1.1.sites_split00_only_var_info_forTESTING_with_customIDs.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 #rare = AF < 0.001 #PROBS HAVE TO SEPARATE FILE ANYWAUS TO RUN
-rare_gnomad = read.csv(file=gzfile("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites.AFlessthan0.001PASSFilter_only_var_info.vcf.gz"), sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-
+rare_gnomad = read.csv(file=gzfile("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites.AFlessthan0.001andnot0PASS_only_var_info.vcf_split/gnomad.exomes.r2.1.1.sites.AFlessthan0.001andnot0PASS_only_var_info.vcf_split00.gz"), sep = "\t", header=FALSE, col.names = c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO"), stringsAsFactors=FALSE)
+rare_gnomad2 = read.csv(file=gzfile("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites.AFlessthan0.001andnot0PASS_only_var_info.vcf_split/gnomad.exomes.r2.1.1.sites.AFlessthan0.001andnot0PASS_only_var_info.vcf_split01.gz"), sep = "\t", header=FALSE, col.names = c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO"), stringsAsFactors=FALSE)
+rare_gnomad3 = read.csv(file=gzfile("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites.AFlessthan0.001andnot0PASS_only_var_info.vcf_split/gnomad.exomes.r2.1.1.sites.AFlessthan0.001andnot0PASS_only_var_info.vcf_split02.gz"), sep = "\t", header=FALSE, col.names = c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO"), stringsAsFactors=FALSE)
+rare_gnomad = rbind(rare_gnomad,rare_gnomad2,rare_gnomad3)
+rm(rare_gnomad2, rare_gnomad3)
 
 p.normal_PA = Paralogous_var_align(
   paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
