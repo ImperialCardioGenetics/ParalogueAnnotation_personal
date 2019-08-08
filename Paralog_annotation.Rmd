@@ -884,10 +884,10 @@ done = c(1,0)
 
 HPC_run_chrom15 = data.frame(
   file = c(
-"0-9", #RUN 4 EXCEEDED MEM
+"0-9", 
 "10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
-done = c(0,0)
+done = c(1,0)
 )
 
 
