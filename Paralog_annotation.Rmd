@@ -858,15 +858,17 @@ done = c(1,1,1)
 HPC_run_chrom12 = data.frame(
   file = c(
 "0-9",
-"10-99"
+"10-99",
+"100-191"
 ),
-done = c(1,1,0)
+done = c(1,1,1)
 )
 
 HPC_run_chrom13 = data.frame(
   file = c(
 "0-9",
-"10-99" #SOME FAILED - TOO MANY CONNECTIONS
+#"10-99" #SOME FAILED - TOO MANY CONNECTIONS
+"10-99"
 ),
 done = c(1,0)
 )
