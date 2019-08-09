@@ -873,7 +873,7 @@ HPC_run_chrom13 = data.frame(
 done = c(1,1)
 )
 
-#TRY RUNNING 14+15 MULTI QSUB SCRIPT
+#STARTED RUNNING 14+15 MULTI QSUB SCRIPT HERE
 HPC_run_chrom14 = data.frame(
   file = c(
 "0-9",
@@ -890,7 +890,8 @@ HPC_run_chrom15 = data.frame(
 done = c(1,0)
 )
 
-
+#TRYING RUNNING 16+17+18 MULTI QSUB SCRIPT for 0-9
+#AND 16+18 MULTI QSUB SCRIPT for 10-99
 HPC_run_chrom16 = data.frame(
   file = c(
 "0-9",
