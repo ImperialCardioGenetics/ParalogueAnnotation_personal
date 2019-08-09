@@ -870,7 +870,7 @@ done = c(1,1)
 #STARTED RUNNING 14+15 MULTI QSUB SCRIPT HERE
 HPC_run_chrom14 = data.frame(
   file = c(
-"0-9", #4+5 ran out of memory, rerun
+"0-9", #4 ran out of memory, rerun
 "10-99",
 "100-117"
 ),
@@ -890,10 +890,10 @@ done = c(1,1,1)
 #AND 16+18 MULTI QSUB SCRIPT for 10-99
 HPC_run_chrom16 = data.frame(
   file = c(
-"0-9", #SOME FAILED - EXCEEDED MEMORY LIMIT
+"0-9", 
 "10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
-done = c(0,0)
+done = c(1,0)
 )
 
 HPC_run_chrom17 = data.frame(
