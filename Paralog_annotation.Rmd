@@ -876,18 +876,20 @@ done = c(1,1)
 #STARTED RUNNING 14+15 MULTI QSUB SCRIPT HERE
 HPC_run_chrom14 = data.frame(
   file = c(
-"0-9", #RERUNNING 4 AND 5
-"10-99"#SOME FAILED - TOO MANY CONNECTIONS
+"0-9", 
+"10-99",
+"100-117"
 ),
-done = c(0,1)
+done = c(1,1,0)
 )
 
 HPC_run_chrom15 = data.frame(
   file = c(
 "0-9", 
-"10-99"#SOME FAILED - TOO MANY CONNECTIONS
+"10-99",
+"100-129"
 ),
-done = c(1,1)
+done = c(1,1,0)
 )
 
 #TRYING RUNNING 16+17+18 MULTI QSUB SCRIPT for 0-9
