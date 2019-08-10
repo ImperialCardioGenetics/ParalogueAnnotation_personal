@@ -5144,7 +5144,7 @@ rare_gnomad2 = read.csv(file=gzfile("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1
 rare_gnomad = rbind(rare_gnomad,rare_gnomad2)
 rm(rare_gnomad2)
 rare_gnomad = rare_gnomad[rare_gnomad$FILTER=="PASS",] #FILTER OUT VARIANTS THAT DID NOT PASS QC
-
+rare_gnomad$Variant_pos = paste(rare_gnomad$CHROM, rare_gnomad$POS, sep = " ")
 
 
 p.normal_PA = Paralogous_var_align(
