@@ -5145,39 +5145,40 @@ rare_gnomad = rbind(rare_gnomad,rare_gnomad2)
 rm(rare_gnomad2)
 rare_gnomad = rare_gnomad[rare_gnomad$FILTER=="PASS",] #FILTER OUT VARIANTS THAT DID NOT PASS QC
 rare_gnomad$Variant_pos = paste(rare_gnomad$CHROM, rare_gnomad$POS, sep = " ")
+rare_gnomad = rare_gnomad[,c("Variant_pos","ID","REF","ALT")]
+names(rare_gnomad) = c("Variant_pos","ID.x","REF.x","ALT.x")
+
+# p.normal_PA = Paralogous_var_align(
+#   paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
 
 
-p.normal_PA = Paralogous_var_align(
-  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-
-
-num_of_var_pred_patho = 0
 var_pred_patho = data.frame()
 for (i in 0:9){
 p.normal_PA = Paralogous_var_align(
   paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-num_of_var_pred_patho = num_of_var_pred_patho + p.normal_PA$true_num_of_paralog_anno
-var_pred_patho = rbind(var_pred_patho,p.normal_PA$Unique_variant_annotations[c("Variant_pos","REF.x","ALT.x")])
+annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
+var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
 }
 for (i in 10:17){
 p.normal_PA = Paralogous_var_align(
   paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-num_of_var_pred_patho = num_of_var_pred_patho + p.normal_PA$true_num_of_paralog_anno
-var_pred_patho = rbind(var_pred_patho,p.normal_PA$Unique_variant_annotations[c("Variant_pos","REF.x","ALT.x")])
+annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
+var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
 }
 for (i in 18:25){
 p.normal_PA = Paralogous_var_align(
   paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-num_of_var_pred_patho = num_of_var_pred_patho + p.normal_PA$true_num_of_paralog_anno
-var_pred_patho = rbind(var_pred_patho,p.normal_PA$Unique_variant_annotations[c("Variant_pos","REF.x","ALT.x")])
+annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
+var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
 }
 for (i in 26:34){
 p.normal_PA = Paralogous_var_align(
   paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-num_of_var_pred_patho = num_of_var_pred_patho + p.normal_PA$true_num_of_paralog_anno
-var_pred_patho = rbind(var_pred_patho,p.normal_PA$Unique_variant_annotations[c("Variant_pos","REF.x","ALT.x")])
+annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
+var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
 }
-num_of_var_pred_patho #66711 out of the 17.2 million gnomad variants are predicted to be pathogenic
+# num_of_var_pred_patho #66711 out of the 17.2 million gnomad variants are predicted to be pathogenic
 var_pred_patho$ALL = paste(var_pred_patho$Variant_pos,var_pred_patho$REF.x,var_pred_patho$ALT.x,sep = " ")
 
 # clinvar_P_LP_vcf_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
