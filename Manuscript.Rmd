@@ -5129,7 +5129,9 @@ write("##gff-version 2","data/all_possible_mutations/KCNQ1/aligned_benign_clinva
 
 
 ## Gnomad
-There's 17.2 million variants in gnomad
+There's 17.2 million variants in gnomad.
+
+Can use "nhomalt" tag for number of homozygotes and then minus that from AC to work out number of individuals. Have to first extract that as well though.
 ```{r gnomad, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 # p.normal_PA = Paralogous_var_align("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split00_only_var_info.out_paraloc_paralogs2.noQC",
 #                                    "data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split00_only_var_info.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
@@ -5145,7 +5147,11 @@ rare_gnomad = rbind(rare_gnomad,rare_gnomad2)
 rm(rare_gnomad2)
 rare_gnomad = rare_gnomad[rare_gnomad$FILTER=="PASS",] #FILTER OUT VARIANTS THAT DID NOT PASS QC
 rare_gnomad$Variant_pos = paste(rare_gnomad$CHROM, rare_gnomad$POS, sep = " ")
-rare_gnomad = rare_gnomad[,c("Variant_pos","ID","REF","ALT")]
+rare_gnomad$AC = sapply(str_split(rare_gnomad$INFO, ";"), "[", 1)
+rare_gnomad$AC = sapply(str_split(rare_gnomad$AC, "="), "[", 2)
+rare_gnomad$AN = sapply(str_split(rare_gnomad$INFO, ";"), "[", 2)
+rare_gnomad$AN = sapply(str_split(rare_gnomad$AN, "="), "[", 2)
+# rare_gnomad = rare_gnomad[,c("Variant_pos","ID","REF","ALT")]
 names(rare_gnomad) = c("Variant_pos","ID.x","REF.x","ALT.x")
 
 # p.normal_PA = Paralogous_var_align(
