@@ -893,9 +893,9 @@ HPC_run_chrom16 = data.frame(
 "0-9", 
 "10-99",
 "100-157" #RUN 102 EXCEEDED MEM LIMIT
-"102-103" #STORE REPEATED RUN 103
+"102-103" #STORED REPEATED RUN 103
 ),
-done = c(1,1,1,0)
+done = c(1,1,1,1)
 )
 
 HPC_run_chrom17 = data.frame(
@@ -904,7 +904,7 @@ HPC_run_chrom17 = data.frame(
 "10-99",
 "100-209"
 ),
-done = c(1,1,0)
+done = c(1,1,1)
 )
 
 HPC_run_chrom18 = data.frame(
