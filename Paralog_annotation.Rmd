@@ -917,7 +917,7 @@ done = c(1,1)
 
 HPC_run_chrom19 = data.frame(
   file = c(
-"0-9" #RUN 7 EXCEEDED MEM
+"0-9" #RUN 7 EXCEEDED MEM #MOVE 8 TO REPEATED RUNS
 "10-99"#SOME FAILED - TOO MANY CONNECTIONS
 ),
 done = c(0,0)
