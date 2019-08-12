@@ -919,9 +919,10 @@ HPC_run_chrom19 = data.frame(
   file = c(
 "0-9" 
 "10-99",
-"100-226"
+"100-163",
+"164-226"
 ),
-done = c(1,1,0)
+done = c(1,1,0,0)
 )
 
 HPC_run_chrom20 = data.frame(
