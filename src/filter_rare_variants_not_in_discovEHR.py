@@ -36,7 +36,7 @@ def get_info_value(db_file,chrom,pos,ref_nt,alt_nt,ref_aa,alt_aa):
 chrom = 1
 pos = 69088
 
-for row in db_file.fetch(chrom, pos - 1, pos):
+for row in tabix_file.fetch(chrom, pos - 1, pos):
 	print(row)
 
         # if line.startswith("CHROM"):
