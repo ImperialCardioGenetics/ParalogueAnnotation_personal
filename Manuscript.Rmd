@@ -5193,7 +5193,7 @@ if (file.exists("data/gnomad_exome_r2.1.1/rare_missense_gnomad_pred_patho_at_par
 # num_of_var_pred_patho #66711 out of the 17.2 million gnomad variants are predicted to be pathogenic
 dim(distinct(var_pred_patho)) #29123 7
 dim(var_pred_patho)[1]/dim(rare_gnomad)[1] #0.005276123 of rare missense gnomad variants predicted patho cf 3533/23894 of clinvar P/LP and 99/14617 of B/LB
-
+sum(as.numeric(var_pred_patho$AC))/(mean(as.numeric(var_pred_patho$AN))/2) #prevalance?
 
 
 
