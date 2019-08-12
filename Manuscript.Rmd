@@ -5186,6 +5186,7 @@ p.normal_PA = Paralogous_var_align(
 annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
 var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
 }
+save(var_pred_patho, file = "data/gnomad_exome_r2.1.1/rare_missense_gnomad_pred_patho_at_para_con.RData")
 # num_of_var_pred_patho #66711 out of the 17.2 million gnomad variants are predicted to be pathogenic
 var_pred_patho$ALL = paste(var_pred_patho$Variant_pos,var_pred_patho$REF.x,var_pred_patho$ALT.x,sep = " ")
 
