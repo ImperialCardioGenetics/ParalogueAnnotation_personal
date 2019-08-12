@@ -2,7 +2,7 @@ import  os, sys, subprocess, re,  shlex, subprocess, codecs, pysam, gzip, argpar
 
 #SCRIPT FOR FILTERING OUT RARE VARIANTS DEFINED AS NOT BEING IN discovEHR
 
-input_file1 = sys.argv[1]   #path of tabix indexed file (.tab.gz file)
+input_file1 = sys.argv[1]   #path of tabix indexed file (.tab.gz file) #NOT tbi file
 # input_file2 = sys.argv[2]  #path of query variants tableized input file 
 tabix_file = pysam.TabixFile(input_file1)
 # out_file_name = input_file1+"_w_REVEL"
