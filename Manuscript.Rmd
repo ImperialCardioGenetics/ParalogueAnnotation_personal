@@ -5156,9 +5156,11 @@ rare_gnomad$AF = sapply(str_split(rare_gnomad$AF, "="), "[", 2)
 rare_gnomad = rare_gnomad[,c("Variant_pos","ID","REF","ALT","AC","AN","AF")]
 names(rare_gnomad) = c("Variant_pos","ID.x","REF.x","ALT.x","AC","AN","AF")
 
-# p.normal_PA = Paralogous_var_align(
-#   paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-# annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
+rare_gnomad_tableized = read.csv(file=gzfile("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites.AFlessthan0.001andnot0_PASS_missense_only.vcf_tableized_org.gz"), sep = "\t", header=TRUE, stringsAsFactors=FALSE) #made this file after rare_gnomad file was made
+rare_gnomad_tableized$Variant_pos = paste(rare_gnomad_tableized$CHROM, rare_gnomad_tableized$POS, sep = " ")
+rare_gnomad_tableized = rare_gnomad_tableized[,c("Variant_pos","ID","REF","ALT","AC","AN","AF","nhomalt")]
+names(rare_gnomad_tableized) = c("Variant_pos","ID.x","REF.x","ALT.x","AC","AN","AF","nhomalt")
+
 
 if (file.exists("data/gnomad_exome_r2.1.1/rare_missense_gnomad_pred_patho_at_para_con.RData")){
   load("data/gnomad_exome_r2.1.1/rare_missense_gnomad_pred_patho_at_para_con.RData")
@@ -5195,7 +5197,12 @@ dim(distinct(var_pred_patho)) #29123 7
 dim(var_pred_patho)[1]/dim(rare_gnomad)[1] #0.005276123 of rare missense gnomad variants predicted patho cf 3533/23894 of clinvar P/LP and 99/14617 of B/LB
 sum(as.numeric(var_pred_patho$AC))/(mean(as.numeric(var_pred_patho$AN))/2) #prevalance?
 
-
+var_pred_patho$AC = as.numeric(var_pred_patho$AC)
+var_pred_patho$AN = as.numeric(var_pred_patho$AN)
+var_pred_patho$AF = as.numeric(var_pred_patho$AF)
+var_pred_patho = inner_join(var_pred_patho, rare_gnomad_tableized)
+var_pred_patho$individuals = var_pred_patho$AC - var_pred_patho$nhomalt
+sum(var_pred_patho$individuals)/125748
 
 var_pred_patho$ALL = paste(var_pred_patho$Variant_pos,var_pred_patho$REF.x,var_pred_patho$ALT.x,sep = " ")
 
