@@ -5151,8 +5151,10 @@ rare_gnomad$AC = sapply(str_split(rare_gnomad$INFO, ";"), "[", 1)
 rare_gnomad$AC = sapply(str_split(rare_gnomad$AC, "="), "[", 2)
 rare_gnomad$AN = sapply(str_split(rare_gnomad$INFO, ";"), "[", 2)
 rare_gnomad$AN = sapply(str_split(rare_gnomad$AN, "="), "[", 2)
-# rare_gnomad = rare_gnomad[,c("Variant_pos","ID","REF","ALT")]
-names(rare_gnomad) = c("Variant_pos","ID.x","REF.x","ALT.x")
+rare_gnomad$AF = sapply(str_split(rare_gnomad$INFO, ";"), "[", 3)
+rare_gnomad$AF = sapply(str_split(rare_gnomad$AF, "="), "[", 2)
+rare_gnomad = rare_gnomad[,c("Variant_pos","ID","REF","ALT","AC","AN","AF")]
+names(rare_gnomad) = c("Variant_pos","ID.x","REF.x","ALT.x","AC","AN","AF")
 
 # p.normal_PA = Paralogous_var_align(
 #   paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",0,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
