@@ -12,35 +12,9 @@ out_file.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
 
 discovEHR_file = pysam.TabixFile("/work/nyl112/data/DiscovEHR/discovEHR_GRCh37.vcf.gz") #path of tabix indexed file (.tab.gz file) #NOT tbi file
 
-# def get_info_value(db_file,chrom,pos,ref_nt,alt_nt,ref_aa,alt_aa):
-#     # position_found = False
-#     REVEL= ""
-#     for row in db_file.fetch(chrom, pos - 1, pos):
-#         row_column = row.split('\t')
-#         if str(pos) != row_column[1]:
-#             continue
-#         # position_found = True
-#         row_ref_nt = row_column[2]
-#         row_alt_nt = row_column[3]
-#         row_ref_aa = row_column[4]
-#         row_alt_aa = row_column[5]
-#         #print row_ref_nt,row_alt_nt,row_ref_aa,row_alt_aa
-#         #print ref_nt,alt_nt,ref_aa,alt_aa
-#         if row_ref_nt == ref_nt and row_alt_nt == alt_nt and row_ref_aa == ref_aa and row_alt_aa ==alt_aa:
-#             REVEL = row_column[6]
-#         elif row_ref_nt == ref_nt and row_alt_nt == alt_nt:
-#             REVEL = row_column[6]
-#     # print(REVEL)
-#     while not isinstance(REVEL, str):
-#         REVEL = REVEL[0]
-#     REVEL = [REVEL]
-#     return REVEL
-
-# chrom = 1
-# pos = 69088
-
 with gzip.open(gnomad_file, "rt") as f:
 	for line in f:
+		check = 0
 		if not line.startswith("#"):
 			split_line = line.split()
 			FILTER = split_line[6]
@@ -58,8 +32,8 @@ with gzip.open(gnomad_file, "rt") as f:
 					disc_REF = row[3]
 					disc_ALT = row[4]
 					if CHROM == disc_CHROM and POS == disc_POS and REF == disc_REF and ALT == disc_ALT:
-						
-
+						check = 1
+				
 						ID = split_line[2]
 						QUAL = split_line[5]
 						INFO = split_line[7]
