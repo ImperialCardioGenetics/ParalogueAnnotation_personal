@@ -3157,6 +3157,20 @@ NDD = NDD[grepl("missense_variant", NDD$Consequence),]
 NDD$Chrom = sapply(strsplit(as.character(NDD$Location),":"),"[",1)
 NDD$Pos = sapply(strsplit(as.character(NDD$Location),":"),"[",2)
 NDD$Case.count = 1
+NDD$Ref = sapply(strsplit(as.character(NDD$Codons),"/"),"[",1)
+NDD$Ref = str_extract_all(NDD$Ref, "[A-Z]+")
+NDD$Ref = unlist(NDD$Ref)
+NDD$Alt = sapply(strsplit(as.character(NDD$Codons),"/"),"[",2)
+NDD$Alt = str_extract_all(NDD$Alt, "[A-Z]+")
+NDD$Alt = unlist(NDD$Alt)
+NDD$ID = "."
+NDD$QUAL = "."
+NDD$FILTER = "."
+NDD$INFO = "."
+NDD_vcf = unique(NDD[,c("Chrom","Pos","ID","Ref","Alt","QUAL","FILTER","INFO")])
+names(NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
+write.table(NDD_vcf, file = "data/NDD+E/NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
+
 ```
 
 
