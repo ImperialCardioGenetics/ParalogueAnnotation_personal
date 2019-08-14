@@ -922,15 +922,15 @@ HPC_run_chrom19 = data.frame(
 "100-163",
 "164-226"
 ),
-done = c(1,1,1,0)
+done = c(1,1,1,1)
 )
 
 HPC_run_chrom20 = data.frame(
   file = c(
 "0-9",
-"10-85"#SOME FAILED - TOO MANY CONNECTIONS
+"10-85"
 ),
-done = c(1,0)
+done = c(1,1)
 )
 
 HPC_run_chrom21 = data.frame(
