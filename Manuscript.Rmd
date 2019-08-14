@@ -3161,6 +3161,9 @@ NDD = NDD[grepl("missense_variant", NDD$Consequence),]
 NDD$CHROM = sapply(strsplit(as.character(NDD$Location),":"),"[",1)
 NDD$CHROM = as.integer((NDD$CHROM))
 NDD$POS = sapply(strsplit(as.character(NDD$Location),":"),"[",2)
+
+NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"[",1)
+
 NDD$POS = as.integer(NDD$POS)
 NDD$Case.count = 1
 NDD$REF = sapply(strsplit(as.character(NDD$Codons),"/"),"[",1)
