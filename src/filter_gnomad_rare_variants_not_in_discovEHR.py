@@ -5,10 +5,10 @@ import  os, sys, subprocess, re,  shlex, subprocess, codecs, pysam, gzip, argpar
 #to tabix index files - tabix -p vcf input.vcf.gz
 
 gnomad_file = sys.argv[1]	#e.g. /work/nyl112/data/gnomad_split_by_line/gnomad.r2.1.1/gnomad.exomes.r2.1.1.sites.vcf_split00.gz
-out_file_name = gnomad_file.rsplit(".",1)[0]+"_notin_discovEHR.vcf"
+out_file_name = gnomad_file.rsplit(".",1)[0]+"_notin_discovEHR.csv"
 
 out_file = open(out_file_name, "w")
-out_file.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
+out_file.write("CHROM,POS,ID,REF,ALT,AC,AN,AF,nhomalt\n")
 
 discovEHR_file = pysam.TabixFile("/work/nyl112/data/DiscovEHR/discovEHR_GRCh37.vcf.gz") #path of tabix indexed file (.tab.gz file) #NOT tbi file
 
@@ -33,16 +33,16 @@ with gzip.open(gnomad_file, "rt") as f:
 					disc_ALT = row[4]
 					if CHROM == disc_CHROM and POS == disc_POS and REF == disc_REF and ALT == disc_ALT:
 						check = 1
-				
-						ID = split_line[2]
-						QUAL = split_line[5]
-						INFO = split_line[7]
-						AC = line.split(";AN=")[0].split("AC=")[1]
-						AN = line.split(";AN=")[1].split(";AF=")[0]
-						AF = line.split(";AF=")[1].split(";rf_tp_probability=")[0]
-						nhomalt = line.split(";nhomalt=")[1].split(";")[0]
+				if check == 0:
+					ID = split_line[2]
+					# QUAL = split_line[5]
+					# INFO = split_line[7]
+					AC = line.split(";AN=")[0].split("AC=")[1]
+					AN = line.split(";AN=")[1].split(";AF=")[0]
+					AF = line.split(";AF=")[1].split(";rf_tp_probability=")[0]
+					nhomalt = line.split(";nhomalt=")[1].split(";")[0]
 
-						out_file.write()
+					out_file.write(CHROM+","+POS+","+ID+","+REF+","+ALT+","+AC+","+AN+","+AF+","+nhomalt+"\n")
 
 
 
