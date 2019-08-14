@@ -3151,24 +3151,24 @@ write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_onlySCN5A_C_terminal_EFs.tsv
 ## EFs for NDD+E
 
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
-discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t")
+discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t",stringsAsFactors = 0)
 names(discovEHR)[1] = "CHROM"
-discovEHR$REF = as.character(discovEHR$REF)
-discovEHR$ALT = as.character(discovEHR$ALT)
-NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T)
+# discovEHR$REF = as.character(discovEHR$REF)
+# discovEHR$ALT = as.character(discovEHR$ALT)
+NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T, stringsAsFactors = 0)
 NDD = NDD[grepl("missense_variant", NDD$Consequence),]
-NDD$CHROM = sapply(strsplit(as.character(NDD$Location),":"),"[",1)
-NDD$POS = sapply(strsplit(as.character(NDD$Location),":"),"[",2)
+NDD$CHROM = sapply(strsplit(NDD$Location,":"),"[",1)
+NDD$POS = sapply(strsplit(NDD$Location,":"),"[",2)
 
 NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"[",1)
 
 NDD$POS = as.integer(NDD$POS)
 NDD$Variant_pos = paste(NDD$CHROM, NDD$POS, sep = " ")
 NDD$Case.count = 1
-NDD$REF = sapply(strsplit(as.character(NDD$Codons),"/"),"[",1)
+NDD$REF = sapply(strsplit(NDD$Codons,"/"),"[",1)
 NDD$REF = str_extract_all(NDD$REF, "[A-Z]+")
 NDD$REF = unlist(NDD$REF)
-NDD$ALT = sapply(strsplit(as.character(NDD$Codons),"/"),"[",2)
+NDD$ALT = sapply(strsplit(NDD$Codons,"/"),"[",2)
 NDD$ALT = str_extract_all(NDD$ALT, "[A-Z]+")
 NDD$ALT = unlist(NDD$ALT)
 NDD$ID = "."
@@ -3179,7 +3179,7 @@ NDD_vcf = unique(NDD[,c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")])
 names(NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
 write.table(NDD_vcf, file = "data/NDD+E/NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
 
-##Disease cases - NDD
+###Disease cases - NDD
 Total_cases = 6994
 
 NDD_notin_discovEHR = anti_join(NDD,discovEHR, by = c("CHROM","POS","REF","ALT"))
@@ -3190,6 +3190,47 @@ names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","
 
 annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
 rare_pa_cases_affected = sum(annotated_NDD$Case.count) #245
+
+
+###Control cases - gnomad
+if (file.exists("data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData")){
+  load("data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData")
+} else {
+  var_pred_patho = data.frame()
+  for (i in 0:9){
+  p.normal_PA = Paralogous_var_align(
+    paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  rare_gnomad = read.csv(file = paste0("data/NDD+E/gnomad.exomes.r2.1.1.sites.vcf_split0",i,"_notin_discovEHR.csv"), header = T, sep = ",", stringsAsFactors = 0)
+  rare_gnomad$Variant_pos = paste(rare_gnomad$CHROM, rare_gnomad$POS, sep = " ")
+  annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad, by = c("Variant_pos", "REF.x" = "REF", "ALT.x" = "ALT"))
+  var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
+  }
+  for (i in 10:17){
+  p.normal_PA = Paralogous_var_align(
+    paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  rare_gnomad = read.csv(file = paste0("data/NDD+E/gnomad.exomes.r2.1.1.sites.vcf_split",i,"_notin_discovEHR.csv"), header = T, sep = ",", stringsAsFactors = 0)
+  rare_gnomad$Variant_pos = paste(rare_gnomad$CHROM, rare_gnomad$POS, sep = " ")
+  annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad, by = c("Variant_pos", "REF.x" = "REF", "ALT.x" = "ALT"))
+  var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
+  }
+  for (i in 18:25){
+  p.normal_PA = Paralogous_var_align(
+    paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  rare_gnomad = read.csv(file = paste0("data/NDD+E/gnomad.exomes.r2.1.1.sites.vcf_split",i,"_notin_discovEHR.csv"), header = T, sep = ",", stringsAsFactors = 0)
+  rare_gnomad$Variant_pos = paste(rare_gnomad$CHROM, rare_gnomad$POS, sep = " ")
+  annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad, by = c("Variant_pos", "REF.x" = "REF", "ALT.x" = "ALT"))
+  var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
+  }
+  for (i in 26:34){
+  p.normal_PA = Paralogous_var_align(
+    paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  rare_gnomad = read.csv(file = paste0("data/NDD+E/gnomad.exomes.r2.1.1.sites.vcf_split",i,"_notin_discovEHR.csv"), header = T, sep = ",", stringsAsFactors = 0)
+  rare_gnomad$Variant_pos = paste(rare_gnomad$CHROM, rare_gnomad$POS, sep = " ")
+  annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad, by = c("Variant_pos", "REF.x" = "REF", "ALT.x" = "ALT"))
+  var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
+  }
+  save(var_pred_patho, file = "data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData")
+}
 
 
 ```
