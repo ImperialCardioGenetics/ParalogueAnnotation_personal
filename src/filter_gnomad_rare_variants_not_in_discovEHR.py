@@ -5,7 +5,7 @@ import  os, sys, subprocess, re,  shlex, subprocess, codecs, pysam, gzip, argpar
 #to tabix index files - tabix -p vcf input.vcf.gz
 
 gnomad_file = sys.argv[1]	#e.g. /work/nyl112/data/gnomad_split_by_line/gnomad.r2.1.1/gnomad.exomes.r2.1.1.sites.vcf_split00.gz
-out_file_name = gnomad_file.rsplit(".",1)[0]+"_notin_discovEHR.csv"
+out_file_name = gnomad_file.rsplit(".",1)[0]+"_missense_only_notin_discovEHR.csv"
 
 out_file = open(out_file_name, "w")
 out_file.write("CHROM,POS,ID,REF,ALT,AC,AN,AF,nhomalt\n")
@@ -15,7 +15,7 @@ discovEHR_file = pysam.TabixFile("/work/nyl112/data/DiscovEHR/discovEHR_GRCh37.v
 with gzip.open(gnomad_file, "rt") as f:
 	for line in f:
 		check = 0
-		if not line.startswith("#"):
+		if not line.startswith("#") and "missense" in line:
 			split_line = line.split()
 			FILTER = split_line[6]
 			if FILTER == "PASS":
