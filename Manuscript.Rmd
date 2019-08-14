@@ -3163,6 +3163,7 @@ NDD$POS = sapply(strsplit(as.character(NDD$Location),":"),"[",2)
 NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"[",1)
 
 NDD$POS = as.integer(NDD$POS)
+NDD$Variant_pos = paste(NDD$CHROM, NDD$POS, sep = " ")
 NDD$Case.count = 1
 NDD$REF = sapply(strsplit(as.character(NDD$Codons),"/"),"[",1)
 NDD$REF = str_extract_all(NDD$REF, "[A-Z]+")
@@ -3179,6 +3180,11 @@ names(NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
 write.table(NDD_vcf, file = "data/NDD+E/NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
 
 NDD_notin_discovEHR = anti_join(NDD,discovEHR, by = c("CHROM","POS","REF","ALT"))
+
+p.annotated_NDD = Paralogous_var_align("data/NDD+E/NDD.out_paraloc_paralogs2.para_con","data/NDD+E/NDD.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","ALT")
+annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
+
 ```
 
 
