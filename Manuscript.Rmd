@@ -3153,13 +3153,11 @@ write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_onlySCN5A_C_terminal_EFs.tsv
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t")
 names(discovEHR)[1] = "CHROM"
-discovEHR$CHROM = as.integer(discovEHR$CHROM)
 discovEHR$REF = as.character(discovEHR$REF)
 discovEHR$ALT = as.character(discovEHR$ALT)
 NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T)
 NDD = NDD[grepl("missense_variant", NDD$Consequence),]
 NDD$CHROM = sapply(strsplit(as.character(NDD$Location),":"),"[",1)
-NDD$CHROM = as.integer((NDD$CHROM))
 NDD$POS = sapply(strsplit(as.character(NDD$Location),":"),"[",2)
 
 NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"[",1)
