@@ -3210,7 +3210,7 @@ Total_controls = as.numeric(mean(rare_gnomad$AN))/2 #116658
 
 ##rare
 rare_gnomad$individuals = rare_gnomad$AC-rare_gnomad$nhomalt
-rare_controls_affected = mean(rare_gnomad$individuals) #247084980
+rare_controls_affected = sum(rare_gnomad$individuals) #247084980
 
 ##rare and paralogue annotated
 if (file.exists("data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData")){
