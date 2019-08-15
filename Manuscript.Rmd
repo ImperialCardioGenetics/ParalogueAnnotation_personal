@@ -3184,6 +3184,12 @@ Total_cases = 6994
 
 ##rare 
 NDD_notin_discovEHR = anti_join(NDD,discovEHR, by = c("CHROM","POS","REF","ALT"))
+NDD_notin_discovEHR = dplyr::select(NDD_notin_discovEHR, c(dnv,DNV_pub,MPC,segregation,class,comp,PUBMED))
+tmp_df = ddply(NDD_notin_discovEHR,.(Location,Allele),nrow)
+NDD_notin_discovEHR = unique(NDD_notin_discovEHR)
+
+NDD_notin_discovEHR = 
+
 rare_cases_affected = sum(NDD_notin_discovEHR$Case.count) #6194
 
 ##rare and paralogue annotated
