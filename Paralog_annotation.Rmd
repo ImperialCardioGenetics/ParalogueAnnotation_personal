@@ -109,6 +109,11 @@ If comparing 2 dataframes and wanting to check what rows exist in one but not th
 
 ```{r eval = FALSE, include = TRUE}
 library(plyr)
+
+a = c(1, 1, 1, 2, 2, 3, 4, 4)
+b = c(3.5, 3.5, 2.5, 2, 2, 1, 2.2, 7)
+df <-data.frame(a,b)
+
 ddply(df,.(a,b),nrow)
 
   a   b V1
