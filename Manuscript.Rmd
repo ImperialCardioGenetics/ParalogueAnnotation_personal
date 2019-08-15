@@ -3184,11 +3184,11 @@ Total_cases = 6994
 
 ##rare 
 NDD_notin_discovEHR = anti_join(NDD,discovEHR, by = c("CHROM","POS","REF","ALT"))
-NDD_notin_discovEHR = dplyr::select(NDD_notin_discovEHR, c(dnv,DNV_pub,MPC,segregation,class,comp,PUBMED))
-tmp_df = ddply(NDD_notin_discovEHR,.(Location,Allele),nrow)
+NDD_notin_discovEHR = NDD_notin_discovEHR[,c("Variant_pos","CHROM","POS","REF","ALT")]
+tmp_df = ddply(NDD_notin_discovEHR,.(Variant_pos,REF,ALT),nrow)
 NDD_notin_discovEHR = unique(NDD_notin_discovEHR)
-
-NDD_notin_discovEHR = 
+NDD_notin_discovEHR = left_join(NDD_notin_discovEHR,tmp_df)
+names(NDD_notin_discovEHR)[6] = "Case.count"
 
 rare_cases_affected = sum(NDD_notin_discovEHR$Case.count) #6194
 
@@ -3197,6 +3197,7 @@ p.annotated_NDD = Paralogous_var_align("data/NDD+E/NDD.out_paraloc_paralogs2.par
 names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","ALT")
 
 annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
+
 rare_pa_cases_affected = sum(annotated_NDD$Case.count) #245
 
 
@@ -3257,12 +3258,17 @@ if (file.exists("data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData"
   }
   save(var_pred_patho, file = "data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData")
 }
+var_pred_patho$individuals = var_pred_patho$AC-var_pred_patho$nhomalt
 
-rare_pa_controls_affected = dim(var_pred_patho)[1]
+rare_pa_controls_affected = sum(var_pred_patho$individuals)
 
 ####variants in both case and control
 rare_both = inner_join(NDD_notin_discovEHR,rare_gnomad, by = c("CHROM","POS","REF","ALT"))
+# rare_both$OR = (rare_both$Case.count/rare_both$individuals)/((6994-rare_both$Case.count)/((rare_both$AN/2)-rare_both$individuals))
+rare_both$OR = calc_EF(rare_both$Case.count,rare_both$individuals,6994-rare_both$Case.count,(rare_both$AN/2)-rare_both$individuals)
+
 rare_pa_both = inner_join(annotated_NDD,var_pred_patho, by = c("CHROM","POS","REF" = "REF.x", "ALT" = "ALT.x"))
+rare_pa_both$OR = (rare_pa_both$Case.count/rare_pa_both$individuals)/((6994-rare_pa_both$Case.count)/((rare_pa_both$AN/2)-rare_pa_both$individuals))
 
 
 ###EFs
