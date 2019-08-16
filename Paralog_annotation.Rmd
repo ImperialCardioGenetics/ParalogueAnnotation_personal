@@ -760,18 +760,19 @@ done = c(1,1,1,1,1,1)
 HPC_run_chrom2 = data.frame(
   file = c(
 "0-9",
-"10-99",
-"100-263", #174, 175, 228, 261, 262 EXCEEDED MEM
-"174,175,228,261,262"
+"10-99", #93 had warnings
+"100-263", 
+"174,175,228,261,262",
+"93-94" #move 94 to repeated runs
 ),
-done = c(1,1,1,1)
+done = c(1,1,1,1,0)
 )
 
 HPC_run_chrom3 = data.frame(
   file = c(
 "0-9",
 "10-99",
-"100-204", #186 EXCEEDED MEM
+"100-204",
 "186"
 ),
 done = c(1,1,1,1)
@@ -781,7 +782,7 @@ HPC_run_chrom4 = data.frame(
   file = c(
 "0-9",
 "10-99",
-"100-139", #135 EXCEEDED MEM
+"100-139", 
 "135"
 ),
 done = c(1,1,1,1)
@@ -800,12 +801,12 @@ done = c(1,1,1,1)
 HPC_run_chrom6 = data.frame(
   file = c(
 "0-9",
-# "10-99" #SOME FAILED - TOO MANY CONNECTIONS EVEN WHEN CHROM6 RUNNING BY ITSELF
-"10-50",
-"51-99",
-"100-179"
+"10-50", #36 had warnings
+"51-99", #92 had warnings
+"100-179",
+"36,92"
 ),
-done = c(1,1,1)
+done = c(1,1,1,0)
 )
 
 HPC_run_chrom7 = data.frame(
@@ -849,19 +850,22 @@ done = c(1,1,1)
 HPC_run_chrom11 = data.frame(
   file = c(
 "0-9",
-"10-99",
-"100-208"
+"10-99", #19,48,73,79 had warnings
+"100-208", #134,137,138,149,174,184,200 had warnings
+"19,48,73,79",
+"134,137,138,149,174,184,200"
 ),
-done = c(1,1,1)
+done = c(1,1,1,0,0)
 )
 
 HPC_run_chrom12 = data.frame(
   file = c(
 "0-9",
 "10-99",
-"100-191"
+"100-191", #176 had warnings
+"176-177" #move 177 to repeated runs
 ),
-done = c(1,1,1)
+done = c(1,1,1,0)
 )
 
 HPC_run_chrom13 = data.frame(
@@ -885,10 +889,11 @@ done = c(1,1,1)
 HPC_run_chrom15 = data.frame(
   file = c(
 "0-9", 
-"10-99",
-"100-129"
+"10-99", #94 had warnings
+"100-129",
+"94-95" #move 95 to repeated runs
 ),
-done = c(1,1,1)
+done = c(1,1,1,0)
 )
 
 #TRYING RUNNING 16+17+18 MULTI QSUB SCRIPT for 0-9
@@ -897,7 +902,7 @@ HPC_run_chrom16 = data.frame(
   file = c(
 "0-9", 
 "10-99",
-"100-157" #RUN 102 EXCEEDED MEM LIMIT
+"100-157" 
 "102-103" #STORED REPEATED RUN 103
 ),
 done = c(1,1,1,1)
