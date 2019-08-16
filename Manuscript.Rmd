@@ -5324,7 +5324,7 @@ if (file.exists("data/gnomad_exome_r2.1.1/rare_missense_gnomad_pred_patho_at_par
   }
   save(var_pred_patho, file = "data/gnomad_exome_r2.1.1/rare_missense_gnomad_pred_patho_at_para_con.RData")
 }
-# num_of_var_pred_patho #66711 out of the 17.2 million gnomad variants are predicted to be pathogenic
+# num_of_var_pred_patho #66711 out of the 17.2 million gnomad variants are predicted to be pathogenic (noQC)
 dim(distinct(var_pred_patho)) #29123 7
 dim(var_pred_patho)[1]/dim(rare_gnomad)[1] #0.005276123 of rare missense gnomad variants predicted patho cf 3533/23894 of clinvar P/LP and 99/14617 of B/LB
 sum(as.numeric(var_pred_patho$AC))/(mean(as.numeric(var_pred_patho$AN))/2) #prevalance?
@@ -5360,10 +5360,19 @@ length(intersect(var_pred_patho$ALL,full_clinvar_tableized$ALL)) #12 all togethe
 
 length(setdiff(var_pred_patho$ALL,full_clinvar_tableized$ALL))
 ```
-66711 out of the 17.2 million gnomad variants are predicted to be pathogenic
+In Gnomad 2.1.1 there are 5519773 rare (MAF < 0.001) missense variants out of the 17.2 million variants
+
+with noQC:
+66711 are predicted to be pathogenic
 only 3 predicted patho variants are in clinvar P/LP
 only 3 predicted patho variants are in clinvar B/LB
 27 all together, meaning 21 VUS
+
+with para_con
+29123 are predicted to be pathogenic
+only 2 predicted patho variants are in clinvar P/LP
+only 2 predicted patho variants are in clinvar B/LB
+12 all together, meaning 8 VUS
 
 ## GO protein classes of clinvar P/LP variants with PA noQC
 
