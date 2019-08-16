@@ -5334,7 +5334,7 @@ var_pred_patho$AN = as.numeric(var_pred_patho$AN)
 var_pred_patho$AF = as.numeric(var_pred_patho$AF)
 var_pred_patho = inner_join(var_pred_patho, rare_gnomad_tableized)
 var_pred_patho$individuals = var_pred_patho$AC - var_pred_patho$nhomalt
-sum(var_pred_patho$individuals)/125748
+# sum(var_pred_patho$individuals)/125748 #125,748 exomes
 
 var_pred_patho$ALL = paste(var_pred_patho$Variant_pos,var_pred_patho$REF.x,var_pred_patho$ALT.x,sep = " ")
 
@@ -5354,11 +5354,11 @@ full_clinvar_tableized = read.csv(file="data/clinvar/clinvar_20190114.vcf_tablei
 full_clinvar_tableized$ALL = paste(full_clinvar_tableized$CHROM,full_clinvar_tableized$POS,full_clinvar_tableized$REF,full_clinvar_tableized$ALT,sep = " ")
 
 
-length(intersect(var_pred_patho$ALL,clinvar_P_LP_tableized$ALL)) #only 3 predicted patho variants are in clinvar P/LP
-length(intersect(var_pred_patho$ALL,clinvar_B_LB_tableized$ALL)) #only 3 predicted patho variants are in clinvar B/LB
-length(intersect(var_pred_patho$ALL,full_clinvar_tableized$ALL)) #27 all together, meaning 21 VUS
+length(intersect(var_pred_patho$ALL,clinvar_P_LP_tableized$ALL)) #only 2 predicted patho variants are in clinvar P/LP
+length(intersect(var_pred_patho$ALL,clinvar_B_LB_tableized$ALL)) #only 2 predicted patho variants are in clinvar B/LB
+length(intersect(var_pred_patho$ALL,full_clinvar_tableized$ALL)) #12 all together, meaning 8 VUS
 
-length(setdiff(var_pred_patho$ALL,clinvar_P_LP_tableized$ALL))
+length(setdiff(var_pred_patho$ALL,full_clinvar_tableized$ALL))
 ```
 66711 out of the 17.2 million gnomad variants are predicted to be pathogenic
 only 3 predicted patho variants are in clinvar P/LP
