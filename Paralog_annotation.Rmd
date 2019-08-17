@@ -896,7 +896,7 @@ HPC_run_chrom15 = data.frame(
 "94(1/2)",
 "94((2/2)"
 ),
-done = c(1,1,1,0,0)
+done = c(1,1,1,1,1)
 )
 
 #TRYING RUNNING 16+17+18 MULTI QSUB SCRIPT for 0-9
