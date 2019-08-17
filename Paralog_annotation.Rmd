@@ -892,9 +892,11 @@ HPC_run_chrom15 = data.frame(
 "0-9", 
 "10-99", #94 had warnings
 "100-129",
-"94-95" #moved 95 to repeated runs
+#"94-95" #moved 95 to repeated runs
+"94(1/2)",
+"94((2/2)"
 ),
-done = c(1,1,1,0)
+done = c(1,1,1,0,0)
 )
 
 #TRYING RUNNING 16+17+18 MULTI QSUB SCRIPT for 0-9
