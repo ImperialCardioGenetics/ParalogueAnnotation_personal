@@ -279,7 +279,7 @@ dens = ggplot(total_plot_data, aes(x=number_of_paralogues)) +
   theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +
-  labs(x = "number of paralogues", y = "number of genes", fill = "") + 
+  labs(x = "Number of paralogues", y = "Number of genes", fill = "") + 
     # labs(title = "Distribution of human protein coding genes involved in disease in Ensembl and their associated paralogues") + 
   theme(axis.title = element_text(size = 15), 
     axis.text = element_text(size = 15), 
