@@ -3150,6 +3150,13 @@ write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_onlySCN5A_C_terminal_EFs.tsv
 
 ## EFs for NDD+E
 
+List of genes of causitive for NDD with Epilepsy as defined by:
+
+Epilepsy as a Neurodevelopmental Disorder (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3306997/) - TSC1; TSC2; DCX; RELN; ARX; SYN1; SYNGAP1; LGI1; SCN1A; SCN2A
+
+Targeted gene sequencing in 6994 individuals with neurodevelopmental disorder with epilepsy (https://www.biorxiv.org/content/10.1101/602524v1.full) - SCN1A; SCN2A; KCNQ2; CDKL5; SCN8A; STXBP1
+
+
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t",stringsAsFactors = 0)
 names(discovEHR)[1] = "CHROM"
@@ -3179,7 +3186,8 @@ NDD_vcf = unique(NDD[,c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")])
 names(NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
 write.table(NDD_vcf, file = "data/NDD+E/NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
 
-NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),]
+NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),] #remove de novo variants
+
 
 ###Disease cases - NDD
 Total_cases = 6994
