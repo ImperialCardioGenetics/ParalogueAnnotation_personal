@@ -3156,7 +3156,9 @@ Epilepsy as a Neurodevelopmental Disorder (https://www.ncbi.nlm.nih.gov/pmc/arti
 
 Targeted gene sequencing in 6994 individuals with neurodevelopmental disorder with epilepsy (https://www.biorxiv.org/content/10.1101/602524v1.full) - SCN1A; SCN2A; KCNQ2; CDKL5; SCN8A; STXBP1
 
+Probably best to use non-channelopathy genes that are different to ones in LQTS/BrS
 
+ANALYSIS BELOW ONLY WORKS FOR FORWARD GENES AS DATA GIVEN IS POORLY FORMATED AND REF/ALT ALLELES GIVEN ARE INCORRECT FOR BACKWARD GENES!
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t",stringsAsFactors = 0)
 names(discovEHR)[1] = "CHROM"
@@ -3172,21 +3174,44 @@ NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"["
 NDD$POS = as.integer(NDD$POS)
 NDD$Variant_pos = paste(NDD$CHROM, NDD$POS, sep = " ")
 NDD$Case.count = 1
+#ONLY FOR FORWARD GENES!
 NDD$REF = sapply(strsplit(NDD$Codons,"/"),"[",1)
 NDD$REF = str_extract_all(NDD$REF, "[A-Z]+")
 NDD$REF = unlist(NDD$REF)
 NDD$ALT = sapply(strsplit(NDD$Codons,"/"),"[",2)
 NDD$ALT = str_extract_all(NDD$ALT, "[A-Z]+")
 NDD$ALT = unlist(NDD$ALT)
+#IMPORTANT NOTE - CARE WHEN DEALING WITH BACKWARDS GENES AS CODONS ARE NOT CORRECT!
+
+# NDD$REF = ifelse(NDD$ALT == NDD$Allele, NDD$REF, 
+#                  ifelse(NDD$REF == "A", "T", 
+#                         ifelse(NDD$REF == "T", "A",
+#                                ifelse(NDD$REF == "G", "C", "G")
+#                                )
+#                         )
+#                  )
+# NDD$ALT = ifelse(NDD$ALT == NDD$Allele, NDD$Allele,
+#                  ifelse(NDD$ALT == "A", "T",
+#                         ifelse(NDD$ALT == "T", "A",
+#                                ifelse(NDD$ALT == "G", "C", "G")
+#                                )
+#                         )
+#                  )
+# NDD$ALT = NDD$Allele
 NDD$ID = "."
 NDD$QUAL = "."
 NDD$FILTER = "."
 NDD$INFO = "."
-NDD_vcf = unique(NDD[,c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")])
-names(NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
-write.table(NDD_vcf, file = "data/NDD+E/NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
+if (!file.exists("data/NDD+E/NDD.vcf")){
+  NDD_vcf = unique(NDD[,c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")])
+  names(NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
+  write.table(NDD_vcf, file = "data/NDD+E/NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
+}
 
 NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),] #remove de novo variants
+
+NDD = NDD[NDD$Gene_SYMBOL == "CDKL5" | #only these 2 for now to avoid channelopathy
+            NDD$Gene_SYMBOL == "STXBP1",]
 
 
 ###Disease cases - NDD
