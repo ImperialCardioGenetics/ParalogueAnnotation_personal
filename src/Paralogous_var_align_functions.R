@@ -82,8 +82,8 @@ Paralogous_var_align = function(paralogs2_file,
                                                     str_count(joining_tableized_data$Amino_acids) == 3,]
   ref_data = joining_tableized_data
   
-  Total_paralog_annotations = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
-  Total_paralog_annotations = distinct(Total_paralog_annotations)
+  Left_joined_gathered_paralog_data = left_join(gathered_paralog_data, ref_data, by = c("paralog_pos" = "Variant_pos"))
+  Total_paralog_annotations = distinct(Left_joined_gathered_paralog_data)
   Total_paralog_annotations = Total_paralog_annotations[Total_paralog_annotations$ID.x != Total_paralog_annotations$ID.y,]# & #remove self annotations that arise from overlapping genes that are paralogues to itself
                                                           # Total_paralog_annotations$Gene != Total_paralog_annotations$SYMBOL,] #&
                                                           # !is.na(Total_paralog_annotations$Protein_position.x) & #remove variants that are not protein coding
@@ -109,6 +109,7 @@ Paralogous_var_align = function(paralogs2_file,
               "Unique_variant_genes_not_annotated" = Unique_variant_genes_not_annotated,
               "Unique_variants_not_annotated" = Unique_variants_not_annotated,
               "gathered_paralog_data" = gathered_paralog_data, 
+              "Left_joined_gathered_paralog_data" = Left_joined_gathered_paralog_data,
               "Total_paralog_annotations" = Total_paralog_annotations, 
               "num_of_paralog_anno" = num_of_paralog_anno, 
               "true_num_of_paralog_anno" = true_num_of_paralog_anno, 
