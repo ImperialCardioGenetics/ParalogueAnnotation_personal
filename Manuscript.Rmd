@@ -3179,6 +3179,8 @@ NDD_vcf = unique(NDD[,c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")])
 names(NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
 write.table(NDD_vcf, file = "data/NDD+E/NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
 
+NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),]
+
 ###Disease cases - NDD
 Total_cases = 6994
 
