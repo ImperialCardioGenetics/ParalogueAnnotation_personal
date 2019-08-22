@@ -1,4 +1,4 @@
-Packages = c("tidyverse", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "clusterProfiler", "org.Hs.eg.db", "DiagrammeR")
+Packages = c("tidyverse", "plyr", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "clusterProfiler", "org.Hs.eg.db", "DiagrammeR")
 lapply(Packages, library, character.only = TRUE)
 
 Paralogous_var_align = function(paralogs2_file, 
