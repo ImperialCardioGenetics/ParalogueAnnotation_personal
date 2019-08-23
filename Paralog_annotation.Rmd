@@ -742,7 +742,7 @@ done = c(1,1,1,1,1,1,1,1,1,1,
 )
 ```
 
-For all missense synthetic exome run on HPC, used qsub_scripts:
+For all missense synthetic exome VEP+plugin run on HPC, used qsub_scripts:
 ```{r eval = FALSE}
 #after each run CHECK with bash command in USEFUL CODE TIPS
 HPC_run_chrom1 = data.frame(
@@ -977,6 +977,13 @@ HPC_run_chromY = data.frame(
 "10-11"
 ),
 done = c(1,1)
+)
+```
+
+For all missense synthetic exome Paralogue_annotation_masterscript_afterrun.py run on RBH:
+```{r eval = FALSE}
+RBH_failed_runs_chrom1 = data.frame(
+  splits = c("162")
 )
 ```
 
