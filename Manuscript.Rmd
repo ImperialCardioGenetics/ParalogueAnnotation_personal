@@ -1936,7 +1936,7 @@ For the OMGL data, Total disease cases would be considered as all variants in th
 
 The Total case counts for gnomad would be the mean of all allele numbers of respective variants being considered divided by 2 (due to homo/heterozygous). I.e. for each variant take the AN number from gnomad vcf and sum them together, take the mean and divide by 2.
 
-Using https://www.nature.com/articles/gim201726/tables/1 and using the upper CI level, e.g. for LQTS = 8.2 x 10−6. If the maximum filtering allele frequency (max out of all the sub populations, i.e. non-global) is smaller than 8.2 x 10-6 then that variant is considered "rare"
+Using https://www.nature.com/articles/gim201726/tables/1 and using the upper CI level, e.g. for LQTS = 8.2 x 10−6. If the maximum filtering allele frequency (max out of all the sub populations, i.e. non-global) is smaller than or equal to 8.2 x 10-6 then that variant is considered "rare"
 
 OMGL LQTS data - data incomplete, require case counts/allele numbers
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
