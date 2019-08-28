@@ -1461,7 +1461,7 @@ ggsave("images/ROC_plot_paraz_with_QC1.png")
 
 # prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
 prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Precision_CI = PPV_CI_list, Sensitivity = Sensitivity_list, Sensitivity_CI = Sens_CI_list))
-prc_data$Type = "conserved AA +\nPara_z"
+prc_data$Type = "conserved AA +\nPara Z"
 
 prc_data = rbind(prc_data, c(as.numeric(conf$PPV),as.numeric(1.96*conf$PPV_SE),as.numeric(conf$Sensitivity),as.numeric(1.96*conf$Sensitivity_SE)))
 prc_data[13,5]="none"
@@ -1476,16 +1476,16 @@ prc_data[17,5]="conserved AA +\nconserved variants"
 
 # prc_data[18:21,5]=c("Sift", "MCap", "CADD", "Revel")
 
-prc_data$Type = factor(prc_data$Type, levels = c("none", "conserved AA", "conserved AA +\nPara_z", "full conserved AA", "conserved AA +\nconserved variants", "full conseerved AA +\nconserved variants"))
+prc_data$Type = factor(prc_data$Type, levels = c("none", "conserved AA", "conserved AA +\nPara Z", "full conserved AA", "conserved AA +\nconserved variants", "full conseerved AA +\nconserved variants"))
 # prc_data$Type = factor(prc_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+Para_Z", "QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-prc_data$Type[1:12] = "conserved AA +\nPara_z"
+prc_data$Type[1:12] = "conserved AA +\nPara Z"
 # gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
-cols = c("conserved AA +\nPara_z" = "#4D5656", "none" = "#58D68D", "conserved AA" = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conseerved AA +\nconserved variants" = "#EC7063")
-shapes = c("conserved AA +\nPara_z" = 6, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conseerved AA +\nconserved variants" = 19)
+cols = c("conserved AA +\nPara Z" = "#4D5656", "none" = "#58D68D", "conserved AA" = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conseerved AA +\nconserved variants" = "#EC7063")
+shapes = c("conserved AA +\nPara Z" = 6, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conseerved AA +\nconserved variants" = 19)
 
 # cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 # shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
