@@ -495,34 +495,34 @@ clinvar_B_LB_tableized_genes = as.vector(unique(clinvar_B_LB_tableized$SYMBOL))
 
 
 var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-p.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+p.var_in_genes_unique_var = dplyr::arrange(var_in_genes_unique_var, desc(Freq))
 p.var_in_genes_unique_var = p.var_in_genes_unique_var[p.var_in_genes_unique_var$Var1 %in% clinvar_P_LP_tableized_genes,] #643 HERE!!! 624 w/o indel annotations
 write.table(p.var_in_genes_unique_var, file = "data/clinvar/genes_with_number_of_annotations_noQC.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
 not_var_in_genes_unique_var = data.frame(table(p.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
-p.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+p.not_var_in_genes_unique_var = dplyr::arrange(not_var_in_genes_unique_var, desc(Freq))
 p.not_var_in_genes_unique_var = p.not_var_in_genes_unique_var[p.not_var_in_genes_unique_var$Var1 %in% clinvar_P_LP_tableized_genes,]
 # length(intersect(p.var_in_genes_unique_var$Var1, p.not_var_in_genes_unique_var$Var1))
 
 #top 5 genes where PA performs best with clinvar data
 COL3A1_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL3A1" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL3A1_annotations_genes = data.frame(table(COL3A1_annotations$SYMBOL))
-COL3A1_annotations_genes = arrange(COL3A1_annotations_genes, desc(Freq))
+COL3A1_annotations_genes = dplyr::arrange(COL3A1_annotations_genes, desc(Freq))
 COL3A1_annotations_genes$Gene = "COL3A1"
 COL4A5_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL4A5" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL4A5_annotations_genes = data.frame(table(COL4A5_annotations$SYMBOL))
-COL4A5_annotations_genes = arrange(COL4A5_annotations_genes, desc(Freq))
+COL4A5_annotations_genes = dplyr::arrange(COL4A5_annotations_genes, desc(Freq))
 COL4A5_annotations_genes$Gene = "COL4A5"
 SCN1A_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "SCN1A" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 SCN1A_annotations_genes = data.frame(table(SCN1A_annotations$SYMBOL))
-SCN1A_annotations_genes = arrange(SCN1A_annotations_genes, desc(Freq))
+SCN1A_annotations_genes = dplyr::arrange(SCN1A_annotations_genes, desc(Freq))
 SCN1A_annotations_genes$Gene = "SCN1A"
 COL1A1_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL1A1" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL1A1_annotations_genes = data.frame(table(COL1A1_annotations$SYMBOL))
-COL1A1_annotations_genes = arrange(COL1A1_annotations_genes, desc(Freq))
+COL1A1_annotations_genes = dplyr::arrange(COL1A1_annotations_genes, desc(Freq))
 COL1A1_annotations_genes$Gene = "COL1A1"
 COL1A2_annotations = p.paralogous_var_align$Total_paralog_annotations[p.paralogous_var_align$Total_paralog_annotations$Gene == "COL1A2" & !is.na(p.paralogous_var_align$Total_paralog_annotations$ID.y),]
 COL1A2_annotations_genes = data.frame(table(COL1A2_annotations$SYMBOL))
-COL1A2_annotations_genes = arrange(COL1A2_annotations_genes, desc(Freq))
+COL1A2_annotations_genes = dplyr::arrange(COL1A2_annotations_genes, desc(Freq))
 COL1A2_annotations_genes$Gene = "COL1A2"
 top_5_paralogues = rbind(COL3A1_annotations_genes, COL4A5_annotations_genes, SCN1A_annotations_genes, COL1A1_annotations_genes, COL1A2_annotations_genes)
 top_5_paralogues = top_5_paralogues[,c(3,1,2)]
@@ -531,26 +531,26 @@ write.table(top_5_paralogues, file = "data/clinvar/Top_5_genes_with_number_of_an
 
 #carrying on finding out what genes are in the variants being annotated and not for the other parts of the confusion matrixes
 var_in_genes_unique_var = data.frame(table(b.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-b.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+b.var_in_genes_unique_var = dplyr::arrange(var_in_genes_unique_var, desc(Freq))
 b.var_in_genes_unique_var = b.var_in_genes_unique_var[b.var_in_genes_unique_var$Var1 %in% clinvar_B_LB_tableized_genes,]
 dim(b.paralogous_var_align$Unique_variants_not_annotated)[1]
 not_var_in_genes_unique_var = data.frame(table(b.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
-b.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+b.not_var_in_genes_unique_var = dplyr::arrange(not_var_in_genes_unique_var, desc(Freq))
 b.not_var_in_genes_unique_var = b.not_var_in_genes_unique_var[b.not_var_in_genes_unique_var$Var1 %in% clinvar_B_LB_tableized_genes,]
 # length(intersect(b.var_in_genes_unique_var$Var1, b.not_var_in_genes_unique_var$Var1))
 
 var_in_genes_unique_var = data.frame(table(ptob.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-ptob.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+ptob.var_in_genes_unique_var = dplyr::arrange(var_in_genes_unique_var, desc(Freq))
 dim(ptob.paralogous_var_align$Unique_variants_not_annotated)[1]
 not_var_in_genes_unique_var = data.frame(table(ptob.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
-ptob.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+ptob.not_var_in_genes_unique_var = dplyr::arrange(not_var_in_genes_unique_var, desc(Freq))
 length(intersect(ptob.var_in_genes_unique_var$Var1, ptob.not_var_in_genes_unique_var$Var1))
 
 var_in_genes_unique_var = data.frame(table(btob.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-btob.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+btob.var_in_genes_unique_var = dplyr::arrange(var_in_genes_unique_var, desc(Freq))
 dim(btob.paralogous_var_align$Unique_variants_not_annotated)[1]
 not_var_in_genes_unique_var = data.frame(table(btob.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
-btob.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+btob.not_var_in_genes_unique_var = dplyr::arrange(not_var_in_genes_unique_var, desc(Freq))
 length(intersect(btob.var_in_genes_unique_var$Var1, btob.not_var_in_genes_unique_var$Var1))
 
 #para_con
@@ -571,31 +571,31 @@ var_removed_b = var_rem_matrix(conf_b$con_table, conf_b2$con_table, ptob2.paralo
 
 #finding out how many genes in para_con
 var_in_genes_unique_var = data.frame(table(p2.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-p2.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+p2.var_in_genes_unique_var = dplyr::arrange(var_in_genes_unique_var, desc(Freq))
 dim(p2.paralogous_var_align$Unique_variants_not_annotated)[1]
 not_var_in_genes_unique_var = data.frame(table(p2.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
-p2.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+p2.not_var_in_genes_unique_var = dplyr::arrange(not_var_in_genes_unique_var, desc(Freq))
 length(intersect(p2.var_in_genes_unique_var$Var1, p2.not_var_in_genes_unique_var$Var1))
 
 var_in_genes_unique_var = data.frame(table(b2.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-b2.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+b2.var_in_genes_unique_var = dplyr::arrange(var_in_genes_unique_var, desc(Freq))
 dim(b2.paralogous_var_align$Unique_variants_not_annotated)[1]
 not_var_in_genes_unique_var = data.frame(table(b2.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
-b2.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+b2.not_var_in_genes_unique_var = dplyr::arrange(not_var_in_genes_unique_var, desc(Freq))
 length(intersect(b2.var_in_genes_unique_var$Var1, b2.not_var_in_genes_unique_var$Var1))
 
 var_in_genes_unique_var = data.frame(table(ptob2.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-ptob2.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+ptob2.var_in_genes_unique_var = dplyr::arrange(var_in_genes_unique_var, desc(Freq))
 dim(ptob2.paralogous_var_align$Unique_variants_not_annotated)[1]
 not_var_in_genes_unique_var = data.frame(table(ptob2.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
-ptob2.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+ptob2.not_var_in_genes_unique_var = dplyr::arrange(not_var_in_genes_unique_var, desc(Freq))
 length(intersect(ptob2.var_in_genes_unique_var$Var1, ptob2.not_var_in_genes_unique_var$Var1))
 
 var_in_genes_unique_var = data.frame(table(btob2.paralogous_var_align$Unique_variant_gene_annotations$Gene))
-btob2.var_in_genes_unique_var = arrange(var_in_genes_unique_var, desc(Freq))
+btob2.var_in_genes_unique_var = dplyr::arrange(var_in_genes_unique_var, desc(Freq))
 dim(btob2.paralogous_var_align$Unique_variants_not_annotated)[1]
 not_var_in_genes_unique_var = data.frame(table(btob2.paralogous_var_align$Unique_variant_genes_not_annotated$Gene))
-btob2.not_var_in_genes_unique_var = arrange(not_var_in_genes_unique_var, desc(Freq))
+btob2.not_var_in_genes_unique_var = dplyr::arrange(not_var_in_genes_unique_var, desc(Freq))
 length(intersect(btob2.var_in_genes_unique_var$Var1, btob2.not_var_in_genes_unique_var$Var1))
 
 #all_con
