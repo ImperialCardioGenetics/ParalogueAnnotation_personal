@@ -2224,6 +2224,7 @@ SCN5A_EF_data$type = factor(SCN5A_EF_data$type, levels = c("rare and\nparalogue 
 SCN5A_EF_data$gene = "SCN5A"
 
 total_EF_data = rbind(KCNQ1_EF_data, KCNH2_EF_data, SCN5A_EF_data)
+total_EF_data$type = factor(total_EF_data$type, levels = c("rare and\nparalogue annotated","rare variants"))
 
 gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
                                colour = type
@@ -2235,7 +2236,7 @@ gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
   theme(#panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.border = element_blank(), 
-        legend.position="none",
+        legend.position = c(0.91,0.91),
         axis.title.y = element_blank(),
         axis.text = element_text(size = 13),
         axis.title.x = element_text(size = 14)
