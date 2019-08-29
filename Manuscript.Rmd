@@ -2172,7 +2172,7 @@ gene_EFs = add_column(gene_EFs, "pa_p-values" = c(KCNE1_pa_EF$OR_p_value, KCNE2_
 write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
 
-### KCNQ1 EF plot
+### KCNQ1 OR plot
 KCNQ1_EF_data = data.frame(
   OR = c(KCNQ1_rare_EF$OR, KCNQ1_pa_EF$OR),
   CI_lower = c(KCNQ1_rare_EF$OR_CI[1], KCNQ1_pa_EF$OR_CI[1]),
@@ -2202,7 +2202,50 @@ gg = ggplot(KCNQ1_EF_data, aes(y=type, x=OR,
   coord_fixed(ratio = 25)
 ggsave("images/KCNQ1_ORs.png", width = 10, height = 6)
 
-  
+### KCNQ1 KCNH2 SCN5A LQTS OR plot
+KCNQ1_EF_data$gene = "KCNQ1"
+
+KCNH2_EF_data = data.frame(
+  OR = c(KCNH2_rare_EF$OR, KCNH2_pa_EF$OR),
+  CI_lower = c(KCNH2_rare_EF$OR_CI[1], KCNH2_pa_EF$OR_CI[1]),
+  CI_upper = c(KCNH2_rare_EF$OR_CI[2], KCNH2_pa_EF$OR_CI[2]),
+  type = c("rare variants","rare and\nparalogue annotated")
+)
+KCNH2_EF_data$type = factor(KCNH2_EF_data$type, levels = c("rare and\nparalogue annotated","rare variants"))
+KCNH2_EF_data$gene = "KCNH2"
+
+SCN5A_EF_data = data.frame(
+  OR = c(SCN5A_rare_EF$OR, SCN5A_pa_EF$OR),
+  CI_lower = c(SCN5A_rare_EF$OR_CI[1], SCN5A_pa_EF$OR_CI[1]),
+  CI_upper = c(SCN5A_rare_EF$OR_CI[2], SCN5A_pa_EF$OR_CI[2]),
+  type = c("rare variants","rare and\nparalogue annotated")
+)
+SCN5A_EF_data$type = factor(SCN5A_EF_data$type, levels = c("rare and\nparalogue annotated","rare variants"))
+SCN5A_EF_data$gene = "SCN5A"
+
+total_EF_data = rbind(KCNQ1_EF_data, KCNH2_EF_data, SCN5A_EF_data)
+
+gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
+                               colour = type
+                               #shape = type
+                               )) + 
+  geom_point(size=9, position = position_dodge(width = .5)) + 
+  scale_color_manual(values=c("rare variants" = alpha("blue",0.4), "rare and\nparalogue annotated" = alpha("red",0.9))) +
+  # theme_bw() + 
+  theme(#panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(), 
+        legend.position="none",
+        axis.title.y = element_blank(),
+        axis.text = element_text(size = 13),
+        axis.title.x = element_text(size = 14)
+        ) + 
+  ylim(0,250) +
+  ylab("Odds Ratios") +
+  coord_fixed(ratio = 25) +
+  coord_flip() +
+  geom_errorbar(aes(ymin=CI_lower, ymax=CI_upper),colour="black",linetype=1,size=.2,width=.5,position = position_dodge(width = .5))
+ggsave("images/KCNQ1_KCNH2_SCN5A_LQTS_ORs.png", width = 10, height = 6)  
 ```
 BrS 
 rare vs rare+pa
