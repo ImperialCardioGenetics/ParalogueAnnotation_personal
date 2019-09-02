@@ -2211,7 +2211,7 @@ KCNH2_EF_data = data.frame(
   CI_upper = c(KCNH2_rare_EF$OR_CI[2], KCNH2_pa_EF$OR_CI[2]),
   type = c("rare variants","rare and\nparalogue annotated")
 )
-KCNH2_EF_data$type = factor(KCNH2_EF_data$type, levels = c("rare and\nparalogue annotated","rare variants"))
+KCNH2_EF_data$type = factor(KCNH2_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
 KCNH2_EF_data$gene = "KCNH2"
 
 SCN5A_EF_data = data.frame(
@@ -2220,11 +2220,12 @@ SCN5A_EF_data = data.frame(
   CI_upper = c(SCN5A_rare_EF$OR_CI[2], SCN5A_pa_EF$OR_CI[2]),
   type = c("rare variants","rare and\nparalogue annotated")
 )
-SCN5A_EF_data$type = factor(SCN5A_EF_data$type, levels = c("rare and\nparalogue annotated","rare variants"))
+SCN5A_EF_data$type = factor(SCN5A_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
 SCN5A_EF_data$gene = "SCN5A"
 
 total_EF_data = rbind(KCNQ1_EF_data, KCNH2_EF_data, SCN5A_EF_data)
 total_EF_data$type = factor(total_EF_data$type, levels = c("rare and\nparalogue annotated","rare variants"))
+total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A","KCNH2","KCNQ1"))
 
 gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
                                colour = type
@@ -2245,7 +2246,8 @@ gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
   ylab("Odds Ratios") +
   coord_fixed(ratio = 25) +
   coord_flip() +
-  geom_errorbar(aes(ymin=CI_lower, ymax=CI_upper),colour="black",linetype=1,size=.2,width=.5,position = position_dodge(width = .5))
+  geom_errorbar(aes(ymin=CI_lower, ymax=CI_upper),colour="black",linetype=1,size=.2,width=.5,position = position_dodge(width = .5)) +
+  guides(color = guide_legend(reverse = TRUE))
 ggsave("images/KCNQ1_KCNH2_SCN5A_LQTS_ORs.png", width = 10, height = 6)  
 ```
 BrS 
