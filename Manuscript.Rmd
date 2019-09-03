@@ -2221,11 +2221,11 @@ SCN5A_EF_data = data.frame(
   type = c("rare variants","rare and\nparalogue annotated")
 )
 SCN5A_EF_data$type = factor(SCN5A_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
-SCN5A_EF_data$gene = "SCN5A"
+SCN5A_EF_data$gene = "SCN5A-LQTS"
 
 total_EF_data = rbind(KCNQ1_EF_data, KCNH2_EF_data, SCN5A_EF_data)
 total_EF_data$type = factor(total_EF_data$type, levels = c("rare and\nparalogue annotated","rare variants"))
-total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A","KCNH2","KCNQ1"))
+total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A-LQTS","KCNH2","KCNQ1"))
 
 gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
                                colour = type
@@ -2359,6 +2359,45 @@ write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_EFs.csv", na="", row.names =
 # gnomad_rare_variants_tmp = gnomad_rare_variants[,c(1,2,4,5)]
 
 # vcf_conv = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv", sep = ",", stringsAsFactors = 0)
+```
+
+OR plot of KCNQ1, KCNH2, SCN5A-LQTS and SCN5A-BrS (MUST RUN ABOVE 2 SECTIONS FIRST IN ORDER)
+```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+SCN5A_EF_data = data.frame(
+  OR = c(SCN5A_rare_EF$OR, SCN5A_pa_EF$OR),
+  CI_lower = c(SCN5A_rare_EF$OR_CI[1], SCN5A_pa_EF$OR_CI[1]),
+  CI_upper = c(SCN5A_rare_EF$OR_CI[2], SCN5A_pa_EF$OR_CI[2]),
+  type = c("rare variants","rare and\nparalogue annotated")
+)
+SCN5A_EF_data$type = factor(SCN5A_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
+SCN5A_EF_data$gene = "SCN5A-BrS"
+
+total_EF_data = rbind(total_EF_data, SCN5A_EF_data)
+total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A-BrS","SCN5A-LQTS","KCNH2","KCNQ1"))
+
+gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
+                               colour = type
+                               #shape = type
+                               )) + 
+  geom_point(size=9, position = position_dodge(width = .5)) + 
+  scale_color_manual(values=c("rare variants" = alpha("blue",0.4), "rare and\nparalogue annotated" = alpha("red",0.9))) +
+  # theme_bw() + 
+  theme(#panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(), 
+        legend.position = c(0.91,0.07),
+        legend.title = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text = element_text(size = 13),
+        axis.title.x = element_text(size = 14)
+        ) + 
+  ylim(0,275) +
+  ylab("Odds Ratios") +
+  coord_fixed(ratio = 25) +
+  coord_flip() +
+  geom_errorbar(aes(ymin=CI_lower, ymax=CI_upper),colour="black",linetype=1,size=.2,width=.5,position = position_dodge(width = .5)) +
+  guides(color = guide_legend(reverse = TRUE))
+ggsave("images/KCNQ1_KCNH2_SCN5A_LQTS_SCN5A_BrS_ORs.png", width = 10, height = 6)  
 ```
 
 LQTS 
