@@ -2360,7 +2360,6 @@ write.table(gene_EFs, file = "data/BrS/Ackerman_BrS_EFs.csv", na="", row.names =
 
 # vcf_conv = read.csv("data/LQTS/Mayo_LQTS_variants_for_vcf_convertion.csv", sep = ",", stringsAsFactors = 0)
 ```
-
 OR plot of KCNQ1, KCNH2, SCN5A-LQTS and SCN5A-BrS (MUST RUN ABOVE 2 SECTIONS FIRST IN ORDER)
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 SCN5A_EF_data = data.frame(
@@ -2731,7 +2730,7 @@ SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_
                                                                         disease_data_ref$Protein_position > 1771)
                                                                      , "cases"]))
 #individual cases for variants predicted pathogenic by PA
-disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+disease.paralogous_var_align = Paralogous_var_align("data/LQTS/rare_disease_cohort_variants.out_paraloc_paralogs2.para_con", "data/LQTS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 #finding only protein positions that are not transmembrane domains identified by pfam
 Protein_pos_select = disease.paralogous_var_align$Total_paralog_annotations[!is.na(disease.paralogous_var_align$Total_paralog_annotations$Protein_position.x) &
                                                                               (disease.paralogous_var_align$Total_paralog_annotations$Protein_position.x < 132 |
@@ -2776,7 +2775,7 @@ SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_
                                                                         control_data_ref$Protein_position > 1771)
                                                                      , "Allele.Count"]))
 #individual cases for variants predicted pathogenic by PA
-control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.noQC", "data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+control.paralogous_var_align = Paralogous_var_align("data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_paralogs2.para_con", "data/LQTS/gnomAD_v2.1.1_LQTS_variants_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
 #finding only protein positions that are not transmembrane domains identified by pfam
 Protein_pos_select = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$Protein_position.x) &
                                                                               (control.paralogous_var_align$Total_paralog_annotations$Protein_position.x < 132 |
@@ -2884,7 +2883,7 @@ SCN5A_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_
                                                                         disease_data_ref$Protein_position > 1771)
                                                                      , "cases"]))
 #individual cases for variants predicted pathogenic by PA
-disease.paralogous_var_align = Paralogous_var_align("data/BrS/rare_disease_cohort_variants.out_paraloc_paralogs2.noQC", "data/BrS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+disease.paralogous_var_align = Paralogous_var_align("data/BrS/rare_disease_cohort_variants.out_paraloc_paralogs2.para_con", "data/BrS/rare_disease_cohort_variants.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 #finding only protein positions that are not transmembrane domains identified by pfam
 Protein_pos_select = disease.paralogous_var_align$Total_paralog_annotations[!is.na(disease.paralogous_var_align$Total_paralog_annotations$Protein_position.x) &
                                                                               (disease.paralogous_var_align$Total_paralog_annotations$Protein_position.x < 132 |
@@ -2928,7 +2927,7 @@ SCN5A_control_rare_variant_cases = sum(as.numeric(control_data_ref[control_data_
                                                                         control_data_ref$Protein_position > 1771)
                                                                      , "Allele.Count"]))
 #individual cases for variants predicted pathogenic by PA
-control.paralogous_var_align = Paralogous_var_align("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_paralogs2.noQC", "data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
+control.paralogous_var_align = Paralogous_var_align("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_paralogs2.para_con", "data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized") 
 #finding only protein positions that are not transmembrane domains identified by pfam
 Protein_pos_select = control.paralogous_var_align$Total_paralog_annotations[!is.na(control.paralogous_var_align$Total_paralog_annotations$Protein_position.x) &
                                                                               (control.paralogous_var_align$Total_paralog_annotations$Protein_position.x < 132 |
