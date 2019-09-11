@@ -5506,7 +5506,6 @@ only 2 predicted patho variants are in clinvar P/LP
 only 2 predicted patho variants are in clinvar B/LB
 12 all together, meaning 8 VUS
 
-
 ## GO protein classes of clinvar P/LP variants with PA noQC
 
 Using GO Panther enrichment analysis (http://pantherdb.org/) to identify common protein classes among the genes that had paralogue annotations.
