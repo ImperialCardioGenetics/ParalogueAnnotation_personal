@@ -5501,10 +5501,11 @@ only 3 predicted patho variants are in clinvar B/LB
 27 all together, meaning 21 VUS
 
 with para_con
-29123 are predicted to be pathogenic
+29123 are predicted to be pathogenic - 1 in 4 people have a ptho pred variant (29123/125748)
 only 2 predicted patho variants are in clinvar P/LP
 only 2 predicted patho variants are in clinvar B/LB
 12 all together, meaning 8 VUS
+
 
 ## GO protein classes of clinvar P/LP variants with PA noQC
 
