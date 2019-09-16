@@ -3295,9 +3295,9 @@ if (!file.exists("data/NDD+E/NDD.vcf")){
 
 NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),] #remove de novo variants
 
-NDD = NDD[NDD$Gene_SYMBOL == "CDKL5" | #only these 2 for now to avoid channelopathy
-            NDD$Gene_SYMBOL == "STXBP1",]
+# NDD = NDD[NDD$Gene_SYMBOL == "SCN1A" | NDD$Gene_SYMBOL == "SCN2A",] #only these 2 for now to avoid channelopathy; CDKL5 and STXBP1 have no paralogue annotations
 
+NDD = NDD[NDD$Gene_SYMBOL == "SCN8A",]
 
 ###Disease cases - NDD
 Total_cases = 6994
