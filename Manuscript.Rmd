@@ -2374,6 +2374,10 @@ SCN5A_EF_data$gene = "SCN5A-BrS"
 total_EF_data = rbind(total_EF_data, SCN5A_EF_data)
 total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A-BrS","SCN5A-LQTS","KCNH2","KCNQ1"))
 
+if (!file.exists("data/total_EF_data.RData")){
+  save(total_EF_data, file = "data/total_EF_data.RData")
+}
+
 gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
                                colour = type
                                #shape = type
@@ -3297,7 +3301,7 @@ NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),] #remove de novo variants
 
 # NDD = NDD[NDD$Gene_SYMBOL == "SCN1A" | NDD$Gene_SYMBOL == "SCN2A",] #only these 2 for now to avoid channelopathy; CDKL5 and STXBP1 have no paralogue annotations
 
-NDD = NDD[NDD$Gene_SYMBOL == "SCN8A",]
+NDD = NDD[NDD$Gene_SYMBOL == "SCN1A",]
 
 ###Disease cases - NDD
 Total_cases = 6994
@@ -3332,6 +3336,8 @@ for (i in 10:34){
   rare_gnomad = rbind(rare_gnomad, rare_gnomad_tmp)
 }
 rm(rare_gnomad_tmp)
+
+rare_gnomad = rare_gnomad[rare_gnomad$POS >= 166845671 & rare_gnomad$POS <= 166984524,]
 
 Total_controls = as.numeric(mean(rare_gnomad$AN))/2 #116658
 
@@ -3408,6 +3414,8 @@ pa_EF = calc_EF(
 
 
 ```
+
+OR plot of KCNQ1-LQTS, KCNH2-LQTS, SCN5A-LQTS, SCN5A-BrS and 
 
 
 ## Comparison to other tools
