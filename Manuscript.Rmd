@@ -3301,7 +3301,7 @@ NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),] #remove de novo variants
 
 # NDD = NDD[NDD$Gene_SYMBOL == "SCN1A" | NDD$Gene_SYMBOL == "SCN2A",] #only these 2 for now to avoid channelopathy; CDKL5 and STXBP1 have no paralogue annotations
 
-NDD = NDD[NDD$Gene_SYMBOL == "SCN1A",]
+# NDD = NDD[NDD$Gene_SYMBOL == "SCN1A",]
 
 ###Disease cases - NDD
 Total_cases = 6994
@@ -3337,7 +3337,7 @@ for (i in 10:34){
 }
 rm(rare_gnomad_tmp)
 
-rare_gnomad = rare_gnomad[rare_gnomad$POS >= 166845671 & rare_gnomad$POS <= 166984524,]
+# rare_gnomad = rare_gnomad[rare_gnomad$POS >= 166845671 & rare_gnomad$POS <= 166984524,]
 
 Total_controls = as.numeric(mean(rare_gnomad$AN))/2 #116658
 
@@ -3415,7 +3415,63 @@ pa_EF = calc_EF(
 
 ```
 
-OR plot of KCNQ1-LQTS, KCNH2-LQTS, SCN5A-LQTS, SCN5A-BrS and 
+OR plot of KCNQ1-LQTS, KCNH2-LQTS, SCN5A-LQTS, SCN5A-BrS and SCN1A-NDD, SCN2A-NDD
+```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t",stringsAsFactors = 0)
+names(discovEHR)[1] = "CHROM"
+# discovEHR$REF = as.character(discovEHR$REF)
+# discovEHR$ALT = as.character(discovEHR$ALT)
+NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T, stringsAsFactors = 0)
+NDD = NDD[grepl("missense_variant", NDD$Consequence),]
+NDD$CHROM = sapply(strsplit(NDD$Location,":"),"[",1)
+NDD$POS = sapply(strsplit(NDD$Location,":"),"[",2)
+
+NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"[",1)
+
+NDD$POS = as.integer(NDD$POS)
+NDD$Variant_pos = paste(NDD$CHROM, NDD$POS, sep = " ")
+NDD$Case.count = 1
+NDD = NDD[NDD$Gene_SYMBOL == "SCN1A",]
+
+NDD$REF = sapply(strsplit(NDD$Codons,"/"),"[",1)
+NDD$REF = str_extract_all(NDD$REF, "[A-Z]+")
+NDD$REF = unlist(NDD$REF)
+NDD$REF = ifelse(NDD$REF == "A", "T",
+                 ifelse(NDD$REF == "T", "A",
+                        ifelse(NDD$REF == "G", "C", "G")
+                        )
+                 )
+NDD$ALT = NDD$Allele
+
+
+
+
+load("data/total_EF_data.RData")
+
+gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
+                               colour = type
+                               #shape = type
+                               )) + 
+  geom_point(size=9, position = position_dodge(width = .5)) + 
+  scale_color_manual(values=c("rare variants" = alpha("blue",0.4), "rare and\nparalogue annotated" = alpha("red",0.9))) +
+  # theme_bw() + 
+  theme(#panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(), 
+        legend.position = c(0.91,0.07),
+        legend.title = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text = element_text(size = 13),
+        axis.title.x = element_text(size = 14)
+        ) + 
+  ylim(0,275) +
+  ylab("Odds Ratios") +
+  coord_fixed(ratio = 25) +
+  coord_flip() +
+  geom_errorbar(aes(ymin=CI_lower, ymax=CI_upper),colour="black",linetype=1,size=.2,width=.5,position = position_dodge(width = .5)) +
+  guides(color = guide_legend(reverse = TRUE))
+ggsave("images/KCNQ1_KCNH2_SCN5A_LQTS_SCN5A_BrS_ORs.png", width = 10, height = 6)  
+```
 
 
 ## Comparison to other tools
