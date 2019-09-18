@@ -3431,17 +3431,42 @@ NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"["
 NDD$POS = as.integer(NDD$POS)
 NDD$Variant_pos = paste(NDD$CHROM, NDD$POS, sep = " ")
 NDD$Case.count = 1
-NDD = NDD[NDD$Gene_SYMBOL == "SCN1A",]
+NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),]
+NDD$ALT = NDD$Allele
 
-NDD$REF = sapply(strsplit(NDD$Codons,"/"),"[",1)
-NDD$REF = str_extract_all(NDD$REF, "[A-Z]+")
-NDD$REF = unlist(NDD$REF)
-NDD$REF = ifelse(NDD$REF == "A", "T",
-                 ifelse(NDD$REF == "T", "A",
-                        ifelse(NDD$REF == "G", "C", "G")
+#SCN2A
+SCN2A_NDD = NDD[NDD$Gene_SYMBOL == "SCN2A",]
+
+SCN2A_NDD$REF = sapply(strsplit(SCN2A_NDD$Codons,"/"),"[",1)
+SCN2A_NDD$REF = str_extract_all(SCN2A_NDD$REF, "[A-Z]+")
+SCN2A_NDD$REF = unlist(SCN2A_NDD$REF)
+
+SCN2A_NDD$ALT = SCN2A_NDD$Allele
+
+##rare 
+SCN2A_NDD_notin_discovEHR = anti_join(SCN2A_NDD,discovEHR, by = c("CHROM","POS","REF","ALT"))
+# SCN2A_NDD_notin_discovEHR = SCN2A_NDD_notin_discovEHR[,c("Variant_pos","CHROM","POS","REF","ALT")]
+tmp_df = ddply(SCN2A_NDD_notin_discovEHR,.(Variant_pos,REF,ALT),nrow)
+SCN2A_NDD_notin_discovEHR = unique(SCN2A_NDD_notin_discovEHR)
+SCN2A_NDD_notin_discovEHR = left_join(SCN2A_NDD_notin_discovEHR,tmp_df)
+names(SCN2A_NDD_notin_discovEHR)[31] = "Case.count"
+SCN2A_rare_cases_affected = sum(SCN2A_NDD_notin_discovEHR$Case.count) #6194
+
+
+#SCN1A - BACKWARDS GENE!
+SCN1A_NDD = NDD[NDD$Gene_SYMBOL == "SCN1A",]
+
+SCN1A_NDD$REF = sapply(strsplit(SCN1A_NDD$Codons,"/"),"[",1)
+SCN1A_NDD$REF = str_extract_all(SCN1A_NDD$REF, "[A-Z]+")
+SCN1A_NDD$REF = unlist(SCN1A_NDD$REF)
+SCN1A_NDD$REF = ifelse(SCN1A_NDD$REF == "A", "T",
+                 ifelse(SCN1A_NDD$REF == "T", "A",
+                        ifelse(SCN1A_NDD$REF == "G", "C", "G")
                         )
                  )
-NDD$ALT = NDD$Allele
+SCN1A_NDD$ALT = SCN1A_NDD$Allele
+
+
 
 
 
