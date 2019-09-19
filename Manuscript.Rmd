@@ -3425,17 +3425,13 @@ NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T, stringsAsFactors 
 NDD = NDD[grepl("missense_variant", NDD$Consequence),]
 NDD$CHROM = sapply(strsplit(NDD$Location,":"),"[",1)
 NDD$POS = sapply(strsplit(NDD$Location,":"),"[",2)
-
 NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"[",1)
-
 NDD$POS = as.integer(NDD$POS)
 NDD$Variant_pos = paste(NDD$CHROM, NDD$POS, sep = " ")
 NDD$Case.count = 1
 NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),]
 NDD$ALT = NDD$Allele
-
 Total_cases = 6994
-
 ###pre setup Control cases - gnomad
 rare_gnomad = data.frame()
 for (i in 0:9){
