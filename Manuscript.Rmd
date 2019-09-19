@@ -3488,6 +3488,49 @@ SCN2A_pa_EF = calc_EF(
   SCN2A_Total_controls-SCN2A_rare_pa_controls_affected
   )
 
+####SCN8A
+SCN8A_NDD = NDD[NDD$Gene_SYMBOL == "SCN8A",]
+SCN8A_NDD$REF = sapply(strsplit(SCN8A_NDD$Codons,"/"),"[",1)
+SCN8A_NDD$REF = str_extract_all(SCN8A_NDD$REF, "[A-Z]+")
+SCN8A_NDD$REF = unlist(SCN8A_NDD$REF)
+SCN8A_NDD$ALT = SCN8A_NDD$Allele
+##rare 
+SCN8A_NDD_notin_discovEHR = anti_join(SCN8A_NDD,discovEHR, by = c("CHROM","POS","REF","ALT"))
+tmp_df = ddply(SCN8A_NDD_notin_discovEHR,.(Variant_pos,REF,ALT),nrow)
+names(tmp_df)[4] = "Case.count"
+SCN8A_NDD_notin_discovEHR = unique(SCN8A_NDD_notin_discovEHR)
+SCN8A_NDD_notin_discovEHR = SCN8A_NDD_notin_discovEHR[,!(names(SCN8A_NDD_notin_discovEHR) == "Case.count")]
+SCN8A_NDD_notin_discovEHR = left_join(SCN8A_NDD_notin_discovEHR,tmp_df)
+SCN8A_rare_cases_affected = sum(SCN8A_NDD_notin_discovEHR$Case.count) 
+##rare and paralogue annotated
+p.annotated_NDD = Paralogous_var_align("data/NDD+E/NDD.out_paraloc_paralogs2.para_con","data/NDD+E/NDD.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","ALT")
+SCN8A_annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,SCN8A_NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
+SCN8A_rare_pa_cases_affected = sum(SCN8A_annotated_NDD$Case.count) 
+###Control cases for SCN8A- gnomad
+SCN8A_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 12 & rare_gnomad$POS >= 51984051 & rare_gnomad$POS <= 52206649,]
+SCN8A_Total_controls = as.numeric(mean(SCN8A_rare_gnomad$AN))/2 
+##rare
+SCN8A_rare_gnomad$individuals = SCN8A_rare_gnomad$AC-SCN8A_rare_gnomad$nhomalt
+SCN8A_rare_controls_affected = sum(SCN8A_rare_gnomad$individuals) 
+##rare and paralogue annotated
+SCN8A_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 12 & var_pred_patho$POS >= 51984051 & var_pred_patho$POS <= 52206649,]
+SCN8A_var_pred_patho$individuals = SCN8A_var_pred_patho$AC-SCN8A_var_pred_patho$nhomalt
+SCN8A_rare_pa_controls_affected = sum(SCN8A_var_pred_patho$individuals)
+###SCN8A EFs
+SCN8A_NDD_EF = calc_EF(
+  SCN8A_rare_cases_affected,
+  SCN8A_rare_controls_affected,
+  Total_cases-SCN8A_rare_cases_affected,
+  SCN8A_Total_controls-SCN8A_rare_controls_affected
+  )
+SCN8A_pa_EF = calc_EF(
+  SCN8A_rare_pa_cases_affected,
+  SCN8A_rare_pa_controls_affected,
+  Total_cases-SCN8A_rare_pa_cases_affected,
+  SCN8A_Total_controls-SCN8A_rare_pa_controls_affected
+  )
+
 ####SCN1A - BACKWARDS GENE but submitted vcf with backwards ref/alt to vep - WILL NEED TO REMAKE SCN1A VCF TO RERUN VEP AGAIN...
 NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T, stringsAsFactors = 0)
 NDD = NDD[grepl("missense_variant", NDD$Consequence),]
@@ -3572,6 +3615,79 @@ SCN1A_pa_EF = calc_EF(
   SCN1A_Total_controls-SCN1A_rare_pa_controls_affected
   )
 
+####KCNQ2 - BACKWARDS GENE but submitted vcf with backwards ref/alt to vep - WILL NEED TO REMAKE KCNQ2 VCF TO RERUN VEP AGAIN...
+NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T, stringsAsFactors = 0)
+NDD = NDD[grepl("missense_variant", NDD$Consequence),]
+NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),] #remove de novo variants
+KCNQ2_NDD = NDD[NDD$Gene_SYMBOL == "KCNQ2",]
+KCNQ2_NDD$CHROM = sapply(strsplit(KCNQ2_NDD$Location,":"),"[",1)
+KCNQ2_NDD$POS = sapply(strsplit(KCNQ2_NDD$Location,":"),"[",2)
+KCNQ2_NDD$POS[grep("-",KCNQ2_NDD$POS)] = sapply(strsplit(KCNQ2_NDD$POS[grep("-",KCNQ2_NDD$POS)],"-"),"[",1)
+KCNQ2_NDD$POS = as.integer(KCNQ2_NDD$POS)
+KCNQ2_NDD$Variant_pos = paste(KCNQ2_NDD$CHROM, KCNQ2_NDD$POS, sep = " ")
+KCNQ2_NDD$Case.count = 1
+#reverse complement ref/alt for backwards gene
+KCNQ2_NDD$REF = sapply(strsplit(KCNQ2_NDD$Codons,"/"),"[",1)
+KCNQ2_NDD$REF = str_extract_all(KCNQ2_NDD$REF, "[A-Z]+")
+KCNQ2_NDD$REF = unlist(KCNQ2_NDD$REF)
+KCNQ2_NDD$REF = ifelse(KCNQ2_NDD$REF == "A", "T",
+                 ifelse(KCNQ2_NDD$REF == "T", "A",
+                        ifelse(KCNQ2_NDD$REF == "G", "C", "G")
+                        )
+                 )
+KCNQ2_NDD$ALT = sapply(strsplit(KCNQ2_NDD$Codons,"/"),"[",2)
+KCNQ2_NDD$ALT = str_extract_all(KCNQ2_NDD$ALT, "[A-Z]+")
+KCNQ2_NDD$ALT = unlist(KCNQ2_NDD$ALT)
+KCNQ2_NDD$ALT = ifelse(KCNQ2_NDD$ALT == "A", "T",
+                 ifelse(KCNQ2_NDD$ALT == "T", "A",
+                        ifelse(KCNQ2_NDD$ALT == "G", "C", "G")
+                        )
+                 )
+KCNQ2_NDD$ID = "."
+KCNQ2_NDD$QUAL = "."
+KCNQ2_NDD$FILTER = "."
+KCNQ2_NDD$INFO = "."
+if (!file.exists("data/NDD+E/KCNQ2_NDD.vcf")){
+  KCNQ2_NDD_vcf = unique(KCNQ2_NDD[,c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")])
+  names(KCNQ2_NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
+  write.table(KCNQ2_NDD_vcf, file = "data/NDD+E/KCNQ2_NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
+}
+##rare - discovEHR variants are forward stand contexted
+KCNQ2_NDD_notin_discovEHR = anti_join(KCNQ2_NDD,discovEHR, by = c("CHROM","POS","REF","ALT"))
+tmp_df = ddply(KCNQ2_NDD_notin_discovEHR,.(Variant_pos,REF,ALT),nrow)
+names(tmp_df)[4] = "Case.count"
+KCNQ2_NDD_notin_discovEHR = unique(KCNQ2_NDD_notin_discovEHR)
+KCNQ2_NDD_notin_discovEHR = KCNQ2_NDD_notin_discovEHR[,!(names(KCNQ2_NDD_notin_discovEHR) == "Case.count")]
+KCNQ2_NDD_notin_discovEHR = left_join(KCNQ2_NDD_notin_discovEHR,tmp_df)
+KCNQ2_rare_cases_affected = sum(KCNQ2_NDD_notin_discovEHR$Case.count) 
+##rare and paralogue annotated - vep variants are backward strand contexted
+p.annotated_NDD = Paralogous_var_align("data/NDD+E/KCNQ2_NDD.out_paraloc_paralogs2.para_con","data/NDD+E/KCNQ2_NDD.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","ALT")
+KCNQ2_annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,KCNQ2_NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
+KCNQ2_rare_pa_cases_affected = sum(KCNQ2_annotated_NDD$Case.count) 
+###Control cases for KCNQ2- gnomad
+KCNQ2_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 2 & rare_gnomad$POS >= 166845671 & rare_gnomad$POS <= 166984524,]
+KCNQ2_Total_controls = as.numeric(mean(KCNQ2_rare_gnomad$AN))/2 
+##rare
+KCNQ2_rare_gnomad$individuals = KCNQ2_rare_gnomad$AC-KCNQ2_rare_gnomad$nhomalt
+KCNQ2_rare_controls_affected = sum(KCNQ2_rare_gnomad$individuals) 
+##rare and paralogue annotated
+KCNQ2_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 2 & var_pred_patho$POS >= 166845671 & var_pred_patho$POS <= 166984524,]
+KCNQ2_var_pred_patho$individuals = KCNQ2_var_pred_patho$AC-KCNQ2_var_pred_patho$nhomalt
+KCNQ2_rare_pa_controls_affected = sum(KCNQ2_var_pred_patho$individuals)
+###KCNQ2 EFs
+KCNQ2_NDD_EF = calc_EF(
+  KCNQ2_rare_cases_affected,
+  KCNQ2_rare_controls_affected,
+  Total_cases-KCNQ2_rare_cases_affected,
+  KCNQ2_Total_controls-KCNQ2_rare_controls_affected
+  )
+KCNQ2_pa_EF = calc_EF(
+  KCNQ2_rare_pa_cases_affected,
+  KCNQ2_rare_pa_controls_affected,
+  Total_cases-KCNQ2_rare_pa_cases_affected,
+  KCNQ2_Total_controls-KCNQ2_rare_pa_controls_affected
+  )
 
 load("data/total_EF_data.RData")
 
