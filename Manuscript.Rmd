@@ -3434,6 +3434,20 @@ NDD$Case.count = 1
 NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),]
 NDD$ALT = NDD$Allele
 
+###pre setup Control cases - gnomad
+rare_gnomad = data.frame()
+for (i in 0:9){
+  rare_gnomad_tmp = read.csv(file = paste0("data/NDD+E/gnomad.exomes.r2.1.1.sites.vcf_split0",i,"_missense_only_notin_discovEHR.csv"), header = T, sep = ",", stringsAsFactors = 0)
+  rare_gnomad = rbind(rare_gnomad, rare_gnomad_tmp)
+}
+for (i in 10:34){
+  rare_gnomad_tmp = read.csv(file = paste0("data/NDD+E/gnomad.exomes.r2.1.1.sites.vcf_split",i,"_missense_only_notin_discovEHR.csv"), header = T, sep = ",", stringsAsFactors = 0)
+  rare_gnomad = rbind(rare_gnomad, rare_gnomad_tmp)
+}
+rm(rare_gnomad_tmp)
+
+
+
 #SCN2A
 SCN2A_NDD = NDD[NDD$Gene_SYMBOL == "SCN2A",]
 
@@ -3445,12 +3459,25 @@ SCN2A_NDD$ALT = SCN2A_NDD$Allele
 
 ##rare 
 SCN2A_NDD_notin_discovEHR = anti_join(SCN2A_NDD,discovEHR, by = c("CHROM","POS","REF","ALT"))
-# SCN2A_NDD_notin_discovEHR = SCN2A_NDD_notin_discovEHR[,c("Variant_pos","CHROM","POS","REF","ALT")]
 tmp_df = ddply(SCN2A_NDD_notin_discovEHR,.(Variant_pos,REF,ALT),nrow)
+names(tmp_df)[4] = "Case.count"
 SCN2A_NDD_notin_discovEHR = unique(SCN2A_NDD_notin_discovEHR)
+SCN2A_NDD_notin_discovEHR = SCN2A_NDD_notin_discovEHR[,!(names(SCN2A_NDD_notin_discovEHR) == "Case.count")]
 SCN2A_NDD_notin_discovEHR = left_join(SCN2A_NDD_notin_discovEHR,tmp_df)
-names(SCN2A_NDD_notin_discovEHR)[31] = "Case.count"
-SCN2A_rare_cases_affected = sum(SCN2A_NDD_notin_discovEHR$Case.count) #6194
+SCN2A_rare_cases_affected = sum(SCN2A_NDD_notin_discovEHR$Case.count) 
+
+##rare and paralogue annotated
+p.annotated_NDD = Paralogous_var_align("data/NDD+E/NDD.out_paraloc_paralogs2.para_con","data/NDD+E/NDD.out_paraloc_tableized", "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","ALT")
+SCN2A_annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,SCN2A_NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
+SCN2A_rare_pa_cases_affected = sum(SCN2A_annotated_NDD$Case.count) 
+
+###Control cases - gnomad
+
+rare_gnomad = rare_gnomad[rare_gnomad$POS >= 166845671 & rare_gnomad$POS <= 166984524,]
+
+Total_controls = as.numeric(mean(rare_gnomad$AN))/2 #116658
+
 
 
 #SCN1A - BACKWARDS GENE!
