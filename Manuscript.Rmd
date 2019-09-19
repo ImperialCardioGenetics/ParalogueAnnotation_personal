@@ -2203,7 +2203,7 @@ gg = ggplot(KCNQ1_EF_data, aes(y=type, x=OR,
 ggsave("images/KCNQ1_ORs.png", width = 10, height = 6)
 
 ### KCNQ1 KCNH2 SCN5A LQTS OR plot
-KCNQ1_EF_data$gene = "KCNQ1"
+KCNQ1_EF_data$gene = "KCNQ1-LQTS"
 
 KCNH2_EF_data = data.frame(
   OR = c(KCNH2_rare_EF$OR, KCNH2_pa_EF$OR),
@@ -2212,7 +2212,7 @@ KCNH2_EF_data = data.frame(
   type = c("rare variants","rare and\nparalogue annotated")
 )
 KCNH2_EF_data$type = factor(KCNH2_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
-KCNH2_EF_data$gene = "KCNH2"
+KCNH2_EF_data$gene = "KCNH2-LQTS"
 
 SCN5A_EF_data = data.frame(
   OR = c(SCN5A_rare_EF$OR, SCN5A_pa_EF$OR),
@@ -2225,7 +2225,7 @@ SCN5A_EF_data$gene = "SCN5A-LQTS"
 
 total_EF_data = rbind(KCNQ1_EF_data, KCNH2_EF_data, SCN5A_EF_data)
 total_EF_data$type = factor(total_EF_data$type, levels = c("rare and\nparalogue annotated","rare variants"))
-total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A-LQTS","KCNH2","KCNQ1"))
+total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A-LQTS","KCNH2-LQTS","KCNQ1-LQTS"))
 
 gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
                                colour = type
@@ -2372,7 +2372,7 @@ SCN5A_EF_data$type = factor(SCN5A_EF_data$type, levels = c("rare variants","rare
 SCN5A_EF_data$gene = "SCN5A-BrS"
 
 total_EF_data = rbind(total_EF_data, SCN5A_EF_data)
-total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A-BrS","SCN5A-LQTS","KCNH2","KCNQ1"))
+total_EF_data$gene = factor(total_EF_data$gene, levels = c("SCN5A-BrS","SCN5A-LQTS","KCNH2-LQTS","KCNQ1-LQTS"))
 
 if (!file.exists("data/total_EF_data.RData")){
   save(total_EF_data, file = "data/total_EF_data.RData")
@@ -3487,6 +3487,14 @@ SCN2A_pa_EF = calc_EF(
   Total_cases-SCN2A_rare_pa_cases_affected,
   SCN2A_Total_controls-SCN2A_rare_pa_controls_affected
   )
+SCN2A_EF_data = data.frame(
+  OR = c(SCN2A_NDD_EF$OR, SCN2A_pa_EF$OR),
+  CI_lower = c(SCN2A_NDD_EF$OR_CI[1], SCN2A_pa_EF$OR_CI[1]),
+  CI_upper = c(SCN2A_NDD_EF$OR_CI[2], SCN2A_pa_EF$OR_CI[2]),
+  type = c("rare variants","rare and\nparalogue annotated")
+)
+SCN2A_EF_data$type = factor(SCN2A_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
+SCN2A_EF_data$gene = "SCN2A-NDD+E"
 
 ####SCN8A
 SCN8A_NDD = NDD[NDD$Gene_SYMBOL == "SCN8A",]
@@ -3530,6 +3538,14 @@ SCN8A_pa_EF = calc_EF(
   Total_cases-SCN8A_rare_pa_cases_affected,
   SCN8A_Total_controls-SCN8A_rare_pa_controls_affected
   )
+SCN8A_EF_data = data.frame(
+  OR = c(SCN8A_NDD_EF$OR, SCN8A_pa_EF$OR),
+  CI_lower = c(SCN8A_NDD_EF$OR_CI[1], SCN8A_pa_EF$OR_CI[1]),
+  CI_upper = c(SCN8A_NDD_EF$OR_CI[2], SCN8A_pa_EF$OR_CI[2]),
+  type = c("rare variants","rare and\nparalogue annotated")
+)
+SCN8A_EF_data$type = factor(SCN8A_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
+SCN8A_EF_data$gene = "SCN8A-NDD+E"
 
 ####SCN1A - BACKWARDS GENE but submitted vcf with backwards ref/alt to vep - WILL NEED TO REMAKE SCN1A VCF TO RERUN VEP AGAIN...
 NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T, stringsAsFactors = 0)
@@ -3614,6 +3630,14 @@ SCN1A_pa_EF = calc_EF(
   Total_cases-SCN1A_rare_pa_cases_affected,
   SCN1A_Total_controls-SCN1A_rare_pa_controls_affected
   )
+SCN1A_EF_data = data.frame(
+  OR = c(SCN1A_NDD_EF$OR, SCN1A_pa_EF$OR),
+  CI_lower = c(SCN1A_NDD_EF$OR_CI[1], SCN1A_pa_EF$OR_CI[1]),
+  CI_upper = c(SCN1A_NDD_EF$OR_CI[2], SCN1A_pa_EF$OR_CI[2]),
+  type = c("rare variants","rare and\nparalogue annotated")
+)
+SCN1A_EF_data$type = factor(SCN1A_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
+SCN1A_EF_data$gene = "SCN1A-NDD+E"
 
 ####KCNQ2 - BACKWARDS GENE but submitted vcf with backwards ref/alt to vep - WILL NEED TO REMAKE KCNQ2 VCF TO RERUN VEP AGAIN...
 NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T, stringsAsFactors = 0)
@@ -3666,13 +3690,13 @@ names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","
 KCNQ2_annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,KCNQ2_NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
 KCNQ2_rare_pa_cases_affected = sum(KCNQ2_annotated_NDD$Case.count) 
 ###Control cases for KCNQ2- gnomad
-KCNQ2_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 2 & rare_gnomad$POS >= 166845671 & rare_gnomad$POS <= 166984524,]
+KCNQ2_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 20 & rare_gnomad$POS >= 62037543 & rare_gnomad$POS <= 62103994,]
 KCNQ2_Total_controls = as.numeric(mean(KCNQ2_rare_gnomad$AN))/2 
 ##rare
 KCNQ2_rare_gnomad$individuals = KCNQ2_rare_gnomad$AC-KCNQ2_rare_gnomad$nhomalt
 KCNQ2_rare_controls_affected = sum(KCNQ2_rare_gnomad$individuals) 
 ##rare and paralogue annotated
-KCNQ2_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 2 & var_pred_patho$POS >= 166845671 & var_pred_patho$POS <= 166984524,]
+KCNQ2_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 20 & var_pred_patho$POS >= 62037543 & var_pred_patho$POS <= 62103994,]
 KCNQ2_var_pred_patho$individuals = KCNQ2_var_pred_patho$AC-KCNQ2_var_pred_patho$nhomalt
 KCNQ2_rare_pa_controls_affected = sum(KCNQ2_var_pred_patho$individuals)
 ###KCNQ2 EFs
@@ -3688,20 +3712,31 @@ KCNQ2_pa_EF = calc_EF(
   Total_cases-KCNQ2_rare_pa_cases_affected,
   KCNQ2_Total_controls-KCNQ2_rare_pa_controls_affected
   )
+KCNQ2_EF_data = data.frame(
+  OR = c(KCNQ2_NDD_EF$OR, KCNQ2_pa_EF$OR),
+  CI_lower = c(KCNQ2_NDD_EF$OR_CI[1], KCNQ2_pa_EF$OR_CI[1]),
+  CI_upper = c(KCNQ2_NDD_EF$OR_CI[2], KCNQ2_pa_EF$OR_CI[2]),
+  type = c("rare variants","rare and\nparalogue annotated")
+)
+KCNQ2_EF_data$type = factor(KCNQ2_EF_data$type, levels = c("rare variants","rare and\nparalogue annotated"))
+KCNQ2_EF_data$gene = "KCNQ2-NDD+E"
 
+####OR PLOTS
 load("data/total_EF_data.RData")
+total_EF_data = rbind(total_EF_data, SCN2A_EF_data, SCN8A_EF_data, SCN1A_EF_data, KCNQ2_EF_data)
+total_EF_data$gene = factor(total_EF_data$gene, levels = c("KCNQ2-NDD+E","SCN1A-NDD+E","SCN8A-NDD+E","SCN2A-NDD+E","SCN5A-BrS","SCN5A-LQTS","KCNH2-LQTS","KCNQ1-LQTS"))
 
 gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
                                colour = type
                                #shape = type
                                )) + 
-  geom_point(size=9, position = position_dodge(width = .5)) + 
+  geom_point(size=5, position = position_dodge(width = .5)) + 
   scale_color_manual(values=c("rare variants" = alpha("blue",0.4), "rare and\nparalogue annotated" = alpha("red",0.9))) +
   # theme_bw() + 
   theme(#panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.border = element_blank(), 
-        legend.position = c(0.91,0.07),
+        legend.position = c(0.92,0.05),
         legend.title = element_blank(),
         axis.title.y = element_blank(),
         axis.text = element_text(size = 13),
@@ -3713,7 +3748,7 @@ gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
   coord_flip() +
   geom_errorbar(aes(ymin=CI_lower, ymax=CI_upper),colour="black",linetype=1,size=.2,width=.5,position = position_dodge(width = .5)) +
   guides(color = guide_legend(reverse = TRUE))
-ggsave("images/KCNQ1_KCNH2_SCN5A_LQTS_SCN5A_BrS_ORs.png", width = 10, height = 6)  
+ggsave("images/KCNQ1_KCNH2_SCN5A_LQTS_SCN5A_BrS_and_NDDgenes_ORs.png", width = 10, height = 6)  
 ```
 
 
