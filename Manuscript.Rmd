@@ -3414,7 +3414,7 @@ pa_EF = calc_EF(
 
 
 ```
-
+Dont run code above; was only for testing; code below is what was used for work in paper.
 OR plot of KCNQ1-LQTS, KCNH2-LQTS, SCN5A-LQTS, SCN5A-BrS and SCN1A-NDD, SCN2A-NDD
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t",stringsAsFactors = 0)
@@ -3498,15 +3498,42 @@ SCN2A_pa_EF = calc_EF(
 ####SCN1A - BACKWARDS GENE but submitted vcf with backwards ref/alt to vep - WILL NEED TO REMAKE SCN1A VCF TO RERUN VEP AGAIN...
 NDD = read.csv("data/NDD+E/media-2.txt", sep="\t", header = T, stringsAsFactors = 0)
 NDD = NDD[grepl("missense_variant", NDD$Consequence),]
-NDD$CHROM = sapply(strsplit(NDD$Location,":"),"[",1)
-NDD$POS = sapply(strsplit(NDD$Location,":"),"[",2)
+NDD = NDD[is.na(NDD$DNV_pub) & is.na(NDD$dnv),] #remove de novo variants
+SCN1A_NDD = NDD[NDD$Gene_SYMBOL == "SCN1A",]
+SCN1A_NDD$CHROM = sapply(strsplit(SCN1A_NDD$Location,":"),"[",1)
+SCN1A_NDD$POS = sapply(strsplit(SCN1A_NDD$Location,":"),"[",2)
+SCN1A_NDD$POS[grep("-",SCN1A_NDD$POS)] = sapply(strsplit(SCN1A_NDD$POS[grep("-",SCN1A_NDD$POS)],"-"),"[",1)
+SCN1A_NDD$POS = as.integer(SCN1A_NDD$POS)
+SCN1A_NDD$Variant_pos = paste(SCN1A_NDD$CHROM, SCN1A_NDD$POS, sep = " ")
+SCN1A_NDD$Case.count = 1
 
-NDD$POS[grep("-",NDD$POS)] = sapply(strsplit(NDD$POS[grep("-",NDD$POS)],"-"),"[",1)
+#reverse complement ref/alt for backwards gene
+SCN1A_NDD$REF = sapply(strsplit(SCN1A_NDD$Codons,"/"),"[",1)
+SCN1A_NDD$REF = str_extract_all(SCN1A_NDD$REF, "[A-Z]+")
+SCN1A_NDD$REF = unlist(SCN1A_NDD$REF)
+SCN1A_NDD$REF = ifelse(SCN1A_NDD$REF == "A", "T",
+                 ifelse(SCN1A_NDD$REF == "T", "A",
+                        ifelse(SCN1A_NDD$REF == "G", "C", "G")
+                        )
+                 )
+SCN1A_NDD$ALT = sapply(strsplit(SCN1A_NDD$Codons,"/"),"[",2)
+SCN1A_NDD$ALT = str_extract_all(SCN1A_NDD$ALT, "[A-Z]+")
+SCN1A_NDD$ALT = unlist(SCN1A_NDD$ALT)
+SCN1A_NDD$ALT = ifelse(SCN1A_NDD$ALT == "A", "T",
+                 ifelse(SCN1A_NDD$ALT == "T", "A",
+                        ifelse(SCN1A_NDD$ALT == "G", "C", "G")
+                        )
+                 )
+SCN1A_NDD$ID = "."
+SCN1A_NDD$QUAL = "."
+SCN1A_NDD$FILTER = "."
+SCN1A_NDD$INFO = "."
+if (!file.exists("data/NDD+E/SCN1A_NDD.vcf")){
+  SCN1A_NDD_vcf = unique(SCN1A_NDD[,c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")])
+  names(SCN1A_NDD_vcf) = c("#CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO")
+  write.table(SCN1A_NDD_vcf, file = "data/NDD+E/SCN1A_NDD.vcf", na="", row.names = FALSE, col.names = TRUE, sep = "\t", quote=FALSE) #RUN PA ON THIS FILE
+}
 
-NDD$POS = as.integer(NDD$POS)
-NDD$Variant_pos = paste(NDD$CHROM, NDD$POS, sep = " ")
-NDD$Case.count = 1
-#MAKE SCN1A VCF AND RUN PA ON THAT FIRST
 
 
 
