@@ -982,8 +982,18 @@ done = c(1,1)
 
 For all missense synthetic exome Paralogue_annotation_masterscript_afterrun.py run on RBH:
 ```{r eval = FALSE}
+#Errors appears to stem from VEP output; will need to rerun these files from scratch
 RBH_failed_runs_chrom1 = data.frame(
-  splits = c("162")
+  splits = c("162") 
+)
+
+RBH_failed_runs_chrom2 = data.frame(
+  splits = c(
+    "165",
+    "175-177",
+    "180",
+    "183"
+    ) 
 )
 ```
 
