@@ -984,13 +984,13 @@ For all missense synthetic exome Paralogue_annotation_masterscript_afterrun.py r
 ```{r eval = FALSE}
 #Errors appears to stem from VEP output; will need to rerun these files from scratch
 
-#ones below here have corrected runs on HPC as well
+###ones below here have corrected runs on HPC as well###
 RBH_failed_runs_chrom1 = data.frame(
   splits = c("162"),
   corrected = c(1)
 )
 
-#ones below here only have corrected runs on RBH. HPC runs are not corrected!
+###ones below here only have corrected runs on RBH. HPC runs are not corrected!###
 RBH_failed_runs_chrom2 = data.frame(
   splits = c(
     "165",
