@@ -69,7 +69,7 @@ def VEP_Plugin_afterrun(input_file, flavour=2, genome_build="GRCh38", VEPversion
 					# else:
 					# 	ID = variant_id
 					line = line[1].split(",")
-					print(line, "\n")
+					# print(line, "\n")
 					for x in line:
 						y = x.split("|")
 						gene = y[3]
