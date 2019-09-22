@@ -14,6 +14,7 @@ def Tableize_wrap(input_file):
 			if line.startswith("CHROM"):
 				out_file.write(line.rstrip()+"\tPara_Z_score\n")
 			else:
+				print(line)
 				line = line.split()
 				AAs = line[8].split(",")
 				Codons = line[9].split(",")
