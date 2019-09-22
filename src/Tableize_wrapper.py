@@ -29,6 +29,7 @@ def Tableize_wrap(input_file):
 						if Gene in os.listdir("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes"):
 							print("B")
 							with open("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes/"+Gene) as para_z_file:
+								print("B.1")
 								for i, para_z_line in enumerate(para_z_file):
 									if i == int(line[7])-1:
 										print("C")
