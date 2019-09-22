@@ -14,7 +14,7 @@ def Tableize_wrap(input_file):
 			if line.startswith("CHROM"):
 				out_file.write(line.rstrip()+"\tPara_Z_score\n")
 			else:
-				#print(line)
+				print(line)
 				line = line.split()
 				AAs = line[8].split(",")
 				Codons = line[9].split(",")
@@ -25,7 +25,7 @@ def Tableize_wrap(input_file):
 				for column in range(0,len(AAs)):
 					if (line[7] != "NA" and 
 						not "-" in line[7]):
-						print("A")
+						print("A", Gene)
 						if Gene in os.listdir("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes"):
 							print("B")
 							with open("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes/"+Gene) as para_z_file:
