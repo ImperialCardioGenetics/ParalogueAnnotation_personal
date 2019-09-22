@@ -994,11 +994,13 @@ RBH_failed_runs_chrom1 = data.frame(
 RBH_failed_runs_chrom2 = data.frame(
   splits = c(
     "165",
-    "175-177",
+    "175",
+    "176",
+    "177",
     "180",
     "183"
     ),
-  corrected = c(1,0,0,0)
+  corrected = c(1,1,0,0,0,0)
 )
 ```
 
