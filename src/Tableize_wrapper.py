@@ -31,7 +31,7 @@ def Tableize_wrap(input_file):
 							with open("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes/"+Gene) as para_z_file:
 								print("B.1")
 								for i, para_z_line in enumerate(para_z_file):
-									# print(i, int(line[7])-1)
+									print(i, int(line[7])-1)
 									if i == int(line[7])-1:
 										print("C")
 										if AAs[column].split("/")[0] == para_z_line.split()[1]:
