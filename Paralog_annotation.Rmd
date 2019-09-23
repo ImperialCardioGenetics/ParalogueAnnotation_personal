@@ -1000,7 +1000,7 @@ RBH_failed_runs_chrom2 = data.frame(
     "180",
     "183"
     ),
-  corrected = c(1,1,0,0,0,0)
+  corrected = c(1,1,1,1,1,1)
 )
 ```
 
