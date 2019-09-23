@@ -1002,6 +1002,63 @@ RBH_failed_runs_chrom2 = data.frame(
     ),
   corrected = c(1,1,1,1,1,1)
 )
+
+#chrom3 is fine
+
+#chrom4 is fine 
+
+#chrom5 is fine
+
+#chrom6 is fine
+
+RBH_failed_runs_chrom7 = data.frame(
+  splits = c("93"),
+  corrected = c(1)
+)
+
+RBH_failed_runs_chrom8 = data.frame(
+  splits = c("7"),
+  corrected = c(0)
+)
+
+#chrom9 is fine
+
+#chrom10 is fine
+
+#chrom11 is fine
+
+#chrom12 is fine
+
+#chrom13 is fine
+
+#chrom14 is fine
+
+#chrom15 is fine
+
+#chrom16 is fine
+
+#chrom17 is fine
+
+#chrom18 is fine
+
+RBH_failed_runs_chrom19 = data.frame(
+  splits = c("4"),
+  corrected = c()
+)
+
+#chrom20 is fine
+
+#chrom21 is fine
+
+#chrom22 is fine
+
+#chromX is fine
+
+RBH_failed_runs_chromY = data.frame(
+  splits = c("11"),
+  corrected = c(1)
+)
+
 ```
 
 ## Benchmarking performance of the plugin
