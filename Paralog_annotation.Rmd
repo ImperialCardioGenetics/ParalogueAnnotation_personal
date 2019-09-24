@@ -1018,7 +1018,7 @@ RBH_failed_runs_chrom7 = data.frame(
 
 RBH_failed_runs_chrom8 = data.frame(
   splits = c("7"),
-  corrected = c(0)
+  corrected = c(1)
 )
 
 #chrom9 is fine
@@ -1043,7 +1043,7 @@ RBH_failed_runs_chrom8 = data.frame(
 
 RBH_failed_runs_chrom19 = data.frame(
   splits = c("4"),
-  corrected = c()
+  corrected = c(0)
 )
 
 #chrom20 is fine
