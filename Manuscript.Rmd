@@ -5848,6 +5848,23 @@ only 2 predicted patho variants are in clinvar P/LP
 only 2 predicted patho variants are in clinvar B/LB
 12 all together, meaning 8 VUS
 
+## Synthetic Exome
+
+```{r synthetic_exome, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+
+p.normal_PA = Paralogous_var_align("data/all_possible_mutations/synthetic_exome/synthetic.vep.cov.table_chrom1_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz",)
+
+
+for (i in 0:9){
+p.normal_PA = Paralogous_var_align(
+  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
+var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
+}
+
+```
+
+
 ## GO protein classes of clinvar P/LP variants with PA noQC
 
 Using GO Panther enrichment analysis (http://pantherdb.org/) to identify common protein classes among the genes that had paralogue annotations.
