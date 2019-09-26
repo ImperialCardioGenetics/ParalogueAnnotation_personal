@@ -459,12 +459,42 @@ Performing a simple kolmogorov smirnov test between the distribution of pathogen
 
 ## Annotation of Clinvar
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
-# library(knitr)
+#Disease gene subset
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
+protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
+protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
+protein_genes_w_paralogues_wide = plyr::count(protein_genes_w_paralogues, "external_gene_name")
+protein_genes_w_paralogues_wide$paralogue = "Yes"
+colnames(protein_genes_w_paralogues_wide)[2] = "number_of_paralogues"
+par(mfrow=c(2,2))
+protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
+protein_genes_wo_paralogues = protein_genes_wo_paralogues[!(protein_genes_wo_paralogues$external_gene_name %in% protein_genes_w_paralogues_genes),]
+protein_genes_wo_paralogues_genes = as.vector(unique(protein_genes_wo_paralogues$external_gene_name))
+protein_genes_wo_paralogues_wide = protein_genes_wo_paralogues
+protein_genes_wo_paralogues_wide[is.na(protein_genes_wo_paralogues_wide)] = 0
+protein_genes_wo_paralogues_wide$paralogue = "No"
+colnames(protein_genes_wo_paralogues_wide)[2] = "number_of_paralogues"
+protein_genes_wo_paralogues_wide = protein_genes_wo_paralogues_wide[!(protein_genes_wo_paralogues_wide$external_gene_name %in% protein_genes_w_paralogues_wide$external_gene_name),]
+clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized$SYMBOL))
+all_protein_genes = dplyr::bind_rows(protein_genes_wo_paralogues_wide, protein_genes_w_paralogues_wide)
+disease_genes = vector()
+# for (gene in clinvar_P_LP_vcf_tableized_genes){
+for (gene in clinvar_P_LP_tableized_genes){
+  # print(gene)
+  if (gene %in% all_protein_genes$external_gene_name){
+    disease_genes = c(gene, disease_genes)
+  }
+}
+
 #noQC
 #pathogenic to pathogenic
 p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 #benign to pathogenic
-b.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.paralogous_var_align = Paralogous_var_align(
+  Subset=c("Gene",disease_genes),
+  Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 #pathogenic to benign
 ptob.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized")
 #benign to benign
@@ -555,7 +585,7 @@ length(intersect(btob.var_in_genes_unique_var$Var1, btob.not_var_in_genes_unique
 
 #para_con
 p2.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b2.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b2.paralogous_var_align = Paralogous_var_align(Subset=c("Gene",disease_genes), Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 ptob2.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized")
 btob2.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized")
 
@@ -600,7 +630,7 @@ length(intersect(btob2.var_in_genes_unique_var$Var1, btob2.not_var_in_genes_uniq
 
 #all_con
 p3.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b3.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b3.paralogous_var_align = Paralogous_var_align(Subset=c("Gene",disease_genes), Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 ptob3.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized")
 btob3.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized")
 
@@ -739,9 +769,9 @@ Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specifi
 Total = c(dim(p.paralogous_var_align$input_variants)[1],dim(b.paralogous_var_align$input_variants)[1],"NA","NA","NA","NA")
 Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),signif(conf$PPV, digits = 2),signif(conf$Sensitivity, digits = 2),signif(conf$Specificity, digits = 2),signif(conf$Pvalue$p.value, digits = 2))
 Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),signif(conf2$PPV, digits = 2), signif(conf2$Sensitivity, digits = 2),signif(conf2$Specificity, digits = 2), signif(conf2$Pvalue$p.value, digits = 2))
-Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),signif(conf3$PPV, digits = 2),signif(conf3$Sensitivity, digits = 2),signif(conf3$Specificity, digits = 2),signif(conf3$Pvalue$p.value, digits = 2))
-Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),signif(conf4$PPV, digits = 2),signif(conf4$Sensitivity, digits = 2),signif(conf4$Specificity, digits = 2),signif(conf4$Pvalue$p.value, digits = 2))
-Variants_remaining_after_PA_QC3_w_QC1_no_QC2 = c(format(conf6$con_table[2], scientific = FALSE),format(conf6$con_table[4], scientific = FALSE),signif(conf6$PPV, digits = 2),signif(conf6$Sensitivity, digits = 2),signif(conf6$Specificity, digits = 2),signif(conf6$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),signif(conf3$PPV, digits = 3),signif(conf3$Sensitivity, digits = 2),signif(conf3$Specificity, digits = 2),signif(conf3$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),signif(conf4$PPV, digits = 3),signif(conf4$Sensitivity, digits = 2),signif(conf4$Specificity, digits = 2),signif(conf4$Pvalue$p.value, digits = 2))
+Variants_remaining_after_PA_QC3_w_QC1_no_QC2 = c(format(conf6$con_table[2], scientific = FALSE),format(conf6$con_table[4], scientific = FALSE),signif(conf6$PPV, digits = 3),signif(conf6$Sensitivity, digits = 2),signif(conf6$Specificity, digits = 2),signif(conf6$Pvalue$p.value, digits = 2))
 
 Variants_removed_after_PA_QC1 = c(format(var_removed$con_table[2], scientific = FALSE),format(var_removed$con_table[4], scientific = FALSE),signif(var_removed$PPV, digits = 2),signif(var_removed$Sensitivity, digits = 2),signif(var_removed$Specificity, digits = 2),signif(var_removed$Pvalue$p.value, digits = 2))
 Variants_removed_after_PA_QC2 = c(format(var_removed2$con_table[2], scientific = FALSE),format(var_removed2$con_table[4], scientific = FALSE),signif(var_removed2$PPV, digits = 2),signif(var_removed2$Sensitivity, digits = 2),signif(var_removed2$Specificity, digits = 2),signif(var_removed2$Pvalue$p.value, digits = 2))
