@@ -4876,7 +4876,7 @@ df1 = data.frame(
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#000000", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 4, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 15)
 gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
