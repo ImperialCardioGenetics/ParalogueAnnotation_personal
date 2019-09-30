@@ -1245,6 +1245,110 @@ length(setdiff(unique(b.paralogous_var_align$paralog_data$Gene),unique(p.paralog
 #1485+883+284 = 2652 genes
 ```
 
+Getting numbers for experimental design flow chart for only disease genes with disease paralogues:
+```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+#Disease gene subset
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
+protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
+protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
+protein_genes_w_paralogues_wide = plyr::count(protein_genes_w_paralogues, "external_gene_name")
+protein_genes_w_paralogues_wide$paralogue = "Yes"
+colnames(protein_genes_w_paralogues_wide)[2] = "number_of_paralogues"
+par(mfrow=c(2,2))
+protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
+protein_genes_wo_paralogues = protein_genes_wo_paralogues[!(protein_genes_wo_paralogues$external_gene_name %in% protein_genes_w_paralogues_genes),]
+protein_genes_wo_paralogues_genes = as.vector(unique(protein_genes_wo_paralogues$external_gene_name))
+protein_genes_wo_paralogues_wide = protein_genes_wo_paralogues
+protein_genes_wo_paralogues_wide[is.na(protein_genes_wo_paralogues_wide)] = 0
+protein_genes_wo_paralogues_wide$paralogue = "No"
+colnames(protein_genes_wo_paralogues_wide)[2] = "number_of_paralogues"
+protein_genes_wo_paralogues_wide = protein_genes_wo_paralogues_wide[!(protein_genes_wo_paralogues_wide$external_gene_name %in% protein_genes_w_paralogues_wide$external_gene_name),]
+clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized$SYMBOL))
+all_protein_genes = dplyr::bind_rows(protein_genes_wo_paralogues_wide, protein_genes_w_paralogues_wide)
+disease_genes = vector()
+# for (gene in clinvar_P_LP_vcf_tableized_genes){
+for (gene in clinvar_P_LP_tableized_genes){
+  # print(gene)
+  if (gene %in% all_protein_genes$external_gene_name){
+    disease_genes = c(gene, disease_genes)
+  }
+}
+clinvar_B_LB_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_B_LB_tableized_genes = as.vector(unique(clinvar_B_LB_tableized$SYMBOL))
+clinvar_B_LB_tableized$Variant_pos = paste(clinvar_B_LB_tableized$CHROM,clinvar_B_LB_tableized$POS, sep = " ")
+x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
+dis_genes_w_dis_para = vector()
+for (row in 1:nrow(protein_genes_w_paralogues_aggregate)){
+# for (row in 1:5){
+  gene = protein_genes_w_paralogues_aggregate$external_gene_name[row]
+  paralogs = unlist(str_split(protein_genes_w_paralogues_aggregate$hsapiens_paralog_associated_gene_name[row], ", "))
+  if (gene %in% unique(x$Gene)){
+    para_check = 0
+    for (paralog in paralogs){
+      if (paralog %in% clinvar_P_LP_tableized_genes){
+        para_check = 1
+      }
+    }
+    if (para_check == 1){
+      dis_genes_w_dis_para = c(dis_genes_w_dis_para,gene)
+    }
+  }
+}
+
+clinvar_P_LP_only_snv_missense_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_P_LP_only_snv_missense_tableized = clinvar_P_LP_only_snv_missense_tableized[!is.na(clinvar_P_LP_only_snv_missense_tableized$Protein_position) &
+                                                                                      !is.na(clinvar_P_LP_only_snv_missense_tableized$Amino_acids) &
+                                                                                      !(grepl("-", clinvar_P_LP_only_snv_missense_tableized$Protein_position)) &
+                                                                                      !(grepl("-", clinvar_P_LP_only_snv_missense_tableized$Amino_acids)) &
+                                                                                      !(grepl("\\*", clinvar_P_LP_only_snv_missense_tableized$Amino_acids)) &
+                                                                                      grepl("/", clinvar_P_LP_only_snv_missense_tableized$Amino_acids) &
+                                                                                      str_count(clinvar_P_LP_only_snv_missense_tableized$REF) == str_count(clinvar_P_LP_only_snv_missense_tableized$ALT) &
+                                                                                      str_count(clinvar_P_LP_only_snv_missense_tableized$Amino_acids) == 3,]
+
+num_of_var_clinvar_P_LP_only_snv_missense_tableized = length(unique(clinvar_P_LP_only_snv_missense_tableized$ID)) #30476
+num_of_genes_clinvar_P_LP_only_snv_missense_tableized = length(unique(clinvar_P_LP_only_snv_missense_tableized$SYMBOL)) #3376
+clinvar_B_LB_only_snv_missense_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+clinvar_B_LB_only_snv_missense_tableized = clinvar_B_LB_only_snv_missense_tableized[!is.na(clinvar_B_LB_only_snv_missense_tableized$Protein_position) &
+                                                                                      !is.na(clinvar_B_LB_only_snv_missense_tableized$Amino_acids) &
+                                                                                      !(grepl("-", clinvar_B_LB_only_snv_missense_tableized$Protein_position)) &
+                                                                                      !(grepl("-", clinvar_B_LB_only_snv_missense_tableized$Amino_acids)) &
+                                                                                      !(grepl("\\*", clinvar_B_LB_only_snv_missense_tableized$Amino_acids)) &
+                                                                                      grepl("/", clinvar_B_LB_only_snv_missense_tableized$Amino_acids) &
+                                                                                      str_count(clinvar_B_LB_only_snv_missense_tableized$REF) == str_count(clinvar_B_LB_only_snv_missense_tableized$ALT) &
+                                                                                      str_count(clinvar_B_LB_only_snv_missense_tableized$Amino_acids) == 3 &
+                                                                                      clinvar_B_LB_only_snv_missense_tableized$SYMBOL %in% disease_genes,]
+
+num_of_var_clinvar_B_LB_only_snv_missense_tableized = length(unique(clinvar_B_LB_only_snv_missense_tableized$ID)) #17782
+num_of_genes_clinvar_B_LB_only_snv_missense_tableized = length(unique(clinvar_B_LB_only_snv_missense_tableized$SYMBOL)) #2529
+total_num_of_genes_clinvar_P_LP_B_LB_only_snv_missense_tableized = length(unique(c(unique(clinvar_P_LP_only_snv_missense_tableized$SYMBOL), unique(clinvar_B_LB_only_snv_missense_tableized$SYMBOL)))) #3767
+
+
+x = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
+y = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", sep="\t", header=FALSE, col.names = c("Variant_pos", "ID", "Gene", "REF", "ALT", paste("paralog", 1:147, sep = "")), quote="", na.strings=".", comment.char="#", stringsAsFactors = 0)
+clinvar_P_LP_tableized$Variant_pos = paste(clinvar_P_LP_tableized$CHROM,clinvar_P_LP_tableized$POS, sep = " ")
+paralog_data = left_join(x,clinvar_P_LP_tableized, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
+paralog_data = paralog_data[!is.na(paralog_data$Protein_position) & !(grepl("-",paralog_data$Protein_position)),]
+length(unique(paralog_data$ID)) #24134
+b.paralog_data = left_join(y,clinvar_B_LB_tableized, by =  c("Variant_pos", "ID", "REF", "ALT", "Gene" = "SYMBOL"))
+b.paralog_data = b.paralog_data[!is.na(b.paralog_data$Protein_position) & !(grepl("-",b.paralog_data$Protein_position)) & str_count(b.paralog_data$REF) == str_count(b.paralog_data$ALT) & b.paralog_data$Gene %in% disease_genes,]
+length(unique(b.paralog_data$ID)) #13746
+diseased_b.genes = intersect(disease_genes,intersect(unique(y$Gene),unique(clinvar_B_LB_tableized_genes)))
+length(unique(c(intersect(unique(x$Gene),unique(clinvar_P_LP_tableized_genes)), diseased_b.genes))) #2749 genes here
+
+
+p.paralogous_var_align = Paralogous_var_align(Overlap = 0, Subset = c("Gene",disease_genes), "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.paralogous_var_align = Paralogous_var_align(Overlap = 0, Subset=c("Gene",disease_genes), "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+length(intersect(unique(p.paralogous_var_align$paralog_data$Gene),unique(b.paralogous_var_align$paralog_data$Gene))) #1485
+length(setdiff(unique(p.paralogous_var_align$paralog_data$Gene),unique(b.paralogous_var_align$paralog_data$Gene))) #883
+length(setdiff(unique(b.paralogous_var_align$paralog_data$Gene),unique(p.paralogous_var_align$paralog_data$Gene))) #284
+#1485+883+284 = 2652 genes
+conf = conf_matrix(p.paralogous_var_align$true_num_of_paralog_anno, p.paralogous_var_align$input_variants, b.paralogous_var_align$true_num_of_paralog_anno, b.paralogous_var_align$input_variants)
+
+test.p.paralogous_var_align = Paralogous_var_align(Overlap = 0, Subset = c("Gene",dis_genes_w_dis_para), "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
+```
 
 Reclassifying VUS:
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
@@ -1484,13 +1588,13 @@ Specificity_list = vector()
 
 #### PA methods with para_z setting to 0 in order to have same number of starting variants
 p.paralogous_var_align = Paralogous_var_align(Overlap = 0, paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b.paralogous_var_align = Paralogous_var_align(Overlap = 0, paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b.paralogous_var_align = Paralogous_var_align(Overlap = 0, Subset=c("Gene",disease_genes), paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 conf = conf_matrix(p.paralogous_var_align$true_num_of_paralog_anno, p.paralogous_var_align$input_variants, b.paralogous_var_align$true_num_of_paralog_anno, b.paralogous_var_align$input_variants)
 p2.paralogous_var_align = Paralogous_var_align(Overlap = 0, paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b2.paralogous_var_align = Paralogous_var_align(Overlap = 0, paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b2.paralogous_var_align = Paralogous_var_align(Overlap = 0, Subset=c("Gene",disease_genes), paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 conf2 = conf_matrix(p2.paralogous_var_align$true_num_of_paralog_anno, p2.paralogous_var_align$input_variants, b2.paralogous_var_align$true_num_of_paralog_anno, b2.paralogous_var_align$input_variants)
 p3.paralogous_var_align = Paralogous_var_align(Overlap = 0, paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-b3.paralogous_var_align = Paralogous_var_align(Overlap = 0, paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b3.paralogous_var_align = Paralogous_var_align(Overlap = 0, Subset=c("Gene",disease_genes), paraz_cutoff = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 conf3 = conf_matrix(p3.paralogous_var_align$true_num_of_paralog_anno, p3.paralogous_var_align$input_variants, b3.paralogous_var_align$true_num_of_paralog_anno, b3.paralogous_var_align$input_variants)
 
 p4.Total_paralog_annotations = p3.paralogous_var_align$Total_paralog_annotations[p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
@@ -1537,7 +1641,7 @@ for (i in seq(0,11)){
 
 #benign to pathogenic
 # b.paraz_var_align = ParaZ_var_align(i,"data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_alleles.single.b38.Benign_and_LikelyBenign.out_paraloc_tableized", "data/clinvar/clinvar_alleles.single.b38.Pathogenic_and_LikelyPathogenic.out_paraloc_tableized")
-  b.paraz_var_align = Paralogous_var_align(Overlap = 0, paraz_cutoff = i,"data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+  b.paraz_var_align = Paralogous_var_align(Overlap = 0, Subset=c("Gene",disease_genes), paraz_cutoff = i,"data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
   paraz.conf = conf_matrix(p.paraz_var_align$true_num_of_paralog_anno, p.paraz_var_align$input_variants, b.paraz_var_align$true_num_of_paralog_anno, b.paraz_var_align$input_variants)
   Sensitivity_list = c(Sensitivity_list, paraz.conf$Sensitivity)
@@ -1581,31 +1685,31 @@ ggsave("images/ROC_plot_paraz_with_QC1.png")
 
 # prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Sensitivity = Sensitivity_list, cutoff = seq(0,11)))
 prc_data = do.call(rbind, Map(data.frame, Precision = PPV_list, Precision_CI = PPV_CI_list, Sensitivity = Sensitivity_list, Sensitivity_CI = Sens_CI_list))
-prc_data$Type = "conserved AA +\nPara Z"
+prc_data$Type = "conserved ref AA +\nPara Z"
 
 prc_data = rbind(prc_data, c(as.numeric(conf$PPV),as.numeric(1.96*conf$PPV_SE),as.numeric(conf$Sensitivity),as.numeric(1.96*conf$Sensitivity_SE)))
 prc_data[13,5]="none"
 prc_data = rbind(prc_data, c(as.numeric(conf2$PPV),as.numeric(1.96*conf2$PPV_SE),as.numeric(conf2$Sensitivity),as.numeric(1.96*conf2$Sensitivity_SE)))
-prc_data[14,5]="conserved AA"
+prc_data[14,5]="conserved ref AA"
 prc_data = rbind(prc_data, c(as.numeric(conf3$PPV),as.numeric(1.96*conf3$PPV_SE),as.numeric(conf3$Sensitivity),as.numeric(1.96*conf3$Sensitivity_SE)))
-prc_data[15,5]="full conserved AA"
+prc_data[15,5]="fully conserved ref AA"
 prc_data = rbind(prc_data, c(as.numeric(conf4$PPV),as.numeric(1.96*conf4$PPV_SE),as.numeric(conf4$Sensitivity),as.numeric(1.96*conf4$Sensitivity_SE)))
-prc_data[16,5]="full conseerved AA +\nconserved variants"
+prc_data[16,5]="fully conserved ref AA +\nconserved alt AA"
 prc_data = rbind(prc_data, c(as.numeric(conf6$PPV),as.numeric(1.96*conf6$PPV_SE),as.numeric(conf6$Sensitivity),as.numeric(1.96*conf6$Sensitivity_SE)))
-prc_data[17,5]="conserved AA +\nconserved variants"
+prc_data[17,5]="conserved ref AA +\nconserved alt AA"
 
 # prc_data[18:21,5]=c("Sift", "MCap", "CADD", "Revel")
 
-prc_data$Type = factor(prc_data$Type, levels = c("none", "conserved AA", "conserved AA +\nPara Z", "full conserved AA", "conserved AA +\nconserved variants", "full conseerved AA +\nconserved variants"))
+prc_data$Type = factor(prc_data$Type, levels = c("none", "conserved ref AA", "conserved ref AA +\nPara Z", "fully conserved ref AA", "conserved ref AA +\nconserved alt AA", "fully conserved ref AA +\nconserved alt AA"))
 # prc_data$Type = factor(prc_data$Type, levels = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+Para_Z", "QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-prc_data$Type[1:12] = "conserved AA +\nPara Z"
+prc_data$Type[1:12] = "conserved ref AA +\nPara Z"
 # gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour=cutoff)) + geom_point() + xlim(0,1) + ylim(0,1)
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
-cols = c("conserved AA +\nPara Z" = "#4D5656", "none" = "#58D68D", "conserved AA" = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conseerved AA +\nconserved variants" = "#EC7063")
-shapes = c("conserved AA +\nPara Z" = 6, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conseerved AA +\nconserved variants" = 19)
+cols = c("conserved ref AA +\nPara Z" = "#4D5656", "none" = "#000000", "conserved ref AA" = "#45B39D", "fully conserved ref AA" = "#5DADE2", "conserved ref AA +\nconserved alt AA" = "#A569BD", "fully conserved ref AA +\nconserved alt AA" = "#EC7063")
+shapes = c("conserved ref AA +\nPara Z" = 6, "none" = 4, "conserved ref AA" = 16, "fully conserved ref AA" = 17, "conserved ref AA +\nconserved alt AA" = 18, "fully conserved ref AA +\nconserved alt AA" = 15)
 
 # cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
 # shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
@@ -3850,7 +3954,7 @@ gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
                                colour = type
                                #shape = type
                                )) + 
-  geom_point(size=5, position = position_dodge(width = .5)) + 
+  geom_point(shape = 73, size=5, position = position_dodge(width = .5)) + 
   scale_color_manual(values=c("rare variants" = alpha("blue",0.4), "rare and\nparalogue annotated" = alpha("red",0.9))) +
   # theme_bw() + 
   theme(#panel.grid.major = element_blank(), 
@@ -3998,7 +4102,7 @@ p.num_of_sift = length(which(other_tools_file$SIFT_pred == "D"))
 p.num_of_mcap = length(which(other_tools_file$M.CAP_pred == "D"))
 p.num_of_cadd = length(which(other_tools_file$CADD_phred > 15))
 
-b.normal_initial = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized")
+b.normal_initial = Paralogous_var_align(Overlap = 0, Subset=c("Gene",disease_genes), "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized")
 
 b.other_tools_file = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs_no_empty_lines.hg38_multianno.vcf_tableized_org", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
 b.other_tools_file = b.other_tools_file[complete.cases(b.other_tools_file),]
@@ -4199,8 +4303,8 @@ other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
 other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel","no QC", "QC1" ,"QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 20)
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#000000", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 4, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 15)
 gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
@@ -4420,14 +4524,14 @@ other_tools_data = data.frame(
   Sensitivity = c(as.numeric(other_tools_set[2:10,5])),
   Sensitivity_CI = c(as.numeric(other_tools_set[2:10,6]))
   )
-other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "none", "conserved AA" ,"full conserved AA", "full conserved AA +\nconserved variants", "conserved AA +\nconserved variants")
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "none", "conserved ref AA" ,"fully conserved ref AA", "fully conserved ref AA +\nconserved alt AA", "conserved ref AA +\nconserved alt AA")
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
-other_tools_data$Type = factor(other_tools_data$Type, levels = c("none", "conserved AA" , "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants", "Sift", "MCap", "CADD", "Revel"))
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("none", "conserved ref AA" , "fully conserved ref AA", "conserved ref AA +\nconserved alt AA", "fully conserved ref AA +\nconserved alt AA", "Sift", "MCap", "CADD", "Revel"))
 # other_tools_data$Precision_CI_min = other_tools_data$Precision - other_tools_data$Precision_CI
 # other_tools_data$Precision_CI_max = sapply(other_tools_data$Precision + other_tools_data$Precision_CI, min, 1)
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "#58D68D", "conserved AA"  = "#45B39D", "full conserved AA" = "#5DADE2", "conserved AA +\nconserved variants" = "#A569BD", "full conserved AA +\nconserved variants" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "none" = 15, "conserved AA" = 16, "full conserved AA" = 17, "conserved AA +\nconserved variants" = 18, "full conserved AA +\nconserved variants" = 20)
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "#000000", "conserved ref AA"  = "#45B39D", "fully conserved ref AA" = "#5DADE2", "conserved ref AA +\nconserved alt AA" = "#A569BD", "fully conserved ref AA +\nconserved alt AA" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "none" = 4, "conserved ref AA" = 16, "fully conserved ref AA" = 17, "conserved ref AA +\nconserved alt AA" = 18, "fully conserved ref AA +\nconserved alt AA" = 15)
 gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
@@ -4518,8 +4622,8 @@ df1 = data.frame(
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#000000", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 4, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 15)
 gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
@@ -4674,8 +4778,8 @@ df1 = data.frame(
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#000000", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 4, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 15)
 gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
@@ -4773,7 +4877,7 @@ df1 = data.frame(
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
+shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 4, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 15)
 gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
@@ -6105,7 +6209,7 @@ gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(
     # axis.text.x=element_blank()
     # axis.ticks.x=element_blank()
     ) +
-  scale_fill_manual(values= c(alpha("red",0.9), alpha("blue",0.4)), labels = c("Only genes with Paralogue\nAnnotations (n=535)","Disease genes with disease\nparalogues (n=1648)")) + 
+  scale_fill_manual(values= c("#45B39D", alpha("red",0.5)), labels = c("Only genes with Paralogue\nAnnotations (n=535)","Disease genes with disease\nparalogues (n=1648)")) + 
   guides(fill = guide_legend(reverse=TRUE)) +
   scale_y_continuous(breaks = c(0,50,100,150,200), limits = c(0,205), expand = c(0,0), position = "right") +
   xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) +ylab("Number of Genes") +
