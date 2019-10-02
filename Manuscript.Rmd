@@ -789,8 +789,13 @@ conf_b6 = conf_matrix_benign(ptob6.true_num_of_paralog_anno, ptob2.paralogous_va
 # genes_with_PA_QC3_w_QC1_no_QC2 = length(unique(p6.Total_paralog_annotations$SYMBOL))
 # write.table(unique(p6.Total_paralog_annotations$SYMBOL), file = "data/clinvar/genes_with_PA_QC3_w_QC1_no_QC2.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
 
+#variants with conserved ref AA but non-conserved alt AA
 var_removed4 = var_rem_matrix(conf2$con_table, conf6$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
 var_removed_b4 = var_rem_matrix(conf_b2$con_table, conf_b6$con_table, ptob2.paralogous_var_align$paralog_data, btob2.paralogous_var_align$paralog_data)
+
+#variants with conserved ref AA + conserved alt AA but not fully conserved ref AA
+p.value = fisher.test(matrix(c((dim(p.paralogous_var_align$input_variants)[1]-(conf6$con_table[2]-conf4$con_table[2])),(conf6$con_table[2]-conf4$con_table[2]),(dim(b.paralogous_var_align$input_variants)[1]-(conf6$con_table[4]-conf4$con_table[4])),(conf6$con_table[4]-conf4$con_table[4])),ncol = 2))
+p.value$p.value
 
 ####
 
