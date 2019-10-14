@@ -8,7 +8,7 @@ fluidPage(theme=shinytheme("cosmo"), # eg. lumen # https://rstudio.github.io/shi
                #h2("Missense Variant Annotation for Inherited Cardiac Conditions",align="center"),
                br(),
                sidebarLayout(
-                  sidebarPanel(img(src = "paralogo.png", width = "100%"),
+                  sidebarPanel(img(src = "paralogo2.png", width = "100%"),
                       h3("Input your variant"),
                       br(),
                       radioButtons("format",label=NULL,
