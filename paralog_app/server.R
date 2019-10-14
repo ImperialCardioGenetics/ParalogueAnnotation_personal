@@ -51,7 +51,12 @@ predict_output<-function(output,input_data){
   # I opened formated and outputted again the RData odject from Nick to edit rownames and NAs 
   # This can be done here within a function
   # load the RData or rds file
-  load("data/paralog_tmp.RData")
+  # load("data/paralog_tmp.RData")
+  
+  load("data/place_holder_results_datatable.RData")
+  
+  # exported RData with hardcoded dataframe name, change to raw_data
+  raw_data<-place_holder_results_datatable
   
   # write new column chr:pos:ref:alt to look up
   raw_data$var<-paste(raw_data$CHROM.x,raw_data$POS.x,raw_data$REF.x,raw_data$ALT.x,sep=":")
