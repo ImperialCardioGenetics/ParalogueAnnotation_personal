@@ -32,7 +32,7 @@ shinyServer(function(input, output){
   return(result)
   }
   
-  output$paralog<-renderDataTable(DT::datatable(get_paralog(), options = list(paging = FALSE))) # set options for table eg. per page lines
+  output$paralog<-renderDataTable(DT::datatable(get_paralog(), options = list(paging = FALSE),rownames = F)) # set options for table eg. per page lines
   
   output$download <- downloadHandler(
     filename = function() {
