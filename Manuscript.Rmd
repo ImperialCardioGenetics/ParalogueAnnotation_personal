@@ -28,6 +28,7 @@ knitr::opts_chunk$set(fig.pos = 'H')
 \newpage
 # To do list
 1) finish all possible missense - 2-3 days
+  1.5) website - include query variant gene? Include link to ensembl alignment. Include any known variants in the same query codon as query variants (including if query variants is already known P/LP). Have links to disease from Clingen (OMIM?).
 2) comments made by Roddy/Nicky - 2 days
 3) Analysis of FP where there is a possible mismatch of query and paralogue variants that function through different disease mechanism - take the FP (i.e the query B/LB variants that were predicted patho) and take the ref paralogous P/LP variants that annotated such query B/LB, and compare the pairings. Compare the Genes these variants are from, the disease they cause, the mechanism of disease, inheritance of the disease. Can use Omin, clingen for the diseases.
 4) PANTHER protein class plot - just have dis genes w/ dis paralogues; put dis genes w/ testable annotations into supplementary. Can plot the inbetween when all possible missense variants is done
