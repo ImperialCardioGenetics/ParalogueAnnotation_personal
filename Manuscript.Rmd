@@ -26,6 +26,10 @@ source("src/Paralogous_var_align_functions.R")
 knitr::opts_chunk$set(fig.pos = 'H')
 ```
 \newpage
+# To do list
+1) finish all possible missense - 2-3 days
+2) comments made by Roddy/Nicky - 2 days
+
 # Introduction
 With the advancements of sequencing technology, new potential variants are being discovered constantly. However to be able to identify said variants as being pathogenic requires supporting evidence, which does not always exists especially if the variant is novel. Several commonly used bioinformatic tools for predicting the functional effect of variants, such as SIFT and REVEL [@sim2012sift,@ioannidis2016revel], utilize information from conservation and/or changes in biophysiocochemical properties of the substituting amino acid. However these predictions cannot be considered as sufficient evidence for pathogenicity if predicted as such and need to be used with care, especially in a clinical context, as results typically have low specificity [@flanagan2010using].
 
