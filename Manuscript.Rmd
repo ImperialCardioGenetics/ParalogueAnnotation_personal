@@ -6116,6 +6116,8 @@ only 2 predicted patho variants are in clinvar B/LB
 
 ## Synthetic Exome
 
+Actual script ("synthetic_exome_paralog_annotate_on_hpc.R") ran on hpc.
+
 ```{r synthetic_exome, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 
 p.normal_PA = Paralogous_var_align("data/all_possible_mutations/synthetic_exome/synthetic.vep.cov.table_chrom1_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz",)
