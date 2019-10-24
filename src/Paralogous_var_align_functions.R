@@ -1,4 +1,6 @@
 Packages = c("tidyverse", "plyr", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "clusterProfiler", "org.Hs.eg.db", "DiagrammeR")
+new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
 lapply(Packages, library, character.only = TRUE)
 
 Paralogous_var_align = function(paralogs2_file, 
