@@ -3,6 +3,9 @@ new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 lapply(Packages, library, character.only = TRUE)
 bioconductor_Packages = c("biomaRt", "clusterProfiler", "org.Hs.eg.db")
+new.packages = bioconductor_Packages[!(bioconductor_Packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+lapply(bioconductor_Packages, library, character.only = TRUE)
 
 Paralogous_var_align = function(paralogs2_file, 
                                 paralog_tableized_file, 
