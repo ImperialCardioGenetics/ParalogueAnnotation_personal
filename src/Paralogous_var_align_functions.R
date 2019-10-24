@@ -1,7 +1,8 @@
-Packages = c("tidyverse", "plyr", "dplyr", "ggplot2", "ggsignif", "biomaRt", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "clusterProfiler", "org.Hs.eg.db", "DiagrammeR")
+Packages = c("tidyverse", "plyr", "dplyr", "ggplot2", "ggsignif", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "DiagrammeR")
 new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 lapply(Packages, library, character.only = TRUE)
+bioconductor_Packages = c("biomaRt", "clusterProfiler", "org.Hs.eg.db")
 
 Paralogous_var_align = function(paralogs2_file, 
                                 paralog_tableized_file, 
