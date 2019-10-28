@@ -1,1 +1,3 @@
 source("/work/nyl112/ParalogueAnnotation_personal/src/Paralogous_var_align_functions.R")
+
+p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "/work/nyl112/data/synthetic_exome/for_transfer_to_hpc/synthetic.vep.cov.table_chromY_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/for_transfer_to_hpc/synthetic.vep.cov.table_chromY_wIDs_proper_total.out_paraloc_tableized.gz","data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
