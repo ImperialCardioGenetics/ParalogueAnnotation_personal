@@ -1,10 +1,12 @@
 Packages = c("tidyverse", "plyr", "dplyr", "ggplot2", "ggsignif", "knitr", "png", "grid", "tinytex", "pander", "kableExtra", "DiagrammeR")
 new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
+if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma.imperial.ac.uk/")
 lapply(Packages, library, character.only = TRUE)
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
 bioconductor_Packages = c("biomaRt", "clusterProfiler", "org.Hs.eg.db")
 new.packages = bioconductor_Packages[!(bioconductor_Packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
+if(length(new.packages)) BiocManager::install(new.packages)
 lapply(bioconductor_Packages, library, character.only = TRUE)
 
 Paralogous_var_align = function(paralogs2_file, 
