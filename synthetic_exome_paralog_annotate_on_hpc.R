@@ -24,4 +24,28 @@ chrom21.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic
 chrom22.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom22_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom22_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 chromX.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromX_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromX_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 chromY.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromY_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromY_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-save(chrom1.paralogous_var_align,)
+save(chrom1.paralogous_var_align,
+     chrom2.paralogous_var_align,
+     chrom3.paralogous_var_align,
+     chrom4.paralogous_var_align,
+     chrom5.paralogous_var_align,
+     chrom6.paralogous_var_align,
+     chrom7.paralogous_var_align,
+     chrom8.paralogous_var_align,
+     chrom9.paralogous_var_align,
+     chrom10.paralogous_var_align,
+     chrom11.paralogous_var_align,
+     chrom12.paralogous_var_align,
+     chrom13.paralogous_var_align,
+     chrom14.paralogous_var_align,
+     chrom15.paralogous_var_align,
+     chrom16.paralogous_var_align,
+     chrom17.paralogous_var_align,
+     chrom18.paralogous_var_align,
+     chrom19.paralogous_var_align,
+     chrom20.paralogous_var_align,
+     chrom21.paralogous_var_align,
+     chrom22.paralogous_var_align,
+     chromX.paralogous_var_align,
+     chromY.paralogous_var_align
+)
