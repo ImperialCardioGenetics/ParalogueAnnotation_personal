@@ -47,5 +47,6 @@ save(chrom1.paralogous_var_align,
      chrom21.paralogous_var_align,
      chrom22.paralogous_var_align,
      chromX.paralogous_var_align,
-     chromY.paralogous_var_align
+     chromY.paralogous_var_align,
+     file = "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic_all_chrom_para_con.paralogous_var_align.RData"
 )
