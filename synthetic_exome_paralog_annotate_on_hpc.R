@@ -1,7 +1,10 @@
 Packages = c("tidyverse", "plyr", "dplyr")
 new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma.imperial.ac.uk/")
-lapply(Packages, library, character.only = TRUE)
+# lapply(Packages, library, character.only = TRUE)
+library("plyr")
+library("dplyr")
+library("tidyverse")
 
 Paralogous_var_align = function(paralogs2_file, 
                                 paralog_tableized_file, 
