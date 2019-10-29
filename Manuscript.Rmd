@@ -1525,7 +1525,42 @@ for (gene in clinvar_P_LP_tableized_genes){
 b.paralogous_var_align = Paralogous_var_align(
   Subset=c("Gene",disease_genes),
   Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+annotated_var_pairs = b.paralogous_var_align$Left_joined_gathered_paralog_data[!is.na(b.paralogous_var_align$Left_joined_gathered_paralog_data$ID.y),] 
+#length(unique(annotated_var_pairs$ID.x)) 245 query variants
+#length(unique(annotated_var_pairs$ID.y)) 259 paralogue variants
+query_genes = unique(annotated_var_pairs$Gene)
+paralog_genes = unique(annotated_var_pairs$SYMBOL)
+genes_in_both = intersect(query_genes, paralog_genes) #36 genes in both query and paralog
+query_genes = setdiff(query_genes, genes_in_both) #117 genes only in query
+paralog_genes = setdiff(paralog_genes, genes_in_both) #107 genes only in paralogues
+c_genes = c("In Both:", genes_in_both, "", "Query Genes:", query_genes, "", "Paralogue Genes:", paralog_genes)
 
+write.table(c_genes, file="data/clinvar/FP_query_paralog_gene_pairs.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+
+###Clingen - not that useful
+clingen_gene_dis = read.csv("data/clinvar/ClinGen-Gene-Disease-Summary-2019-10-22.csv", sep=",", header = F, stringsAsFactors = F)
+clingen_gene_dis = clingen_gene_dis[-c(1:6),]
+colnames(clingen_gene_dis) = c("GENE SYMBOL", "GENE ID (HGNC)", "DISEASE LABEL", "DISEASE ID (MONDO)", "SOP", "CLASSIFICATION", "ONLINE REPORT", "CLASSIFICATION DATE")
+clingen_gene_dis = clingen_gene_dis[clingen_gene_dis$CLASSIFICATION != "No Reported Evidence" & clingen_gene_dis$CLASSIFICATION != "Refuted" & clingen_gene_dis$CLASSIFICATION != "Disputed",]
+query_clingen_gene_dis = clingen_gene_dis[clingen_gene_dis$`GENE SYMBOL` %in% query_genes,]
+paralog_clingen_gene_dis = clingen_gene_dis[clingen_gene_dis$`GENE SYMBOL` %in% paralog_genes,]
+
+###G2P - has mutation.consequence
+g2p_gene_dis = read.csv(gzfile("data/clinvar/DDG2P_29_10_2019.csv.gz"), sep=",", header = T, stringsAsFactors = F)
+query_g2p_gene_dis = g2p_gene_dis[g2p_gene_dis$gene.symbol %in% query_genes,]
+paralog_g2p_gene_dis = g2p_gene_dis[g2p_gene_dis$gene.symbol %in% paralog_genes,]
+both_g2p_gene_dis = g2p_gene_dis[g2p_gene_dis$gene.symbol %in% genes_in_both,]
+#TP control
+p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+control_annotated_var_pairs = p.paralogous_var_align$Left_joined_gathered_paralog_data[!is.na(p.paralogous_var_align$Left_joined_gathered_paralog_data$ID.y),] 
+control_query_genes = unique(control_annotated_var_pairs$Gene)
+control_paralog_genes = unique(control_annotated_var_pairs$SYMBOL)
+control_genes_in_both = intersect(control_query_genes, control_paralog_genes) #633 genes in both query and paralog
+control_query_genes = setdiff(control_query_genes, control_genes_in_both) #12 genes only in query
+control_paralog_genes = setdiff(control_paralog_genes, control_genes_in_both) #15 genes only in paralogues
+control_query_g2p_gene_dis = g2p_gene_dis[g2p_gene_dis$gene.symbol %in% control_query_genes,]
+control_paralog_g2p_genes_dis = g2p_gene_dis[g2p_gene_dis$gene.symbol %in% control_paralog_genes,]
+control_both_g2p_gene_dis = g2p_gene_dis[g2p_gene_dis$gene.symbol %in% control_genes_in_both,]
 
 ```
 
