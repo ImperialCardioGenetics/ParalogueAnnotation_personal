@@ -121,53 +121,57 @@ Paralogous_var_align = function(paralogs2_file,
                     "n_occur" = n_occur))
 }
 
-chrom1.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom1_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom1_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom2.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom2_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom2_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom3.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom3_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom3_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom4.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom4_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom4_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom5.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom5_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom5_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom6.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom6_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom6_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom7.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom7_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom7_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom8.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom8_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom8_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom9.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom9_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom9_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom10.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom10_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom10_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom11.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom11_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom11_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom12.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom12_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom12_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom13.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom13_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom13_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom14.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom14_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom14_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom15.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom15_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom15_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom16.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom16_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom16_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom17.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom17_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom17_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom18.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom18_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom18_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom19.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom19_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom19_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom20.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom20_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom20_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom21.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom21_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom21_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chrom22.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom22_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom22_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chromX.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromX_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromX_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-chromY.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromY_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromY_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-save(chrom1.paralogous_var_align,
-     chrom2.paralogous_var_align,
-     chrom3.paralogous_var_align,
-     chrom4.paralogous_var_align,
-     chrom5.paralogous_var_align,
-     chrom6.paralogous_var_align,
-     chrom7.paralogous_var_align,
-     chrom8.paralogous_var_align,
-     chrom9.paralogous_var_align,
-     chrom10.paralogous_var_align,
-     chrom11.paralogous_var_align,
-     chrom12.paralogous_var_align,
-     chrom13.paralogous_var_align,
-     chrom14.paralogous_var_align,
-     chrom15.paralogous_var_align,
-     chrom16.paralogous_var_align,
-     chrom17.paralogous_var_align,
-     chrom18.paralogous_var_align,
-     chrom19.paralogous_var_align,
-     chrom20.paralogous_var_align,
-     chrom21.paralogous_var_align,
-     chrom22.paralogous_var_align,
-     chromX.paralogous_var_align,
-     chromY.paralogous_var_align,
-     file = "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic_all_chrom_para_con.paralogous_var_align.RData"
-)
+for (i in 1:22){
+        synthetic_para_con.paralogous_var_align = Paralogous_var_align(
+                paste0("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom",i,"_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz"),
+                paste0("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom",i,"_wIDs_proper_total.out_paraloc_tableized.gz"),
+                "/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+        save(synthetic_para_con.paralogous_var_align, file = paste0("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic_para_con_chrom",i,".paralogous_var_align.RData"))
+        rm(synthetic_para_con.paralogous_var_align)
+} 
+
+# chrom1.paralogous_var_align = Paralogous_var_align("/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom1_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chrom1_wIDs_proper_total.out_paraloc_tableized.gz","/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# save(chrom1.paralogous_var_align, file = "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic_para_con_chrom1.paralogous_var_align.RData")
+# rm(chrom1.paralogous_var_align)
+
+synthetic_para_con.paralogous_var_align = Paralogous_var_align(
+        "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromX_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", 
+        "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromX_wIDs_proper_total.out_paraloc_tableized.gz",
+        "/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+save(synthetic_para_con.paralogous_var_align, file = "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic_para_con_chromX.paralogous_var_align.RData")
+rm(synthetic_para_con.paralogous_var_align)
+
+synthetic_para_con.paralogous_var_align = Paralogous_var_align(
+        "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromY_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz", 
+        "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic.vep.cov.table_chromY_wIDs_proper_total.out_paraloc_tableized.gz",
+        "/work/nyl112/ParalogueAnnotation_personal/data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+save(synthetic_para_con.paralogous_var_align, file = "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic_para_con_chromY.paralogous_var_align.RData")
+rm(synthetic_para_con.paralogous_var_align)
+
+
+# save(chrom1.paralogous_var_align,
+#      chrom2.paralogous_var_align,
+#      chrom3.paralogous_var_align,
+#      chrom4.paralogous_var_align,
+#      chrom5.paralogous_var_align,
+#      chrom6.paralogous_var_align,
+#      chrom7.paralogous_var_align,
+#      chrom8.paralogous_var_align,
+#      chrom9.paralogous_var_align,
+#      chrom10.paralogous_var_align,
+#      chrom11.paralogous_var_align,
+#      chrom12.paralogous_var_align,
+#      chrom13.paralogous_var_align,
+#      chrom14.paralogous_var_align,
+#      chrom15.paralogous_var_align,
+#      chrom16.paralogous_var_align,
+#      chrom17.paralogous_var_align,
+#      chrom18.paralogous_var_align,
+#      chrom19.paralogous_var_align,
+#      chrom20.paralogous_var_align,
+#      chrom21.paralogous_var_align,
+#      chrom22.paralogous_var_align,
+#      chromX.paralogous_var_align,
+#      chromY.paralogous_var_align,
+#      file = "/work/nyl112/data/synthetic_exome/compressed_para_con_and_tableized/synthetic_all_chrom_para_con.paralogous_var_align.RData"
+# )
