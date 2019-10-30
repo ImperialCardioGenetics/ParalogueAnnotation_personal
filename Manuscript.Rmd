@@ -6196,14 +6196,13 @@ Actual script ("synthetic_exome_paralog_annotate_on_hpc.R") ran on hpc.
 
 ```{r synthetic_exome, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 
-p.normal_PA = Paralogous_var_align("data/all_possible_mutations/synthetic_exome/synthetic.vep.cov.table_chrom1_wIDs_proper_total.out_paraloc_paralogs2.para_con.gz",)
+p.normal_PA = Paralogous_var_align("data/all_possible_mutations/synthetic_exome/synthetic.vep.cov.table_chrom1_wIDs_proper_split000.out_paraloc_paralogs2.para_con", "data/all_possible_mutations/synthetic_exome/synthetic.vep.cov.table_chrom1_wIDs_proper_split000.out_paraloc_tableized","data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 
 
 for (i in 0:9){
 p.normal_PA = Paralogous_var_align(
-  paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_paralogs2.para_con"), paste0("data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split0",i,"_only_var_info.out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-annotated_gnomad = inner_join(p.normal_PA$Unique_variant_annotations, rare_gnomad)
-var_pred_patho = rbind(var_pred_patho,annotated_gnomad)
+  paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.para_con"), paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_tableized"), "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+save(p.normal_PA, file = paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic_para_con_chrom",i,".paralogous_var_align.RData"))
 }
 
 ```
