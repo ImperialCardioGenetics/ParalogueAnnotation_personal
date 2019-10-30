@@ -124,10 +124,26 @@ Paralogous_var_align = function(paralogs2_file,
                     "n_occur" = n_occur))
 }
 
+for (i in 0:9){
+        p.normal_PA = Paralogous_var_align(
+                paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.para_con"),
+                paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_tableized"),
+                "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+        save(p.normal_PA, file = paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic_chrom1_para_con_split00",i,".paralogous_var_align.RDS"))
+}
+
 for (i in 10:99){
         p.normal_PA = Paralogous_var_align(
                 paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.para_con"), 
                 paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_tableized"), 
                 "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-        save(p.normal_PA, file = paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic_para_con_chrom",i,".paralogous_var_align.RData"))
+        save(p.normal_PA, file = paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic_chrom1_para_con_split0",i,".paralogous_var_align.RDS"))
+}
+
+for (i in 100:360){
+        p.normal_PA = Paralogous_var_align(
+                paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.para_con"), 
+                paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_tableized"), 
+                "data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+        save(p.normal_PA, file = paste0("data/all_possible_mutations/synthetic_exome/chrom_1/synthetic_chrom1_para_con_split",i,".paralogous_var_align.RDS"))
 }
