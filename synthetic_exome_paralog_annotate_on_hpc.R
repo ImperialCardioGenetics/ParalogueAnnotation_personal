@@ -136,7 +136,7 @@ for (i in 0:9){
 }
 
 for (i in 10:99){
-        info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.para_con"))
+        info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.para_con"))
         if (info$size == 0) next
         p.normal_PA = Paralogous_var_align(
                 paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.para_con"), 
@@ -146,7 +146,7 @@ for (i in 10:99){
 }
 
 for (i in 100:360){
-        info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.para_con"))
+        info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.para_con"))
         if (info$size == 0) next
         p.normal_PA = Paralogous_var_align(
                 paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.para_con"), 
