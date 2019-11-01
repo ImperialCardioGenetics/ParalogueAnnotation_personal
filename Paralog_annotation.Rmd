@@ -193,7 +193,7 @@ df
 In bash, a way to iteratively check if a directory with wildcard exists is:
 
 ```{bash eval = FALSE, include = TRUE}
-for i in {0..360}; do if ls *\[$i\].pbs 1> /dev/null 2>&1; then echo $i "exists"; else echo $i "does not exists"; fi; done
+for i in {000..360}; do if ls *\[$i\].pbs 1> /dev/null 2>&1; then echo $i "exists"; else echo $i "does not exists"; fi; done
 ```
 
 To check if run had any errors by looking at log files. Can then also use it to rerun the ones that failed.
