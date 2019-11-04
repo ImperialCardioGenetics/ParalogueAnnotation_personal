@@ -125,6 +125,7 @@ Paralogous_var_align = function(paralogs2_file,
 }
 
 setwd("/work/nyl112/ParalogueAnnotation_personal")
+# JUST COMMENT OUT THE BITS THAT DONT NEED RUNNING
 # #chrom1
 # for (i in 0:9){
 #         info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.para_con"))
