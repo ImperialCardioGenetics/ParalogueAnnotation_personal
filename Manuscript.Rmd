@@ -6377,7 +6377,75 @@ gg_protein_class_poster = ggplot(total_protein_class_poster, aes(y=number_of_gen
                  reverse = TRUE))
 ggsave("images/GO_protein_classes_of_genes2_for_poster.png", height = 9, width = 12)
 
+###Total_plot with just disease genes with disease paralogues - protein_classes4
+total_protein_class = protein_classes4
+total_protein_class[total_protein_class$Protein_class=="transmembrane receptor regulatory/adaptor protein (PC00226)", "Protein_class"] = "transmembrane receptor\nregulatory/adaptor protein (PC00226)"
+total_protein_class$stage = factor(total_protein_class$stage, levels = c("Disease genes with at\nleast 1 disease paralogue"))
 
+gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = stage)) +
+  geom_bar(stat="identity", position = "dodge") +
+  coord_flip() +
+  # geom_point() + 
+  # geom_text(aes(label=Protein_class, position = "dodge"), position = position_dodge(width = 0), hjust =0 , vjust=0, angle = 20) +
+  theme(
+  #   axis.text.x = element_text(angle = -45, hjust = -0),
+  #   plot.margin = unit(c(5.5, 5.5, 5.5, 10), "points")
+    # axis.title.y=element_blank(),
+    legend.title=element_blank()
+    # legend.position="none"
+    # axis.text.x=element_blank()
+    # axis.ticks.x=element_blank()
+    ) +
+  scale_fill_manual(values= c(alpha("red",0.5)), labels = c("Disease genes with disease\nparalogues (n=1648)")) + 
+  guides(fill = guide_legend(reverse=TRUE)) +
+  scale_y_continuous(breaks = c(0,50,100,150,200), limits = c(0,205), expand = c(0,0), position = "right") +
+  xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) +ylab("Number of Genes") +
+  theme(axis.text.x = element_text(size = 16), 
+        axis.text.y = element_text(size=11),
+        legend.text = element_text(size=16),
+        axis.title = element_text(size=15),
+        legend.position = c(0.84,0.07)) + 
+  guides(fill=guide_legend(
+                 keywidth=0.2,
+                 keyheight=0.5,
+                 default.unit="inch",
+                 reverse = TRUE))
+ggsave("images/GO_protein_classes_of_genes3.png", height = 8, width = 12)
+
+###Total_plot with only genes that had paralogue annotations - protein_classes
+total_protein_class = protein_classes
+total_protein_class[total_protein_class$Protein_class=="transmembrane receptor regulatory/adaptor protein (PC00226)", "Protein_class"] = "transmembrane receptor\nregulatory/adaptor protein (PC00226)"
+total_protein_class$stage = factor(total_protein_class$stage, levels = c("Only genes with\nParalogue Annotations"))
+
+gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = stage)) +
+  geom_bar(stat="identity", position = "dodge") +
+  coord_flip() +
+  # geom_point() + 
+  # geom_text(aes(label=Protein_class, position = "dodge"), position = position_dodge(width = 0), hjust =0 , vjust=0, angle = 20) +
+  theme(
+  #   axis.text.x = element_text(angle = -45, hjust = -0),
+  #   plot.margin = unit(c(5.5, 5.5, 5.5, 10), "points")
+    # axis.title.y=element_blank(),
+    legend.title=element_blank()
+    # legend.position="none"
+    # axis.text.x=element_blank()
+    # axis.ticks.x=element_blank()
+    ) +
+  scale_fill_manual(values= c("#45B39D"), labels = c("Only genes with Paralogue\nAnnotations (n=535)")) + 
+  guides(fill = guide_legend(reverse=TRUE)) +
+  scale_y_continuous(breaks = c(0,50,100,150,200), limits = c(0,205), expand = c(0,0), position = "right") +
+  xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) +ylab("Number of Genes") +
+  theme(axis.text.x = element_text(size = 16), 
+        axis.text.y = element_text(size=11),
+        legend.text = element_text(size=16),
+        axis.title = element_text(size=15),
+        legend.position = c(0.84,0.07)) + 
+  guides(fill=guide_legend(
+                 keywidth=0.2,
+                 keyheight=0.5,
+                 default.unit="inch",
+                 reverse = TRUE))
+ggsave("images/GO_protein_classes_of_genes4.png", height = 8, width = 12)
 ```
 
 # References
