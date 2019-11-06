@@ -16,3 +16,4 @@ data/all_possible_mutations/synthetic_exome/*/*tableized
 data/all_possible_mutations/synthetic_exome/*/*para_con
 #data/all_possible_mutations/synthetic_exome/*noQC
 #data/all_possible_mutations/synthetic_exome/*all_con
+data/all_possible_mutations/synthetic_exome/*/*RDS.gz
