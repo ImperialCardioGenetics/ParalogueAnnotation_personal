@@ -36,9 +36,9 @@ fluidPage(theme=shinytheme("cosmo"), # eg. lumen # https://rstudio.github.io/shi
                                   selected = "A",width = "80",multiple = F,selectize = F,
                                   choices = c("A","G","T","C"))),
                       conditionalPanel(condition="input.format=='paste'",textAreaInput("var",label=NULL,placeholder = "1:114713907:T:G"))),
-               mainPanel(h2("Missense Variant Annotation for Inherited Cardiac Conditions",align="center"),
-                         dataTableOutput("paralog"),
-                        conditionalPanel("output.paralog",downloadButton("download","Download"))
+                  mainPanel(h2("Missense Variant Paralogue Annotation",align="center"),
+                            dataTableOutput("paralog"),
+                            conditionalPanel("output.paralog",downloadButton("download","Download"))
                ))),
       tabPanel("About",
       style = "width:80%; margin-right:auto; margin-left:auto", 
