@@ -29,15 +29,20 @@ shinyServer(function(input, output){
       result<-predict_output(raw_data,input_data)
       }
     }
+    
+  result$Query_ClinVar<- paste0("<a href='", paste0("https://www.ncbi.nlm.nih.gov/clinvar/variation/",result$Query_ClinVar,"/"), "' target='_blank'>", result$Query_ClinVar, "</a>")  
+  result$ClinVar_ID<- paste0("<a href='", paste0("https://www.ncbi.nlm.nih.gov/clinvar/variation/",result$ClinVar_ID,"/"), "' target='_blank'>", result$ClinVar_ID, "</a>")  
+    
   return(result)
   }
   
   output$paralog<-renderDataTable(DT::datatable(get_paralog(),
+                                                escape = F, # escape text hyperlink to url instead of text
                                                 options = list(paging = FALSE),# set options for table eg. per page lines
                                                 rownames = F, 
                                                 caption = htmltools::tags$caption(style = 'caption-side: bottom; text-align: center;','Table 1 : ', htmltools::em('Paralogous Variants'))
                                                 ) %>%
-                                                formatStyle(c("Variant_ID","Query_Gene"),  color = 'black', backgroundColor = 'lightgrey', fontWeight = 'bold')
+                                                formatStyle(c("Variant_ID","Query_Gene","Query_ClinVar"),  color = 'black', backgroundColor = 'lightgrey', fontWeight = 'bold')
                                   )
   
   output$download <- downloadHandler(
