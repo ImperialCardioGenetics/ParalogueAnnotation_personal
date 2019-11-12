@@ -6352,27 +6352,63 @@ save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var
 
 
 ##Graph representation##
-gg = ggplot(var_positions_data, aes(x=Position, y=Chrom
-                               )) + geom_segment(aes(x=0,y="1",xend=249250621,yend="1")) +
-  geom_point(shape = 73, size=3, position = position_dodge(width = .5), colour = alpha("red",0.9)) + 
-  xlim(0,249250621) +
-  # scale_fill_manual(values=c(alpha("red",0.9))) +
+chrom_lengths = data.frame(
+  Chrom=c(1:22,"X","Y"),
+  Position=c(249250621, 243199373, 198022430, 191154276, 180915260, 171115067, 159138663, 146364022, 141213431, 135534747, 135006516, 133851895, 115169878, 107349540, 102531392, 90354753, 81195210, 78077248, 59128983, 63025520, 48129895, 51304566, 155270560, 59373566)
+  )
+
+total_var_positions_data = data.frame()
+#individual graphs#
+for (i in c(1:22,"X","Y")){
+  load(paste0("data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_",i,".RData"))
+  total_var_positions_data = rbind(total_var_positions_data, var_positions_data)
+  end_length = chrom_lengths[chrom_lengths$Chrom==i,"Position"]
+  gg = ggplot(var_positions_data, aes(x=Position, y=Chrom
+                               )) + geom_segment(aes(x=0,y=i,xend=end_length,yend=i)) +
+  geom_point(shape = 73, size=5, position = position_dodge(width = .5), colour = alpha("red",0.9)) +
+  xlim(0,end_length) +
   theme_bw() +
-  theme(#panel.grid.major = element_blank(),
+  theme(
         panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
         panel.border = element_blank(),
-        legend.position = c(0.92,0.05),
         legend.title = element_blank(),
         axis.title.y = element_blank(),
-        axis.text = element_text(size = 13),
-        axis.title.x = element_text(size = 14)
-        ) +
-  # ylim(0,275) +
-  ylab("Chromosome") 
-  # coord_fixed(ratio = 25) +
-  # coord_flip() 
-  # geom_errorbar(aes(ymin=CI_lower, ymax=CI_upper),colour="black",linetype=1,size=.2,width=.5,position = position_dodge(width = .5)) +
-  # guides(color = guide_legend(reverse = TRUE))
+        axis.text = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+        )
+
+ggsave(paste0("images/Synthetic_exome_chrom_",i,"_annotations.png"), height = 8, width = 12)
+}
+#total plot#
+total_var_positions_data$Chrom = factor(total_var_positions_data$Chrom, levels = rev(c(1:22,"X","Y")))
+
+gg = ggplot(total_var_positions_data, aes(x=Position, y=Chrom)) +
+  geom_point(shape = 73, size=4, position = position_dodge(width = .5), colour = alpha("red",0.9)) +
+  xlim(0,max(chrom_lengths$Position)+10000000) +
+  theme_bw() +
+  theme(
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        legend.title = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+        ) 
+for (i in c(1:22,"X","Y")){
+  end_length = chrom_lengths[chrom_lengths$Chrom==i,"Position"]
+  gg = gg + geom_segment(data = chrom_lengths, aes(x=0,y=Chrom,xend=Position,yend=Chrom)) + annotate("text", label = length(total_var_positions_data[total_var_positions_data$Chrom == i, "Position"]), x = end_length+10000000, y = i)
+}
+ggsave("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/Synthetic_exome_all_chrom_annotations.png", height = 6, width = 10)
+
+  # geom_text(aes(label=Pathogenic_var), position=position_dodge(width=0.9), vjust=-0.25, size = 15, color = "black")
+
+num_pred_Chr1 = length(total_var_positions_data[total_var_positions_data$Chrom == 1, "Position"])
 
 ```
 
