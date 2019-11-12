@@ -6194,27 +6194,185 @@ only 2 predicted patho variants are in clinvar B/LB
 
 Actual script ("synthetic_exome_paralog_annotate_on_hpc.R") ran on hpc.
 
-```{r synthetic_exome, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+```{r synthetic_exome, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE, results='hide'}
 
 # All_possible_query_genes = c()
 
-#Chr1
+max_no_paralogous_pos = 0
+Genes = c()
+var_positions_data = data.frame()
+
+##Chr1##
 Total_annotations = data.frame()
 files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_1", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
 for (i in files){
+  print(i)
   load(i)
   # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
-  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_annotations, Total_annotations))
+  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+  if (p.normal_PA$max_no_col > max_no_paralogous_pos){
+    max_no_paralogous_pos = p.normal_PA$max_no_col
+  }
+}
+Genes = unique(Total_annotations$Gene)
+chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+var_positions_data =data.frame(Chrom = "1", Position = chr_pos)
+write.table(Genes,file="data/all_possible_mutations/synthetic_exome/synthetic_exome_chrom_1_genes.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_1.RData")
 
+##Chr2##
+Total_annotations = data.frame()
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_2", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+for (i in files){
+  print(i)
+  load(i)
+  # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
+  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+  if (p.normal_PA$max_no_col > max_no_paralogous_pos){
+    max_no_paralogous_pos = p.normal_PA$max_no_col
+  }
+}
+Genes = unique(Total_annotations$Gene)
+chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+var_positions_data = data.frame(Chrom = "2", Position = chr_pos)
+write.table(Genes,file="data/all_possible_mutations/synthetic_exome/synthetic_exome_chrom_2_genes.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_2.RData")
+
+##Chr3##
+Total_annotations = data.frame()
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_3", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+for (i in files){
+  print(i)
+  load(i)
+  # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
+  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+  if (p.normal_PA$max_no_col > max_no_paralogous_pos){
+    max_no_paralogous_pos = p.normal_PA$max_no_col
+  }
+}
+Genes = unique(Total_annotations$Gene)
+chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+var_positions_data = data.frame(Chrom = "3", Position = chr_pos)
+write.table(Genes,file="data/all_possible_mutations/synthetic_exome/synthetic_exome_chrom_3_genes.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_3.RData")
+
+##Chr4##
+Total_annotations = data.frame()
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_4", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+for (i in files){
+  print(i)
+  load(i)
+  # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
+  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+  if (p.normal_PA$max_no_col > max_no_paralogous_pos){
+    max_no_paralogous_pos = p.normal_PA$max_no_col
+  }
+}
+Genes = unique(Total_annotations$Gene)
+chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+var_positions_data = data.frame(Chrom = "4", Position = chr_pos)
+write.table(Genes,file="data/all_possible_mutations/synthetic_exome/synthetic_exome_chrom_4_genes.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_4.RData")
+
+##Chr5##
+Total_annotations = data.frame()
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_5", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+for (i in files){
+  print(i)
+  load(i)
+  # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
+  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+  if (p.normal_PA$max_no_col > max_no_paralogous_pos){
+    max_no_paralogous_pos = p.normal_PA$max_no_col
+  }
+}
+Genes = unique(Total_annotations$Gene)
+chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+var_positions_data = data.frame(Chrom = "5", Position = chr_pos)
+write.table(Genes,file="data/all_possible_mutations/synthetic_exome/synthetic_exome_chrom_5_genes.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_5.RData")
+
+##Chr 6 to 22##
+for (j in 6:22){
+  Total_annotations = data.frame()
+  files = list.files(path=paste0("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_",j), pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+  for (i in files){
+    print(i)
+    load(i)
+    # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
+    Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+    if (p.normal_PA$max_no_col > max_no_paralogous_pos){
+      max_no_paralogous_pos = p.normal_PA$max_no_col
+    }
+  }
+  Genes = unique(Total_annotations$Gene)
+  chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+  var_positions_data = data.frame(Chrom = as.character(j), Position = chr_pos)
+  write.table(Genes,file=paste0("data/all_possible_mutations/synthetic_exome/synthetic_exome_chrom_",j,"_genes.txt"), na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+  save(var_positions_data, file = paste0("data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_",j,".RData"))
 }
 
-#ChrY
+##ChrX##
+Total_annotations = data.frame()
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_X", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+for (i in files){
+  print(i)
+  load(i)
+  # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
+  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+  if (p.normal_PA$max_no_col > max_no_paralogous_pos){
+    max_no_paralogous_pos = p.normal_PA$max_no_col
+  }
+}
+Genes = unique(Total_annotations$Gene)
+chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+var_positions_data = data.frame(Chrom = "X", Position = chr_pos)
+write.table(Genes,file="data/all_possible_mutations/synthetic_exome/synthetic_exome_chrom_X_genes.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_X.RData")
+
+
+##ChrY##
 Total_annotations = data.frame()
 files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_Y", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
 for (i in files){
+  print(i)
   load(i)
-  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_annotations, Total_annotations))
+  # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
+  Total_annotations = rbind(Total_annotations, setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+  if (p.normal_PA$max_no_col > max_no_paralogous_pos){
+    max_no_paralogous_pos = p.normal_PA$max_no_col
+  }
 }
+Genes = unique(Total_annotations$Gene)
+chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+var_positions_data = data.frame(Chrom = "Y", Position = chr_pos)
+write.table(Genes,file="data/all_possible_mutations/synthetic_exome/synthetic_exome_chrom_Y_genes.txt", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var_positions_data_chrom_Y.RData")
+
+
+
+##Graph representation##
+gg = ggplot(var_positions_data, aes(x=Position, y=Chrom
+                               )) + geom_segment(aes(x=0,y="1",xend=249250621,yend="1")) +
+  geom_point(shape = 73, size=3, position = position_dodge(width = .5), colour = alpha("red",0.9)) + 
+  xlim(0,249250621) +
+  # scale_fill_manual(values=c(alpha("red",0.9))) +
+  theme_bw() +
+  theme(#panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        legend.position = c(0.92,0.05),
+        legend.title = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text = element_text(size = 13),
+        axis.title.x = element_text(size = 14)
+        ) +
+  # ylim(0,275) +
+  ylab("Chromosome") 
+  # coord_fixed(ratio = 25) +
+  # coord_flip() 
+  # geom_errorbar(aes(ymin=CI_lower, ymax=CI_upper),colour="black",linetype=1,size=.2,width=.5,position = position_dodge(width = .5)) +
+  # guides(color = guide_legend(reverse = TRUE))
 
 ```
 
@@ -6455,6 +6613,46 @@ gg_protein_class = ggplot(total_protein_class, aes(y=number_of_genes, x=reorder(
                  default.unit="inch",
                  reverse = TRUE))
 ggsave("images/GO_protein_classes_of_genes4.png", height = 8, width = 12)
+
+###PA of synthetic exome all chrom - protein_classes
+protein_classes = read.csv(file="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/synthetic_exome_all_chrom_GO_protein_class.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+protein_classes$V4 = as.numeric(sub("%", "", protein_classes$V4))
+protein_classes$V5 = as.numeric(sub("%", "", protein_classes$V5))
+protein_classes = protein_classes[,2:5]
+colnames(protein_classes) = c("Protein_class", "number_of_genes", "Percent_of_gene_hit_against_total_number_of_genes", "Percent_of_gene_hit_against_total_number_of_Protein_Class_hits")
+protein_classes = protein_classes[order(protein_classes$number_of_genes, decreasing = T),] 
+protein_classes[protein_classes$Protein_class=="transmembrane receptor regulatory/adaptor protein (PC00226)","Protein_class"] = "transmembrane receptor\nregulatory/adaptor protein (PC00226)"
+protein_classes$stage = "synthetic exome genes with PA"
+
+gg_protein_class = ggplot(protein_classes, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = stage)) +
+  geom_bar(stat="identity", position = "dodge") +
+  coord_flip() +
+  # geom_point() + 
+  # geom_text(aes(label=Protein_class, position = "dodge"), position = position_dodge(width = 0), hjust =0 , vjust=0, angle = 20) +
+  theme(
+  #   axis.text.x = element_text(angle = -45, hjust = -0),
+  #   plot.margin = unit(c(5.5, 5.5, 5.5, 10), "points")
+    # axis.title.y=element_blank(),
+    legend.title=element_blank()
+    # legend.position="none"
+    # axis.text.x=element_blank()
+    # axis.ticks.x=element_blank()
+    ) +
+  scale_fill_manual(values=c("#BB8FCE"), labels = c("All possible genes that could\nbe annotated (n=4224)")) + 
+  guides(fill = guide_legend(reverse=TRUE)) +
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350,400,450,500,550), limits = c(0,560), expand = c(0,0), position = "right") +
+  xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) + ylab("Number of Genes") +
+  theme(axis.text.x = element_text(size = 16), 
+        axis.text.y = element_text(size=11),
+        legend.text = element_text(size=16),
+        axis.title = element_text(size=15),
+        legend.position = c(0.825,0.04)) + 
+  guides(fill=guide_legend(
+                 keywidth=0.2,
+                 keyheight=0.5,
+                 default.unit="inch",
+                 reverse = TRUE))
+ggsave("images/GO_protein_classes_of_synthetic_exome_genes_w_annotations.png", height = 8, width = 12)
 ```
 
 # References
