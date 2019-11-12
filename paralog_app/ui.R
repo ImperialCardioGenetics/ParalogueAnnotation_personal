@@ -35,8 +35,13 @@ fluidPage(theme=shinytheme("cosmo"), # eg. lumen # https://rstudio.github.io/shi
                                   label = "Alternate:", 
                                   selected = "A",width = "80",multiple = F,selectize = F,
                                   choices = c("A","G","T","C"))),
-                      conditionalPanel(condition="input.format=='paste'",textAreaInput("var",label=NULL,placeholder = "1:114713907:T:G"))),
-                  mainPanel(h2("Missense Variant Paralogue Annotation",align="center"),
+                      conditionalPanel(condition="input.format=='paste'",textAreaInput("var",label=NULL,placeholder = "1:114713907:T:G")),
+                      conditionalPanel(condition="input.format=='upload'",fileInput("file", NULL,accept = c(
+                                      "text/csv",
+                                      "text/comma-separated-values,text/plain",
+                                      ".csv")))
+                      ),
+                   mainPanel(h2("Missense Variant Paralogue Annotation",align="center"),
                             dataTableOutput("paralog"),
                             conditionalPanel("output.paralog",downloadButton("download","Download"))
                ))),
