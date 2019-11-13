@@ -15,7 +15,7 @@ fluidPage(theme=shinytheme("cosmo"), # eg. lumen # https://rstudio.github.io/shi
                                    # Here a new input method can be inserted eg. upload a file with variants
                                    # eg. choices = list("upload file"="upload",
                                    # fileInput("file", NULL,accept = c("text/csv","text/comma-separated-values,text/plain",".csv")))),
-                                   choices = list("Choose position"="pick","Paste variant"="paste"),selected = NULL),
+                                   choices = list("Choose position"="pick","Paste variants"="paste", "Upload Variants"="upload"),selected = NULL),
                       p("e.g. 1:114713907:T:G"),
                       conditionalPanel(condition="input.format=='pick'",
                       selectInput(inputId = "chr",
