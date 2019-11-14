@@ -16,7 +16,7 @@ fluidPage(theme=shinytheme("cosmo"), # eg. lumen # https://rstudio.github.io/shi
                                    # eg. choices = list("upload file"="upload",
                                    # fileInput("file", NULL,accept = c("text/csv","text/comma-separated-values,text/plain",".csv")))),
                                    choices = list("Choose position"="pick","Paste variants"="paste", "Upload Variants"="upload"),selected = NULL),
-                      p("e.g. 1:114713907:T:G"),
+                      p("e.g. 1:114713907:T:G, 3:38551076:T:A, or X:71223741:G:A"),
                       conditionalPanel(condition="input.format=='pick'",
                       selectInput(inputId = "chr",
                                   label = "Chromosome:", 
