@@ -48,7 +48,7 @@ shinyServer(function(input, output){
     
     #generate ensembl alignment URLs
     # https://www.ensembl.org/Homo_sapiens/Gene/Compara_Paralog/Alignment?db=core;g=ENSG00000213281;g1=ENSG00000133703;seq=cDNA
-    result$Ensembl_alignment<- paste0("<a href='", paste0("https://www.ensembl.org/Homo_sapiens/Gene/Compara_Paralog/Alignment?db=core;g=",map[unlist(result$Query_Gene)],";g1=",map[unlist(result$Gene)],";seq=cDNA"), "' target='_blank'>alignment</a>")  
+    result$Ensembl_alignment<- paste0("<a href='", paste0("https://www.ensembl.org/Homo_sapiens/Gene/Compara_Paralog/Alignment?db=core;g=",map[unlist(result$Query_Gene)],";g1=",map[unlist(result$Gene)]), "' target='_blank'>alignment</a>")  
   
     return(result)
   }
