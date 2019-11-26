@@ -661,7 +661,7 @@ if input_file2 != "null":
 As paraloc mode only returns ref alleles. The alt alleles were extracted from the VEP information. This was done by using __tableize_vcf.py__.
 __/data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py__ was used to format the VEP output into table format for R processing. For example:
 ```{bash eval = FALSE, include = TRUE}
-python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info SYMBOL,Amino_acids,Codons,Paralogue_Vars --split_by_transcript --canonical_only
+python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc --out /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc_tableized --do_not_minrep --include_id --vep_info SYMBOL,Protein_position,Amino_acids,Codons,BIOTYPE,Paralogue_Vars --split_by_transcript --canonical_only
 ```
 
 If __--split_by_transcript__ is used then the code above is sufficient. Otherwise a python wrapper that includes additional formatting (__/data/Share/nick/Paralog_Anno/Tableize_wrapper.py__) that tableize couldn't do, i.e. separate variants that had multiple REF and ALT alleles was used to prepare the data for R. 
@@ -673,7 +673,7 @@ import  os, sys, subprocess, re
 input_file = sys.argv[1]	#path of paraloc file e.g. /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc
 dir1 = input_file.rsplit("/", 1)[0]
 
-os.system("python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf " + input_file + " --out " + input_file + "_tableized --do_not_minrep --include_id --vep_info SYMBOL,Amino_acids,Codons,Paralogue_Vars")
+os.system("python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf " + input_file + " --out " + input_file + "_tableized --do_not_minrep --include_id --vep_info SYMBOL,Protein_position,Amino_acids,Codons,BIOTYPE,Paralogue_Vars")
 
 out_file = open(input_file + "_tableized_temp", "w")
 with open(input_file + "_tableized") as f:
