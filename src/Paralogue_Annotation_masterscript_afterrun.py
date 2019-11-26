@@ -3,7 +3,7 @@
 import os, sys, subprocess, re, shlex, subprocess, codecs
 from VEP_ParalogAnno_wo_VEP import *
 from File_prep_for_R import *
-from Tableize_wrapper import *
+from Tableize_wrapper_with_ParalogueVars import *
 
 input_file = sys.argv[1]	#path of input file
 
