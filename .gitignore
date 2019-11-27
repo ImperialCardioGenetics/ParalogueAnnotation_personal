@@ -14,7 +14,7 @@ data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites_split31_only_var_info.out_pa
 data/gnomad_exome_r2.1.1/gnomad.exomes.r2.1.1.sites.AFlessthan0.001PASSFilter_only_var_info.vcf.gz
 data/all_possible_mutations/synthetic_exome/*/*tableized
 data/all_possible_mutations/synthetic_exome/*/*para_con
-#data/all_possible_mutations/synthetic_exome/*noQC
-#data/all_possible_mutations/synthetic_exome/*all_con
+data/all_possible_mutations/synthetic_exome/*noQC
+data/all_possible_mutations/synthetic_exome/*all_con
 data/all_possible_mutations/synthetic_exome/*/*RDS.gz
 data/all_possible_mutations/synthetic_exome/*/*RDS
