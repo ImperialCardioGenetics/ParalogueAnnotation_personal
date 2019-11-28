@@ -33,9 +33,11 @@ elif refid_flavour == "all_con":
 else:
 	sys.exit("ERROR: refid flavour selected not recognized")
 
+tableize_dir = sys.argv[5] #path of where tableize_vcf.py is located, e.g. on HPC - "/work/nyl112/loftee/src/"; can have "/" at end or not
+
 print(len(sys.argv), sys.argv)
 
 
 VEP_Plugin_run(input_file, genome_build=genome_build, flavour=flavour, VEPversion=93, offline=1)#, output_filename=sys.argv[2])
-Tableize_wrap(input_file.rsplit(".",1)[0]+".out_paraloc")
+Tableize_wrap(input_file.rsplit(".",1)[0]+".out_paraloc", tableize_dir)
 R_file_prep(input_file.rsplit(".",1)[0]+".out_paraloc_paralogs", refid_flavour=refid_flavour)

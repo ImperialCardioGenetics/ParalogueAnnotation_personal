@@ -2,11 +2,16 @@ import os, sys, subprocess, re
 
 #Tableize.py wrapper plus additional formatting that can't be done in tableize. Also adds in Para Z scores.
 
-def Tableize_wrap(input_file):
+def Tableize_wrap(input_file, tableize_dir):
 	#input_file = sys.argv[1]	#path of paraloc file e.g. /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc
 	dir1 = input_file.rsplit("/", 1)[0]
 
-	os.system("python /data/Share/nick/Paralog_Anno/loftee/src/tableize_vcf.py --vcf " + input_file + " --out " + input_file + "_tableized_org --do_not_minrep --include_id --vep_info SYMBOL,Protein_position,Amino_acids,Codons,BIOTYPE,Paralogue_Vars --split_by_transcript --canonical_only")
+	if tableize_dir.endswith("/"):
+		tableize_dir = tableize_dir
+	else:
+		tableize_dir = tableize_dir + "/"
+
+	os.system("python2 " + tableize_dir + "tableize_vcf.py --vcf " + input_file + " --out " + input_file + "_tableized_org --do_not_minrep --include_id --vep_info SYMBOL,Protein_position,Amino_acids,Codons,BIOTYPE,Paralogue_Vars --split_by_transcript --canonical_only")
 
 	out_file = open(input_file + "_tableized", "w")
 	with open(input_file + "_tableized_org") as f:
