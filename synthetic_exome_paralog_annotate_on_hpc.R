@@ -128,872 +128,875 @@ setwd("/work/nyl112/ParalogueAnnotation_personal")
 # JUST COMMENT OUT THE BITS THAT DONT NEED RUNNING
 
 #noQC
+#####
 #chrom1
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_1/synthetic_chrom1_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_1/synthetic_chrom1_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:360){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_1/synthetic_chrom1_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom2
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_2/synthetic_chrom2_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_2/synthetic_chrom2_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:263){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_2/synthetic_chrom2_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom3
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_3/synthetic_chrom3_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_3/synthetic_chrom3_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:204){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_3/synthetic_chrom3_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom4
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_4/synthetic_chrom4_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_4/synthetic_chrom4_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:139){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_4/synthetic_chrom4_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom5
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_5/synthetic_chrom5_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_5/synthetic_chrom5_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:159){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_5/synthetic_chrom5_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom6
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_6/synthetic_chrom6_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_6/synthetic_chrom6_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:179){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_6/synthetic_chrom6_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom7
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_7/synthetic_chrom7_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_7/synthetic_chrom7_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:172){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_7/synthetic_chrom7_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom8
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_8/synthetic_chrom8_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_8/synthetic_chrom8_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:123){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_8/synthetic_chrom8_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom9
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_9/synthetic_chrom9_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_9/synthetic_chrom9_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:144){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_9/synthetic_chrom9_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom10
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_10/synthetic_chrom10_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_10/synthetic_chrom10_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:145){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_10/synthetic_chrom10_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom11
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_11/synthetic_chrom11_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_11/synthetic_chrom11_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:208){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_11/synthetic_chrom11_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom12
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_12/synthetic_chrom12_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_12/synthetic_chrom12_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:191){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_12/synthetic_chrom12_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom13
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_13/synthetic_chrom13_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:63){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_13/synthetic_chrom13_noQC_split0",i,".paralogous_var_align.RData"))
-}
-
-#chrom14
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_14/synthetic_chrom14_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_14/synthetic_chrom14_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:117){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_14/synthetic_chrom14_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom15
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:93){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split0",i,".paralogous_var_align.RData"))
-}
-#94 1st half
-info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_paralogs2.noQC"))
-if (info$size == 0) next
-tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-if (dim(tableized_file)[1] == 0) next
-p.normal_PA = Paralogous_var_align(
-  paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_paralogs2.noQC"),
-  paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_tableized"),
-  "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split0","94_half1",".paralogous_var_align.RData"))
-#94 2nd half
-info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_paralogs2.noQC"))
-if (info$size == 0) next
-tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-if (dim(tableized_file)[1] == 0) next
-p.normal_PA = Paralogous_var_align(
-  paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_paralogs2.noQC"),
-  paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_tableized"),
-  "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split0","94_half2",".paralogous_var_align.RData"))
-for (i in 95:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:129){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom16
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_16/synthetic_chrom16_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_16/synthetic_chrom16_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:157){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_16/synthetic_chrom16_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom17
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_17/synthetic_chrom17_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_17/synthetic_chrom17_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:209){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_17/synthetic_chrom17_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom18
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_18/synthetic_chrom18_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:56){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_18/synthetic_chrom18_noQC_split0",i,".paralogous_var_align.RData"))
-}
-
-#chrom19
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_19/synthetic_chrom19_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_19/synthetic_chrom19_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:226){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_19/synthetic_chrom19_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chrom20
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_20/synthetic_chrom20_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:85){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_20/synthetic_chrom20_noQC_split0",i,".paralogous_var_align.RData"))
-}
-
-#chrom21
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_21/synthetic_chrom21_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:36){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_21/synthetic_chrom21_noQC_split0",i,".paralogous_var_align.RData"))
-}
-
-#chrom22
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_22/synthetic_chrom22_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:77){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_22/synthetic_chrom22_noQC_split0",i,".paralogous_var_align.RData"))
-}
-
-#chromX
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_X/synthetic_chromX_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:99){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_X/synthetic_chromX_noQC_split0",i,".paralogous_var_align.RData"))
-}
-for (i in 100:130){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_X/synthetic_chromX_noQC_split",i,".paralogous_var_align.RData"))
-}
-
-#chromY
-for (i in 0:9){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_Y/synthetic_chromY_noQC_split00",i,".paralogous_var_align.RData"))
-}
-for (i in 10:11){
-  info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  if (info$size == 0) next
-  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
-  max_no_col = (max(count.fields(info, sep = "\t"))-5)
-  if (max_no_col == 0) next
-  tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
-  if (dim(tableized_file)[1] == 0) next
-  p.normal_PA = Paralogous_var_align(
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
-    paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_tableized"),
-    "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
-  save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_Y/synthetic_chromY_noQC_split0",i,".paralogous_var_align.RData"))
-}
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_1/synthetic_chrom1_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_1/synthetic_chrom1_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:360){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_1/synthetic_chrom1_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom2
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_2/synthetic_chrom2_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_2/synthetic_chrom2_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:263){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_2/synthetic_chrom2_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom3
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_3/synthetic_chrom3_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_3/synthetic_chrom3_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:204){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_3/synthetic_chrom3_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom4
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_4/synthetic_chrom4_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_4/synthetic_chrom4_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:139){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_4/synthetic_chrom4_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom5
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_5/synthetic_chrom5_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_5/synthetic_chrom5_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:159){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_5/synthetic_chrom5_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom6
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_6/synthetic_chrom6_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_6/synthetic_chrom6_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:179){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_6/synthetic_chrom6_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom7
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_7/synthetic_chrom7_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_7/synthetic_chrom7_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:172){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_7/synthetic_chrom7_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom8
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_8/synthetic_chrom8_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_8/synthetic_chrom8_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:123){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_8/synthetic_chrom8_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom9
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_9/synthetic_chrom9_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_9/synthetic_chrom9_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:144){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_9/synthetic_chrom9_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom10
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_10/synthetic_chrom10_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_10/synthetic_chrom10_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:145){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_10/synthetic_chrom10_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom11
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_11/synthetic_chrom11_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_11/synthetic_chrom11_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:208){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_11/synthetic_chrom11_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom12
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_12/synthetic_chrom12_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_12/synthetic_chrom12_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:191){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_12/synthetic_chrom12_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom13
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_13/synthetic_chrom13_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:63){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_13/synthetic_chrom13_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom14
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_14/synthetic_chrom14_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_14/synthetic_chrom14_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:117){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_14/synthetic_chrom14_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom15
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:93){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# #94 1st half
+# info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_paralogs2.noQC"))
+# if (info$size == 0) next
+# tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+# if (dim(tableized_file)[1] == 0) next
+# p.normal_PA = Paralogous_var_align(
+#   paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_paralogs2.noQC"),
+#   paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_tableized"),
+#   "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split0","94_half1",".paralogous_var_align.RData"))
+# #94 2nd half
+# info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_paralogs2.noQC"))
+# if (info$size == 0) next
+# tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+# if (dim(tableized_file)[1] == 0) next
+# p.normal_PA = Paralogous_var_align(
+#   paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_paralogs2.noQC"),
+#   paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_tableized"),
+#   "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+# save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split0","94_half2",".paralogous_var_align.RData"))
+# for (i in 95:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:129){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_15/synthetic_chrom15_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom16
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_16/synthetic_chrom16_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_16/synthetic_chrom16_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:157){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_16/synthetic_chrom16_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom17
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_17/synthetic_chrom17_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_17/synthetic_chrom17_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:209){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_17/synthetic.vep.cov.table_chrom17_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_17/synthetic_chrom17_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom18
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_18/synthetic_chrom18_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:56){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_18/synthetic.vep.cov.table_chrom18_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_18/synthetic_chrom18_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom19
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_19/synthetic_chrom19_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_19/synthetic_chrom19_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:226){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_19/synthetic.vep.cov.table_chrom19_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_19/synthetic_chrom19_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom20
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_20/synthetic_chrom20_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:85){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_20/synthetic.vep.cov.table_chrom20_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_20/synthetic_chrom20_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom21
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_21/synthetic_chrom21_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:36){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_21/synthetic.vep.cov.table_chrom21_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_21/synthetic_chrom21_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chrom22
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_22/synthetic_chrom22_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:77){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_22/synthetic.vep.cov.table_chrom22_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_22/synthetic_chrom22_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chromX
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_X/synthetic_chromX_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:99){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_X/synthetic_chromX_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+# for (i in 100:130){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_X/synthetic.vep.cov.table_chromX_wIDs_proper_split",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_X/synthetic_chromX_noQC_split",i,".paralogous_var_align.RData"))
+# }
+# 
+# #chromY
+# for (i in 0:9){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split00",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_Y/synthetic_chromY_noQC_split00",i,".paralogous_var_align.RData"))
+# }
+# for (i in 10:11){
+#   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   if (info$size == 0) next
+#   info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"))
+#   max_no_col = (max(count.fields(info, sep = "\t"))-5)
+#   if (max_no_col == 0) next
+#   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
+#   if (dim(tableized_file)[1] == 0) next
+#   p.normal_PA = Paralogous_var_align(
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_paralogs2.noQC"),
+#     paste0("./data/all_possible_mutations/synthetic_exome/chrom_Y/synthetic.vep.cov.table_chromY_wIDs_proper_split0",i,".out_paraloc_tableized"),
+#     "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#   save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_Y/synthetic_chromY_noQC_split0",i,".paralogous_var_align.RData"))
+# }
+#####
 
 #para_con
+#####
 # #chrom1
 # for (i in 0:9){
 #         info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.para_con"))
@@ -1858,14 +1861,21 @@ for (i in 10:11){
 #                 "./data/clinvar/clinvar_20181028_GRCh37_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
 #         save(p.normal_PA, file = paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_Y/synthetic_chromY_para_con_split0",i,".paralogous_var_align.RData"))
 # }
+#####
 
 #all_con
+#####
 #chrom1
 for (i in 0:9){
   info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -1877,6 +1887,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -1888,6 +1903,11 @@ for (i in 100:360){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_1/synthetic.vep.cov.table_chrom1_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -1901,6 +1921,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -1912,6 +1937,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -1923,6 +1953,11 @@ for (i in 100:263){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_2/synthetic.vep.cov.table_chrom2_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -1936,6 +1971,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -1947,6 +1987,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -1958,6 +2003,11 @@ for (i in 100:204){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_3/synthetic.vep.cov.table_chrom3_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -1971,6 +2021,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -1982,6 +2037,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -1993,6 +2053,11 @@ for (i in 100:139){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_4/synthetic.vep.cov.table_chrom4_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2006,6 +2071,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2017,6 +2087,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2028,6 +2103,11 @@ for (i in 100:159){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_5/synthetic.vep.cov.table_chrom5_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2041,6 +2121,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2052,6 +2137,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2063,6 +2153,11 @@ for (i in 100:179){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_6/synthetic.vep.cov.table_chrom6_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2076,6 +2171,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2087,6 +2187,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2098,6 +2203,11 @@ for (i in 100:172){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_7/synthetic.vep.cov.table_chrom7_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2111,6 +2221,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2122,6 +2237,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2133,6 +2253,11 @@ for (i in 100:123){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_8/synthetic.vep.cov.table_chrom8_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2146,6 +2271,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2157,6 +2287,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2168,6 +2303,11 @@ for (i in 100:144){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_9/synthetic.vep.cov.table_chrom9_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2181,6 +2321,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2192,6 +2337,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2203,6 +2353,11 @@ for (i in 100:145){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_10/synthetic.vep.cov.table_chrom10_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2216,6 +2371,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2227,6 +2387,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2238,6 +2403,11 @@ for (i in 100:208){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_11/synthetic.vep.cov.table_chrom11_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2251,6 +2421,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2262,6 +2437,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2273,6 +2453,11 @@ for (i in 100:191){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_12/synthetic.vep.cov.table_chrom12_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2286,6 +2471,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2297,6 +2487,11 @@ for (i in 10:63){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_13/synthetic.vep.cov.table_chrom13_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2310,6 +2505,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2321,6 +2521,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2332,6 +2537,11 @@ for (i in 100:117){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_14/synthetic.vep.cov.table_chrom14_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2345,6 +2555,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2356,6 +2571,11 @@ for (i in 10:93){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2367,6 +2587,11 @@ info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/
 if (info$size == 0) next
 tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
 if (dim(tableized_file)[1] == 0) next
+
+info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_paralogs2.all_con"))
+max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+if (max_no_col == 0) next
+
 p.normal_PA = Paralogous_var_align(
   paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_paralogs2.all_con"),
   paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half1",".out_paraloc_tableized"),
@@ -2377,6 +2602,11 @@ info = file.info(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/
 if (info$size == 0) next
 tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
 if (dim(tableized_file)[1] == 0) next
+
+info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_paralogs2.all_con"))
+max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+if (max_no_col == 0) next
+
 p.normal_PA = Paralogous_var_align(
   paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_paralogs2.all_con"),
   paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0","94_half2",".out_paraloc_tableized"),
@@ -2387,6 +2617,11 @@ for (i in 95:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split0",i,".out_paraloc_tableized"),
@@ -2398,6 +2633,11 @@ for (i in 100:129){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_15/synthetic.vep.cov.table_chrom15_wIDs_proper_split",i,".out_paraloc_tableized"),
@@ -2411,6 +2651,11 @@ for (i in 0:9){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split00",i,".out_paraloc_tableized"),
@@ -2422,6 +2667,11 @@ for (i in 10:99){
   if (info$size == 0) next
   tableized_file = read.csv(file = paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_tableized"), header = T, stringsAsFactors = F, sep = "\t")
   if (dim(tableized_file)[1] == 0) next
+  
+  info = file(paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"))
+  max_no_col = (max(count.fields(info, sep = "\t"))-5) #-6 for "Variant_pos", "ID", "Gene", "Ref", "Alt", and "\n"; -5 for above python script
+  if (max_no_col == 0) next
+  
   p.normal_PA = Paralogous_var_align(
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_paralogs2.all_con"),
     paste0("./data/all_possible_mutations/synthetic_exome/chrom_16/synthetic.vep.cov.table_chrom16_wIDs_proper_split0",i,".out_paraloc_tableized"),
