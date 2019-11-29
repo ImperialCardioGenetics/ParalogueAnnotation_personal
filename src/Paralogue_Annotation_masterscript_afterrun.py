@@ -37,9 +37,11 @@ else:
 
 tableize_dir = sys.argv[5] #path of where tableize_vcf.py is located, e.g. on HPC - "/work/nyl112/loftee/src/"; can have "/" at end or not
 
+para_zscore_dir = sys.argv[6] #path of where para_zscore folder is located, e.g. on HPC - "/work/nyl112/data"; can have "/" at end or not
+
 print(len(sys.argv), sys.argv)
 
 
 VEP_Plugin_afterrun(input_file, genome_build=genome_build, flavour=flavour, VEPversion=93, offline=1)#, output_filename=sys.argv[2])
-Tableize_wrap(input_file.rsplit(".",1)[0]+".out_paraloc", tableize_dir)
+Tableize_wrap(input_file.rsplit(".",1)[0]+".out_paraloc", tableize_dir, para_zscore_dir)
 R_file_prep(input_file.rsplit(".",1)[0]+".out_paraloc_paralogs", refid_flavour=refid_flavour)

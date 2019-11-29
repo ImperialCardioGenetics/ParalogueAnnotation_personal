@@ -2,7 +2,7 @@ import os, sys, subprocess, re
 
 #Tableize.py wrapper plus additional formatting that can't be done in tableize. Also adds in Para Z scores.
 
-def Tableize_wrap(input_file, tableize_dir):
+def Tableize_wrap(input_file, tableize_dir, para_zscore_dir):
 	#input_file = sys.argv[1]	#path of paraloc file e.g. /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc
 	dir1 = input_file.rsplit("/", 1)[0]
 
@@ -10,6 +10,11 @@ def Tableize_wrap(input_file, tableize_dir):
 		tableize_dir = tableize_dir
 	else:
 		tableize_dir = tableize_dir + "/"
+
+	if para_zscore_dir.endswith("/"):
+		para_zscore_dir = para_zscore_dir
+	else:
+		para_zscore_dir = para_zscore_dir + "/"
 
 	os.system("python2 " + tableize_dir + "tableize_vcf.py --vcf " + input_file + " --out " + input_file + "_tableized_org --do_not_minrep --include_id --vep_info SYMBOL,Protein_position,Amino_acids,Codons,BIOTYPE,Paralogue_Vars --split_by_transcript --canonical_only")
 
@@ -31,9 +36,9 @@ def Tableize_wrap(input_file, tableize_dir):
 					if (line[7] != "NA" and 
 						not "-" in line[7]):
 						# print("A", Gene)
-						if Gene in os.listdir("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes"):
+						if Gene in os.listdir(para_zscore_dir + "para_zscores/genes"):
 							# print("B")
-							with open("/data/Share/nick/Paralog_Anno/data_files/para_zscores/genes/"+Gene) as para_z_file:
+							with open(para_zscore_dir + "para_zscores/genes/" + Gene) as para_z_file:
 								# print("B.1")
 								for i, para_z_line in enumerate(para_z_file):
 									# print(i, int(line[7])-1)
