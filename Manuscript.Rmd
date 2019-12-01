@@ -6204,7 +6204,7 @@ var_positions_data = data.frame()
 
 ##Chr1##
 Total_annotations = data.frame()
-files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_1", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_1", pattern="*.RData", full.names=TRUE, recursive=FALSE)
 for (i in files){
   print(i)
   load(i)
@@ -6222,7 +6222,7 @@ save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var
 
 ##Chr2##
 Total_annotations = data.frame()
-files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_2", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_2", pattern="*.RData", full.names=TRUE, recursive=FALSE)
 for (i in files){
   print(i)
   load(i)
@@ -6240,7 +6240,7 @@ save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var
 
 ##Chr3##
 Total_annotations = data.frame()
-files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_3", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_3", pattern="*.RData", full.names=TRUE, recursive=FALSE)
 for (i in files){
   print(i)
   load(i)
@@ -6258,7 +6258,7 @@ save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var
 
 ##Chr4##
 Total_annotations = data.frame()
-files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_4", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_4", pattern="*.RData", full.names=TRUE, recursive=FALSE)
 for (i in files){
   print(i)
   load(i)
@@ -6276,7 +6276,7 @@ save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var
 
 ##Chr5##
 Total_annotations = data.frame()
-files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_5", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_5", pattern="*.RData", full.names=TRUE, recursive=FALSE)
 for (i in files){
   print(i)
   load(i)
@@ -6295,7 +6295,7 @@ save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var
 ##Chr 6 to 22##
 for (j in 6:22){
   Total_annotations = data.frame()
-  files = list.files(path=paste0("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_",j), pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+  files = list.files(path=paste0("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_",j), pattern="*.RData", full.names=TRUE, recursive=FALSE)
   for (i in files){
     print(i)
     load(i)
@@ -6314,7 +6314,7 @@ for (j in 6:22){
 
 ##ChrX##
 Total_annotations = data.frame()
-files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_X", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_X", pattern="*.RData", full.names=TRUE, recursive=FALSE)
 for (i in files){
   print(i)
   load(i)
@@ -6333,7 +6333,7 @@ save(var_positions_data, file = "data/all_possible_mutations/synthetic_exome/var
 
 ##ChrY##
 Total_annotations = data.frame()
-files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_Y", pattern="*.RDS", full.names=TRUE, recursive=FALSE)
+files = list.files(path="/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_Y", pattern="*.RData", full.names=TRUE, recursive=FALSE)
 for (i in files){
   print(i)
   load(i)
