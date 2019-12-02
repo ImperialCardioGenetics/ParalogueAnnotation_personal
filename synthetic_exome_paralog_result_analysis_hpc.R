@@ -1,12 +1,12 @@
 ##RUN ON HPC##
 
-Packages = c("tidyverse", "plyr", "dplyr")
-new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma.imperial.ac.uk/")
+# Packages = c("tidyverse", "plyr", "dplyr")
+# new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
+# if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma.imperial.ac.uk/")
 # lapply(Packages, library, character.only = TRUE)
-library("plyr")
-library("dplyr")
-library("tidyverse")
+# library("plyr")
+# library("dplyr")
+# library("tidyverse")
 
 # max_no_paralogous_pos = 0
 
