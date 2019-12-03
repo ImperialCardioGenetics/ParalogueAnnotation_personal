@@ -26,7 +26,7 @@ for (j in 1:22){
                         # }
                 }
                 Genes = unique(Total_annotations$Gene)
-                chr_pos = as.numeric(sapply(strsplit(Total_annotations$Variant_pos, split = " "), "[", 2))
+                chr_pos = as.numeric(sapply(strsplit(as.character(Total_annotations$Variant_pos), split = " "), "[", 2))
                 var_positions_data = data.frame(Chrom = as.character(j), Position = chr_pos)
                 write.table(Genes,file=paste0("/work/nyl112/data/synthetic_exome/synthetic_exome_chrom_",j,"_",k,"_genes.txt"), na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
                 save(var_positions_data, file = paste0("/work/nyl112/data/synthetic_exome/var_positions_data_chrom_",j,"_",k,".RData"))
