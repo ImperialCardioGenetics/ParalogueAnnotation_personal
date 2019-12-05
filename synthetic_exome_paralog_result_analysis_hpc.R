@@ -38,6 +38,7 @@ for (k in c("noQC","para_con","all_con")){
         Total_annotations = data.frame()
         var_positions_data = data.frame()
         files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_X/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
+        print(files)
         for (i in files){
                 print(i)
                 load(i)
