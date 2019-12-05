@@ -103,7 +103,7 @@ Paralogous_var_align = function(paralogs2_file,
   Unique_variant_gene_annotations = distinct(Unique_variant_annotations[c("Variant_pos", "ID.x", "Gene", "REF.x", "ALT.x")])
   Unique_variant_annotations = distinct(Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
   
-  Unique_variant_IDs_not_annotated = setdiff(input_variants$ID,Unique_variant_annotations$ID.x)
+  Unique_variant_IDs_not_annotated = dplyr::setdiff(input_variants$ID,Unique_variant_annotations$ID.x)
   Unique_variants_not_annotated = distinct(Total_paralog_annotations[Total_paralog_annotations$ID.x %in% Unique_variant_IDs_not_annotated,c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
   Unique_variant_genes_not_annotated = distinct(Total_paralog_annotations[Total_paralog_annotations$ID.x %in% Unique_variant_IDs_not_annotated,c("Variant_pos", "ID.x", "Gene", "REF.x", "ALT.x")])
   
