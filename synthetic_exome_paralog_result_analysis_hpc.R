@@ -49,7 +49,7 @@ for (k in c("noQC","para_con","all_con")){
         }
         Genes = unique(Total_annotations$Gene)
         chr_pos = as.numeric(sapply(strsplit(as.character(Total_annotations$Variant_pos), split = " "), "[", 2))
-        print(chr_pos)
+        print(Total_annotations)
         var_positions_data = data.frame(Chrom = "X", Position = chr_pos)
         write.table(Genes,file=paste0("/work/nyl112/data/synthetic_exome/synthetic_exome_chrom_X_",k,"_genes.txt"), na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
         save(var_positions_data, file = paste0("/work/nyl112/data/synthetic_exome/var_positions_data_chrom_X_",k,".RData"))
