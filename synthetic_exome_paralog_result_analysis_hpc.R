@@ -13,14 +13,17 @@ library("dplyr")
 ##Chr 1 to 22##
 for (j in 1:22){
         for (k in c("noQC","para_con","all_con")){
-                Total_annotations = data.frame()
-                var_positions_data = data.frame()
+                Total_annotations = NULL
                 files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_",j,"/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
                 for (i in files){
                         print(i)
                         load(i)
                         # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
-                        Total_annotations = rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+                        if (is.null(Total_annotations)){
+                                Total_annotations = p.normal_PA$Unique_variant_gene_annotations
+                        } else {
+                                Total_annotations = rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+                        }
                         # if (p.normal_PA$max_no_col > max_no_paralogous_pos){
                         #         max_no_paralogous_pos = p.normal_PA$max_no_col
                         # }
@@ -35,15 +38,18 @@ for (j in 1:22){
 
 ##ChrX##
 for (k in c("noQC","para_con","all_con")){
-        Total_annotations = data.frame()
-        var_positions_data = data.frame()
+        Total_annotations = NULL
         files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_X/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
         # print(files)
         for (i in files){
                 print(i)
                 load(i)
                 # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
-                Total_annotations = rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+                if (is.null(Total_annotations)){
+                        Total_annotations = p.normal_PA$Unique_variant_gene_annotations
+                } else {
+                        Total_annotations = rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+                }                
                 # if (p.normal_PA$max_no_col > max_no_paralogous_pos){
                 #         max_no_paralogous_pos = p.normal_PA$max_no_col
                 # }
@@ -58,14 +64,17 @@ for (k in c("noQC","para_con","all_con")){
 
 ##ChrY##
 for (k in c("noQC","para_con","all_con")){
-        Total_annotations = data.frame()
-        var_positions_data = data.frame()
+        Total_annotations = NULL
         files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_Y/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
         for (i in files){
                 print(i)
                 load(i)
                 # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
-                Total_annotations = rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+                if (is.null(Total_annotations)){
+                        Total_annotations = p.normal_PA$Unique_variant_gene_annotations
+                } else {
+                        Total_annotations = rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+                }               
                 # if (p.normal_PA$max_no_col > max_no_paralogous_pos){
                 #         max_no_paralogous_pos = p.normal_PA$max_no_col
                 # }
