@@ -37,8 +37,8 @@
 for (k in c("noQC","para_con","all_con")){
         Total_annotations = data.frame()
         var_positions_data = data.frame()
-        files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_X/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
-        print(files)
+        files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_X/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
+        # print(files)
         for (i in files){
                 print(i)
                 load(i)
@@ -50,7 +50,7 @@ for (k in c("noQC","para_con","all_con")){
         }
         Genes = unique(Total_annotations$Gene)
         chr_pos = as.numeric(sapply(strsplit(as.character(Total_annotations$Variant_pos), split = " "), "[", 2))
-        print(Total_annotations)
+        # print(Total_annotations)
         var_positions_data = data.frame(Chrom = "X", Position = chr_pos)
         write.table(Genes,file=paste0("/work/nyl112/data/synthetic_exome/synthetic_exome_chrom_X_",k,"_genes.txt"), na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
         save(var_positions_data, file = paste0("/work/nyl112/data/synthetic_exome/var_positions_data_chrom_X_",k,".RData"))
@@ -60,7 +60,7 @@ for (k in c("noQC","para_con","all_con")){
 for (k in c("noQC","para_con","all_con")){
         Total_annotations = data.frame()
         var_positions_data = data.frame()
-        files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RDS_objects/chrom_Y/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
+        files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_Y/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
         for (i in files){
                 print(i)
                 load(i)
