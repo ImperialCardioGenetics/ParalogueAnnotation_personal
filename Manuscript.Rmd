@@ -6194,6 +6194,7 @@ only 2 predicted patho variants are in clinvar B/LB
 
 Actual script ("synthetic_exome_paralog_annotate_on_hpc.R") ran on hpc.
 
+Visualisation of all predicted pathogenic variants using conserved AA/Para_con:
 ```{r synthetic_exome, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE, results='hide'}
 
 # All_possible_query_genes = c()
@@ -6412,7 +6413,108 @@ num_pred_Chr1 = length(total_var_positions_data[total_var_positions_data$Chrom =
 
 ```
 
+Visualisation of all predicted pathogenic variants using all conservation stringency levels:
+```{r synthetic_exome, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE, results='hide'}
 
+# All_possible_query_genes = c()
+
+max_no_paralogous_pos = 0
+Genes = c()
+var_positions_data = data.frame()
+
+##Graph representation##
+chrom_lengths = data.frame(
+  Chrom=c(1:22,"X","Y"),
+  Position=c(249250621, 243199373, 198022430, 191154276, 180915260, 171115067, 159138663, 146364022, 141213431, 135534747, 135006516, 133851895, 115169878, 107349540, 102531392, 90354753, 81195210, 78077248, 59128983, 63025520, 48129895, 51304566, 155270560, 59373566)
+  )
+
+#noQC#
+noQC_total_var_positions_data = data.frame()
+for (i in c(1:22,"X","Y")){
+  load(paste0("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/var_positions_data_chrom_",i,"_noQC.RData"))
+  noQC_total_var_positions_data = rbind(noQC_total_var_positions_data, var_positions_data)
+}
+noQC_total_var_positions_data$stringency = "noQC"
+#para_con#
+para_con_total_var_positions_data = data.frame()
+for (i in c(1:22,"X","Y")){
+  load(paste0("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/var_positions_data_chrom_",i,"_para_con.RData"))
+  para_con_total_var_positions_data = rbind(para_con_total_var_positions_data, var_positions_data)
+}
+para_con_total_var_positions_data$stringency = "para_con"
+#all_con#
+all_con_total_var_positions_data = data.frame()
+for (i in c(1:22,"X","Y")){
+  load(paste0("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/var_positions_data_chrom_",i,"_all_con.RData"))
+  all_con_total_var_positions_data = rbind(all_con_total_var_positions_data, var_positions_data)
+}
+all_con_total_var_positions_data$stringency = "all_con"
+
+total_var_positions_data = rbind(noQC_total_var_positions_data,para_con_total_var_positions_data,all_con_total_var_positions_data)
+
+total_var_positions_data$Chrom = factor(total_var_positions_data$Chrom, levels = rev(c(1:22,"X","Y")))
+total_var_positions_data$stringency = factor(total_var_positions_data$stringency, levels = c("noQC","para_con","all_con"))
+
+cols = c("noQC" = "green", "para_con" = "yellow", "all_con" = "red")
+
+gg = ggplot(total_var_positions_data, aes(x=Position, y=Chrom, colour = stringency)) +
+  geom_point(shape = 73, size=4, position = position_dodge(width = .5)) +
+  scale_color_manual(values = cols) +
+  xlim(0,max(chrom_lengths$Position)+10000000) +
+  theme_bw() +
+  theme(
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        legend.title = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+        ) 
+
+ggsave("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/Synthetic_exome_all_chrom_all_conservations_annotations.png", height = 6, width = 10)
+
+for (i in c(1:22,"X","Y")){
+  end_length = chrom_lengths[chrom_lengths$Chrom==i,"Position"]
+  gg = gg + geom_segment(data = chrom_lengths, aes(x=0,y=Chrom,xend=Position,yend=Chrom)) + annotate("text", label = length(total_var_positions_data[total_var_positions_data$Chrom == i, "Position"]), x = end_length+10000000, y = i)
+}
+# ggsave("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/Synthetic_exome_all_chrom_noQC_annotations.png", height = 6, width = 10)
+
+#para_con#
+para_con_total_var_positions_data = data.frame()
+#individual graphs#
+
+#total plot#
+para_con_total_var_positions_data$Chrom = factor(para_con_total_var_positions_data$Chrom, levels = rev(c(1:22,"X","Y")))
+
+gg = ggplot(para_con_total_var_positions_data, aes(x=Position, y=Chrom)) +
+  geom_point(shape = 73, size=4, position = position_dodge(width = .5), colour = alpha("red",0.9)) +
+  xlim(0,max(chrom_lengths$Position)+10000000) +
+  theme_bw() +
+  theme(
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        legend.title = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+        ) 
+for (i in c(1:22,"X","Y")){
+  end_length = chrom_lengths[chrom_lengths$Chrom==i,"Position"]
+  gg = gg + geom_segment(data = chrom_lengths, aes(x=0,y=Chrom,xend=Position,yend=Chrom)) + annotate("text", label = length(para_con_total_var_positions_data[para_con_total_var_positions_data$Chrom == i, "Position"]), x = end_length+10000000, y = i)
+}
+ggsave("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/Synthetic_exome_all_chrom_para_con_annotations.png", height = 6, width = 10)
+
+  # geom_text(aes(label=Pathogenic_var), position=position_dodge(width=0.9), vjust=-0.25, size = 15, color = "black")
+
+num_pred_Chr1 = length(total_var_positions_data[total_var_positions_data$Chrom == 1, "Position"])
+
+```
 ## GO protein classes of clinvar P/LP variants with PA noQC
 
 Using GO Panther enrichment analysis (http://pantherdb.org/) to identify common protein classes among the genes that had paralogue annotations.
