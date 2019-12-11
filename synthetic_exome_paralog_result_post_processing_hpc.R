@@ -1,4 +1,4 @@
-##RUN ON HPC - for making chromosome plots##
+##RUN ON HPC - for trimming data down to only what's needed for paralog app website##
 
 Packages = c("tidyverse", "plyr", "dplyr")
 new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
