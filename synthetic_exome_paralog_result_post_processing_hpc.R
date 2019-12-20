@@ -18,15 +18,13 @@ for (j in 1:22){
                 for (i in files){
                         print(i)
                         load(i)
-                        # All_possible_query_genes = c(All_possible_query_genes, unique(p.normal_PA$Left_joined_gathered_paralog_data$Gene))
+                        tmp_Total_annotations = p.normal_PA$Total_paralog_annotations
+                          
                         if (is.null(Total_annotations)){
-                                Total_annotations = p.normal_PA$Unique_variant_gene_annotations
+                                Total_annotations = p.normal_PA$Total_paralog_annotations
                         } else {
-                                Total_annotations = base::rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Unique_variant_gene_annotations, Total_annotations))
+                                Total_annotations = base::rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Total_paralog_annotations, Total_annotations))
                         }
-                        # if (p.normal_PA$max_no_col > max_no_paralogous_pos){
-                        #         max_no_paralogous_pos = p.normal_PA$max_no_col
-                        # }
                 }
                 Genes = unique(Total_annotations$Gene)
                 chr_pos = as.numeric(sapply(strsplit(as.character(Total_annotations$Variant_pos), split = " "), "[", 2))
