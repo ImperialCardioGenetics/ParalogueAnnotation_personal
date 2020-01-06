@@ -10,8 +10,8 @@ library("dplyr")
 
 # max_no_paralogous_pos = 0
 
-##Chr 1 to 22##
-for (j in 1:22){
+##Chr 19 to 22##
+for (j in 19:22){
         for (k in c("noQC","para_con","all_con")){
                 Total_annotations = NULL
                 files = list.files(path=paste0("/work/nyl112/data/synthetic_exome/paralogous_var_align.RData_objects/chrom_",j,"/",k), pattern="*.RData", full.names=TRUE, recursive=FALSE)
