@@ -1,4 +1,4 @@
-##RUN ON HPC - for trimming data down to only what's needed for paralog app website##
+##RUN ON HPC - for trimming data down to only what's needed for paralog app website and also extracting predicted pathogenic variants for GeL##
 
 Packages = c("tidyverse", "plyr", "dplyr")
 new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
