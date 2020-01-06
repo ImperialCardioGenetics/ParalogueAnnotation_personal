@@ -19,18 +19,18 @@ for (j in 1:22){
                         print(i)
                         load(i)
                         tmp_Total_annotations = p.normal_PA$Total_paralog_annotations
-                          
+                        tmp_Total_annotations = tmp_Total_annotations[,!(names(tmp_Total_annotations) %in% c("Variant_pos","FILTER.x","BIOTYPE.x","Paralogue_Vars.x","REF_Amino_acids.x","ALT_Amino_acids.x","paralog","paralog_pos","FILTER.y","BIOTYPE.y","Paralogue_Vars.y","REF_Amino_acids.y","ALT_Amino_acids.y"))]
+                        tmp_Total_annotations = tmp_Total_annotations[!is.na(tmp_Total_annotations$POS.x),]
                         if (is.null(Total_annotations)){
-                                Total_annotations = p.normal_PA$Total_paralog_annotations
+                                Total_annotations = tmp_Total_annotations
                         } else {
-                                Total_annotations = base::rbind(Total_annotations, dplyr::setdiff(p.normal_PA$Total_paralog_annotations, Total_annotations))
+                                Total_annotations = base::rbind(Total_annotations, dplyr::setdiff(tmp_Total_annotations, Total_annotations))
                         }
                 }
-                Genes = unique(Total_annotations$Gene)
-                chr_pos = as.numeric(sapply(strsplit(as.character(Total_annotations$Variant_pos), split = " "), "[", 2))
-                var_positions_data = data.frame(Chrom = as.character(j), Position = chr_pos)
-                write.table(Genes,file=paste0("/work/nyl112/data/synthetic_exome/synthetic_exome_chrom_",j,"_",k,"_genes.txt"), na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
-                save(var_positions_data, file = paste0("/work/nyl112/data/synthetic_exome/var_positions_data_chrom_",j,"_",k,".RData"))
+                save(Total_annotations, file = paste0("/work/nyl112/data/synthetic_exome/Total_annotations_chrom_",j,"_",k,".RData"))
+                Total_annotations = Total_annotations[,c("CHROM.x","POS.x","ID.x","REF.x","ALT.x")]
+                names(Total_annotations) = c("CHROM","POS","ID","REF","ALT")
+                write.table(Total_annotations,file=paste0("/work/nyl112/data/synthetic_exome/Total_annotations_chrom_X_",k,"_predicted_pathogenic.vcf"), na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
         }
 }
 
