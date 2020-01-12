@@ -19,6 +19,9 @@ for (j in args[1]){
                 for (i in files){
                         print(i)
                         load(i)
+                        if (k == "noQC"){
+                          
+                        }
                         tmp_Total_annotations = p.normal_PA$Total_paralog_annotations
                         tmp_Total_annotations = tmp_Total_annotations[,!(names(tmp_Total_annotations) %in% c("Variant_pos","FILTER.x","BIOTYPE.x","Paralogue_Vars.x","REF_Amino_acids.x","ALT_Amino_acids.x","paralog","paralog_pos","FILTER.y","BIOTYPE.y","Paralogue_Vars.y","REF_Amino_acids.y","ALT_Amino_acids.y"))]
                         tmp_Total_annotations = tmp_Total_annotations[!is.na(tmp_Total_annotations$POS.x),]
