@@ -7,7 +7,7 @@ Packages = c("tidyverse", "plyr", "dplyr")
 new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma.imperial.ac.uk/")
 # lapply(Packages, library, character.only = TRUE)
-# library("plyr")
+library("plyr")
 library("dplyr")
 # library("tidyverse")
 
@@ -25,7 +25,7 @@ for (j in args[1]){
                         tmp_Total_annotations = tmp_Total_annotations[!is.na(tmp_Total_annotations$POS.x),]
                         tmp_Total_annotations$Para_Z_score.x = as.numeric(tmp_Total_annotations$Para_Z_score.x)
                         tmp_Total_annotations$Para_Z_score.y = as.numeric(tmp_Total_annotations$Para_Z_score.y)
-                        tmp_Total_annotations$QC = k
+                        tmp_Total_annotations$QC = toString(k)
                         if (k == "noQC"){
                                 tmp_Paraloc = p.normal_PA$paralog_data
                                 tmp_Paraloc = tmp_Paraloc[,!(names(tmp_Paraloc) %in% c("Variant_pos","FILTER","BIOTYPE","Paralogue_Vars","Para_Z_score","REF_Amino_acids","ALT_Amino_acids","Protein_position","Amino_acids","Codons"))]
@@ -33,7 +33,7 @@ for (j in args[1]){
                                 print("HERE1")
                                 tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
                                 print("HERE2")
-                                tmp_Paraloc$QC = k
+                                tmp_Paraloc$QC = toString(k)
                         }
                         if (is.null(Total_annotations)){
                                 Total_annotations = tmp_Total_annotations
@@ -43,7 +43,7 @@ for (j in args[1]){
                         if (is.null(Paraloc)){
                                 Paraloc = tmp_Paraloc
                         } else {
-                                Paraloc = base::rbind(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
+                                Paraloc = plyr::rbind.fill(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
                         }
                 }
                 print("HERE3")
