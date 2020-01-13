@@ -25,15 +25,25 @@ for (j in args[1]){
                         tmp_Total_annotations = tmp_Total_annotations[!is.na(tmp_Total_annotations$POS.x),]
                         tmp_Total_annotations$Para_Z_score.x = as.numeric(tmp_Total_annotations$Para_Z_score.x)
                         tmp_Total_annotations$Para_Z_score.y = as.numeric(tmp_Total_annotations$Para_Z_score.y)
-                        tmp_Total_annotations$QC = toString(k)
+                        if (all(is.na(tmp_Total_annotations$POS.x))){
+                                tmp_df = data.frame(QC = character())
+                                tmp_Total_annotations = base::cbind(tmp_Total_annotations, tmp_df)
+                        } else {
+                                tmp_Total_annotations$QC = toString(k)
+                        }
                         if (k == "noQC"){
                                 tmp_Paraloc = p.normal_PA$paralog_data
                                 tmp_Paraloc = tmp_Paraloc[,!(names(tmp_Paraloc) %in% c("Variant_pos","FILTER","BIOTYPE","Paralogue_Vars","Para_Z_score","REF_Amino_acids","ALT_Amino_acids","Protein_position","Amino_acids","Codons"))]
                                 tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
-                                print("HERE1")
+                                # print("HERE1")
                                 tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
-                                print("HERE2")
-                                tmp_Paraloc$QC = toString(k)
+                                # print("HERE2")
+                                if (all(is.na(tmp_Paraloc$POS))){
+                                        tmp_df = data.frame(QC = character())
+                                        tmp_Paraloc = base::cbind(tmp_Paraloc, tmp_df)
+                                } else {
+                                        tmp_Paraloc$QC = toString(k)
+                                }
                         }
                         if (is.null(Total_annotations)){
                                 Total_annotations = tmp_Total_annotations
@@ -46,7 +56,7 @@ for (j in args[1]){
                                 Paraloc = plyr::rbind.fill(Paraloc, dplyr::anti_join(x=tmp_Paraloc, y=Paraloc, by=c("CHROM","POS","ID","Gene","REF","ALT","QC")))
                         }
                 }
-                print("HERE3")
+                # print("HERE3")
                 Total_annotations_vcf = Total_annotations[Total_annotations$QC == k,c("CHROM.x","POS.x","ID.x","REF.x","ALT.x")]
                 names(Total_annotations_vcf) = c("CHROM","POS","ID","REF","ALT")
                 write.table(Total_annotations_vcf,file=paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Total_annotations_chrom_",j,"_",k,"_predicted_pathogenic.vcf"), na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
