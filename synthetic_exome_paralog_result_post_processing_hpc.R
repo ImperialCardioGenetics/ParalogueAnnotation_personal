@@ -38,10 +38,10 @@ for (j in args[1]){
                         }
                         if (k == "noQC"){
                                 tmp_Paraloc = p.normal_PA$paralog_data
-                                tmp_Paraloc = tmp_Paraloc[,!(names(tmp_Paraloc) %in% c("Variant_pos","FILTER","BIOTYPE","Paralogue_Vars","Para_Z_score","REF_Amino_acids","ALT_Amino_acids","Protein_position","Amino_acids","Codons"))]
-                                # tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","ID","Gene","REF","ALT","Paralogue_Vars")]
+                                # tmp_Paraloc = tmp_Paraloc[,!(names(tmp_Paraloc) %in% c("Variant_pos","FILTER","BIOTYPE","Paralogue_Vars","Para_Z_score","REF_Amino_acids","ALT_Amino_acids","Protein_position","Amino_acids","Codons"))]
+                                # tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
+                                tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","ID","Gene","REF","ALT","Paralogue_Vars")]
                                 tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
-                                tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
                                 # if (all(is.na(tmp_Paraloc$POS))){
                                 #         tmp_df = data.frame(QC = character())
                                 #         tmp_Paraloc = base::cbind(tmp_Paraloc, tmp_df)
@@ -51,17 +51,17 @@ for (j in args[1]){
                                 if (is.null(Paraloc)){
                                         Paraloc = tmp_Paraloc
                                 } else {
-                                        Paraloc = plyr::rbind.fill(Paraloc, dplyr::anti_join(x=tmp_Paraloc, y=Paraloc, by=c("CHROM","POS","ID","Gene","REF","ALT")))
-                                        # Paraloc = base::rbind(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
+                                        # Paraloc = plyr::rbind.fill(Paraloc, dplyr::anti_join(x=tmp_Paraloc, y=Paraloc, by=c("CHROM","POS","ID","Gene","REF","ALT")))
+                                        Paraloc = base::rbind(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
                                 }
                         }
                 }
-                save(Total_annotations, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Total_annotations_chrom_",j,"_",k,".RData"))
+                save(Total_annotations, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/chrom_",j,"/Total_annotations_chrom_",j,"_",k,".RData"))
                 Total_annotations = Total_annotations[,c("CHROM.x","POS.x","ID.x","REF.x","ALT.x")]
                 names(Total_annotations) = c("CHROM","POS","ID","REF","ALT")
-                write.table(Total_annotations,file=paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Total_annotations_chrom_",j,"_",k,"_predicted_pathogenic.vcf"), na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
+                write.table(Total_annotations,file=paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/chrom_",j,"/Total_annotations_chrom_",j,"_",k,"_predicted_pathogenic.vcf"), na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
                 if (!is.null(Paraloc)){
-                        save(Paraloc, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Para_locations_chrom_",j,"_",k,".RData"))
+                        save(Paraloc, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/chrom_",j,"/Para_locations_chrom_",j,"_",k,".RData"))
                 }
         }
 }
