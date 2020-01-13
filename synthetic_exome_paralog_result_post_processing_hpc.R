@@ -33,11 +33,9 @@ for (j in args[1]){
                         }
                         if (k == "noQC"){
                                 tmp_Paraloc = p.normal_PA$paralog_data
-                                tmp_Paraloc = tmp_Paraloc[,!(names(tmp_Paraloc) %in% c("Variant_pos","FILTER","BIOTYPE","Paralogue_Vars","Para_Z_score","REF_Amino_acids","ALT_Amino_acids","Protein_position","Amino_acids","Codons"))]
+                                tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","ID","Gene","REF","ALT","Paralogue_Vars")]
                                 tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
-                                # print("HERE1")
-                                tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
-                                # print("HERE2")
+                                # tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
                                 if (all(is.na(tmp_Paraloc$POS))){
                                         tmp_df = data.frame(QC = character())
                                         tmp_Paraloc = base::cbind(tmp_Paraloc, tmp_df)
@@ -53,14 +51,14 @@ for (j in args[1]){
                         if (is.null(Paraloc)){
                                 Paraloc = tmp_Paraloc
                         } else {
-                                Paraloc = plyr::rbind.fill(Paraloc, dplyr::anti_join(x=tmp_Paraloc, y=Paraloc, by=c("CHROM","POS","ID","Gene","REF","ALT","QC")))
+                                # Paraloc = plyr::rbind.fill(Paraloc, dplyr::anti_join(x=tmp_Paraloc, y=Paraloc, by=c("CHROM","POS","ID","Gene","REF","ALT","QC")))
+                                Paraloc = base::rbind(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
                         }
                 }
-                # print("HERE3")
                 Total_annotations_vcf = Total_annotations[Total_annotations$QC == k,c("CHROM.x","POS.x","ID.x","REF.x","ALT.x")]
                 names(Total_annotations_vcf) = c("CHROM","POS","ID","REF","ALT")
                 write.table(Total_annotations_vcf,file=paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Total_annotations_chrom_",j,"_",k,"_predicted_pathogenic.vcf"), na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
+                save(Total_annotations, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Total_annotations_chrom_",j,"_",k,".RData"))
+                save(Paraloc, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Para_locations_chrom_",j,"_",k,".RData"))
         }
-        save(Total_annotations, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Total_annotations_chrom_",j,".RData"))
-        save(Paraloc, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Para_locations_chrom_",j,".RData"))
 }
