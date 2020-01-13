@@ -43,7 +43,7 @@ for (j in args[1]){
                         if (is.null(Paraloc)){
                                 Paraloc = tmp_Paraloc
                         } else {
-                                Paraloc = plyr::rbind.fill(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
+                                Paraloc = plyr::rbind.fill(Paraloc, dplyr::anti_join(x=tmp_Paraloc, y=Paraloc, by=c("CHROM","POS","ID","Gene","REF","ALT","QC")))
                         }
                 }
                 print("HERE3")
