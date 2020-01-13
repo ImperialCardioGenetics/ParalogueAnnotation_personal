@@ -31,6 +31,7 @@ for (j in args[1]){
                                 tmp_Paraloc = tmp_Paraloc[,!(names(tmp_Paraloc) %in% c("Variant_pos","FILTER","BIOTYPE","Paralogue_Vars","Para_Z_score","REF_Amino_acids","ALT_Amino_acids","Protein_position","Amino_acids","Codons"))]
                                 tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
                                 tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
+                                print("HERE")
                                 tmp_Paraloc$QC = k
                         }
                         if (is.null(Total_annotations)){
@@ -44,6 +45,7 @@ for (j in args[1]){
                                 Paraloc = base::rbind(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
                         }
                 }
+                print("OR HERE")
                 Total_annotations_vcf = Total_annotations[Total_annotations$QC == k,c("CHROM.x","POS.x","ID.x","REF.x","ALT.x")]
                 names(Total_annotations_vcf) = c("CHROM","POS","ID","REF","ALT")
                 write.table(Total_annotations_vcf,file=paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/Total_annotations_chrom_",j,"_",k,"_predicted_pathogenic.vcf"), na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
