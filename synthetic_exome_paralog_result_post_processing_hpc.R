@@ -42,6 +42,7 @@ for (j in args[1]){
                                 # tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
                                 tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","ID","Gene","REF","ALT","Paralogue_Vars")]
                                 tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
+                                tmp_Paraloc$Paralogue_Vars = as.character(tmp_Paraloc$Paralogue_Vars)
                                 # if (all(is.na(tmp_Paraloc$POS))){
                                 #         tmp_df = data.frame(QC = character())
                                 #         tmp_Paraloc = base::cbind(tmp_Paraloc, tmp_df)
