@@ -33,9 +33,9 @@ elif refid_flavour == "all_con":
 else:
 	sys.exit("ERROR: refid flavour selected not recognized")
 
-tableize_dir = sys.argv[5] #path of where tableize_vcf.py is located, e.g. on HPC - "/work/nyl112/loftee/src/"; can have "/" at end or not
+tableize_dir = sys.argv[5] #path of where tableize_vcf.py is located, e.g. on HPC - "/work/nyl112/loftee/src/"; can have "/" at end or not; on RBH - "/data/Share/nick/Paralog_Anno/loftee/src/"
 
-para_zscore_dir = sys.argv[6] #path of where para_zscore folder is located, e.g. on HPC - "/work/nyl112/data"; can have "/" at end or not
+para_zscore_dir = sys.argv[6] #path of where para_zscore folder is located, e.g. on HPC - "/work/nyl112/data"; can have "/" at end or not; on RBH - "/data/Share/nick/Paralog_Anno/data_files/"
 
 print(len(sys.argv), sys.argv)
 
