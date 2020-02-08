@@ -6436,24 +6436,27 @@ for (i in c(1:22,"X","Y")){
   load(paste0("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/var_positions_data_chrom_",i,"_noQC.RData"))
   noQC_total_var_positions_data = rbind(noQC_total_var_positions_data, var_positions_data)
 }
-noQC_total_var_positions_data$stringency = "noQC"
-# noQC_total_var_positions_data$stringency = 0
+# noQC_total_var_positions_data$stringency = "noQC"
+noQC_total_var_positions_data$stringency = 0
+noQC_total_var_positions_data$Position_end = noQC_total_var_positions_data$Position
+noQC_total_var_positions_data$name = paste(noQC_total_var_positions_data$Chrom, noQC_total_var_positions_data$Position, noQC_total_var_positions_data$stringency, sep = "_")
+
 #para_con#
 para_con_total_var_positions_data = data.frame()
 for (i in c(1:22,"X","Y")){
   load(paste0("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/var_positions_data_chrom_",i,"_para_con.RData"))
   para_con_total_var_positions_data = rbind(para_con_total_var_positions_data, var_positions_data)
 }
-para_con_total_var_positions_data$stringency = "para_con"
-# para_con_total_var_positions_data$stringency = 1
+# para_con_total_var_positions_data$stringency = "para_con"
+para_con_total_var_positions_data$stringency = 1
 #all_con#
 all_con_total_var_positions_data = data.frame()
 for (i in c(1:22,"X","Y")){
   load(paste0("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/var_positions_data_chrom_",i,"_all_con.RData"))
   all_con_total_var_positions_data = rbind(all_con_total_var_positions_data, var_positions_data)
 }
-all_con_total_var_positions_data$stringency = "all_con"
-# all_con_total_var_positions_data$stringency = 2
+# all_con_total_var_positions_data$stringency = "all_con"
+all_con_total_var_positions_data$stringency = 2
 
 total_var_positions_data = rbind(noQC_total_var_positions_data,para_con_total_var_positions_data,all_con_total_var_positions_data)
 
