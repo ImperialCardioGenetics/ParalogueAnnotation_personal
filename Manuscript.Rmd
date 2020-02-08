@@ -6425,8 +6425,10 @@ var_positions_data = data.frame()
 ##Graph representation##
 chrom_lengths = data.frame(
   Chrom=c(1:22,"X","Y"),
+  Start = rep(1,24),
   Position=c(249250621, 243199373, 198022430, 191154276, 180915260, 171115067, 159138663, 146364022, 141213431, 135534747, 135006516, 133851895, 115169878, 107349540, 102531392, 90354753, 81195210, 78077248, 59128983, 63025520, 48129895, 51304566, 155270560, 59373566)
   )
+write.table(chrom_lengths,file="data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/ChromoMap_files/chromosome_file.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE) #write to file in order to work with ChromoMap
 
 #noQC#
 noQC_total_var_positions_data = data.frame()
@@ -6435,6 +6437,7 @@ for (i in c(1:22,"X","Y")){
   noQC_total_var_positions_data = rbind(noQC_total_var_positions_data, var_positions_data)
 }
 noQC_total_var_positions_data$stringency = "noQC"
+# noQC_total_var_positions_data$stringency = 0
 #para_con#
 para_con_total_var_positions_data = data.frame()
 for (i in c(1:22,"X","Y")){
@@ -6442,6 +6445,7 @@ for (i in c(1:22,"X","Y")){
   para_con_total_var_positions_data = rbind(para_con_total_var_positions_data, var_positions_data)
 }
 para_con_total_var_positions_data$stringency = "para_con"
+# para_con_total_var_positions_data$stringency = 1
 #all_con#
 all_con_total_var_positions_data = data.frame()
 for (i in c(1:22,"X","Y")){
@@ -6449,6 +6453,7 @@ for (i in c(1:22,"X","Y")){
   all_con_total_var_positions_data = rbind(all_con_total_var_positions_data, var_positions_data)
 }
 all_con_total_var_positions_data$stringency = "all_con"
+# all_con_total_var_positions_data$stringency = 2
 
 total_var_positions_data = rbind(noQC_total_var_positions_data,para_con_total_var_positions_data,all_con_total_var_positions_data)
 
