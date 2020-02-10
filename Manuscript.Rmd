@@ -6437,7 +6437,7 @@ for (i in c(1:22,"X","Y")){
 }
 noQC_total_var_positions_data_variant_num = dim(noQC_total_var_positions_data)[1]
 noQC_total_var_positions_data = dplyr::distinct(noQC_total_var_positions_data)
-noQC_total_var_positions_data$stringency = "noQC"
+noQC_total_var_positions_data$stringency = "none"
 # noQC_total_var_positions_data$stringency = 0
 # noQC_total_var_positions_data$Position_end = noQC_total_var_positions_data$Position+1
 # noQC_total_var_positions_data$name = paste(noQC_total_var_positions_data$Chrom, noQC_total_var_positions_data$Position, noQC_total_var_positions_data$stringency, sep = "_")
@@ -6451,7 +6451,7 @@ for (i in c(1:22,"X","Y")){
 }
 para_con_total_var_positions_data_variant_num = dim(para_con_total_var_positions_data)[1]
 para_con_total_var_positions_data = dplyr::distinct(para_con_total_var_positions_data)
-para_con_total_var_positions_data$stringency = "para_con"
+para_con_total_var_positions_data$stringency = "conserved ref AA"
 # para_con_total_var_positions_data$stringency = 1
 # para_con_total_var_positions_data$Position_end = para_con_total_var_positions_data$Position+1
 # para_con_total_var_positions_data$name = paste(para_con_total_var_positions_data$Chrom, para_con_total_var_positions_data$Position, para_con_total_var_positions_data$stringency, sep = "_")
@@ -6465,7 +6465,7 @@ for (i in c(1:22,"X","Y")){
 }
 all_con_total_var_positions_data_variant_num = dim(all_con_total_var_positions_data)[1]
 all_con_total_var_positions_data = dplyr::distinct(all_con_total_var_positions_data)
-all_con_total_var_positions_data$stringency = "all_con"
+all_con_total_var_positions_data$stringency = "fully conserved ref AA"
 # all_con_total_var_positions_data$stringency = 2
 # all_con_total_var_positions_data$Position_end = all_con_total_var_positions_data$Position+1
 # all_con_total_var_positions_data$name = paste(all_con_total_var_positions_data$Chrom, all_con_total_var_positions_data$Position, all_con_total_var_positions_data$stringency, sep = "_")
@@ -6474,7 +6474,7 @@ all_con_total_var_positions_data$stringency = "all_con"
 #rbind them together
 total_var_positions_data = rbind(noQC_total_var_positions_data,para_con_total_var_positions_data,all_con_total_var_positions_data)
 total_var_positions_data$Chrom = factor(total_var_positions_data$Chrom, levels = rev(c(1:22,"X","Y")))
-total_var_positions_data$stringency = factor(total_var_positions_data$stringency, levels = rev(c("noQC","para_con","all_con")))
+total_var_positions_data$stringency = factor(total_var_positions_data$stringency, levels = rev(c("none","conserved ref AA","fully conserved ref AA")))
 # total_var_positions_data$stringency = factor(total_var_positions_data$stringency, levels = c(0,1,2))
 # write.table(total_var_positions_data,file="data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/ChromoMap_files/annotation_file.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE) #write to file in order to work with ChromoMap
 
@@ -6482,7 +6482,7 @@ total_var_positions_data$stringency = factor(total_var_positions_data$stringency
 # chromoMap("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/ChromoMap_files/chromosome_file.txt","data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/ChromoMap_files/annotation_file.txt")
 
 ##GGPLOT
-cols = c("noQC" = "black", "para_con" = "green", "all_con" = "blue")
+cols = c("none" = "black", "conserved ref AA" = "green", "fully conserved ref AA" = "blue")
 
 gg = ggplot(total_var_positions_data, aes(x=Position, y=Chrom, colour = stringency)) +
   geom_point(shape = 73, size=2, position = position_dodge(width = .5)) +
@@ -6493,20 +6493,45 @@ gg = ggplot(total_var_positions_data, aes(x=Position, y=Chrom, colour = stringen
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         panel.border = element_blank(),
-        legend.title = element_blank(),
+        # legend.title = element_blank(),
         # legend.position = "none",
+        # legend.key.size = unit(10,"line"),
+        # legend.text=element_text(size=20),
         axis.title.y = element_blank(),
         axis.text = element_text(size = 20),
         axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank()
-        ) + guides(colour = guide_legend(reverse=T))
+        ) + guides(colour = guide_legend(reverse=T,title="conservation stringency"))
 
 for (i in c(1:22,"X","Y")){
   # end_length = chrom_lengths[chrom_lengths$Chrom==i,"Position"]
   gg = gg + geom_segment(data = chrom_lengths, aes(x=0,y=Chrom,xend=Position,yend=Chrom), colour="black", inherit.aes = F, size = 0.1) #+ annotate("text", label = length(total_var_positions_data[total_var_positions_data$Chrom == i, "Position"]), x = end_length+10000000, y = i)
 }
 ggsave("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/Synthetic_exome_all_chrom_all_conservations_annotations.png", height = 6, width = 10)
+
+##MAKE SEPARATE PLOT FOR BIGGER LEGEND AND THEN PASTE THEM TOGETHER IN POWERPOINT!
+gg = ggplot(total_var_positions_data, aes(x=Position, y=Chrom, colour = stringency)) +
+  geom_point(shape = 73, size=7, position = position_dodge(width = .5)) +
+  scale_color_manual(values = cols) +
+  xlim(0,max(chrom_lengths$Position)+10000000) +
+  theme_bw() +
+  theme(
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        # legend.title = element_blank(),
+        # legend.position = "none",
+        # legend.key.size = unit(10,"line"),
+        # legend.text=element_text(size=20),
+        axis.title.y = element_blank(),
+        axis.text = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+        ) + guides(colour = guide_legend(reverse=T,title="conservation stringency"))
+ggsave("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/Synthetic_exome_all_chrom_all_conservations_annotations_legend_only.png", height = 6, width = 10)
+
 # ggsave("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/Synthetic_exome_all_chrom_noQC_annotations.png", height = 6, width = 10)
 
 #para_con#
