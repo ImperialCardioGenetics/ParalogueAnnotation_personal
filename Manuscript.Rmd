@@ -4324,8 +4324,8 @@ PPV_CI_list = vector()
 P_value_list = vector()
 Specificity_list = vector()
 ##Table##
-paraz_set = t(data.frame(Total = c(revel_conf$con_table[1],revel_conf$con_table[3],"NA","NA","NA","NA","NA","NA")))
-colnames(paraz_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sensitivity CI","Specificity","P value")
+paraz_set = t(data.frame(Total = c(revel_conf$con_table[1],revel_conf$con_table[3],"NA","NA","NA","NA","NA","NA","NA")))
+colnames(paraz_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sensitivity CI","Specificity","P value","FPR")
 ####
 for (i in seq(0,11)){
 #noQC
@@ -4354,40 +4354,41 @@ for (i in seq(0,11)){
   P_value_list = c(P_value_list, paraz.conf$Pvalue$p.value)
   Specificity_list = c(Specificity_list, paraz.conf$Specificity)
   
-  PA_threshold_row = c(format(paraz.conf$con_table[2], scientific = FALSE), format(paraz.conf$con_table[2,2], scientific = FALSE), round(paraz.conf$PPV, digits = 3), round(1.96*paraz.conf$PPV_SE, digits = 3), round(paraz.conf$Sensitivity, digits = 3), round(1.96*paraz.conf$Sensitivity_SE, digits =3), round(paraz.conf$Specificity,digits = 3), signif(paraz.conf$Pvalue$p.value, digits = 3))
+  PA_threshold_row = c(format(paraz.conf$con_table[2], scientific = FALSE), format(paraz.conf$con_table[2,2], scientific = FALSE), round(paraz.conf$PPV, digits = 3), round(1.96*paraz.conf$PPV_SE, digits = 3), round(paraz.conf$Sensitivity, digits = 3), round(1.96*paraz.conf$Sensitivity_SE, digits =3), round(paraz.conf$Specificity,digits = 3), signif(paraz.conf$Pvalue$p.value, digits = 3), round(paraz.conf$FPR, digits = 3))
   paraz_set = rbind(paraz_set, PA_threshold_row)
 }
 
 # Overall dataframe
 other_tools_set = t(data.frame(
   # Total = c(sapply(c(revel_conf$con_table[1],revel_conf$con_table[3]),format,scientific = FALSE),"NA","NA","NA","NA"),
-  Total = c(sapply(c(dim(other_tools_file)[1],dim(b.other_tools_file)[1]),format,scientific = FALSE),"NA","NA","NA","NA","NA","NA"),
+  Total = c(sapply(c(dim(other_tools_file)[1],dim(b.other_tools_file)[1]),format,scientific = FALSE),"NA","NA","NA","NA","NA","NA","NA"),
   Sift = c(sapply(c(sift_conf$con_table[2],sift_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(sift_conf$PPV,sift1_conf$PPV_SE*1.96,sift_conf$Sensitivity,sift1_conf$Sensitivity_SE*1.96,sift_conf$Specificity,sift_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(sift_conf$PPV,sift1_conf$PPV_SE*1.96,sift_conf$Sensitivity,sift1_conf$Sensitivity_SE*1.96,sift_conf$Specificity,sift_conf$Pvalue$p.value,sift_conf$FPR),signif,digits=3)),
   MCap = c(sapply(c(mcap_conf$con_table[2],mcap_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(mcap_conf$PPV,mcap1_conf$PPV_SE*1.96,mcap_conf$Sensitivity,mcap1_conf$Sensitivity_SE*1.96,mcap_conf$Specificity,mcap_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(mcap_conf$PPV,mcap1_conf$PPV_SE*1.96,mcap_conf$Sensitivity,mcap1_conf$Sensitivity_SE*1.96,mcap_conf$Specificity,mcap_conf$Pvalue$p.value,mcap_conf$FPR),signif,digits=3)),
   Cadd = c(sapply(c(cadd_conf$con_table[2],cadd_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(cadd_conf$PPV,cadd1_conf$PPV_SE*1.96,cadd_conf$Sensitivity,cadd1_conf$Sensitivity_SE*1.96,cadd_conf$Specificity,cadd_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(cadd_conf$PPV,cadd1_conf$PPV_SE*1.96,cadd_conf$Sensitivity,cadd1_conf$Sensitivity_SE*1.96,cadd_conf$Specificity,cadd_conf$Pvalue$p.value,cadd_conf$FPR),signif,digits=3)),
   Revel = c(sapply(c(revel_conf$con_table[2],revel_conf$con_table[4]),format,scientific = FALSE),
-            sapply(c(revel_conf$PPV,revel1_conf$PPV_SE*1.96,revel_conf$Sensitivity,revel1_conf$Sensitivity_SE*1.96,revel_conf$Specificity,revel_conf$Pvalue$p.value),signif,digits=3)),
+            sapply(c(revel_conf$PPV,revel1_conf$PPV_SE*1.96,revel_conf$Sensitivity,revel1_conf$Sensitivity_SE*1.96,revel_conf$Specificity,revel_conf$Pvalue$p.value,revel_conf$FPR),signif,digits=3)),
   PA.noQC = c(sapply(c(normal_PA_conf$con_table[2],normal_PA_conf$con_table[4]),format,scientific = FALSE),
-         sapply(c(normal_PA_conf$PPV,normal_PA_conf$PPV_SE*1.96,normal_PA_conf$Sensitivity,normal_PA_conf$Sensitivity_SE*1.96,normal_PA_conf$Specificity,normal_PA_conf$Pvalue$p.value),signif,digits=3)),
+         sapply(c(normal_PA_conf$PPV,normal_PA_conf$PPV_SE*1.96,normal_PA_conf$Sensitivity,normal_PA_conf$Sensitivity_SE*1.96,normal_PA_conf$Specificity,normal_PA_conf$Pvalue$p.value,normal_PA_conf$FPR),signif,digits=3)),
   PA.para_con = c(sapply(c(normal_PA2_conf$con_table[2],normal_PA2_conf$con_table[4]),format,scientific = FALSE),
-                  sapply(c(normal_PA2_conf$PPV,normal_PA2_conf$PPV_SE*1.96,normal_PA2_conf$Sensitivity,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA2_conf$Specificity,normal_PA2_conf$Pvalue$p.value),signif,digits=3)),
+                  sapply(c(normal_PA2_conf$PPV,normal_PA2_conf$PPV_SE*1.96,normal_PA2_conf$Sensitivity,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA2_conf$Specificity,normal_PA2_conf$Pvalue$p.value,normal_PA2_conf$FPR),signif,digits=3)),
   PA.all_con = c(sapply(c(normal_PA3_conf$con_table[2],normal_PA3_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$PPV_SE*1.96,normal_PA3_conf$Sensitivity,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)),
+                 sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$PPV_SE*1.96,normal_PA3_conf$Sensitivity,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value,normal_PA3_conf$FPR),signif,digits=3)),
   PA.alt_con = c(sapply(c(normal_PA4_conf$con_table[2],normal_PA4_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3)),
+                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value,normal_PA4_conf$FPR),signif,digits=3)),
   PA.alt_con_w_para_con_no_all_con = c(sapply(c(normal_PA5_conf$con_table[2],normal_PA5_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA5_conf$PPV,normal_PA5_conf$PPV_SE*1.96,normal_PA5_conf$Sensitivity,normal_PA5_conf$Sensitivity_SE*1.96,normal_PA5_conf$Specificity,normal_PA5_conf$Pvalue$p.value),signif,digits=3))
+                 sapply(c(normal_PA5_conf$PPV,normal_PA5_conf$PPV_SE*1.96,normal_PA5_conf$Sensitivity,normal_PA5_conf$Sensitivity_SE*1.96,normal_PA5_conf$Specificity,normal_PA5_conf$Pvalue$p.value,normal_PA5_conf$FPR),signif,digits=3))
 ))
-colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value")
+colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value","FPR")
 paraz_set = paraz_set[-1,]
 other_tools_set = rbind(other_tools_set,paraz_set)
 rownames(other_tools_set) = c("Total","Sift","MCap","CADD","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)", "Paralogue Annotation (QC3, no QC2)", "Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
 # write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 write.table(other_tools_set, file = "data/other_tools_set_w_paraz_afterQC1.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 
+clinvar_cf_sift_revel = other_tools_set
 
 #for subsetting the massive dataframe above for easier graph making
 other_tools_data = data.frame(
@@ -4608,27 +4609,27 @@ normal_PA5_conf = conf_matrix(p.normal_PA5$true_num_of_paralog_anno, p.normal_PA
 # Overall dataframe
 other_tools_set = t(data.frame(
   # Total = c(sapply(c(revel_conf$con_table[1],revel_conf$con_table[3]),format,scientific = FALSE),"NA","NA","NA","NA"),
-  Total = c(sapply(c(dim(other_tools_file)[1],dim(b.other_tools_file)[1]),format,scientific = FALSE),"NA","NA","NA","NA","NA","NA"),
+  Total = c(sapply(c(dim(other_tools_file)[1],dim(b.other_tools_file)[1]),format,scientific = FALSE),"NA","NA","NA","NA","NA","NA","NA"),
   Sift = c(sapply(c(sift1_conf$con_table[2],sift1_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(sift1_conf$PPV,sift1_conf$PPV_SE*1.96,sift1_conf$Sensitivity,sift1_conf$Sensitivity_SE*1.96,sift1_conf$Specificity,sift1_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(sift1_conf$PPV,sift1_conf$PPV_SE*1.96,sift1_conf$Sensitivity,sift1_conf$Sensitivity_SE*1.96,sift1_conf$Specificity,sift1_conf$Pvalue$p.value,sift1_conf$FPR),signif,digits=3)),
   MCap = c(sapply(c(mcap1_conf$con_table[2],mcap1_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(mcap1_conf$PPV,mcap1_conf$PPV_SE*1.96,mcap1_conf$Sensitivity,mcap1_conf$Sensitivity_SE*1.96,mcap1_conf$Specificity,mcap1_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(mcap1_conf$PPV,mcap1_conf$PPV_SE*1.96,mcap1_conf$Sensitivity,mcap1_conf$Sensitivity_SE*1.96,mcap1_conf$Specificity,mcap1_conf$Pvalue$p.value,mcap1_conf$FPR),signif,digits=3)),
   Cadd = c(sapply(c(cadd1_conf$con_table[2],cadd1_conf$con_table[4]),format,scientific = FALSE),
-           sapply(c(cadd1_conf$PPV,cadd1_conf$PPV_SE*1.96,cadd1_conf$Sensitivity,cadd1_conf$Sensitivity_SE*1.96,cadd1_conf$Specificity,cadd1_conf$Pvalue$p.value),signif,digits=3)),
+           sapply(c(cadd1_conf$PPV,cadd1_conf$PPV_SE*1.96,cadd1_conf$Sensitivity,cadd1_conf$Sensitivity_SE*1.96,cadd1_conf$Specificity,cadd1_conf$Pvalue$p.value,cadd1_conf$FPR),signif,digits=3)),
   Revel = c(sapply(c(revel1_conf$con_table[2],revel1_conf$con_table[4]),format,scientific = FALSE),
-            sapply(c(revel1_conf$PPV,revel1_conf$PPV_SE*1.96,revel1_conf$Sensitivity,revel1_conf$Sensitivity_SE*1.96,revel1_conf$Specificity,revel1_conf$Pvalue$p.value),signif,digits=3)),
+            sapply(c(revel1_conf$PPV,revel1_conf$PPV_SE*1.96,revel1_conf$Sensitivity,revel1_conf$Sensitivity_SE*1.96,revel1_conf$Specificity,revel1_conf$Pvalue$p.value,revel1_conf$FPR),signif,digits=3)),
   PA.noQC = c(sapply(c(normal_PA_conf$con_table[2],normal_PA_conf$con_table[4]),format,scientific = FALSE),
-         sapply(c(normal_PA_conf$PPV,normal_PA_conf$PPV_SE*1.96,normal_PA_conf$Sensitivity,normal_PA_conf$Sensitivity_SE*1.96,normal_PA_conf$Specificity,normal_PA_conf$Pvalue$p.value),signif,digits=3)),
+         sapply(c(normal_PA_conf$PPV,normal_PA_conf$PPV_SE*1.96,normal_PA_conf$Sensitivity,normal_PA_conf$Sensitivity_SE*1.96,normal_PA_conf$Specificity,normal_PA_conf$Pvalue$p.value,normal_PA_conf$FPR),signif,digits=3)),
   PA.para_con = c(sapply(c(normal_PA2_conf$con_table[2],normal_PA2_conf$con_table[4]),format,scientific = FALSE),
-                  sapply(c(normal_PA2_conf$PPV,normal_PA2_conf$PPV_SE*1.96,normal_PA2_conf$Sensitivity,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA2_conf$Specificity,normal_PA2_conf$Pvalue$p.value),signif,digits=3)),
+                  sapply(c(normal_PA2_conf$PPV,normal_PA2_conf$PPV_SE*1.96,normal_PA2_conf$Sensitivity,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA2_conf$Specificity,normal_PA2_conf$Pvalue$p.value,normal_PA2_conf$FPR),signif,digits=3)),
   PA.all_con = c(sapply(c(normal_PA3_conf$con_table[2],normal_PA3_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$PPV_SE*1.96,normal_PA3_conf$Sensitivity,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value),signif,digits=3)),
+                 sapply(c(normal_PA3_conf$PPV,normal_PA3_conf$PPV_SE*1.96,normal_PA3_conf$Sensitivity,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA3_conf$Specificity,normal_PA3_conf$Pvalue$p.value,normal_PA3_conf$FPR),signif,digits=3)),
   PA.alt_con = c(sapply(c(normal_PA4_conf$con_table[2],normal_PA4_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value),signif,digits=3)),
+                 sapply(c(normal_PA4_conf$PPV,normal_PA4_conf$PPV_SE*1.96,normal_PA4_conf$Sensitivity,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA4_conf$Specificity,normal_PA4_conf$Pvalue$p.value,normal_PA4_conf$FPR),signif,digits=3)),
   PA.alt_con_w_QC1_no_QC2 = c(sapply(c(normal_PA5_conf$con_table[2],normal_PA5_conf$con_table[4]),format,scientific = FALSE),
-                 sapply(c(normal_PA5_conf$PPV,normal_PA5_conf$PPV_SE*1.96,normal_PA5_conf$Sensitivity,normal_PA5_conf$Sensitivity_SE*1.96,normal_PA5_conf$Specificity,normal_PA5_conf$Pvalue$p.value),signif,digits=3))
+                 sapply(c(normal_PA5_conf$PPV,normal_PA5_conf$PPV_SE*1.96,normal_PA5_conf$Sensitivity,normal_PA5_conf$Sensitivity_SE*1.96,normal_PA5_conf$Specificity,normal_PA5_conf$Pvalue$p.value,normal_PA5_conf$FPR),signif,digits=3))
 ))
-colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value")
+colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV CI","Sensitivity","Sens CI","Specificity","P value","FPR")
 ##REMINDER TO FIX APPENDING OF PARAZ SET AS HAVE NOT YET ADDED CI FOR PPV AND SENS
 # paraz_set = paraz_set[-1,]
 # other_tools_set = rbind(other_tools_set,paraz_set)
@@ -4729,6 +4730,10 @@ normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools
 normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools, b.normal_PA3$true_num_of_paralog_anno, b.other_tools)
 normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
 normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA5$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+
+TP53_cf_sift_revel = data.frame(Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
+                                Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
+                                FPR = c(sift1_conf$FPR,mcap1_conf$FPR,cadd1_conf$FPR,revel1_conf$FPR,normal_PA_conf$FPR,normal_PA2_conf$FPR,normal_PA3_conf$FPR,normal_PA4_conf$FPR,normal_PA5_conf$FPR))
 
 df1 = data.frame(
   Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
@@ -4886,6 +4891,10 @@ normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools
 normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
 normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA5$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
 
+PPARG_cf_sift_revel = data.frame(Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
+                       Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
+                       FPR = c(sift1_conf$FPR,mcap1_conf$FPR,cadd1_conf$FPR,revel1_conf$FPR,normal_PA_conf$FPR,normal_PA2_conf$FPR,normal_PA3_conf$FPR,normal_PA4_conf$FPR,normal_PA5_conf$FPR))
+
 df1 = data.frame(
   Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
   Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
@@ -4983,6 +4992,10 @@ normal_PA2_conf = conf_matrix(p.normal_PA2$true_num_of_paralog_anno, other_tools
 normal_PA3_conf = conf_matrix(p.normal_PA3$true_num_of_paralog_anno, other_tools, b.normal_PA3$true_num_of_paralog_anno, b.other_tools)
 normal_PA4_conf = conf_matrix(normal_PA4$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA4$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
 normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, other_tools, normal_PA5$b.normal_PA4$true_num_of_paralog_anno, b.other_tools)
+
+SSC_cf_sift_revel = data.frame(Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
+                     Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
+                     FPR = c(sift1_conf$FPR,mcap1_conf$FPR,cadd1_conf$FPR,revel1_conf$FPR,normal_PA_conf$FPR,normal_PA2_conf$FPR,normal_PA3_conf$FPR,normal_PA4_conf$FPR,normal_PA5_conf$FPR))
 
 df1 = data.frame(
   Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
@@ -5293,6 +5306,22 @@ gg = ggplot(df_all, aes(x=Sensitivity, y=Precision, colour = test_set, shape = T
         axis.line.y = element_line(color="black", size = 2)) +
   theme(plot.title = element_text(hjust = 0.25),legend.text=element_text(size=40)) +guides(shape=FALSE)
 ggsave("images/PRC_of_TP53_PPARG_SSC_with_other_tools_plot_with_legend.png", width = 10, height = 11)
+```
+
+Comparison of average FPR and average precision of PA against other tools. PA has higher average precision and lower FPR than other tools. Run "cf_sift_revel", TP53 half of "cf_UniFun_TP53-TA", and "cf_PPARG" (which includes SSC) code chunks above first:
+```{r avg_FPR_and_PPV, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+clinvar_cf_sift_revel
+TP53_cf_sift_revel
+PPARG_cf_sift_revel
+SSC_cf_sift_revel
+
+PA_avg_PPV = mean(c(as.numeric(clinvar_cf_sift_revel[6:10,"PPV"]),TP53_cf_sift_revel[5:9,"Precision"],PPARG_cf_sift_revel[5:9,"Precision"],SSC_cf_sift_revel[5:9,"Precision"]))
+other_avg_PPV = mean(c(as.numeric(clinvar_cf_sift_revel[2:5,"PPV"]),TP53_cf_sift_revel[1:4,"Precision"],PPARG_cf_sift_revel[1:4,"Precision"],SSC_cf_sift_revel[1:4,"Precision"]))
+avg_PPV_inc = (PA_avg_PPV-other_avg_PPV)/other_avg_PPV
+
+PA_avg_FPR = mean(c(as.numeric(clinvar_cf_sift_revel[6:10,"FPR"]),TP53_cf_sift_revel[5:9,"FPR"],PPARG_cf_sift_revel[5:9,"FPR"],SSC_cf_sift_revel[5:9,"FPR"]))
+other_avg_FPR = mean(c(as.numeric(clinvar_cf_sift_revel[2:5,"FPR"]),TP53_cf_sift_revel[1:4,"FPR"],PPARG_cf_sift_revel[1:4,"FPR"],SSC_cf_sift_revel[1:4,"FPR"]))
+avg_FPR_dec = (other_avg_FPR-PA_avg_FPR)/other_avg_FPR
 ```
 
 
