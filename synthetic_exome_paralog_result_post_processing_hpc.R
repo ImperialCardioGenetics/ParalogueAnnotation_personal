@@ -3,7 +3,7 @@
 
 args = commandArgs(trailingOnly=TRUE)
 
-Packages = c("tidyverse", "plyr", "dplyr")
+Packages = c("tidyverse", "plyr", "dplyr", "stringr")
 new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma.imperial.ac.uk/")
 # lapply(Packages, library, character.only = TRUE)
@@ -43,6 +43,9 @@ for (j in args[1]){
                                 tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","ID","Gene","REF","ALT","Paralogue_Vars")]
                                 tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
                                 tmp_Paraloc$Paralogue_Vars = as.character(tmp_Paraloc$Paralogue_Vars)
+                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace, "&", "") #PROBABLY A GOOD IDEA TO DO THIS IN POST-PROCESSING BEFORE LOADING DATA IN 
+                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, "&", " ")
+                                
                                 # if (all(is.na(tmp_Paraloc$POS))){
                                 #         tmp_df = data.frame(QC = character())
                                 #         tmp_Paraloc = base::cbind(tmp_Paraloc, tmp_df)
