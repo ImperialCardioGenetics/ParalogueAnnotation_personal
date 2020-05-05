@@ -40,13 +40,15 @@ for (j in args[1]){
                                 tmp_Paraloc = p.normal_PA$paralog_data
                                 # tmp_Paraloc = tmp_Paraloc[,!(names(tmp_Paraloc) %in% c("Variant_pos","FILTER","BIOTYPE","Paralogue_Vars","Para_Z_score","REF_Amino_acids","ALT_Amino_acids","Protein_position","Amino_acids","Codons"))]
                                 # tmp_Paraloc = dplyr::select(tmp_Paraloc, CHROM, POS, dplyr::everything())
-                                tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","ID","Gene","REF","ALT","Paralogue_Vars")]
+                                tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","REF","Gene","Paralogue_Vars")]
+                                #tmp_Paraloc = subset(tmp_Paraloc, select=c(CHROM,POS,REF,Gene,Paralogue_Vars)) #IF NOT COMBINING INTO VAR THEN NEED TO CHANGE HOW WE LOOK UP DATA
                                 tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
+                                tmp_Paraloc = dplyr::distinct(tmp_Paraloc)
                                 tmp_Paraloc$Paralogue_Vars = as.character(tmp_Paraloc$Paralogue_Vars)
                                 tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace, "&", "") #PROBABLY A GOOD IDEA TO DO THIS IN POST-PROCESSING BEFORE LOADING DATA IN 
                                 tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, "&", " ")
-                                tmp_Paraloc = subset(tmp_Paraloc, select=c(CHROM,POS,REF,Gene,Paralogue_Vars)) #IF NOT COMBINING INTO VAR THEN NEED TO CHANGE HOW WE LOOK UP DATA
-                                tmp_Paraloc = dplyr::distinct(tmp_Paraloc)
+                                
+                                
                                 tmp_Paraloc$CHROM = as.character(tmp_Paraloc$CHROM)
                                 # if (all(is.na(tmp_Paraloc$POS))){
                                 #         tmp_df = data.frame(QC = character())
