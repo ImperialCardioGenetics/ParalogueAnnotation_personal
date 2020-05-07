@@ -1,7 +1,13 @@
-import os, sys, subprocess, re
+import os, sys, subprocess, re, requests
 
 #Wrapper for tableize that adds in features used for R shiny app. Join the results generated from here to old paralogues results generated normally.
 #Tableize.py wrapper plus additional formatting that can't be done in tableize. Also adds in Para Z scores.
+
+input_file = sys.argv[1]	#path of input file, e.g. "synthetic.vep.cov.table_chromY_wIDs_proper_split011.out_paraloc"
+tableize_dir = sys.argv[5] #path of where tableize_vcf.py is located, e.g. on HPC - "/work/nyl112/loftee/src/"; can have "/" at end or not; on RBH - "/data/Share/nick/Paralog_Anno/loftee/src/"
+para_zscore_dir = sys.argv[6] #path of where para_zscore folder is located, e.g. on HPC - "/work/nyl112/data"; can have "/" at end or not; on RBH - "/data/Share/nick/Paralog_Anno/data_files/"
+
+print(len(sys.argv), sys.argv)
 
 def Tableize_wrap(input_file, tableize_dir, para_zscore_dir):
 	#input_file = sys.argv[1]	#path of paraloc file e.g. /data/Share/nick/Paralog_Anno/data_files/clinvar_20171029_onlyPathogenic.out_paraloc
@@ -17,10 +23,10 @@ def Tableize_wrap(input_file, tableize_dir, para_zscore_dir):
 	else:
 		para_zscore_dir = para_zscore_dir + "/"
 
-	os.system("python2 " + tableize_dir + "tableize_vcf.py --vcf " + input_file + " --out " + input_file + "_tableized_org --do_not_minrep --include_id --vep_info SYMBOL,Protein_position,Amino_acids,Codons,BIOTYPE,Paralogue_Vars --split_by_transcript --canonical_only")
+	os.system("python2 " + tableize_dir + "tableize_vcf.py --vcf " + input_file + " --out " + input_file + "_tableized_for_shinyapp_org --do_not_minrep --include_id --vep_info SYMBOL,Protein_position,Amino_acids,Codons,Feature,BIOTYPE,Paralogue_Vars --split_by_transcript --canonical_only")
 
-	out_file = open(input_file + "_tableized", "w")
-	with open(input_file + "_tableized_org") as f:
+	out_file = open(input_file + "_tableized_for_shinyapp", "w")
+	with open(input_file + "_tableized_for_shinyapp_org") as f:
 		for line in f:
 			if line.startswith("CHROM"):
 				out_file.write(line.rstrip()+"\tPara_Z_score\n")
@@ -30,7 +36,7 @@ def Tableize_wrap(input_file, tableize_dir, para_zscore_dir):
 				AAs = line[8].split(",")
 				Codons = line[9].split(",")
 				Gene = str(line[6])+".txt"
-				BIOTYPE = line[10]
+				BIOTYPE = line[11]
 				if not BIOTYPE == "protein_coding":
 					continue
 				for column in range(0,len(AAs)):
@@ -58,7 +64,9 @@ def Tableize_wrap(input_file, tableize_dir, para_zscore_dir):
 							para_z_score = "NA"
 					else:
 						para_z_score = "NA"
-					out_file.write(line[0] + "\t" + line[1] +"\t" +line[2] +"\t" + line[3] +"\t" +line[4] +"\t" +line[5] +"\t" + line[6] + "\t" + line[7] + "\t" + AAs[column] + "\t" + Codons[column] + "\t" + line[10] + "\t" + line[11] + "\t" + str(para_z_score) + "\n")
+					out_file.write(line[0] + "\t" + line[1] +"\t" +line[2] +"\t" + line[3] +"\t" +line[4] +"\t" +line[5] +"\t" + line[6] + "\t" + line[7] + "\t" + AAs[column] + "\t" + Codons[column] + "\t" + line[10] + "\t" + line[11] + "\t" + line[12] + "\t" + str(para_z_score) + "\n")
 		out_file.close()
 
 	print("Tableize_wrapper_for_Rshiny_app Done!")
+
+Tableize_wrap(input_file.rsplit(".",1)[0]+".out_paraloc", tableize_dir, para_zscore_dir)

@@ -3,7 +3,7 @@
 
 args = commandArgs(trailingOnly=TRUE)
 
-Packages = c("tidyverse", "plyr", "dplyr", "stringr")
+Packages = c("tidyverse", "plyr", "dplyr", "stringr","httr","jsonlite","xml2")
 new.packages = Packages[!(Packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma.imperial.ac.uk/")
 # lapply(Packages, library, character.only = TRUE)
@@ -73,3 +73,5 @@ for (j in args[1]){
                 }
         }
 }
+
+##Using Ensembl's REST API to create flat file hash tables for ENSG to ENSP ids.
