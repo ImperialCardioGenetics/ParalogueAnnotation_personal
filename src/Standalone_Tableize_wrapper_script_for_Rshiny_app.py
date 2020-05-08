@@ -4,8 +4,8 @@ import os, sys, subprocess, re, requests
 #Tableize.py wrapper plus additional formatting that can't be done in tableize. Also adds in Para Z scores.
 
 input_file = sys.argv[1]	#path of input file, e.g. "synthetic.vep.cov.table_chromY_wIDs_proper_split011.out_paraloc"
-tableize_dir = sys.argv[5] #path of where tableize_vcf.py is located, e.g. on HPC - "/work/nyl112/loftee/src/"; can have "/" at end or not; on RBH - "/data/Share/nick/Paralog_Anno/loftee/src/"
-para_zscore_dir = sys.argv[6] #path of where para_zscore folder is located, e.g. on HPC - "/work/nyl112/data"; can have "/" at end or not; on RBH - "/data/Share/nick/Paralog_Anno/data_files/"
+tableize_dir = sys.argv[2] #path of where tableize_vcf.py is located, e.g. on HPC - "/work/nyl112/loftee/src/"; can have "/" at end or not; on RBH - "/data/Share/nick/Paralog_Anno/loftee/src/"
+para_zscore_dir = sys.argv[3] #path of where para_zscore folder is located, e.g. on HPC - "/work/nyl112/data"; can have "/" at end or not; on RBH - "/data/Share/nick/Paralog_Anno/data_files/"
 
 print(len(sys.argv), sys.argv)
 
