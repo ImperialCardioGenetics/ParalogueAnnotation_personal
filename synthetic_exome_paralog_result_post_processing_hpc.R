@@ -75,3 +75,11 @@ for (j in args[1]){
 }
 
 ##Using Ensembl's REST API to create flat file hash tables for ENSG to ENSP ids.
+mart_export = read.delim("/work/nyl112/Paralogue_Annotation_App/paralog_app/data/mart_export.txt", quote="", stringsAsFactors=F)
+map=setNames(mart_export$HGNC.symbol, mart_export$Gene.stable.ID)
+for (j in c(1:22,"X","Y")){
+  files = list.files(path=paste0("/rds/general/project/lms-ware-analysis/live/nick/RBH-work/Paralog_Anno/data_files/all_possible_mutation/synthetic_exome/synthetic_exome_GRCh37_renamed/chrom_",j), pattern="*.out_paraloc_tableized_for_shinyapp", full.names=TRUE, recursive=FALSE)
+  for (i in files){
+    tableized_for_shinyapp = read.csv(file=i, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+  }
+}
