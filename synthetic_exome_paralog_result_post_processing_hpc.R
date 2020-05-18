@@ -25,12 +25,12 @@ for (j in args[1]){
                         tmp_Total_annotations = tmp_Total_annotations[!is.na(tmp_Total_annotations$POS.x),]
                         tmp_Total_annotations$Para_Z_score.x = as.numeric(tmp_Total_annotations$Para_Z_score.x)
                         tmp_Total_annotations$Para_Z_score.y = as.numeric(tmp_Total_annotations$Para_Z_score.y)
-                        # if (all(is.na(tmp_Total_annotations$POS.x))){
-                        #         tmp_df = data.frame(QC = character())
-                        #         tmp_Total_annotations = base::cbind(tmp_Total_annotations, tmp_df)
-                        # } else {
-                        #         tmp_Total_annotations$QC = toString(k)
-                        # }
+                        
+                        split_number = unlist(strsplit(i, "_split", fixed = TRUE))[length(unlist(strsplit(i, "_split", fixed = TRUE)))] #split to get split number of file
+                        split_number = unlist(strsplit(split_number, ".", fixed = TRUE))[1]
+                        new_tableized_file = read.csv(file=paste0("/rds/general/project/lms-ware-analysis/live/nick/RBH-work/Paralog_Anno/data_files/all_possible_mutation/synthetic_exome/synthetic_exome_GRCh37_renamed/chrom_",j,"/synthetic.vep.cov.table_chrom",j,"_wIDs_proper_split",split_number,".out_paraloc_tableized_for_shinyapp"), sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+                        
+                        
                         if (is.null(Total_annotations)){
                                 Total_annotations = tmp_Total_annotations
                         } else {
@@ -64,6 +64,8 @@ for (j in args[1]){
                                 }
                         }
                 }
+                
+                
                 save(Total_annotations, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/chrom_",j,"/Total_annotations_chrom_",j,"_",k,".RData"))
                 Total_annotations = Total_annotations[,c("CHROM.x","POS.x","ID.x","REF.x","ALT.x")]
                 names(Total_annotations) = c("CHROM","POS","ID","REF","ALT")
