@@ -26,10 +26,15 @@ for (j in args[1]){
                         tmp_Total_annotations$Para_Z_score.x = as.numeric(tmp_Total_annotations$Para_Z_score.x)
                         tmp_Total_annotations$Para_Z_score.y = as.numeric(tmp_Total_annotations$Para_Z_score.y)
                         
+                        ##insert new tableized file here to join up any new info columns
                         split_number = unlist(strsplit(i, "_split", fixed = TRUE))[length(unlist(strsplit(i, "_split", fixed = TRUE)))] #split to get split number of file
                         split_number = unlist(strsplit(split_number, ".", fixed = TRUE))[1]
                         new_tableized_file = read.csv(file=paste0("/rds/general/project/lms-ware-analysis/live/nick/RBH-work/Paralog_Anno/data_files/all_possible_mutation/synthetic_exome/synthetic_exome_GRCh37_renamed/chrom_",j,"/synthetic.vep.cov.table_chrom",j,"_wIDs_proper_split",split_number,".out_paraloc_tableized_for_shinyapp"), sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+                        new_tableized_file$Para_Z_score = as.numeric(new_tableized_file$Para_Z_score)
+                        new_tableized_file = subset(new_tableized_file, select = c(CHROM, POS, REF, ALT, SYMBOL, Protein_position, Amino_acids, Codons, Feature))
+                        tmp_Total_annotations = left_join(tmp_Total_annotations,new_tableized_file, by =  c("CHROM.x" = "CHROM", "POS.x" = "POS", "REF.x" = "REF", "ALT.x" = "ALT", "Gene" = "SYMBOL", "Protein_position.x" = "Protein_position", "Amino_acids.x"))
                         
+                        #maybe implement in panda's amino_acid format change here.
                         
                         if (is.null(Total_annotations)){
                                 Total_annotations = tmp_Total_annotations
