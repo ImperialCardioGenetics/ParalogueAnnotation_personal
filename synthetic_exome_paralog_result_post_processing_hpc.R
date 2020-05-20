@@ -10,8 +10,16 @@ if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma
 library("plyr")
 library("dplyr")
 # library("tidyverse")
+
+#load AA conversion table
 AA_table <- read.delim("/work/nyl112/Paralogue_Annotation_App/paralog_app/data/AA_table.txt", stringsAsFactors = F)
 AA_map=setNames(AA_table$AA_3letter, AA_table$AA_1letter)
+#load clinvar ids
+clinvar_P_LP = read.csv(file = "/work/nyl112/Paralogue_Annotation_App/paralog_app/data/clinvar/clinvar_20190114_GRCh37_onlyPathogenic_and_Likely_pathogenic.vcf", sep = "\t", comment.char = "#", stringsAsFactors = F, header = F) #load in clinvar data for query variant
+clinvar_P_LP = clinvar_P_LP[,1:5]
+colnames(clinvar_P_LP) = c("CHR", "POS", "ID", "REF", "ALT")
+clinvar_P_LP$var = paste(clinvar_P_LP$CHR,clinvar_P_LP$POS,clinvar_P_LP$REF,clinvar_P_LP$ALT,sep=" ")
+clinvar_P_LP = subset(clinvar_P_LP,select=c(var, ID))
 
 ##Split job by chrom##
 for (j in args[1]){
@@ -90,12 +98,6 @@ for (j in args[1]){
                 Total_annotations = dplyr::select(Total_annotations,var, Gene, Codons.x, Transcript=Feature, Protein_dot.x, Para_Z_score.x, var2, ID.y, SYMBOL, Codons.y, Protein_position.y, Amino_acids.y, Para_Z_score.y)
                 
                 ###implement joining of clinvar IDs###
-                clinvar_P_LP = read.csv(file = "/work/nyl112/Paralogue_Annotation_App/paralog_app/data/clinvar/clinvar_20190114_GRCh37_onlyPathogenic_and_Likely_pathogenic.vcf", sep = "\t", comment.char = "#", stringsAsFactors = F, header = F) #load in clinvar data for query variant
-                clinvar_P_LP = clinvar_P_LP[,1:5]
-                colnames(clinvar_P_LP) = c("CHR", "POS", "ID", "REF", "ALT")
-                clinvar_P_LP$var = paste(clinvar_P_LP$CHR,clinvar_P_LP$POS,clinvar_P_LP$REF,clinvar_P_LP$ALT,sep=" ")
-                clinvar_P_LP = subset(clinvar_P_LP,select=c(var, ID))
-                
                 Total_annotations = dplyr::right_join(clinvar_P_LP,Total_annotations,by = c("var"))
                 
                 
