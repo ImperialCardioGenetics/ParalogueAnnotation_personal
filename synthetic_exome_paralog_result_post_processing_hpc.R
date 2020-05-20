@@ -10,6 +10,8 @@ if(length(new.packages)) install.packages(new.packages, repos = "https://cran.ma
 library("plyr")
 library("dplyr")
 # library("tidyverse")
+AA_table <- read.delim("/work/nyl112/Paralogue_Annotation_App/paralog_app/data/AA_table.txt", stringsAsFactors = F)
+AA_map=setNames(AA_table$AA_3letter, AA_table$AA_1letter)
 
 ##Split job by chrom##
 for (j in args[1]){
@@ -33,9 +35,7 @@ for (j in args[1]){
                         new_tableized_file$Para_Z_score = as.numeric(new_tableized_file$Para_Z_score)
                         new_tableized_file = subset(new_tableized_file, select = c(CHROM, POS, REF, ALT, SYMBOL, Protein_position, Amino_acids, Codons, Feature))
                         tmp_Total_annotations = left_join(tmp_Total_annotations,new_tableized_file, by =  c("CHROM.x" = "CHROM", "POS.x" = "POS", "REF.x" = "REF", "ALT.x" = "ALT", "Gene" = "SYMBOL", "Protein_position.x" = "Protein_position", "Amino_acids.x"))
-                        
-                        #maybe implement in panda's amino_acid format change here.
-                        
+
                         if (is.null(Total_annotations)){
                                 Total_annotations = tmp_Total_annotations
                         } else {
@@ -69,6 +69,35 @@ for (j in args[1]){
                                 }
                         }
                 }
+
+                ###implement amino_acid formating here###
+                Total_annotations$Protein_dot.x = sapply(Total_annotations[,"Amino_acids.x"],strsplit,"/")
+                Total_annotations$Protein_dot.x = paste0("p.",
+                                                         AA_map[unlist(sapply(Total_annotations$Protein_dot.x, "[", 1))],
+                                                         Total_annotations$Protein_position.x,
+                                                         AA_map[unlist(sapply(Total_annotations$Protein_dot.x, "[", 2))]
+                                                         )
+                Total_annotations$Protein_dot.y = sapply(Total_annotations[,"Amino_acids.y"],strsplit,"/")
+                Total_annotations$Protein_dot.y = paste0("p.",
+                                                         AA_map[unlist(sapply(Total_annotations$Protein_dot.y, "[", 1))],
+                                                         Total_annotations$Protein_position.y,
+                                                         AA_map[unlist(sapply(Total_annotations$Protein_dot.y, "[", 2))]
+                )
+                
+                ###convert CHROM POS REF ALT to var here###
+                Total_annotations$var = paste(Total_annotations$CHROM.x,Total_annotations$POS.x,Total_annotations$REF.x,Total_annotations$ALT.x,sep=" ")
+                Total_annotations$var2 = paste(Total_annotations$CHROM.y,Total_annotations$POS.y,Total_annotations$REF.y,Total_annotations$ALT.y,sep=" ")
+                Total_annotations = dplyr::select(Total_annotations,var, Gene, Codons.x, Transcript=Feature, Protein_dot.x, Para_Z_score.x, var2, ID.y, SYMBOL, Codons.y, Protein_position.y, Amino_acids.y, Para_Z_score.y)
+                
+                ###implement joining of clinvar IDs###
+                clinvar_P_LP = read.csv(file = "/work/nyl112/Paralogue_Annotation_App/paralog_app/data/clinvar/clinvar_20190114_GRCh37_onlyPathogenic_and_Likely_pathogenic.vcf", sep = "\t", comment.char = "#", stringsAsFactors = F, header = F) #load in clinvar data for query variant
+                clinvar_P_LP = clinvar_P_LP[,1:5]
+                colnames(clinvar_P_LP) = c("CHR", "POS", "ID", "REF", "ALT")
+                clinvar_P_LP$var = paste(clinvar_P_LP$CHR,clinvar_P_LP$POS,clinvar_P_LP$REF,clinvar_P_LP$ALT,sep=" ")
+                clinvar_P_LP = subset(clinvar_P_LP,select=c(var, ID))
+                
+                Total_annotations = dplyr::right_join(clinvar_P_LP,Total_annotations,by = c("var"))
+                
                 
                 
                 save(Total_annotations, file = paste0("/work/nyl112/data/synthetic_exome/Synthetic_exome_paralog_result_post_processed/chrom_",j,"/Total_annotations_chrom_",j,"_",k,".RData"))
@@ -81,12 +110,12 @@ for (j in args[1]){
         }
 }
 
-##Using Ensembl's REST API to create flat file hash tables for ENSG to ENSP ids.
-mart_export = read.delim("/work/nyl112/Paralogue_Annotation_App/paralog_app/data/mart_export.txt", quote="", stringsAsFactors=F)
-map=setNames(mart_export$HGNC.symbol, mart_export$Gene.stable.ID)
-for (j in c(1:22,"X","Y")){
-  files = list.files(path=paste0("/rds/general/project/lms-ware-analysis/live/nick/RBH-work/Paralog_Anno/data_files/all_possible_mutation/synthetic_exome/synthetic_exome_GRCh37_renamed/chrom_",j), pattern="*.out_paraloc_tableized_for_shinyapp", full.names=TRUE, recursive=FALSE)
-  for (i in files){
-    tableized_for_shinyapp = read.csv(file=i, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
-  }
-}
+##Using Ensembl's REST API to create flat file hash tables for ENSG to ENSP ids. INCOMPLETE FINISH EDITING LATER
+# mart_export = read.delim("/work/nyl112/Paralogue_Annotation_App/paralog_app/data/mart_export.txt", quote="", stringsAsFactors=F)
+# map=setNames(mart_export$HGNC.symbol, mart_export$Gene.stable.ID)
+# for (j in c(1:22,"X","Y")){
+#   files = list.files(path=paste0("/rds/general/project/lms-ware-analysis/live/nick/RBH-work/Paralog_Anno/data_files/all_possible_mutation/synthetic_exome/synthetic_exome_GRCh37_renamed/chrom_",j), pattern="*.out_paraloc_tableized_for_shinyapp", full.names=TRUE, recursive=FALSE)
+#   for (i in files){
+#     tableized_for_shinyapp = read.csv(file=i, sep = "\t", header=TRUE, stringsAsFactors=FALSE)
+#   }
+# }
