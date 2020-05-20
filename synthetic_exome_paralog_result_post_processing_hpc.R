@@ -42,7 +42,7 @@ for (j in args[1]){
                         new_tableized_file = read.csv(file=paste0("/rds/general/project/lms-ware-analysis/live/nick/RBH-work/Paralog_Anno/data_files/all_possible_mutation/synthetic_exome/synthetic_exome_GRCh37_renamed/chrom_",j,"/synthetic.vep.cov.table_chrom",j,"_wIDs_proper_split",split_number,".out_paraloc_tableized_for_shinyapp"), sep = "\t", header=TRUE, stringsAsFactors=FALSE)
                         new_tableized_file$Para_Z_score = as.numeric(new_tableized_file$Para_Z_score)
                         new_tableized_file = subset(new_tableized_file, select = c(CHROM, POS, REF, ALT, SYMBOL, Protein_position, Amino_acids, Codons, Feature))
-                        tmp_Total_annotations = left_join(tmp_Total_annotations,new_tableized_file, by =  c("CHROM.x" = "CHROM", "POS.x" = "POS", "REF.x" = "REF", "ALT.x" = "ALT", "Gene" = "SYMBOL", "Protein_position.x" = "Protein_position", "Amino_acids.x"))
+                        tmp_Total_annotations = left_join(tmp_Total_annotations,new_tableized_file, by =  c("CHROM.x" = "CHROM", "POS.x" = "POS", "REF.x" = "REF", "ALT.x" = "ALT", "Gene" = "SYMBOL", "Protein_position.x" = "Protein_position", "Amino_acids.x" = "Amino_acids", "Codons.x" = "Codons"))
 
                         if (is.null(Total_annotations)){
                                 Total_annotations = tmp_Total_annotations
@@ -95,7 +95,7 @@ for (j in args[1]){
                 ###convert CHROM POS REF ALT to var here###
                 Total_annotations$var = paste(Total_annotations$CHROM.x,Total_annotations$POS.x,Total_annotations$REF.x,Total_annotations$ALT.x,sep=" ")
                 Total_annotations$var2 = paste(Total_annotations$CHROM.y,Total_annotations$POS.y,Total_annotations$REF.y,Total_annotations$ALT.y,sep=" ")
-                Total_annotations = dplyr::select(Total_annotations,var, Gene, Codons.x, Transcript=Feature, Protein_dot.x, Para_Z_score.x, var2, ID.y, SYMBOL, Codons.y, Protein_position.y, Amino_acids.y, Para_Z_score.y)
+                Total_annotations = dplyr::select(Total_annotations,var, Gene, Codons.x, Transcript=Feature, Protein_dot.x, Para_Z_score.x, var2, ID.y, SYMBOL, Codons.y, Protein_dot.y, Para_Z_score.y)
                 
                 ###implement joining of clinvar IDs###
                 Total_annotations = dplyr::right_join(clinvar_P_LP,Total_annotations,by = c("var"))
