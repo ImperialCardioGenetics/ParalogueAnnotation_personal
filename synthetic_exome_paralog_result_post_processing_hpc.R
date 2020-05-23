@@ -51,31 +51,33 @@ for (j in args[1]){
                         }
                         if (k == "noQC"){
                                 tmp_Paraloc = p.normal_PA$paralog_data
-                                tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","REF","Gene","Paralogue_Vars")]
-                                tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
-                                tmp_Paraloc$var = paste(tmp_Paraloc$CHROM,tmp_Paraloc$POS,tmp_Paraloc$REF,sep=" ")
-                                tmp_Paraloc = dplyr::select(tmp_Paraloc, var, Gene, Paralogue_Vars)
-                                tmp_Paraloc = dplyr::distinct(tmp_Paraloc)
-                                tmp_Paraloc$Paralogue_Vars = as.character(tmp_Paraloc$Paralogue_Vars)
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace, "&", "")
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, "&", ", ")
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c("REFID=0","REFID=1"),collapse="|"), "") 
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, ":.:,", ",")
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c(":chr","_",":"),collapse="|"), " ")
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c(", $"),collapse="|"), "") 
-                                # tmp_Paraloc$CHROM = as.character(tmp_Paraloc$CHROM)
-                                
-                                # if (all(is.na(tmp_Paraloc$POS))){
-                                #         tmp_df = data.frame(QC = character())
-                                #         tmp_Paraloc = base::cbind(tmp_Paraloc, tmp_df)
-                                # } else {
-                                #         tmp_Paraloc$QC = toString(k)
-                                # }
-                                if (is.null(Paraloc)){
-                                        Paraloc = tmp_Paraloc
-                                } else {
-                                        # Paraloc = plyr::rbind.fill(Paraloc, dplyr::anti_join(x=tmp_Paraloc, y=Paraloc, by=c("CHROM","POS","ID","Gene","REF","ALT")))
-                                        Paraloc = base::rbind(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
+                                if (nrow(tmp_Paraloc) > 0){
+                                  tmp_Paraloc = tmp_Paraloc[,names(tmp_Paraloc) %in% c("CHROM","POS","REF","Gene","Paralogue_Vars")]
+                                  tmp_Paraloc = tmp_Paraloc[!is.na(tmp_Paraloc$POS),]
+                                  tmp_Paraloc$var = paste(tmp_Paraloc$CHROM,tmp_Paraloc$POS,tmp_Paraloc$REF,sep=" ")
+                                  tmp_Paraloc = dplyr::select(tmp_Paraloc, var, Gene, Paralogue_Vars)
+                                  tmp_Paraloc = dplyr::distinct(tmp_Paraloc)
+                                  tmp_Paraloc$Paralogue_Vars = as.character(tmp_Paraloc$Paralogue_Vars)
+                                  tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace, "&", "")
+                                  tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, "&", ", ")
+                                  tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c("REFID=0","REFID=1"),collapse="|"), "") 
+                                  tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, ":.:,", ",")
+                                  tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c(":chr","_",":"),collapse="|"), " ")
+                                  tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c(", $"),collapse="|"), "") 
+                                  # tmp_Paraloc$CHROM = as.character(tmp_Paraloc$CHROM)
+                                  
+                                  # if (all(is.na(tmp_Paraloc$POS))){
+                                  #         tmp_df = data.frame(QC = character())
+                                  #         tmp_Paraloc = base::cbind(tmp_Paraloc, tmp_df)
+                                  # } else {
+                                  #         tmp_Paraloc$QC = toString(k)
+                                  # }
+                                  if (is.null(Paraloc)){
+                                          Paraloc = tmp_Paraloc
+                                  } else {
+                                          # Paraloc = plyr::rbind.fill(Paraloc, dplyr::anti_join(x=tmp_Paraloc, y=Paraloc, by=c("CHROM","POS","ID","Gene","REF","ALT")))
+                                          Paraloc = base::rbind(Paraloc, dplyr::setdiff(tmp_Paraloc, Paraloc))
+                                  }
                                 }
                         }
                 }
