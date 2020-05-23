@@ -59,10 +59,10 @@ for (j in args[1]){
                                 tmp_Paraloc$Paralogue_Vars = as.character(tmp_Paraloc$Paralogue_Vars)
                                 tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace, "&", "")
                                 tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, "&", ", ")
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, str_c(c("REFID=0","REFID=1"),collapse="|"), "") 
+                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c("REFID=0","REFID=1"),collapse="|"), "") 
                                 tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, ":.:,", ",")
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, str_c(c(":chr","_",":"),collapse="|"), " ")
-                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, str_c(c(", $"),collapse="|"), "") 
+                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c(":chr","_",":"),collapse="|"), " ")
+                                tmp_Paraloc$Paralogue_Vars = sapply(tmp_Paraloc$Paralogue_Vars, stringr::str_replace_all, stringr::str_c(c(", $"),collapse="|"), "") 
                                 # tmp_Paraloc$CHROM = as.character(tmp_Paraloc$CHROM)
                                 
                                 # if (all(is.na(tmp_Paraloc$POS))){
