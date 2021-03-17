@@ -1285,7 +1285,7 @@ rownames(clinvar_set) = c("Total variants",
                           "Variants removed from QC1+QC2",
                           "Variants removed from QC1+QC3",
                           "Variants removed from QC1+QC2+QC3")
-# write.table(clinvar_set, file = "data/clinvar/clinvar_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
+write.table(clinvar_set, file = "data/clinvar/GRCh37_clinvar_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 # kable(clinvar_set)
 
 clinvar_set_genes = data.frame(c("Total","Genes with Paralogue Annotations - no QC", "Genes remaining after QC1", "Genes with Paralogue Annotations - QC1", "Genes remaining after QC2", "Genes with Paralogue Annotations - QC2", "Genes remaining after QC3", "Genes with Paralogue Annotations - QC3"),
@@ -1318,7 +1318,7 @@ clinvar_set_benign = data.frame(#Variant,
 clinvar_set_benign = t(clinvar_set_benign)
 colnames(clinvar_set_benign) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
 rownames(clinvar_set_benign) = c("Total variants", "Paralogue Annotation", "Variants remaining after QC1", "Variants remaining after QC2", "Variants remaining after QC3", "Variants removed from QC1", "Variants removed from QC2", "Variants removed from QC3")
-# write.table(clinvar_set_benign, file = "data/clinvar/clinvar_set_benign.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
+# write.table(clinvar_set_benign, file = "data/clinvar/GRCh37_clinvar_set_benign.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
 # kable(clinvar_set_benign)
 
 ### Analysing average number of annotations per input
@@ -2302,6 +2302,7 @@ write.table(paraz_set, file = "data/clinvar/paraz_set.csv", na="", row.names = T
 
 ## visual graph of main clinvar and para_z table
 ```{r plot_of_clinvar_paraz_set, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+### GRCh38
 clinvar_set_csv = read.csv("data/clinvar/clinvar_set.csv", sep=",", header = T)
 clinvar_set_only_P = data.frame(bar = c("none", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
            Pathogenic_var = clinvar_set_csv[2:6,1],
@@ -4169,8 +4170,8 @@ pa_EF = calc_EF(
 
 
 ```
-Dont run code above; was only for testing; code below is what was used for work in paper.
-OR plot of KCNQ1-LQTS, KCNH2-LQTS, SCN5A-LQTS, SCN5A-BrS and SCN1A-NDD, SCN2A-NDD
+Dont run code above; was only for testing and generating "data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData"; code below is what was used for work in paper.
+OR plot of KCNQ1-LQTS, KCNH2-LQTS, SCN5A-LQTS, SCN5A-BrS and SCN1A-NDD, SCN2A-NDD, SCN8A-NDD, KCNQ2-NDD
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 discovEHR = read.csv(file=gzfile("data/discovEHR_GRCh37.vcf.gz"), header=T, sep="\t",stringsAsFactors = 0)
 names(discovEHR)[1] = "CHROM"
@@ -4225,7 +4226,7 @@ SCN2A_Total_controls = as.numeric(mean(SCN2A_rare_gnomad$AN))/2
 SCN2A_rare_gnomad$individuals = SCN2A_rare_gnomad$AC-SCN2A_rare_gnomad$nhomalt
 SCN2A_rare_controls_affected = sum(SCN2A_rare_gnomad$individuals) 
 ##rare and paralogue annotated
-load("data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData")
+load("data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData") #generated this file in the code chunk above
 SCN2A_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 2 & var_pred_patho$POS >= 166095913 & var_pred_patho$POS <= 166248819,]
 SCN2A_var_pred_patho$individuals = SCN2A_var_pred_patho$AC-SCN2A_var_pred_patho$nhomalt
 SCN2A_rare_pa_controls_affected = sum(SCN2A_var_pred_patho$individuals)
