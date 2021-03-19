@@ -4220,14 +4220,14 @@ names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","
 SCN2A_annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,SCN2A_NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
 SCN2A_rare_pa_cases_affected = sum(SCN2A_annotated_NDD$Case.count) 
 ###Control cases for SCN2A- gnomad
-SCN2A_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 2 & rare_gnomad$POS >= 166095913 & rare_gnomad$POS <= 166248819,]
+SCN2A_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 2 & rare_gnomad$POS >= 166095912 & rare_gnomad$POS <= 166248818,]
 SCN2A_Total_controls = as.numeric(mean(SCN2A_rare_gnomad$AN))/2 
 ##rare
 SCN2A_rare_gnomad$individuals = SCN2A_rare_gnomad$AC-SCN2A_rare_gnomad$nhomalt
 SCN2A_rare_controls_affected = sum(SCN2A_rare_gnomad$individuals) 
 ##rare and paralogue annotated
 load("data/NDD+E/notin_discovEHR_gnomad_pred_patho_at_para_con.RData") #generated this file in the code chunk above
-SCN2A_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 2 & var_pred_patho$POS >= 166095913 & var_pred_patho$POS <= 166248819,]
+SCN2A_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 2 & var_pred_patho$POS >= 166095912 & var_pred_patho$POS <= 166248818,]
 SCN2A_var_pred_patho$individuals = SCN2A_var_pred_patho$AC-SCN2A_var_pred_patho$nhomalt
 SCN2A_rare_pa_controls_affected = sum(SCN2A_var_pred_patho$individuals)
 ###SCN2A EFs
@@ -4272,13 +4272,13 @@ names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","
 SCN8A_annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,SCN8A_NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
 SCN8A_rare_pa_cases_affected = sum(SCN8A_annotated_NDD$Case.count) 
 ###Control cases for SCN8A- gnomad
-SCN8A_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 12 & rare_gnomad$POS >= 51984051 & rare_gnomad$POS <= 52206649,]
+SCN8A_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 12 & rare_gnomad$POS >= 51984050 & rare_gnomad$POS <= 52206648,]
 SCN8A_Total_controls = as.numeric(mean(SCN8A_rare_gnomad$AN))/2 
 ##rare
 SCN8A_rare_gnomad$individuals = SCN8A_rare_gnomad$AC-SCN8A_rare_gnomad$nhomalt
 SCN8A_rare_controls_affected = sum(SCN8A_rare_gnomad$individuals) 
 ##rare and paralogue annotated
-SCN8A_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 12 & var_pred_patho$POS >= 51984051 & var_pred_patho$POS <= 52206649,]
+SCN8A_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 12 & var_pred_patho$POS >= 51984050 & var_pred_patho$POS <= 52206648,]
 SCN8A_var_pred_patho$individuals = SCN8A_var_pred_patho$AC-SCN8A_var_pred_patho$nhomalt
 SCN8A_rare_pa_controls_affected = sum(SCN8A_var_pred_patho$individuals)
 ###SCN8A EFs
@@ -4364,13 +4364,13 @@ names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","
 SCN1A_annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,SCN1A_NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
 SCN1A_rare_pa_cases_affected = sum(SCN1A_annotated_NDD$Case.count) 
 ###Control cases for SCN1A- gnomad
-SCN1A_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 2 & rare_gnomad$POS >= 166845671 & rare_gnomad$POS <= 166984524,]
+SCN1A_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 2 & rare_gnomad$POS >= 166845670 & rare_gnomad$POS <= 166984523,]
 SCN1A_Total_controls = as.numeric(mean(SCN1A_rare_gnomad$AN))/2 
 ##rare
 SCN1A_rare_gnomad$individuals = SCN1A_rare_gnomad$AC-SCN1A_rare_gnomad$nhomalt
 SCN1A_rare_controls_affected = sum(SCN1A_rare_gnomad$individuals) 
 ##rare and paralogue annotated
-SCN1A_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 2 & var_pred_patho$POS >= 166845671 & var_pred_patho$POS <= 166984524,]
+SCN1A_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 2 & var_pred_patho$POS >= 166845670 & var_pred_patho$POS <= 166984523,]
 SCN1A_var_pred_patho$individuals = SCN1A_var_pred_patho$AC-SCN1A_var_pred_patho$nhomalt
 SCN1A_rare_pa_controls_affected = sum(SCN1A_var_pred_patho$individuals)
 ###SCN1A EFs
@@ -4446,13 +4446,13 @@ names(p.annotated_NDD$Unique_variant_annotations) = c("Variant_pos","ID","REF","
 KCNQ2_annotated_NDD = inner_join(p.annotated_NDD$Unique_variant_annotations,KCNQ2_NDD_notin_discovEHR,by = c("Variant_pos","REF","ALT"))
 KCNQ2_rare_pa_cases_affected = sum(KCNQ2_annotated_NDD$Case.count) 
 ###Control cases for KCNQ2- gnomad
-KCNQ2_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 20 & rare_gnomad$POS >= 62037543 & rare_gnomad$POS <= 62103994,]
+KCNQ2_rare_gnomad = rare_gnomad[rare_gnomad$CHROM == 20 & rare_gnomad$POS >= 62037542 & rare_gnomad$POS <= 62103993,]
 KCNQ2_Total_controls = as.numeric(mean(KCNQ2_rare_gnomad$AN))/2 
 ##rare
 KCNQ2_rare_gnomad$individuals = KCNQ2_rare_gnomad$AC-KCNQ2_rare_gnomad$nhomalt
 KCNQ2_rare_controls_affected = sum(KCNQ2_rare_gnomad$individuals) 
 ##rare and paralogue annotated
-KCNQ2_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 20 & var_pred_patho$POS >= 62037543 & var_pred_patho$POS <= 62103994,]
+KCNQ2_var_pred_patho = var_pred_patho[var_pred_patho$CHROM == 20 & var_pred_patho$POS >= 62037542 & var_pred_patho$POS <= 62103993,]
 KCNQ2_var_pred_patho$individuals = KCNQ2_var_pred_patho$AC-KCNQ2_var_pred_patho$nhomalt
 KCNQ2_rare_pa_controls_affected = sum(KCNQ2_var_pred_patho$individuals)
 ###KCNQ2 EFs
