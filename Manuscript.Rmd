@@ -1126,12 +1126,12 @@ p.value = fisher.test(matrix(c((dim(p.paralogous_var_align$input_variants)[1]-(c
 
 
 #Overall_table for predicting pathogenic variants
-clinvar_set_only_P = data.frame(bar = c("none", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
+clinvar_set_only_P = data.frame(bar = c("Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
            Pathogenic_var = c(dim(p.paralogous_var_align$Unique_variant_annotations)[1], dim(p2.paralogous_var_align$Unique_variant_annotations)[1], dim(p3.paralogous_var_align$Unique_variant_annotations)[1], p6.true_num_of_paralog_anno, p4.true_num_of_paralog_anno),
            Stage = "Pathogenic")
 clinvar_set_only_P$Stage = factor(clinvar_set_only_P$Stage, levels = c("Pathogenic"))
 
-clinvar_set_only_B = data.frame(bar = c("none", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
+clinvar_set_only_B = data.frame(bar = c("Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
            Pathogenic_var = c(dim(b.paralogous_var_align$Unique_variant_annotations)[1], dim(b2.paralogous_var_align$Unique_variant_annotations)[1], dim(b3.paralogous_var_align$Unique_variant_annotations)[1], b6.true_num_of_paralog_anno, b4.true_num_of_paralog_anno),
            Stage = "Benign")
 clinvar_set_only_B$Stage = factor(clinvar_set_only_B$Stage, levels = c("Benign"))
@@ -1141,36 +1141,39 @@ Total_clinvar_set = rbind(clinvar_set_only_P,clinvar_set_only_B)
 complete_df =  data.frame()
 rowTotal_variants = c(dim(p.paralogous_var_align$input_variants)[1],dim(b.paralogous_var_align$input_variants)[1],NA,NA,NA,NA,NA,NA)
 complete_df = rbind(complete_df, rowTotal_variants)
-colnames(complete_df) = c("Pathogenic var", "Bening var", "Precision", "PPV CI", "Sensitivity", "Sens CI", "Specificity", "P-value")
+colnames(complete_df) = c("Pathogenic variants", "Benign variants", "PPV", "PPV CI", "Sensitivity", "Sens CI", "Specificity", "P value")
 for (i in 1:5){
   rowStats = calc_PPV_Sens_Spec(Total_clinvar_set$Pathogenic_var[i], Total_clinvar_set$Pathogenic_var[i+5], dim(b.paralogous_var_align$input_variants)[1]-Total_clinvar_set$Pathogenic_var[i+5], dim(p.paralogous_var_align$input_variants)[1]-Total_clinvar_set$Pathogenic_var[i])
   row = c(as.integer(Total_clinvar_set$Pathogenic_var[i]), as.integer(Total_clinvar_set$Pathogenic_var[i+5]), rowStats$PPV, rowStats$PPV_SE*1.96, rowStats$Sens, rowStats$Sens_SE*1.96, rowStats$Spec, rowStats$pvalue$p.value)
+  row[3:8] = sapply(row[3:8], signif, 2)
   complete_df = rbind(complete_df, row)
 }
-row.names(complete_df) = c("total", "none", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants")
+row.names(complete_df) = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA + conserved variants", "full conserved AA + conserved variants")
 write.table(complete_df, file = "data/clinvar/redone_GRCh38_clinvar_set_predicted_patho.csv", na="", row.names = TRUE, col.names = NA, sep = ",", quote=FALSE)
 
 #Calculating var removed
 removed_df = data.frame()
 for (i in 2:5){
-  rowVars = calc_var_removed(complete_df$`Pathogenic var`[i], complete_df$`Pathogenic var`[i+1], complete_df$`Bening var`[i], complete_df$`Bening var`[i+1])
+  rowVars = calc_var_removed(complete_df$`Pathogenic var`[i], complete_df$`Pathogenic var`[i+1], complete_df$`Benign var`[i], complete_df$`Benign var`[i+1])
   rowStats = calc_PPV_Sens_Spec(rowVars$p.dif, rowVars$b.dif, dim(b.paralogous_var_align$input_variants)[1]-rowVars$b.dif, dim(p.paralogous_var_align$input_variants)[1]-rowVars$p.dif)
   row = c(as.integer(rowVars$p.dif), as.integer(rowVars$b.dif), rowStats$PPV, rowStats$PPV_SE*1.96, rowStats$Sens, rowStats$Sens_SE*1.96, rowStats$Spec, rowStats$pvalue$p.value)
+  row[3:8] = sapply(row[3:8], signif, 2)
   removed_df = rbind(removed_df, row)
 }
-colnames(removed_df) = c("Pathogenic var", "Bening var", "Precision", "PPV CI", "Sensitivity", "Sens CI", "Specificity", "P-value")
-row.names(removed_df) = c("none - conserved AA", "conserved AA - full conserved AA", "full conserved AA - conserved AA +\nconserved variants", "conserved AA +\nconserved variants - full conserved AA +\nconserved variants")
+colnames(removed_df) = c("Pathogenic variants", "Benign variants", "PPV", "PPV CI", "Sensitivity", "Sens CI", "Specificity", "P value")
+row.names(removed_df) = c("none - conserved AA", "conserved AA - full conserved AA", "full conserved AA - conserved AA + conserved variants", "conserved AA + conserved variants - full conserved AA + conserved variants")
 write.table(removed_df, file = "data/clinvar/redone_GRCh38_clinvar_set_predicted_patho_removed_var.csv", na="", row.names = TRUE, col.names = NA, sep = ",", quote=FALSE)
 
 removed_df2 = data.frame()
 for (i in 3:4){
-  rowVars = calc_var_removed(complete_df$`Pathogenic var`[i], complete_df$`Pathogenic var`[i+2], complete_df$`Bening var`[i], complete_df$`Bening var`[i+2])
+  rowVars = calc_var_removed(complete_df$`Pathogenic var`[i], complete_df$`Pathogenic var`[i+2], complete_df$`Benign var`[i], complete_df$`Benign var`[i+2])
   rowStats = calc_PPV_Sens_Spec(rowVars$p.dif, rowVars$b.dif, dim(b.paralogous_var_align$input_variants)[1]-rowVars$b.dif, dim(p.paralogous_var_align$input_variants)[1]-rowVars$p.dif)
   row = c(as.integer(rowVars$p.dif), as.integer(rowVars$b.dif), rowStats$PPV, rowStats$PPV_SE*1.96, rowStats$Sens, rowStats$Sens_SE*1.96, rowStats$Spec, rowStats$pvalue$p.value)
+  row[3:8] = sapply(row[3:8], signif, 2)
   removed_df2 = rbind(removed_df2, row)
 }
-colnames(removed_df2) = c("Pathogenic var", "Bening var", "Precision", "PPV CI", "Sensitivity", "Sens CI", "Specificity", "P-value")
-row.names(removed_df2) = c("conserved AA - conserved AA +\nconserved variants", "full conserved AA - full conserved AA +\nconserved variants")
+colnames(removed_df2) = c("Pathogenic variants", "Benign variants", "PPV", "PPV CI", "Sensitivity", "Sens CI", "Specificity", "P value")
+row.names(removed_df2) = c("conserved AA - conserved AA + conserved variants", "full conserved AA - full conserved AA + conserved variants")
 write.table(removed_df2, file = "data/clinvar/redone_GRCh38_clinvar_set_predicted_patho_removed_var2.csv", na="", row.names = TRUE, col.names = NA, sep = ",", quote=FALSE)
 
 

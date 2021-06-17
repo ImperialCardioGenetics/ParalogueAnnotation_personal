@@ -1,5 +1,3 @@
-,Pathogenic var,Bening var,Precision,PPV CI,Sensitivity,Sens CI,Specificity,P-value
-conserved AA - conserved AA +
-conserved variants,2215,76,0.966826713225666,0.00733351355395172,0.092701096509584,0.00367730176573103,0.993737640079103,6.85537268353343e-302
-full conserved AA - full conserved AA +
-conserved variants,1258,18,0.9858934169279,0.00647077997596136,0.052649200636143,0.00283180240009729,0.998516809492419,3.43303226727105e-198
+,Pathogenic variants,Benign variants,PPV,PPV CI,Sensitivity,Sens CI,Specificity,P value
+conserved AA - conserved AA + conserved variants,2215,76,0.97,0.0073,0.093,0.0037,0.99,6.9e-302
+full conserved AA - full conserved AA + conserved variants,1258,18,0.99,0.0065,0.053,0.0028,1,3.4e-198
