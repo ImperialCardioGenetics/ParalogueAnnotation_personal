@@ -619,3 +619,37 @@ cell_format = function(value,CI){
   y = paste(x[1]," (",x[2],",",x[3],")",sep = "")
   return(y)
 }
+
+calc_PPV_Sens_Spec = function(TP,FP,TN,FN){
+  PPV = TP/(TP+FP)
+  Sens = TP/(TP+FN)
+  Spec = TN/(TN+FP)
+  con_matrix = matrix(
+    c(FN,
+      TP,
+      TN,
+      FP
+    ), ncol = 2
+  )
+  pvalue = fisher.test(con_matrix)
+  
+  PPV_SE = sqrt((PPV*(1-PPV))/(TP+FP))
+  PPV_CI = c(PPV - (1.96*PPV_SE), PPV + (1.96*PPV_SE))
+  
+  Sens_SE = sqrt((Sens*(1-Sens))/(TP+FN))
+  Sens_CI = c(Sens - (1.96*Sens_SE), Sens + (1.96*Sens_SE))
+  
+  return(list("PPV"=PPV,
+              "PPV_SE" = PPV_SE,
+              "PPV_CI" = PPV_CI,
+              "Sens"=Sens,
+              "Sens_SE" = Sens_SE,
+              "Sens_CI" = Sens_CI,
+              "Spec"=Spec,
+              "pvalue"=pvalue))
+}
+calc_var_removed = function(p.var_before, p.var_after, b.var_before, b.var_after){
+  p.dif = p.var_before - p.var_after
+  b.dif = b.var_before - b.var_after
+  return(list("p.dif" = p.dif, "b.dif" = b.dif))
+}
