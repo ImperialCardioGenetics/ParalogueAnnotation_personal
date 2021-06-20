@@ -1176,54 +1176,19 @@ colnames(removed_df2) = c("Pathogenic variants", "Benign variants", "PPV", "PPV 
 row.names(removed_df2) = c("conserved AA - conserved AA + conserved variants", "full conserved AA - full conserved AA + conserved variants")
 write.table(removed_df2, file = "data/clinvar/redone_GRCh38_clinvar_set_predicted_patho_removed_var2.csv", na="", row.names = TRUE, col.names = NA, sep = ",", quote=FALSE)
 
+# Getting numbers for this version of pipeline study #
+clinvar_20190114_vcf = read.csv("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38.vcf", sep = "\t", comment.char = "#", header = F, stringsAsFactors = F)
+colnames(clinvar_20190114_vcf) = c("CHROM","POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO") #440487 unique variants in total
+clinvar_20190114_vcf$GENE = sapply(strsplit(clinvar_20190114_vcf$INFO, "GENEINFO="), "[", 2)
+clinvar_20190114_vcf$GENE = sapply(strsplit(clinvar_20190114_vcf$GENE, ":"), "[", 1) #5936 unique genes in total
 
-##old code
-Variant = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
-Total = c(dim(p.paralogous_var_align$input_variants)[1],dim(b.paralogous_var_align$input_variants)[1],"NA","NA","NA","NA")
-Paralogue_Annotation_no_QC = c(format(conf$con_table[2], scientific = FALSE),format(conf$con_table[4], scientific = FALSE),signif(conf$PPV, digits = 2),signif(conf$Sensitivity, digits = 2),signif(conf$Specificity, digits = 2),signif(conf$Pvalue$p.value, digits = 2))
-Variants_remaining_after_PA_QC1 = c(format(conf2$con_table[2], scientific = FALSE),format(conf2$con_table[4], scientific = FALSE),signif(conf2$PPV, digits = 2), signif(conf2$Sensitivity, digits = 2),signif(conf2$Specificity, digits = 2), signif(conf2$Pvalue$p.value, digits = 2))
-Variants_remaining_after_PA_QC2 = c(format(conf3$con_table[2], scientific = FALSE),format(conf3$con_table[4], scientific = FALSE),signif(conf3$PPV, digits = 4),signif(conf3$Sensitivity, digits = 2),signif(conf3$Specificity, digits = 2),signif(conf3$Pvalue$p.value, digits = 2))
-Variants_remaining_after_PA_QC3 = c(format(conf4$con_table[2], scientific = FALSE),format(conf4$con_table[4], scientific = FALSE),signif(conf4$PPV, digits = 3),signif(conf4$Sensitivity, digits = 2),signif(conf4$Specificity, digits = 2),signif(conf4$Pvalue$p.value, digits = 2))
-Variants_remaining_after_PA_QC3_w_QC1_no_QC2 = c(format(conf6$con_table[2], scientific = FALSE),format(conf6$con_table[4], scientific = FALSE),signif(conf6$PPV, digits = 4),signif(conf6$Sensitivity, digits = 2),signif(conf6$Specificity, digits = 2),signif(conf6$Pvalue$p.value, digits = 2))
+protein_coding_genes_in_total = intersect(unique(clinvar_20190114_vcf$GENE), all_protein_genes$external_gene_name) #5862 unique protein coding genes in total
 
-Variants_removed_after_PA_QC1 = c(format(var_removed$con_table[2], scientific = FALSE),format(var_removed$con_table[4], scientific = FALSE),signif(var_removed$PPV, digits = 2),signif(var_removed$Sensitivity, digits = 2),signif(var_removed$Specificity, digits = 2),signif(var_removed$Pvalue$p.value, digits = 2))
-Variants_removed_after_PA_QC2 = c(format(var_removed2$con_table[2], scientific = FALSE),format(var_removed2$con_table[4], scientific = FALSE),signif(var_removed2$PPV, digits = 2),signif(var_removed2$Sensitivity, digits = 2),signif(var_removed2$Specificity, digits = 2),signif(var_removed2$Pvalue$p.value, digits = 2))
-Variants_removed_after_PA_QC3 = c(format(var_removed3$con_table[2], scientific = FALSE),format(var_removed3$con_table[4], scientific = FALSE),signif(var_removed3$PPV, digits = 2),signif(var_removed3$Sensitivity, digits = 2),signif(var_removed3$Specificity, digits = 2),signif(var_removed3$Pvalue$p.value, digits = 2))
-Variants_removed_after_PA_QC3_w_QC1_no_QC2 = c(format(var_removed4$con_table[2], scientific = FALSE),format(var_removed4$con_table[4], scientific = FALSE),signif(var_removed4$PPV, digits = 2),signif(var_removed4$Sensitivity, digits = 2),signif(var_removed4$Specificity, digits = 2),signif(var_removed4$Pvalue$p.value, digits = 2))
+p.tableized_vcf = read.csv("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_no_plugin_tableized_org", sep = "\t", stringsAsFactors = F, header = T) #89003 unique P/LP variants
+b.tableized_vcf = read.csv("data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_no_plugin_tableized_org", sep = "\t", stringsAsFactors = F, header = T) #123965 unique B/LB variants
 
-clinvar_set = data.frame(#Variant,
-                         Total,
-                         Paralogue_Annotation_no_QC,
-                         Variants_remaining_after_PA_QC1,
-                         Variants_remaining_after_PA_QC2,
-                         Variants_remaining_after_PA_QC3_w_QC1_no_QC2,
-                         Variants_remaining_after_PA_QC3,
-                         Variants_removed_after_PA_QC1,
-                         Variants_removed_after_PA_QC2,
-                         Variants_removed_after_PA_QC3_w_QC1_no_QC2,
-                         Variants_removed_after_PA_QC3
-                         )
+protein_coding_genes_here = intersect(unique(c(p.tableized_vcf$SYMBOL,b.tableized_vcf$SYMBOL)),all_protein_genes$external_gene_name) #4341 genes
 
-clinvar_set = t(clinvar_set)
-colnames(clinvar_set) = c("Pathogenic variants","Benign variants","PPV","Sensitivity","Specificity","P value")
-rownames(clinvar_set) = c("Total variants", 
-                          "Paralogue Annotation", 
-                          "Variants remaining after QC1",
-                          "Variants remaining after QC1+QC2", 
-                          "Variants remaining after QC1+QC3", 
-                          "Variants remaining after QC1+QC2+QC3",
-                          "Variants removed from QC1", 
-                          "Variants removed from QC1+QC2",
-                          "Variants removed from QC1+QC3",
-                          "Variants removed from QC1+QC2+QC3")
-#write.table(clinvar_set, file = "data/clinvar/clinvar_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
-
-
-#Calculating var removed
-var_removed_bw_1_2 = var_rem_matrix(conf$con_table, conf2$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
-var_removed_bw_2_3 = var_rem_matrix(conf2$con_table, conf3$con_table, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$paralog_data)
-var_removed_bw_3_4 = var_rem_matrix(conf3$con_table, conf4$con_table, p3.paralogous_var_align$paralog_data, b3.paralogous_var_align$paralog_data)
-var_removed_bw_2_6 = var_rem_matrix(conf2$con_table, conf6$con_table, p2.paralogous_var_align$paralog_data, b2.paralogous_var_align$paralog_data)
 ```
 
 
