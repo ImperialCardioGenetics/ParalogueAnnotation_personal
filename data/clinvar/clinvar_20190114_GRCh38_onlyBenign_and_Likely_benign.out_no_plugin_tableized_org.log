@@ -1,0 +1,29 @@
+Running file: clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_no_plugin
+Started at: 2021_06_20_01_19_44
+--add_ucsc_link False
+--lof_only False
+--biallelic_only False
+--split_size None
+--canonical_only True
+--mysql False
+--original_position False
+--split_by_gene False
+--all_csqs False
+--vcf clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_no_plugin
+--simplify_gtex False
+--ucsc_link_window 20
+--samples False
+--only_pass False
+--do_not_minrep True
+--snps_only False
+--omit_filter False
+--dont_collapse_annotations False
+--include_id True
+--functional_simplify False
+--vep_info SYMBOL,Protein_position,Amino_acids,Codons,Feature,BIOTYPE
+--info None
+--sample_info None
+--split_by_transcript True
+--hom_samples False
+--output clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_no_plugin_tableized_org
+--options False
