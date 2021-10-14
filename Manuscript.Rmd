@@ -4699,7 +4699,10 @@ KCNQ2_EF_data$gene = "KCNQ2-NDD+E"
 load("data/total_EF_data.RData")
 total_EF_data = rbind(total_EF_data, SCN2A_EF_data, SCN8A_EF_data, SCN1A_EF_data, KCNQ2_EF_data)
 total_EF_data$gene = factor(total_EF_data$gene, levels = c("KCNQ2-NDD+E","SCN1A-NDD+E","SCN8A-NDD+E","SCN2A-NDD+E","SCN5A-BrS","SCN5A-LQTS","KCNH2-LQTS","KCNQ1-LQTS"))
-
+if (!file.exists("data/ParalogueAnnotation_total_EF_data_w_NDD+E.RData")){
+  save(total_EF_data, file = "data/ParalogueAnnotation_total_EF_data_w_NDD+E.RData")
+}
+  
 gg = ggplot(total_EF_data, aes(x=gene, y=OR, group=type,
                                colour = type
                                #shape = type
