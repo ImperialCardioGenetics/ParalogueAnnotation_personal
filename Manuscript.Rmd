@@ -7509,6 +7509,86 @@ gg_protein_class = ggplot(protein_classes, aes(y=number_of_genes, x=reorder(Prot
 ggsave("images/GO_protein_classes_of_synthetic_exome_genes_w_annotations.png", height = 8, width = 12)
 ```
 
+Using update GO Panther version 16.0 (17/10/21):
+
+```{r GO_protein_class, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+#Panther GO
+protein_classes = read.csv(file="data/clinvar/genes_with_paralogue_annotation_noQC_GO_protein_class_v2.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+protein_classes$V4 = as.numeric(sub("%", "", protein_classes$V4))
+protein_classes$V5 = as.numeric(sub("%", "", protein_classes$V5))
+protein_classes = protein_classes[,2:5]
+colnames(protein_classes) = c("Protein_class", "number_of_genes", "Percent_of_gene_hit_against_total_number_of_genes", "Percent_of_gene_hit_against_total_number_of_Protein_Class_hits")
+protein_classes = protein_classes[order(protein_classes$number_of_genes, decreasing = T),] 
+protein_classes$stage = "Only genes with\nParalogue Annotations"
+gg_protein_class = ggplot(protein_classes, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = stage)) +
+  geom_bar(stat="identity", position = "dodge") +
+  coord_flip() +
+  # geom_point() + 
+  # geom_text(aes(label=Protein_class, position = "dodge"), position = position_dodge(width = 0), hjust =0 , vjust=0, angle = 20) +
+  theme(
+  #   axis.text.x = element_text(angle = -45, hjust = -0),
+  #   plot.margin = unit(c(5.5, 5.5, 5.5, 10), "points")
+    # axis.title.y=element_blank(),
+    legend.title=element_blank()
+    # legend.position="none"
+    # axis.text.x=element_blank()
+    # axis.ticks.x=element_blank()
+    ) +
+  scale_fill_manual(values=c("#BB8FCE")) + 
+  guides(fill = guide_legend(reverse=TRUE)) +
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300,350,400)) +
+  xlab("PANTHER Protein Class") + theme(legend.key.size = unit(2,"line")) +ylab("Number of Genes")
+#ggsave("images/GO_protein_classes_of_only_genes_w_annotations.png", height = 8, width = 12)
+
+###control - 1947 disease clinvar genes with disease paralogues
+protein_classes4 = read.csv(file="data/clinvar/1947_dis_clinvar_genes_w_dis_para_GO_protein_class_v2.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+protein_classes4$V4 = as.numeric(sub("%", "", protein_classes4$V4))
+protein_classes4$V5 = as.numeric(sub("%", "", protein_classes4$V5))
+protein_classes4 = protein_classes4[,2:5]
+colnames(protein_classes4) = c("Protein_class", "number_of_genes", "Percent_of_gene_hit_against_total_number_of_genes", "Percent_of_gene_hit_against_total_number_of_Protein_Class_hits")
+protein_classes4 = protein_classes4[order(protein_classes4$number_of_genes, decreasing = T),] 
+protein_classes4$stage = "Disease genes with at\nleast 1 disease paralogue"
+
+###Total_plot with protein_classes, protein_classes4
+total_protein_class = rbind(protein_classes, protein_classes4)
+total_protein_class[total_protein_class$Protein_class=="chromatin/chromatin-binding, or -regulatory protein (PC00077)", "Protein_class"] = "chromatin-binding regulatory protein (PC00077)"
+total_protein_class$stage = factor(total_protein_class$stage, levels = c("Only genes with\nParalogue Annotations", "Disease genes with at\nleast 1 disease paralogue"))
+
+total_protein_class_poster = total_protein_class[total_protein_class$Protein_class != "transmembrane receptor\nregulatory/adaptor protein (PC00226)",]
+gg_protein_class_poster = ggplot(total_protein_class_poster, aes(y=number_of_genes, x=reorder(Protein_class, number_of_genes), fill = stage)) +
+  geom_bar(stat="identity", position = "dodge") +
+  coord_flip() +
+  # geom_point() + 
+  # geom_text(aes(label=Protein_class, position = "dodge"), position = position_dodge(width = 0), hjust =0 , vjust=0, angle = 20) +
+  theme(
+  #   axis.text.x = element_text(angle = -45, hjust = -0),
+  #   plot.margin = unit(c(5.5, 5.5, 5.5, 10), "points")
+    # axis.title.y=element_blank(),
+    legend.title=element_blank()
+    # legend.position="none"
+    # axis.text.x=element_blank()
+    # axis.ticks.x=element_blank()
+    ) +
+  scale_fill_manual(values= c(alpha("red",0.9), alpha("blue",0.4)), labels = c(paste0("Genes with Paralogue\nAnnotations\n(hits=",sum(protein_classes$number_of_genes),")"),paste0("Disease genes with\ndisease paralogues\n(hits=",sum(protein_classes4$number_of_genes),")"))) + 
+  guides(fill = guide_legend(reverse=TRUE)) +
+  scale_y_continuous(breaks = c(0,50,100,150,200,250,300), limits = c(0,310), expand = c(0,0), position = "right") +
+  xlab("PANTHER Protein Class") + theme(legend.key.size = unit(3,"line")) +ylab("Number of Genes") +
+  theme(axis.text.x = element_text(size = 21), 
+        axis.text.y = element_text(size=25),
+        legend.text = element_text(size=25),
+        axis.title = element_text(size=25),
+        legend.position = c(0.72,0.14)) + 
+  guides(fill=guide_legend(
+                 keywidth=0.2,
+                 keyheight=1.2,
+                 default.unit="inch",
+                 reverse = TRUE))
+ggsave("images/GO_protein_classes_of_genes2_v2_for_poster.png", height = 10, width = 15)
+
+
+```
+
+
 ## DCM variants
 ```{r DCM_variants, cache=TRUE, echo = FALSE, message = FALSE, warning=FALSE}
 #noQC

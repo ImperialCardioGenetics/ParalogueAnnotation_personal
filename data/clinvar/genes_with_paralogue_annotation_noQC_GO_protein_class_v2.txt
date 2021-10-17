@@ -1,0 +1,18 @@
+1	extracellular matrix protein (PC00102)	30	4.7%	5.9%
+2	cytoskeletal protein (PC00085)	31	4.9%	6.1%
+3	transporter (PC00227)	99	15.6%	19.5%
+4	scaffold/adaptor protein (PC00226)	3	0.5%	0.6%
+5	cell adhesion molecule (PC00069)	7	1.1%	1.4%
+6	nucleic acid metabolism protein (PC00171)	4	0.6%	0.8%
+7	intercellular signal molecule (PC00207)	14	2.2%	2.8%
+8	protein-binding activity modulator (PC00095)	33	5.2%	6.5%
+9	calcium-binding protein (PC00060)	3	0.5%	0.6%
+10	gene-specific transcriptional regulator (PC00264)	81	12.8%	15.9%
+11	metabolite interconversion enzyme (PC00262)	82	12.9%	16.1%
+12	protein modifying enzyme (PC00260)	38	6.0%	7.5%
+13	chromatin/chromatin-binding, or -regulatory protein (PC00077)	5	0.8%	1.0%
+14	transfer/carrier protein (PC00219)	4	0.6%	0.8%
+15	membrane traffic protein (PC00150)	6	0.9%	1.2%
+16	cell junction protein (PC00070)	10	1.6%	2.0%
+17	structural protein (PC00211)	2	0.3%	0.4%
+18	transmembrane signal receptor (PC00197)	56	8.8%	11.0%
