@@ -5735,7 +5735,7 @@ normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, 
 df1 = data.frame(
   Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
   Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
-  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
+  Precision_CI = c(sift1_conf$PPV_SE*1.96,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
   Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity,normal_PA2_conf$Sensitivity,normal_PA3_conf$Sensitivity,normal_PA4_conf$Sensitivity,normal_PA5_conf$Sensitivity),
   Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA5_conf$Sensitivity_SE*1.96)
 )
@@ -5807,7 +5807,7 @@ normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, 
 df2 = data.frame(
   Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
   Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
-  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
+  Precision_CI = c(sift1_conf$PPV_SE*1.96,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
   Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity,normal_PA2_conf$Sensitivity,normal_PA3_conf$Sensitivity,normal_PA4_conf$Sensitivity,normal_PA5_conf$Sensitivity),
   Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA5_conf$Sensitivity_SE*1.96)
 )
@@ -5886,7 +5886,7 @@ normal_PA5_conf = conf_matrix(normal_PA5$p.normal_PA4$true_num_of_paralog_anno, 
 df3 = data.frame(
   Type = c("Sift","Mcap","Cadd","Revel","no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"),
   Precision = c(sift1_conf$PPV,mcap1_conf$PPV,cadd1_conf$PPV,revel1_conf$PPV,normal_PA_conf$PPV,normal_PA2_conf$PPV,normal_PA3_conf$PPV,normal_PA4_conf$PPV,normal_PA5_conf$PPV),
-  Precision_CI = c(sift1_conf$PPV_SE*.196,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
+  Precision_CI = c(sift1_conf$PPV_SE*1.96,mcap1_conf$PPV_SE*1.96,cadd1_conf$PPV_SE*1.96,revel1_conf$PPV_SE*1.96,normal_PA_conf$PPV_SE*1.96,normal_PA2_conf$PPV_SE*1.96,normal_PA3_conf$PPV_SE*1.96,normal_PA4_conf$PPV_SE*1.96,normal_PA5_conf$PPV_SE*1.96),
   Sensitivity = c(sift1_conf$Sensitivity,mcap1_conf$Sensitivity,cadd1_conf$Sensitivity,revel1_conf$Sensitivity,normal_PA_conf$Sensitivity,normal_PA2_conf$Sensitivity,normal_PA3_conf$Sensitivity,normal_PA4_conf$Sensitivity,normal_PA5_conf$Sensitivity),
   Sensitivity_CI = c(sift1_conf$Sensitivity_SE*1.96,mcap1_conf$Sensitivity_SE*1.96,cadd1_conf$Sensitivity_SE*1.96,revel1_conf$Sensitivity_SE*1.96,normal_PA_conf$Sensitivity_SE*1.96,normal_PA2_conf$Sensitivity_SE*1.96,normal_PA3_conf$Sensitivity_SE*1.96,normal_PA4_conf$Sensitivity_SE*1.96,normal_PA5_conf$Sensitivity_SE*1.96)
 )
