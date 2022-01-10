@@ -5899,6 +5899,9 @@ shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" 
 
 df_all = rbind(df1,df2,df3)
 df_all$test_set = factor(df_all$test_set, levels = c("ASD", "TP53", "PPARG"))
+if (!file.exists("data/paralogue_comparison_to_other_tools.RData")){
+  save(df_all, file = "data/paralogue_comparison_to_other_tools.RData")
+}
 perc_increase = ((mean(df_all$Precision[c(5:9,14:18,23:27)])-mean(df_all$Precision[c(1:4,10:13,19:22)]))/mean(df_all$Precision[c(1:4,10:13,19:22)]))*100
 
 gg = ggplot(df_all, aes(x=Sensitivity, y=Precision, colour = test_set, shape = Type)) + geom_point(size=15,stroke=2,alpha=0.6) +
