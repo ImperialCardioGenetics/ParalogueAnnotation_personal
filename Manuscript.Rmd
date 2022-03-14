@@ -7234,6 +7234,28 @@ ggsave("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_resu
 # num_pred_Chr1 = length(total_var_positions_data[total_var_positions_data$Chrom == 1, "Position"])
 
 ```
+
+Count how many variant positions in total are predicted to be pathogenic using conserved AA/Para_con:
+```{r synthetic_exome, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE, results='hide'}
+
+Total_variants_pred = 0
+for (i in c(1:22, "X", "Y")){
+  load(paste0("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_result_analysis/var_positions_data_chrom_",i,"_para_con.RData"))
+  vars_pred = length((var_positions_data$Position))
+  Total_variants_pred = Total_variants_pred + vars_pred
+}
+
+for (i in c(1:22, "X", "Y")){
+  load(paste0("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/ParalogueAnnotation_personal/data/all_possible_mutations/synthetic_exome/chrom_",i,"/Total_annotations_chrom_",i,"_para_con.RData"))
+  vars_pred = dim(Total_annotations)[1]
+  Total_variants_pred = Total_variants_pred + vars_pred
+}
+
+#spent last time trying to figure out the dif between var_positions_data_chrom_",i,"_para_con.RData and Total_annotations_chrom_",i,"_para_con.RData. The latter contains all annotations including variants with multiple ref variants annotating them while the former is purely the positions of all possible variants that can be annotated.
+
+```
+
+
 ## GO protein classes of clinvar P/LP variants with PA noQC
 
 Using GO Panther enrichment analysis (http://pantherdb.org/) to identify common protein classes among the genes that had paralogue annotations.
