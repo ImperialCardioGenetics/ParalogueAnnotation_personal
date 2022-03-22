@@ -7254,23 +7254,37 @@ for (i in c(1:22, "X", "Y")){
   Total_var_pos_para_con_pred = Total_var_pos_para_con_pred + vars_pred
 }
 
-# NOTE DUE TO BS READTHROUGH TRANSCRIPTS AND OVERLAPPING GENES, THE BOTTOM CODE SHOULD NOT BE USED TO IDENTIFY ALL POSSIBLE MISSENSE VARIANTS THAT HAVE ANNOTATIONS
+# NOTE DUE TO BS READTHROUGH TRANSCRIPTS AND OVERLAPPING GENES, THE ABOVE CODE SHOULD NOT BE USED TO IDENTIFY ALL POSSIBLE MISSENSE VARIANTS THAT HAVE ANNOTATIONS AS THE LOADED OBJECTS DO NOT INCLUDE REF/ALT ALLELES, JUST ONLY THE CHROM POSITION
 
-# Total_variants_para_con_pred = 0
-# Total_uniq_postions = 0
-# for (i in c(1:22, "X", "Y")){
-#   load(paste0("data/all_possible_mutations/synthetic_exome/chrom_",i,"/Total_annotations_chrom_",i,"_para_con.RData"))
-#   Total_annotations$position = sapply(strsplit(Total_annotations$var, split=" "), "[", 1)
-#   Total_annotations$position_ = sapply(strsplit(Total_annotations$var, split=" "), "[", 2)
-#   Total_annotations$position = paste(Total_annotations$position, Total_annotations$position_, sep = " ")
-#   Total_annotations = subset(Total_annotations, select=-c(position_))
-#   uniq_positions = length(unique(Total_annotations$var))
-#   Total_uniq_postions = Total_uniq_postions + uniq_positions
-#   vars_pred = dim(Total_annotations)[1]
-#   Total_variants_para_con_pred = Total_variants_para_con_pred + vars_pred
-# }
-# 
-# setdiff(Total_annotations$position, var_positions_data$Chrom_pos)
+Total_noQC_uniq_postions_and_alleles = 0
+Total_noQC_uniq_postions = 0
+for (i in c(1:22, "X", "Y")){
+  load(paste0("data/all_possible_mutations/synthetic_exome/chrom_",i,"/Total_annotations_chrom_",i,"_noQC.RData"))
+  Total_annotations$position = sapply(strsplit(Total_annotations$var, split=" "), "[", 1)
+  Total_annotations$position_ = sapply(strsplit(Total_annotations$var, split=" "), "[", 2)
+  Total_annotations$position = paste(Total_annotations$position, Total_annotations$position_, sep = " ")
+  Total_annotations = subset(Total_annotations, select=-c(position_))
+  uniq_position_alleles = length(unique(Total_annotations$var))
+  Total_noQC_uniq_postions_and_alleles = Total_noQC_uniq_postions_and_alleles + uniq_position_alleles
+  uniq_postions = length(unique(Total_annotations$position))
+  Total_noQC_uniq_postions = Total_noQC_uniq_postions + uniq_postions
+}
+
+Total_para_con_uniq_postions_and_alleles = 0
+Total_para_con_uniq_postions = 0
+for (i in c(1:22, "X", "Y")){
+  load(paste0("data/all_possible_mutations/synthetic_exome/chrom_",i,"/Total_annotations_chrom_",i,"_para_con.RData"))
+  Total_annotations$position = sapply(strsplit(Total_annotations$var, split=" "), "[", 1)
+  Total_annotations$position_ = sapply(strsplit(Total_annotations$var, split=" "), "[", 2)
+  Total_annotations$position = paste(Total_annotations$position, Total_annotations$position_, sep = " ")
+  Total_annotations = subset(Total_annotations, select=-c(position_))
+  uniq_position_alleles = length(unique(Total_annotations$var))
+  Total_para_con_uniq_postions_and_alleles = Total_para_con_uniq_postions_and_alleles + uniq_position_alleles
+  uniq_postions = length(unique(Total_annotations$position))
+  Total_para_con_uniq_postions = Total_para_con_uniq_postions + uniq_postions
+}
+
+setdiff(Total_annotations$position, var_positions_data$Chrom_pos)
 
 
 ```
