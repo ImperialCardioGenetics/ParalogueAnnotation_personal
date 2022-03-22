@@ -7254,23 +7254,24 @@ for (i in c(1:22, "X", "Y")){
   Total_var_pos_para_con_pred = Total_var_pos_para_con_pred + vars_pred
 }
 
-Total_variants_para_con_pred = 0
+# NOTE DUE TO BS READTHROUGH TRANSCRIPTS AND OVERLAPPING GENES, THE BOTTOM CODE SHOULD NOT BE USED TO IDENTIFY ALL POSSIBLE MISSENSE VARIANTS THAT HAVE ANNOTATIONS
+
+# Total_variants_para_con_pred = 0
 # Total_uniq_postions = 0
-for (i in c(1:22, "X", "Y")){
-  load(paste0("data/all_possible_mutations/synthetic_exome/chrom_",i,"/Total_annotations_chrom_",i,"_para_con.RData"))
-  Total_annotations$position = sapply(strsplit(Total_annotations$var, split=" "), "[", 1)
-  Total_annotations$position_ = sapply(strsplit(Total_annotations$var, split=" "), "[", 2)
-  Total_annotations$position = paste(Total_annotations$position, Total_annotations$position_, sep = " ")
-  Total_annotations = subset(Total_annotations, select=-c(position_))
-  uniq_positions = length(unique(Total_annotations$var))
-  Total_uniq_postions = Total_uniq_postions + uniq_positions
-  vars_pred = dim(Total_annotations)[1]
-  Total_variants_para_con_pred = Total_variants_para_con_pred + vars_pred
-}
+# for (i in c(1:22, "X", "Y")){
+#   load(paste0("data/all_possible_mutations/synthetic_exome/chrom_",i,"/Total_annotations_chrom_",i,"_para_con.RData"))
+#   Total_annotations$position = sapply(strsplit(Total_annotations$var, split=" "), "[", 1)
+#   Total_annotations$position_ = sapply(strsplit(Total_annotations$var, split=" "), "[", 2)
+#   Total_annotations$position = paste(Total_annotations$position, Total_annotations$position_, sep = " ")
+#   Total_annotations = subset(Total_annotations, select=-c(position_))
+#   uniq_positions = length(unique(Total_annotations$var))
+#   Total_uniq_postions = Total_uniq_postions + uniq_positions
+#   vars_pred = dim(Total_annotations)[1]
+#   Total_variants_para_con_pred = Total_variants_para_con_pred + vars_pred
+# }
+# 
+# setdiff(Total_annotations$position, var_positions_data$Chrom_pos)
 
-setdiff(Total_annotations$position, var_positions_data$Chrom_pos)
-
-#spent last time trying to figure out the dif between var_positions_data_chrom_",i,"_para_con.RData and Total_annotations_chrom_",i,"_para_con.RData. The latter contains all annotations including variants with multiple ref variants annotating them while the former is purely the positions of all possible variants that can be annotated.
 
 ```
 
