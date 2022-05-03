@@ -7289,6 +7289,12 @@ setdiff(Total_annotations$position, var_positions_data$Chrom_pos)
 
 ```
 
+Calculate how many are already in ClinVar and how many "new" indirect annotations there:
+```{r synthetic_exome, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE, results='hide'}
+
+
+```
+
 
 ## GO protein classes of clinvar P/LP variants with PA noQC
 
