@@ -1304,9 +1304,42 @@ b.paralogous_var_align = Paralogous_var_align(
 clinvar_B_LB_tableized_left_joined_paralogue_anno = left_join(clinvar_B_LB_tableized, b.paralogous_var_align$Unique_variant_annotations, by = c("ID" = "ID.x"))
 dim(clinvar_B_LB_tableized_left_joined_paralogue_anno[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Variant_pos),]) #number showing How many have an aligned paralogue position - 12103
 
-# SECOND BIT IS CALCULATING PARA Z SCORE 
-clinvar_P_LP_tableized_left_joined_paralogue_anno
+### SECOND BIT IS CALCULATING PARA Z SCORE ###
+#bin0-2
+clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1 = clinvar_P_LP_tableized_left_joined_paralogue_anno[clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score < 3 & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score),]
+dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1[!is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with an annotation: 94
+dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1[is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with no annotation: 986
 
+clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1 = clinvar_B_LB_tableized_left_joined_paralogue_anno[clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score < 3 & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score),]
+dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with an annotation: 31
+dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1[is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with no annotation: 1505
+
+#bin3-5
+clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2 = clinvar_P_LP_tableized_left_joined_paralogue_anno[clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score < 6 & clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score > 2 & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score),]
+dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2[!is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2$Variant_pos),]) #with an annotation: 304
+dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2[is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2$Variant_pos),]) #with no annotation: 1672
+
+clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2 = clinvar_B_LB_tableized_left_joined_paralogue_anno[clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score < 6 & clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score > 2 & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score),]
+dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2$Variant_pos),]) #with an annotation: 44
+dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2[is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2$Variant_pos),]) #with no annotation: 1459
+
+#bin6-8
+clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin3 = clinvar_P_LP_tableized_left_joined_paralogue_anno[clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score < 9 & clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score > 5 & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score),]
+dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin3[!is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin3$Variant_pos),]) #with an annotation: 455
+dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin3[is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin3$Variant_pos),]) #with no annotation: 2281
+
+clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin3 = clinvar_B_LB_tableized_left_joined_paralogue_anno[clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score < 9 & clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score > 5 & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score),]
+dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin3[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin3$Variant_pos),]) #with an annotation: 48
+dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin3[is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin3$Variant_pos),]) #with no annotation: 1550
+
+#bin9-11
+clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin4 = clinvar_P_LP_tableized_left_joined_paralogue_anno[clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score < 12 & clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score > 8 & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score),]
+dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin4[!is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin4$Variant_pos),]) #with an annotation: 2595
+dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin4[is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin4$Variant_pos),]) #with no annotation: 8422
+
+clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin4 = clinvar_B_LB_tableized_left_joined_paralogue_anno[clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score < 12 & clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score > 8 & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score),]
+dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin4[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin4$Variant_pos),]) #with an annotation: 52
+dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin4[is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin4$Variant_pos),]) #with no annotation: 1395
 
 ```
 
