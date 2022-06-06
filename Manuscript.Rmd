@@ -1218,7 +1218,7 @@ length(unique(b.paralogous_var_align$input_variants$ID)) #12136 B/LB variants
 length(unique(c(p.paralogous_var_align$gathered_paralog_data$Gene,b.paralogous_var_align$gathered_paralog_data$Gene))) #2395 genes
 ```
 
-Thesis correction - GRCh38 to include paralogue locations in main table:
+Thesis correction - GRCh38 to include paralogue locations (with paraZ cutoff threshold) in main table:
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 
 # FIRST BIT IS CALCULATING THE NUMBER OF VARIANTS IN THE TEST SET THAT HAVE OR DO NOT HAVE AN ALIGNED PARALOGUE POSITION 
@@ -1243,11 +1243,22 @@ protein_genes_wo_paralogues_wide = protein_genes_wo_paralogues_wide[!(protein_ge
 clinvar_P_LP_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE) # NOTE THIS FILE CONTAINS NON-SENSE AND INDELS
 clinvar_B_LB_tableized = read.csv(file="data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", sep = "\t", header=TRUE, stringsAsFactors=FALSE) 
 
-clinvar_P_LP_tableized = clinvar_P_LP_tableized[str_count(clinvar_P_LP_tableized$Amino_acids) == 3 &
+clinvar_P_LP_tableized_temp = clinvar_P_LP_tableized[str_count(clinvar_P_LP_tableized$Amino_acids) == 3 &
                                                   !(grepl("-", clinvar_P_LP_tableized$Amino_acids)) &
                                                   !(grepl("\\*", clinvar_P_LP_tableized$Amino_acids)) &
                                                   grepl("/", clinvar_P_LP_tableized$Amino_acids) &
                                                   str_count(clinvar_P_LP_tableized$REF) == str_count(clinvar_P_LP_tableized$ALT),]
+
+clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized_temp$SYMBOL)); rm(clinvar_P_LP_tableized_temp)
+all_protein_genes = dplyr::bind_rows(protein_genes_wo_paralogues_wide, protein_genes_w_paralogues_wide)
+disease_genes = vector()
+# for (gene in clinvar_P_LP_vcf_tableized_genes){
+for (gene in clinvar_P_LP_tableized_genes){
+  # print(gene)
+  if (gene %in% all_protein_genes$external_gene_name){
+    disease_genes = c(gene, disease_genes)
+  }
+}
 
 ####JUST TO GET THE SAME NUMBER OF VARIANTS AS STATED IN THE PIPELINE DIAGRAM####
 start_comment = grepl("^#", readLines("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38.vcf"))
@@ -1274,20 +1285,17 @@ b.tableized_vcf = b.tableized_vcf[!(grepl("-",b.tableized_vcf$Amino_acids)) &
                                     str_count(b.tableized_vcf$Amino_acids) == 3 &
                                     str_count(b.tableized_vcf$REF) == str_count(b.tableized_vcf$ALT) &
                                     b.tableized_vcf$SYMBOL %in% disease_genes,] #15722
+
+####Filter by existence of paralogue and not by using vep plugins results of paralogue_vars as stated originally in workflow pipeline diagram####
+p.tableized_vcf = p.tableized_vcf[p.tableized_vcf$SYMBOL %in% protein_genes_w_paralogues_wide$external_gene_name,] #24426 variants instead of 23894
+b.tableized_vcf = b.tableized_vcf[b.tableized_vcf$SYMBOL %in% protein_genes_w_paralogues_wide$external_gene_name,] #12382 variants instead of 12136
+length(unique(c(p.tableized_vcf$SYMBOL, b.tableized_vcf$SYMBOL))) # 2414 paralogous genes instead of 2395
+#MAKE SURE THE PIPELINE DIAGRAM IS CORRECTED WITH THE 3 VALUES ABOVE
+
+
 #######
 clinvar_P_LP_tableized = clinvar_P_LP_tableized[clinvar_P_LP_tableized$ID %in% p.tableized_vcf$ID,]
 clinvar_B_LB_tableized = clinvar_B_LB_tableized[clinvar_B_LB_tableized$ID %in% b.tableized_vcf$ID,]
-
-clinvar_P_LP_tableized_genes = as.vector(unique(clinvar_P_LP_tableized$SYMBOL))
-all_protein_genes = dplyr::bind_rows(protein_genes_wo_paralogues_wide, protein_genes_w_paralogues_wide)
-disease_genes = vector()
-# for (gene in clinvar_P_LP_vcf_tableized_genes){
-for (gene in clinvar_P_LP_tableized_genes){
-  # print(gene)
-  if (gene %in% all_protein_genes$external_gene_name){
-    disease_genes = c(gene, disease_genes)
-  }
-}
 
 #no conservation
 #pathogenic to pathogenic
@@ -1305,21 +1313,21 @@ clinvar_B_LB_tableized_left_joined_paralogue_anno = left_join(clinvar_B_LB_table
 dim(clinvar_B_LB_tableized_left_joined_paralogue_anno[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Variant_pos),]) #number showing How many have an aligned paralogue position - 12103
 
 ### SECOND BIT IS CALCULATING PARA Z SCORE ###
-#bin0-2
-clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1 = clinvar_P_LP_tableized_left_joined_paralogue_anno[clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score < 3 & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score),]
+#cutoff -1 
+clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1 = clinvar_P_LP_tableized_left_joined_paralogue_anno[clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score >= 1 & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score),]
 dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1[!is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with an annotation: 94
 dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1[is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with no annotation: 986
 
-clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1 = clinvar_B_LB_tableized_left_joined_paralogue_anno[clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score < 3 & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score),]
+clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1 = clinvar_B_LB_tableized_left_joined_paralogue_anno[clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score >= 1 & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score),]
 dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with an annotation: 31
 dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1[is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with no annotation: 1505
 
-#bin3-5
-clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2 = clinvar_P_LP_tableized_left_joined_paralogue_anno[clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score < 6 & clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score > 2 & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score),]
+#cutoff - 3
+clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2 = clinvar_P_LP_tableized_left_joined_paralogue_anno[clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score >= 3 & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Para_Z_score),]
 dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2[!is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2$Variant_pos),]) #with an annotation: 304
 dim(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2[is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno_paraz_bin2$Variant_pos),]) #with no annotation: 1672
 
-clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2 = clinvar_B_LB_tableized_left_joined_paralogue_anno[clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score < 6 & clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score > 2 & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score),]
+clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2 = clinvar_B_LB_tableized_left_joined_paralogue_anno[clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score >= 3 & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & !is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Para_Z_score),]
 dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2$Variant_pos),]) #with an annotation: 44
 dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2[is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin2$Variant_pos),]) #with no annotation: 1459
 
