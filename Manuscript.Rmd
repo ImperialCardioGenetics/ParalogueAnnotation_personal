@@ -1293,7 +1293,7 @@ length(unique(c(p.tableized_vcf$SYMBOL, b.tableized_vcf$SYMBOL))) # 2414 paralog
 #MAKE SURE THE PIPELINE DIAGRAM IS CORRECTED WITH THE 3 VALUES ABOVE
 
 
-#######
+####### Identifying number of aligned positions per query clinvar variant - THE NUMBERS BELOW ARE FILLED IN TO THE LATEX TABLE GENERATOR AND PPV/SENS WERE CALCULATED BY HAND
 clinvar_P_LP_tableized = clinvar_P_LP_tableized[clinvar_P_LP_tableized$ID %in% p.tableized_vcf$ID &
                                                   !is.na(clinvar_P_LP_tableized$Protein_position),]
 clinvar_B_LB_tableized = clinvar_B_LB_tableized[clinvar_B_LB_tableized$ID %in% b.tableized_vcf$ID &
@@ -1307,7 +1307,7 @@ clinvar_B_LB_tableized = clinvar_B_LB_tableized[clinvar_B_LB_tableized$ID %in% b
 # clinvar_P_LP_tableized_left_joined_paralogue_anno = left_join(clinvar_P_LP_tableized, p.paralogous_var_align$Unique_variant_annotations, by = c("ID" = "ID.x"))
 # dim(clinvar_P_LP_tableized_left_joined_paralogue_anno[!is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Paralogue_Vars) & is.na(clinvar_P_LP_tableized_left_joined_paralogue_anno$Variant_pos),]) #number showing How many have an aligned paralogue position and para anno - 20316
 
-length(unique(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),"ID"])) #How many have an aligned paralogue position - 24018
+TP = length(unique(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars),"ID"])) #How many have an aligned paralogue position - 24018
 
 #benign to pathogenic
 
@@ -1318,8 +1318,9 @@ length(unique(clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Var
 # clinvar_B_LB_tableized_left_joined_paralogue_anno = left_join(clinvar_B_LB_tableized, b.paralogous_var_align$Unique_variant_annotations, by = c("ID" = "ID.x"))
 # dim(clinvar_B_LB_tableized_left_joined_paralogue_anno[!is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Paralogue_Vars) & is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno$Variant_pos),]) #number showing How many have an aligned paralogue position - 12103
 
-length(unique(clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Vars),"ID"])) #How many have an aligned paralogue position - 12207
+FP = length(unique(clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Vars),"ID"])) #How many have an aligned paralogue position - 12207
 
+p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
 
 ### SECOND BIT IS CALCULATING PARA Z SCORE ###
 #cutoff -1 
@@ -1332,39 +1333,68 @@ length(unique(clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Var
 # dim(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1[is.na(clinvar_B_LB_tableized_left_joined_paralogue_anno_paraz_bin1$Variant_pos),]) #with no annotation: 1505
 
 clinvar_P_LP_tableized_paraz_bin1 = clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars) & clinvar_P_LP_tableized$Para_Z_score >= 1,] 
-length(unique(clinvar_P_LP_tableized_paraz_bin1$ID)) #vars with an aligned paralogue position: 16088
+TP = length(unique(clinvar_P_LP_tableized_paraz_bin1$ID)) #vars with an aligned paralogue position: 16088
 clinvar_B_LB_tableized_paraz_bin1 = clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Vars) & clinvar_B_LB_tableized$Para_Z_score >= 1,] 
-length(unique(clinvar_B_LB_tableized_paraz_bin1$ID)) #vars with an aligned paralogue position: 4972
+FP = length(unique(clinvar_B_LB_tableized_paraz_bin1$ID)) #vars with an aligned paralogue position: 4972
+
+p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
 
 #cutoff - 3
 clinvar_P_LP_tableized_paraz_bin2 = clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars) & clinvar_P_LP_tableized$Para_Z_score >= 3,] 
-length(unique(clinvar_P_LP_tableized_paraz_bin2$ID)) #vars with an aligned paralogue position: 15729
+TP = length(unique(clinvar_P_LP_tableized_paraz_bin2$ID)) #vars with an aligned paralogue position: 15729
 clinvar_B_LB_tableized_paraz_bin2 = clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Vars) & clinvar_B_LB_tableized$Para_Z_score >= 3,] 
-length(unique(clinvar_B_LB_tableized_paraz_bin2$ID)) #vars with an aligned paralogue position: 4549
+FP = length(unique(clinvar_B_LB_tableized_paraz_bin2$ID)) #vars with an aligned paralogue position: 4549
+
+p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
 
 #cutoff - 5
 clinvar_P_LP_tableized_paraz_bin3 = clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars) & clinvar_P_LP_tableized$Para_Z_score >= 5,] 
-length(unique(clinvar_P_LP_tableized_paraz_bin3$ID)) #vars with an aligned paralogue position: 14486
+TP = length(unique(clinvar_P_LP_tableized_paraz_bin3$ID)) #vars with an aligned paralogue position: 14486
 clinvar_B_LB_tableized_paraz_bin3 = clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Vars) & clinvar_B_LB_tableized$Para_Z_score >= 5,] 
-length(unique(clinvar_B_LB_tableized_paraz_bin3$ID)) #vars with an aligned paralogue position: 3555
+FP = length(unique(clinvar_B_LB_tableized_paraz_bin3$ID)) #vars with an aligned paralogue position: 3555
+
+p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
 
 #cutoff - 7
 clinvar_P_LP_tableized_paraz_bin4 = clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars) & clinvar_P_LP_tableized$Para_Z_score >= 7,] 
-length(unique(clinvar_P_LP_tableized_paraz_bin4$ID)) #vars with an aligned paralogue position: 13016
+TP = length(unique(clinvar_P_LP_tableized_paraz_bin4$ID)) #vars with an aligned paralogue position: 13016
 clinvar_B_LB_tableized_paraz_bin4 = clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Vars) & clinvar_B_LB_tableized$Para_Z_score >= 7,] 
-length(unique(clinvar_B_LB_tableized_paraz_bin4$ID)) #vars with an aligned paralogue position: 2536
+FP = length(unique(clinvar_B_LB_tableized_paraz_bin4$ID)) #vars with an aligned paralogue position: 2536
+
+p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
 
 #cutoff - 9
 clinvar_P_LP_tableized_paraz_bin5 = clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars) & clinvar_P_LP_tableized$Para_Z_score >= 9,] 
-length(unique(clinvar_P_LP_tableized_paraz_bin5$ID)) #vars with an aligned paralogue position: 11017
+TP = length(unique(clinvar_P_LP_tableized_paraz_bin5$ID)) #vars with an aligned paralogue position: 11017
 clinvar_B_LB_tableized_paraz_bin5 = clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Vars) & clinvar_B_LB_tableized$Para_Z_score >= 9,] 
-length(unique(clinvar_B_LB_tableized_paraz_bin5$ID)) #vars with an aligned paralogue position: 1448
+FP = length(unique(clinvar_B_LB_tableized_paraz_bin5$ID)) #vars with an aligned paralogue position: 1448
+
+p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
 
 #cutoff - 11
 clinvar_P_LP_tableized_paraz_bin6 = clinvar_P_LP_tableized[!is.na(clinvar_P_LP_tableized$Paralogue_Vars) & clinvar_P_LP_tableized$Para_Z_score >= 11,] 
-length(unique(clinvar_P_LP_tableized_paraz_bin6$ID)) #vars with an aligned paralogue position: 9420
+TP = length(unique(clinvar_P_LP_tableized_paraz_bin6$ID)) #vars with an aligned paralogue position: 9420
 clinvar_B_LB_tableized_paraz_bin6 = clinvar_B_LB_tableized[!is.na(clinvar_B_LB_tableized$Paralogue_Vars) & clinvar_B_LB_tableized$Para_Z_score >= 11,] 
-length(unique(clinvar_B_LB_tableized_paraz_bin6$ID)) #vars with an aligned paralogue position: 863
+FP = length(unique(clinvar_B_LB_tableized_paraz_bin6$ID)) #vars with an aligned paralogue position: 863
+
+p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
+
+# full con ref AA 
+p.full_con_ref_AA = file("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con")
+max_no_col = (max(count.fields(p.full_con_ref_AA, sep = "\t"))-5)
+p.full_con_ref_AA = read.csv(file("data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con"), stringsAsFactors = F, header = F, col.names = c("Variant_pos", "ID", "GENE", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")), sep = "\t")
+
+TP = length(unique(p.full_con_ref_AA[p.full_con_ref_AA$paralog1 != "","ID"]))
+
+b.full_con_ref_AA = file("data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con")
+max_no_col = (max(count.fields(b.full_con_ref_AA, sep = "\t"))-5)
+b.full_con_ref_AA = read.csv(file("data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con"), stringsAsFactors = F, header = F, col.names = c("Variant_pos", "ID", "GENE", "REF", "ALT", paste("paralog", 1:max_no_col, sep = "")), sep = "\t")
+
+FP = length(unique(b.full_con_ref_AA[b.full_con_ref_AA$paralog1 != "","ID"]))
+
+p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
+
+##### Redoing Clinvar Paralogue Annotation statistics with new corrected total variants
 
 ```
 
