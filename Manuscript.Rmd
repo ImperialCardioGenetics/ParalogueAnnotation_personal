@@ -1287,8 +1287,10 @@ b.tableized_vcf = b.tableized_vcf[!(grepl("-",b.tableized_vcf$Amino_acids)) &
                                     b.tableized_vcf$SYMBOL %in% disease_genes,] #15722
 
 ####Filter by existence of paralogue and not by using vep plugins results of paralogue_vars as stated originally in workflow pipeline diagram####
-p.tableized_vcf = p.tableized_vcf[p.tableized_vcf$SYMBOL %in% protein_genes_w_paralogues_wide$external_gene_name,] #24426 variants instead of 23894
-b.tableized_vcf = b.tableized_vcf[b.tableized_vcf$SYMBOL %in% protein_genes_w_paralogues_wide$external_gene_name,] #12382 variants instead of 12136
+p.tableized_vcf = p.tableized_vcf[p.tableized_vcf$SYMBOL %in% protein_genes_w_paralogues_wide$external_gene_name,] 
+num_of_var_p.tableized_vcf = length(unique(p.tableized_vcf$ID)) #24426 variants instead of 23894
+b.tableized_vcf = b.tableized_vcf[b.tableized_vcf$SYMBOL %in% protein_genes_w_paralogues_wide$external_gene_name,]
+num_of_var_b.tableized_vcf = length(unique(b.tableized_vcf$ID)) #12382 variants instead of 12136
 length(unique(c(p.tableized_vcf$SYMBOL, b.tableized_vcf$SYMBOL))) # 2414 paralogous genes instead of 2395
 #MAKE SURE THE PIPELINE DIAGRAM IS CORRECTED WITH THE 3 VALUES ABOVE
 
@@ -1395,6 +1397,102 @@ FP = length(unique(b.full_con_ref_AA[b.full_con_ref_AA$paralog1 != "","ID"]))
 p_value = fisher.test(matrix(c(TP,length(unique(p.tableized_vcf$ID))-TP,FP,length(unique(b.tableized_vcf$ID))-FP),nrow = 2))
 
 ##### Redoing Clinvar Paralogue Annotation statistics with new corrected total variants
+
+#no conservation
+#pathogenic to pathogenic
+p.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#benign to pathogenic
+b.paralogous_var_align = Paralogous_var_align(
+  Subset=c("Gene",disease_genes),
+  Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.noQC", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+#stats
+conf = conf_matrix_USED_FOR_CORRECTIONS(p.paralogous_var_align$true_num_of_paralog_anno, num_of_var_p.tableized_vcf, b.paralogous_var_align$true_num_of_paralog_anno, num_of_var_b.tableized_vcf)
+
+#conserved ref AA
+p2.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b2.paralogous_var_align = Paralogous_var_align(Subset=c("Gene",disease_genes), Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.para_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
+conf2 = conf_matrix_USED_FOR_CORRECTIONS(p2.paralogous_var_align$true_num_of_paralog_anno, num_of_var_p.tableized_vcf, b2.paralogous_var_align$true_num_of_paralog_anno, num_of_var_b.tableized_vcf)
+
+#fully conserved ref AA
+p3.paralogous_var_align = Paralogous_var_align(Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+b3.paralogous_var_align = Paralogous_var_align(Subset=c("Gene",disease_genes), Overlap = 0, "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_paralogs2.all_con", "data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_paraloc_tableized", "data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_paraloc_tableized")
+
+conf3 = conf_matrix_USED_FOR_CORRECTIONS(p3.paralogous_var_align$true_num_of_paralog_anno, num_of_var_p.tableized_vcf, b3.paralogous_var_align$true_num_of_paralog_anno, num_of_var_b.tableized_vcf)
+
+#fully conserved ref AA + conserved alt AA
+#pathogenic to pathogenic
+p4.Total_paralog_annotations = p3.paralogous_var_align$Total_paralog_annotations[p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+# p4.Total_paralog_annotations = p4.Total_paralog_annotations[!duplicated(p4.Total_paralog_annotations$ID.x),]
+p4.Total_paralog_annotations = distinct(p4.Total_paralog_annotations)
+
+p4.num_of_paralog_anno = sum(!is.na(p4.Total_paralog_annotations$ID.y))
+p4.Unique_variant_annotations = p4.Total_paralog_annotations[!is.na(p4.Total_paralog_annotations$ID.y),]
+p4.Unique_variant_annotations = distinct(p4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p4.true_num_of_paralog_anno = length(p4.Unique_variant_annotations$Variant_pos)
+
+#benign to pathogenic
+b4.Total_paralog_annotations = b3.paralogous_var_align$Total_paralog_annotations[b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+# b4.Total_paralog_annotations = b4.Total_paralog_annotations[!duplicated(b4.Total_paralog_annotations$ID.x),]
+b4.Total_paralog_annotations = distinct(b4.Total_paralog_annotations)
+
+b4.num_of_paralog_anno = sum(!is.na(b4.Total_paralog_annotations$ID.y))
+b4.Unique_variant_annotations = b4.Total_paralog_annotations[!is.na(b4.Total_paralog_annotations$ID.y),]
+b4.Unique_variant_annotations = distinct(b4.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b4.true_num_of_paralog_anno = length(b4.Unique_variant_annotations$Variant_pos)
+
+conf4 = conf_matrix_USED_FOR_CORRECTIONS(p4.true_num_of_paralog_anno, num_of_var_p.tableized_vcf, b4.true_num_of_paralog_anno, num_of_var_b.tableized_vcf)
+
+#conserved ref AA but not fully conserved ref AA + conserved alt AA
+#pathogenic to pathogenic
+p6.Total_paralog_annotations = p2.paralogous_var_align$Total_paralog_annotations[p2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+p6.Total_paralog_annotations = distinct(p6.Total_paralog_annotations)
+
+p6.num_of_paralog_anno = sum(!is.na(p6.Total_paralog_annotations$ID.y))
+p6.Unique_variant_annotations = p6.Total_paralog_annotations[!is.na(p6.Total_paralog_annotations$ID.y),]
+p6.Unique_variant_annotations = distinct(p6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+p6.true_num_of_paralog_anno = length(p6.Unique_variant_annotations$Variant_pos)
+
+#benign to pathogenic
+b6.Total_paralog_annotations = b2.paralogous_var_align$Total_paralog_annotations[b2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b2.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y,]
+b6.Total_paralog_annotations = distinct(b6.Total_paralog_annotations)
+
+b6.num_of_paralog_anno = sum(!is.na(b6.Total_paralog_annotations$ID.y))
+b6.Unique_variant_annotations = b6.Total_paralog_annotations[!is.na(b6.Total_paralog_annotations$ID.y),]
+b6.Unique_variant_annotations = distinct(b6.Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+b6.true_num_of_paralog_anno = length(b6.Unique_variant_annotations$Variant_pos)
+
+conf6 = conf_matrix_USED_FOR_CORRECTIONS(p6.true_num_of_paralog_anno, num_of_var_p.tableized_vcf, b6.true_num_of_paralog_anno, num_of_var_b.tableized_vcf)
+
+# p.value = fisher.test(matrix(c((dim(p.paralogous_var_align$input_variants)[1]-(conf6$con_table[2]-conf4$con_table[2])),(conf6$con_table[2]-conf4$con_table[2]),(dim(b.paralogous_var_align$input_variants)[1]-(conf6$con_table[4]-conf4$con_table[4])),(conf6$con_table[4]-conf4$con_table[4])),ncol = 2))
+
+
+#Overall_table for predicting pathogenic variants
+clinvar_set_only_P = data.frame(bar = c("Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
+           Pathogenic_var = c(dim(p.paralogous_var_align$Unique_variant_annotations)[1], dim(p2.paralogous_var_align$Unique_variant_annotations)[1], dim(p3.paralogous_var_align$Unique_variant_annotations)[1], p6.true_num_of_paralog_anno, p4.true_num_of_paralog_anno),
+           Stage = "Pathogenic")
+clinvar_set_only_P$Stage = factor(clinvar_set_only_P$Stage, levels = c("Pathogenic"))
+
+clinvar_set_only_B = data.frame(bar = c("Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
+           Pathogenic_var = c(dim(b.paralogous_var_align$Unique_variant_annotations)[1], dim(b2.paralogous_var_align$Unique_variant_annotations)[1], dim(b3.paralogous_var_align$Unique_variant_annotations)[1], b6.true_num_of_paralog_anno, b4.true_num_of_paralog_anno),
+           Stage = "Benign")
+clinvar_set_only_B$Stage = factor(clinvar_set_only_B$Stage, levels = c("Benign"))
+
+Total_clinvar_set = rbind(clinvar_set_only_P,clinvar_set_only_B)
+
+complete_df =  data.frame()
+rowTotal_variants = c(num_of_var_p.tableized_vcf,num_of_var_b.tableized_vcf,NA,NA,NA,NA,NA,NA)
+complete_df = rbind(complete_df, rowTotal_variants)
+colnames(complete_df) = c("Pathogenic variants", "Benign variants", "PPV", "PPV CI", "Sensitivity", "Sens CI", "Specificity", "P value")
+for (i in 1:5){
+  rowStats = calc_PPV_Sens_Spec(Total_clinvar_set$Pathogenic_var[i], Total_clinvar_set$Pathogenic_var[i+5], num_of_var_b.tableized_vcf-Total_clinvar_set$Pathogenic_var[i+5], num_of_var_p.tableized_vcf-Total_clinvar_set$Pathogenic_var[i])
+  row = c(as.integer(Total_clinvar_set$Pathogenic_var[i]), as.integer(Total_clinvar_set$Pathogenic_var[i+5]), rowStats$PPV, rowStats$PPV_SE*1.96, rowStats$Sens, rowStats$Sens_SE*1.96, rowStats$Spec, rowStats$pvalue$p.value)
+  row[3:8] = sapply(row[3:8], signif, 2)
+  complete_df = rbind(complete_df, row)
+}
+row.names(complete_df) = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA + conserved variants", "full conserved AA + conserved variants")
+write.table(complete_df, file = "data/clinvar/CORRECTED_redone_GRCh38_clinvar_set_predicted_patho.csv", na="", row.names = TRUE, col.names = NA, sep = ",", quote=FALSE)
+
 
 ```
 
