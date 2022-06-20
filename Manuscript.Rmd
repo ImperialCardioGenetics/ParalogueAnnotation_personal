@@ -1210,7 +1210,7 @@ b.tableized_vcf = b.tableized_vcf[!(grepl("-",b.tableized_vcf$Amino_acids)) &
                                     str_count(b.tableized_vcf$REF) == str_count(b.tableized_vcf$ALT) &
                                     b.tableized_vcf$SYMBOL %in% disease_genes,] #15722
 
-diseased_protein_coding_genes_here = unique(c(p.tableized_vcf$SYMBOL, b.tableized_vcf$SYMBOL)) #3414
+diseased_protein_coding_genes_here = unique(c(p.tableized_vcf$SYMBOL, b.tableized_vcf$SYMBOL)) #should be 3289 NOT 3414
 
 # removing non-paralogous genes
 length(unique(p.paralogous_var_align$input_variants$ID)) #23894 P/LP variants
@@ -1218,7 +1218,7 @@ length(unique(b.paralogous_var_align$input_variants$ID)) #12136 B/LB variants
 length(unique(c(p.paralogous_var_align$gathered_paralog_data$Gene,b.paralogous_var_align$gathered_paralog_data$Gene))) #2395 genes
 ```
 
-Thesis correction - GRCh38 to include paralogue locations (with paraZ cutoff threshold) in main table:
+Thesis corrections - GRCh38 to include paralogue locations (with paraZ cutoff threshold) in main table:
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 
 # FIRST BIT IS CALCULATING THE NUMBER OF VARIANTS IN THE TEST SET THAT HAVE OR DO NOT HAVE AN ALIGNED PARALOGUE POSITION 
@@ -1466,7 +1466,6 @@ conf6 = conf_matrix_USED_FOR_CORRECTIONS(p6.true_num_of_paralog_anno, num_of_var
 
 # p.value = fisher.test(matrix(c((dim(p.paralogous_var_align$input_variants)[1]-(conf6$con_table[2]-conf4$con_table[2])),(conf6$con_table[2]-conf4$con_table[2]),(dim(b.paralogous_var_align$input_variants)[1]-(conf6$con_table[4]-conf4$con_table[4])),(conf6$con_table[4]-conf4$con_table[4])),ncol = 2))
 
-
 #Overall_table for predicting pathogenic variants
 clinvar_set_only_P = data.frame(bar = c("Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA +\nconserved variants", "full conserved AA +\nconserved variants"),
            Pathogenic_var = c(dim(p.paralogous_var_align$Unique_variant_annotations)[1], dim(p2.paralogous_var_align$Unique_variant_annotations)[1], dim(p3.paralogous_var_align$Unique_variant_annotations)[1], p6.true_num_of_paralog_anno, p4.true_num_of_paralog_anno),
@@ -1491,7 +1490,83 @@ for (i in 1:5){
   complete_df = rbind(complete_df, row)
 }
 row.names(complete_df) = c("Total variants", "Paralogue Annotation", "conserved AA", "full conserved AA", "conserved AA + conserved variants", "full conserved AA + conserved variants")
-write.table(complete_df, file = "data/clinvar/CORRECTED_redone_GRCh38_clinvar_set_predicted_patho.csv", na="", row.names = TRUE, col.names = NA, sep = ",", quote=FALSE)
+if (!file.exists("data/clinvar/CORRECTED_redone_GRCh38_clinvar_set_predicted_patho.csv")){
+  write.table(complete_df, file = "data/clinvar/CORRECTED_redone_GRCh38_clinvar_set_predicted_patho.csv", na="", row.names = TRUE, col.names = NA, sep = ",", quote=FALSE)
+}
+
+##### Randomly selected 500 P/LP and 500 B/LB balanced test set
+
+test_positive_dif_set = c()
+test_positive_PPV_set = c()
+test_positive_Sens_set = c()
+test_positive_pvalue_set = c()
+
+for (i in 1:1000){
+  p500.paralogous_var_align = list()
+  p500.paralogous_var_align$input_variants = p.paralogous_var_align$input_variants[sample(nrow(p.paralogous_var_align$input_variants), 500),]
+  
+  b500.paralogous_var_align = list()
+  b500.paralogous_var_align$input_variants = b.paralogous_var_align$input_variants[sample(nrow(b.paralogous_var_align$input_variants), 500),]
+  
+  #fully conserved ref AA + conserved alt AA
+  #pathogenic to pathogenic
+  p500.paralogous_var_align$Total_paralog_annotations = p3.paralogous_var_align$Total_paralog_annotations[p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==p3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y & p3.paralogous_var_align$Total_paralog_annotations$ID.x %in% p500.paralogous_var_align$input_variants$ID,]
+  p500.paralogous_var_align$Total_paralog_annotations = distinct(p500.paralogous_var_align$Total_paralog_annotations)
+  
+  p500.paralogous_var_align$Unique_variant_annotations = p500.paralogous_var_align$Total_paralog_annotations[!is.na(p500.paralogous_var_align$Total_paralog_annotations$ID.y),]
+  p500.paralogous_var_align$Unique_variant_annotations = distinct(p500.paralogous_var_align$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+  p500.paralogous_var_align$true_num_of_paralog_anno = length(p500.paralogous_var_align$Unique_variant_annotations$Variant_pos)
+  
+  #benign to pathogenic
+  b500.paralogous_var_align$Total_paralog_annotations = b3.paralogous_var_align$Total_paralog_annotations[b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.x==b3.paralogous_var_align$Total_paralog_annotations$ALT_Amino_acids.y & b3.paralogous_var_align$Total_paralog_annotations$ID.x %in% b500.paralogous_var_align$input_variants$ID,]
+  b500.paralogous_var_align$Total_paralog_annotations = distinct(b500.paralogous_var_align$Total_paralog_annotations)
+  
+  b500.paralogous_var_align$Unique_variant_annotations = b500.paralogous_var_align$Total_paralog_annotations[!is.na(b500.paralogous_var_align$Total_paralog_annotations$ID.y),]
+  b500.paralogous_var_align$Unique_variant_annotations = distinct(b500.paralogous_var_align$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+  b500.paralogous_var_align$true_num_of_paralog_anno = length(b500.paralogous_var_align$Unique_variant_annotations$Variant_pos)
+  
+  conf500 = conf_matrix_USED_FOR_CORRECTIONS(p500.paralogous_var_align$true_num_of_paralog_anno, num_of_var_p.tableized_vcf, b500.paralogous_var_align$true_num_of_paralog_anno, num_of_var_b.tableized_vcf)
+  test_positive_dif = conf500$con_table[2,1] - conf500$con_table[2,2]
+  test_positive_dif_set = c(test_positive_dif_set, test_positive_dif)
+  test_positive_PPV = conf500$PPV
+  test_positive_PPV_set = c(test_positive_PPV_set, test_positive_PPV)
+  test_positive_Sens = conf500$Sensitivity
+  test_positive_Sens_set = c(test_positive_Sens_set, test_positive_Sens)
+  test_positive_pvalue = conf500$Pvalue$p.value
+  test_positive_pvalue_set = c(test_positive_pvalue_set, test_positive_pvalue)
+}
+
+test_positive_dif_set = data.frame(test_positive_dif_set)
+dif_dens_plot = ggplot(test_positive_dif_set ,aes(test_positive_dif_set)) + geom_density() +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
+  geom_vline(xintercept = mean(test_positive_dif_set$test_positive_dif_set), linetype='dotted', col = 'blue', size = 1) +
+  annotate("text", x = mean(test_positive_dif_set$test_positive_dif_set)+1.5, y = 0.05, label = mean(test_positive_dif_set$test_positive_dif_set), colour = "blue", size = 6) 
+ggsave("images/KDE_full_ref_and_alt_con_500balanced_testset_dif.png", width = 10, height = 11)
+
+test_positive_PPV_set = data.frame(test_positive_PPV_set)
+PPV_dens_plot = ggplot(test_positive_PPV_set ,aes(test_positive_PPV_set, y = ..density..)) + geom_density() +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
+  geom_vline(xintercept = mean(test_positive_PPV_set$test_positive_PPV_set), linetype='dotted', col = 'blue', size = 1) +
+  annotate("text", x = mean(test_positive_PPV_set$test_positive_PPV_set)-0.01, y = 40, label = signif(mean(test_positive_PPV_set$test_positive_PPV_set),2), colour = "blue", size = 6)
+ggsave("images/KDE_full_ref_and_alt_con_500balanced_testset_PPV.png", width = 10, height = 11)
+
+test_positive_Sens_set = data.frame(test_positive_Sens_set)
+Sens_dens_plot = ggplot(test_positive_Sens_set ,aes(test_positive_Sens_set, y = ..density..)) + geom_density() +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
+  geom_vline(xintercept = mean(test_positive_Sens_set$test_positive_Sens_set), linetype='dotted', col = 'blue', size = 1) +
+  annotate("text", x = mean(test_positive_Sens_set$test_positive_Sens_set)-0.00007, y = 500, label = signif(mean(test_positive_Sens_set$test_positive_Sens_set),2), colour = "blue", size = 6)
+ggsave("images/KDE_full_ref_and_alt_con_500balanced_testset_Sensitivity.png", width = 10, height = 11)
+
+test_positive_pvalue_set = data.frame(test_positive_pvalue_set)
+Pvalue_dens_plot = ggplot(test_positive_pvalue_set ,aes(test_positive_pvalue_set, y= ..density..)) + geom_density() +
+  geom_vline(xintercept = 0.05, linetype='dotted', col = 'red', size = 1) +
+  annotate("text", x = 0.08, y = 40, label = "0.05", colour = "red", size = 6) +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
+  geom_vline(xintercept = mean(test_positive_pvalue_set$test_positive_pvalue_set), linetype='dotted', col = 'blue', size = 1) +
+  annotate("text", x = mean(test_positive_pvalue_set$test_positive_pvalue_set)+0.02, y = 45, label = round(mean(test_positive_pvalue_set$test_positive_pvalue_set),2), colour = "blue", size = 6)
+ggsave("images/KDE_full_ref_and_alt_con_500balanced_testset_pvalue.png", width = 10, height = 11)
+  # coord_cartesian(ylim = c(0, 70), clip = "off")
+  # geom_text(aes(x=0.05, label="0.05", y=-5), colour="red", text=element_text(size=8)) 
 
 
 ```
@@ -5365,10 +5440,12 @@ gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+  geom_hline(yintercept=0.79, linetype='dotted', col = 'red', size = 3) +
+  
   # scale_x_continuous(limits = c(0,1.5)) +
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
-  xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
+  xlim(0,1) + ylim(0.75,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 20), 
     plot.title = element_text(size = 14),
@@ -5567,6 +5644,7 @@ shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "none" = 4, "conserv
 gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+  geom_hline(yintercept=0.86, linetype='dotted', col = 'red', size = 3) +
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
   xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
@@ -5666,6 +5744,7 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+  geom_hline(yintercept=0.29, linetype='dotted', col = 'red', size = 3) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
@@ -5826,6 +5905,7 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+  geom_hline(yintercept=0.06, linetype='dotted', col = 'red', size = 3) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
@@ -5928,6 +6008,7 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+  geom_hline(yintercept=0.06, linetype='dotted', col = 'red', size = 3) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
@@ -5941,6 +6022,10 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
         axis.line.y = element_line(color="black", size = 2)) +
   theme(plot.title = element_text(hjust = 0.25)) 
 ggsave("images/PRC_of_SSC_with_other_tools_plot.png", width = 10, height = 11)
+
+#### Fisher's exact association test for ASD
+
+
 
 #checking if any of the variants are in clinvar
 SSC_variants = f[f$Data.source=="SSC",-c(1,4)]
