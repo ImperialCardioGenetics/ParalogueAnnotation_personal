@@ -6008,7 +6008,7 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
-  geom_hline(yintercept=0.06, linetype='dotted', col = 'red', size = 3) +
+  geom_hline(yintercept=0.6, linetype='dotted', col = 'red', size = 3) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
