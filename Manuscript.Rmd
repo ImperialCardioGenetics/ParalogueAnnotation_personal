@@ -5416,8 +5416,10 @@ paraz_set = paraz_set[-1,]
 other_tools_set = rbind(other_tools_set,paraz_set)
 rownames(other_tools_set) = c("Total","Sift","MCap","CADD","Revel","Paralogue Annotation","Paralogue Annotation (QC1)","Paralogue Annotation (QC2)", "Paralogue Annotation (QC3)", "Paralogue Annotation (QC3, no QC2)", "Para z_score cutoff 0","Para z_score cutoff 1","Para z_score cutoff 2","Para z_score cutoff 3","Para z_score cutoff 4","Para z_score cutoff 5","Para z_score cutoff 6","Para z_score cutoff 7","Para z_score cutoff 8","Para z_score cutoff 9","Para z_score cutoff 10","Para z_score cutoff 11")
 # write.table(other_tools_set, file = "data/other_tools_set.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
-write.table(other_tools_set, file = "data/other_tools_set_w_paraz_afterQC1.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
-
+if (!file.exists("data/other_tools_set_w_paraz_afterQC1.csv")){
+  write.table(other_tools_set, file = "data/other_tools_set_w_paraz_afterQC1.csv", na="", row.names = TRUE, col.names = TRUE, sep = ",", quote=FALSE)
+}
+  
 clinvar_cf_sift_revel = other_tools_set
 
 #for subsetting the massive dataframe above for easier graph making
@@ -5440,7 +5442,7 @@ gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) #+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
-ggsave("images/PRC_with_other_tools_plot.png")
+# ggsave("images/PRC_with_other_tools_plot.png")
 
 other_tools_data = data.frame(
   Precision = c(as.numeric(other_tools_set[2:10,3])),
@@ -5452,9 +5454,10 @@ other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
 other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel","no QC", "QC1" ,"QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#000000", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 4, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 15)
-gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "black", "QC1" = "black", "QC1+QC2" = "black", "QC1+QC3" = "black", "QC1+QC2+QC3" = "black")
+fills = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#F1EEF6", "QC1" = "#D7B5D8", "QC1+QC2" = "#DF65B0", "QC1+QC3" = "#DD1C77", "QC1+QC2+QC3" = "#980043")
+shapes = c("Sift" = 6, "MCap" = 0, "CADD" = 2, "Revel" = 5, "no QC" = 21, "QC1" = 21, "QC1+QC2" = 21, "QC1+QC3" = 21, "QC1+QC2+QC3" = 21)
+gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2, fill = fills) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
@@ -5477,7 +5480,7 @@ gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
   theme(legend.position="none", axis.title.x=element_blank(), axis.title.y=element_blank())#+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
 ggsave("images/PRC_with_other_tools_with_QC3_QC1_no_QC2.png", width = 10, height = 11) #THIS ONE IS BEING USED IN PAPER
 
-gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2) + 
+gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2, fill = fills) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
@@ -5523,7 +5526,7 @@ gg6 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(title = "Precision-Sensitivity space plot of Paralogue Annotation\ncompared with other tools", 
     x = "Sensitivity") + theme(axis.text = element_text(size = 13)) + theme(plot.title = element_text(hjust = 0.5)) #+ scale_color_discrete(breaks=c("Sift","MCap","Revel","noQC","QC1","QC2","QC3"))
-ggsave("images/PRC_with_QC3_QC1_no_QC2.png")
+# ggsave("images/PRC_with_QC3_QC1_no_QC2.png")
 
 ```
 
@@ -5682,9 +5685,11 @@ other_tools_data$Type = factor(other_tools_data$Type, levels = c("none", "conser
 # other_tools_data$Precision_CI_min = other_tools_data$Precision - other_tools_data$Precision_CI
 # other_tools_data$Precision_CI_max = sapply(other_tools_data$Precision + other_tools_data$Precision_CI, min, 1)
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "#000000", "conserved ref AA"  = "#45B39D", "fully conserved ref AA" = "#5DADE2", "conserved ref AA +\nconserved alt AA" = "#A569BD", "fully conserved ref AA +\nconserved alt AA" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "none" = 4, "conserved ref AA" = 16, "fully conserved ref AA" = 17, "conserved ref AA +\nconserved alt AA" = 18, "fully conserved ref AA +\nconserved alt AA" = 15)
-gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "black", "conserved ref AA"  = "black", "fully conserved ref AA" = "black", "conserved ref AA +\nconserved alt AA" = "black", "fully conserved ref AA +\nconserved alt AA" = "black")
+fills = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "#F1EEF6", "conserved ref AA" = "#D7B5D8", "fully conserved ref AA" = "#DF65B0", "conserved ref AA +\nconserved alt AA" = "#DD1C77", "fully conserved ref AA +\nconserved alt AA" = "#980043")
+shapes = c("Sift" = 6, "MCap" = 0, "CADD" = 2, "Revel" = 5, "none" = 21, "conserved ref AA" = 21, "fully conserved ref AA" = 21, "conserved ref AA +\nconserved alt AA" = 21, "fully conserved ref AA +\nconserved alt AA" = 21)
+
+gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2, fill = fills) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
   geom_hline(yintercept=0.86, linetype='dotted', col = 'red', size = 3) +
@@ -5700,7 +5705,7 @@ gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sha
   theme(legend.position="none", axis.text = element_text(size = 35), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(legend.key.size = unit(2,"line"))
 ggsave("images/PRC_of_SCN5A.png", width = 10, height = 11)
 
-gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=20,stroke=2) + 
+gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=20,stroke=2,fill=fills) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
   scale_shape_manual(values = shapes) +
@@ -5710,10 +5715,12 @@ gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sha
     axis.title = element_text(size = 16), 
     plot.title = element_text(size = 14)) +labs(y = "PPV", x = "Sensitivity") +
    theme(plot.background = element_blank(),
-         panel.grid.minor = element_blank())+
+         panel.grid.minor = element_blank()) +
   theme(axis.line.x = element_line(color="black", size = 2),
         axis.line.y = element_line(color="black", size = 2)) +
-  theme(legend.text=element_text(size=40), legend.title=element_blank(), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(7,"line"))
+  theme(legend.text=element_text(size=40), legend.title=element_blank(), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + 
+  theme(legend.key.size = unit(7,"line")) +
+  guides(color = guide_legend(override.aes = list(colour = cols, fill = fills)))
 ggsave("images/PRC_of_SCN5A_with_legend.png", width = 10, height = 13)
 ```
 
@@ -5778,9 +5785,11 @@ df1 = data.frame(
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#000000", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 4, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 15)
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "black", "QC1" = "black", "QC1+QC2" = "black", "QC1+QC3" = "black", "QC1+QC2+QC3" = "black")
+shapes = c("Sift" = 6, "MCap" = 0, "CADD" = 2, "Revel" = 5, "no QC" = 21, "QC1" = 21, "QC1+QC2" = 21, "QC1+QC3" = 21, "QC1+QC2+QC3" = 21)
+fills = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#F1EEF6", "QC1" = "#D7B5D8", "QC1+QC2" = "#DF65B0", "QC1+QC3" = "#DD1C77", "QC1+QC2+QC3" = "#980043")
+
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2,fill=fills) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
@@ -5939,9 +5948,11 @@ df1 = data.frame(
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
-cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#000000", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 4, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 15)
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2) + 
+cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "black", "QC1" = "black", "QC1+QC2" = "black", "QC1+QC3" = "black", "QC1+QC2+QC3" = "black")
+shapes = c("Sift" = 6, "MCap" = 0, "CADD" = 2, "Revel" = 5, "no QC" = 21, "QC1" = 21, "QC1+QC2" = 21, "QC1+QC3" = 21, "QC1+QC2+QC3" = 21)
+fills = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#F1EEF6", "QC1" = "#D7B5D8", "QC1+QC2" = "#DF65B0", "QC1+QC3" = "#DD1C77", "QC1+QC2+QC3" = "#980043")
+
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2,fill=fills) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
@@ -6161,10 +6172,13 @@ ASD_rates = data.frame(Type = c("Total", "Revel", "Sift", "Mcap", "Cadd", "Paral
                        Num_cases = 2508,
                        Rate_of_DNM_in_cases = sapply(c(sum(SSC$Label=="asd"), p.num_of_revel, p.num_of_sift, p.num_of_mcap, p.num_of_cadd, normal_PA_conf$con_table[2,1], normal_PA2_conf$con_table[2,1], normal_PA3_conf$con_table[2,1], normal_PA5_conf$con_table[2,1], normal_PA4_conf$con_table[2,1]), "/", 2508),
                        
-                       Num_DNM_cases = c(sum(SSC$Label=="control"), b.num_of_revel, b.num_of_sift, b.num_of_mcap, b.num_of_cadd, normal_PA_conf$con_table[2,2], normal_PA2_conf$con_table[2,2], normal_PA3_conf$con_table[2,2], normal_PA5_conf$con_table[2,2], normal_PA4_conf$con_table[2,2]),
+                       Num_DNM_controls = c(sum(SSC$Label=="control"), b.num_of_revel, b.num_of_sift, b.num_of_mcap, b.num_of_cadd, normal_PA_conf$con_table[2,2], normal_PA2_conf$con_table[2,2], normal_PA3_conf$con_table[2,2], normal_PA5_conf$con_table[2,2], normal_PA4_conf$con_table[2,2]),
                        Num_controls = 1911, 
                        Rate_of_DNM_in_controls = sapply(c(sum(SSC$Label=="control"), b.num_of_revel, b.num_of_sift, b.num_of_mcap, b.num_of_cadd, normal_PA_conf$con_table[2,2], normal_PA2_conf$con_table[2,2], normal_PA3_conf$con_table[2,2], normal_PA5_conf$con_table[2,2], normal_PA4_conf$con_table[2,2]), "/", 1911))
 ASD_rates$Ratio = ASD_rates$Rate_of_DNM_in_cases/ASD_rates$Rate_of_DNM_in_controls
+ASD_rates$Rate_of_DNM_in_cases = round(ASD_rates$Rate_of_DNM_in_cases,3)
+ASD_rates$Rate_of_DNM_in_controls = round(ASD_rates$Rate_of_DNM_in_controls,3)
+ASD_rates$Ratio = round(ASD_rates$Ratio,3)
 if(!file.exists("data/J_Li_data/Rates_of_ASD.csv")){
     write.table(ASD_rates, file = "data/J_Li_data/Rates_of_ASD.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE) #RUN PA ON THIS FILE
 }
