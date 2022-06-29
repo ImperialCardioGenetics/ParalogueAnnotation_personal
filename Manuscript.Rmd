@@ -1496,12 +1496,86 @@ if (!file.exists("data/clinvar/CORRECTED_redone_GRCh38_clinvar_set_predicted_pat
 
 ##### Randomly selected 500 P/LP and 500 B/LB balanced test set
 
+tmp_p.full_con_ref_AA = p.full_con_ref_AA[p.full_con_ref_AA$paralog1 != "",]
+
+## Without conserved alt aa
 test_positive_dif_set = c()
 test_positive_PPV_set = c()
 test_positive_Sens_set = c()
 test_positive_pvalue_set = c()
+for (i in 1:1000){
+  p822.paralogous_var_align = list()
+  p822.paralogous_var_align$input_variants = tmp_p.full_con_ref_AA[sample(nrow(tmp_p.full_con_ref_AA), 822),c("Variant_pos","ID","REF","ALT")]
+    # p.paralogous_var_align$input_variants[sample(nrow(p.paralogous_var_align$input_variants), 500),]
+  
+  b822.paralogous_var_align = list()
+  b822.paralogous_var_align$input_variants = b.full_con_ref_AA[b.full_con_ref_AA$paralog1 != "",c("Variant_pos","ID","REF","ALT")]
+    # b.paralogous_var_align$input_variants[sample(nrow(b.paralogous_var_align$input_variants), 500),]
+  
+  #fully conserved ref AA + conserved alt AA
+  #pathogenic to pathogenic
+  p822.paralogous_var_align$Total_paralog_annotations = p3.paralogous_var_align$Total_paralog_annotations[p3.paralogous_var_align$Total_paralog_annotations$ID.x %in% p822.paralogous_var_align$input_variants$ID,]
+  p822.paralogous_var_align$Total_paralog_annotations = distinct(p822.paralogous_var_align$Total_paralog_annotations)
+  
+  p822.paralogous_var_align$Unique_variant_annotations = p822.paralogous_var_align$Total_paralog_annotations[!is.na(p822.paralogous_var_align$Total_paralog_annotations$ID.y),]
+  p822.paralogous_var_align$Unique_variant_annotations = distinct(p822.paralogous_var_align$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+  p822.paralogous_var_align$true_num_of_paralog_anno = length(p822.paralogous_var_align$Unique_variant_annotations$Variant_pos)
+  
+  #benign to pathogenic
+  b822.paralogous_var_align$Total_paralog_annotations = b3.paralogous_var_align$Total_paralog_annotations[b3.paralogous_var_align$Total_paralog_annotations$ID.x %in% b822.paralogous_var_align$input_variants$ID,]
+  b822.paralogous_var_align$Total_paralog_annotations = distinct(b822.paralogous_var_align$Total_paralog_annotations)
+  
+  b822.paralogous_var_align$Unique_variant_annotations = b822.paralogous_var_align$Total_paralog_annotations[!is.na(b822.paralogous_var_align$Total_paralog_annotations$ID.y),]
+  b822.paralogous_var_align$Unique_variant_annotations = distinct(b822.paralogous_var_align$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
+  b822.paralogous_var_align$true_num_of_paralog_anno = length(b822.paralogous_var_align$Unique_variant_annotations$Variant_pos)
+  
+  conf822 = conf_matrix_USED_FOR_CORRECTIONS(p822.paralogous_var_align$true_num_of_paralog_anno, 822, b822.paralogous_var_align$true_num_of_paralog_anno, 822)
+  test_positive_dif = conf822$con_table[2,1] - conf822$con_table[2,2]
+  test_positive_dif_set = c(test_positive_dif_set, test_positive_dif)
+  test_positive_PPV = conf822$PPV
+  test_positive_PPV_set = c(test_positive_PPV_set, test_positive_PPV)
+  test_positive_Sens = conf822$Sensitivity
+  test_positive_Sens_set = c(test_positive_Sens_set, test_positive_Sens)
+  test_positive_pvalue = conf822$Pvalue$p.value
+  test_positive_pvalue_set = c(test_positive_pvalue_set, test_positive_pvalue)
+}
 
-tmp_p.full_con_ref_AA = p.full_con_ref_AA[p.full_con_ref_AA$paralog1 != "",]
+test_positive_dif_set = data.frame(test_positive_dif_set)
+dif_dens_plot = ggplot(test_positive_dif_set ,aes(test_positive_dif_set, y = ..density..)) + geom_density() +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
+  geom_vline(xintercept = mean(test_positive_dif_set$test_positive_dif_set), linetype='dotted', col = 'blue', size = 1) +
+  annotate("text", x = mean(test_positive_dif_set$test_positive_dif_set)+3, y = 0.02, label = signif(mean(test_positive_dif_set$test_positive_dif_set),2), colour = "blue", size = 6) +
+  ylab("density") + xlab("Difference between true positives")
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_dif.png", width = 10, height = 11)
+
+test_positive_PPV_set = data.frame(test_positive_PPV_set)
+PPV_dens_plot = ggplot(test_positive_PPV_set ,aes(test_positive_PPV_set, y = ..density..)) + geom_density() +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
+  geom_vline(xintercept = mean(test_positive_PPV_set$test_positive_PPV_set), linetype='dotted', col = 'blue', size = 1) +
+  annotate("text", x = mean(test_positive_PPV_set$test_positive_PPV_set)+0.002, y = 40, label = signif(mean(test_positive_PPV_set$test_positive_PPV_set),3), colour = "blue", size = 6) + xlab("Precision")
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_PPV.png", width = 10, height = 11)
+
+test_positive_Sens_set = data.frame(test_positive_Sens_set)
+Sens_dens_plot = ggplot(test_positive_Sens_set ,aes(test_positive_Sens_set, y = ..density..)) + geom_density() +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
+  geom_vline(xintercept = mean(test_positive_Sens_set$test_positive_Sens_set), linetype='dotted', col = 'blue', size = 1) +
+  annotate("text", x = mean(test_positive_Sens_set$test_positive_Sens_set)+0.003, y = 500, label = signif(mean(test_positive_Sens_set$test_positive_Sens_set),2), colour = "blue", size = 6) + xlab("Sensitivity")
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_Sensitivity.png", width = 10, height = 11)
+
+test_positive_pvalue_set = data.frame(test_positive_pvalue_set)
+Pvalue_dens_plot = ggplot(test_positive_pvalue_set ,aes(test_positive_pvalue_set, y= ..density..)) + geom_density() +
+  # geom_vline(xintercept = 0.05, linetype='dotted', col = 'red', size = 1) +
+  # annotate("text", x = 0.08, y = 40, label = "0.05", colour = "red", size = 6) +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
+  # geom_vline(xintercept = mean(test_positive_pvalue_set$test_positive_pvalue_set), linetype='dotted', col = 'blue', size = 1) +
+  annotate("text", x = mean(test_positive_pvalue_set$test_positive_pvalue_set)+(0.5*10^-28), y = (2*10^35), label = signif(mean(test_positive_pvalue_set$test_positive_pvalue_set),3), colour = "blue", size = 6) + xlab("P value")
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_pvalue.png", width = 10, height = 11)
+
+## With conserved alt aa
+test_positive_dif_set = c()
+test_positive_PPV_set = c()
+test_positive_Sens_set = c()
+test_positive_pvalue_set = c()
 for (i in 1:1000){
   p822.paralogous_var_align = list()
   p822.paralogous_var_align$input_variants = tmp_p.full_con_ref_AA[sample(nrow(tmp_p.full_con_ref_AA), 822),c("Variant_pos","ID","REF","ALT")]
@@ -1528,7 +1602,7 @@ for (i in 1:1000){
   b822.paralogous_var_align$Unique_variant_annotations = distinct(b822.paralogous_var_align$Unique_variant_annotations[c("Variant_pos", "ID.x", "REF.x", "ALT.x")])
   b822.paralogous_var_align$true_num_of_paralog_anno = length(b822.paralogous_var_align$Unique_variant_annotations$Variant_pos)
   
-  conf822 = conf_matrix_USED_FOR_CORRECTIONS(p822.paralogous_var_align$true_num_of_paralog_anno, num_of_var_p.tableized_vcf, b822.paralogous_var_align$true_num_of_paralog_anno, num_of_var_b.tableized_vcf)
+  conf822 = conf_matrix_USED_FOR_CORRECTIONS(p822.paralogous_var_align$true_num_of_paralog_anno, 822, b822.paralogous_var_align$true_num_of_paralog_anno, 822)
   test_positive_dif = conf822$con_table[2,1] - conf822$con_table[2,2]
   test_positive_dif_set = c(test_positive_dif_set, test_positive_dif)
   test_positive_PPV = conf822$PPV
@@ -1545,21 +1619,21 @@ dif_dens_plot = ggplot(test_positive_dif_set ,aes(test_positive_dif_set, y = ..d
   geom_vline(xintercept = mean(test_positive_dif_set$test_positive_dif_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_dif_set$test_positive_dif_set)+3, y = 0.02, label = signif(mean(test_positive_dif_set$test_positive_dif_set),2), colour = "blue", size = 6) +
   ylab("density") + xlab("Difference between true positives")
-ggsave("images/KDE_full_ref_and_alt_con_822balanced_testset_dif.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_dif.png", width = 10, height = 11)
 
 test_positive_PPV_set = data.frame(test_positive_PPV_set)
 PPV_dens_plot = ggplot(test_positive_PPV_set ,aes(test_positive_PPV_set, y = ..density..)) + geom_density() +
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   geom_vline(xintercept = mean(test_positive_PPV_set$test_positive_PPV_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_PPV_set$test_positive_PPV_set)+0.002, y = 40, label = signif(mean(test_positive_PPV_set$test_positive_PPV_set),3), colour = "blue", size = 6) + xlab("Precision")
-ggsave("images/KDE_full_ref_and_alt_con_822balanced_testset_PPV.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_PPV.png", width = 10, height = 11)
 
 test_positive_Sens_set = data.frame(test_positive_Sens_set)
 Sens_dens_plot = ggplot(test_positive_Sens_set ,aes(test_positive_Sens_set, y = ..density..)) + geom_density() +
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   geom_vline(xintercept = mean(test_positive_Sens_set$test_positive_Sens_set), linetype='dotted', col = 'blue', size = 1) +
-  annotate("text", x = mean(test_positive_Sens_set$test_positive_Sens_set)+0.0001, y = 500, label = signif(mean(test_positive_Sens_set$test_positive_Sens_set),2), colour = "blue", size = 6) + xlab("Sensitivity")
-ggsave("images/KDE_full_ref_and_alt_con_822balanced_testset_Sensitivity.png", width = 10, height = 11)
+  annotate("text", x = mean(test_positive_Sens_set$test_positive_Sens_set)+0.003, y = 500, label = signif(mean(test_positive_Sens_set$test_positive_Sens_set),2), colour = "blue", size = 6) + xlab("Sensitivity")
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_Sensitivity.png", width = 10, height = 11)
 
 test_positive_pvalue_set = data.frame(test_positive_pvalue_set)
 Pvalue_dens_plot = ggplot(test_positive_pvalue_set ,aes(test_positive_pvalue_set, y= ..density..)) + geom_density() +
@@ -1567,8 +1641,8 @@ Pvalue_dens_plot = ggplot(test_positive_pvalue_set ,aes(test_positive_pvalue_set
   # annotate("text", x = 0.08, y = 40, label = "0.05", colour = "red", size = 6) +
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   # geom_vline(xintercept = mean(test_positive_pvalue_set$test_positive_pvalue_set), linetype='dotted', col = 'blue', size = 1) +
-  annotate("text", x = mean(test_positive_pvalue_set$test_positive_pvalue_set)+0.000008, y = 2500000, label = signif(mean(test_positive_pvalue_set$test_positive_pvalue_set),3), colour = "blue", size = 6) + xlab("P value")
-ggsave("images/KDE_full_ref_and_alt_con_822balanced_testset_pvalue.png", width = 10, height = 11)
+  annotate("text", x = mean(test_positive_pvalue_set$test_positive_pvalue_set)+(0.5*10^-10), y = (2*10^14), label = signif(mean(test_positive_pvalue_set$test_positive_pvalue_set),3), colour = "blue", size = 6) + xlab("P value")
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_pvalue.png", width = 10, height = 11)
   # coord_cartesian(ylim = c(0, 70), clip = "off")
   # geom_text(aes(x=0.05, label="0.05", y=-5), colour="red", text=element_text(size=8)) 
 
