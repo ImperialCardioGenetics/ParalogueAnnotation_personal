@@ -5519,19 +5519,20 @@ gg4 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
 # ggsave("images/PRC_with_other_tools_plot.png")
 
 other_tools_data = data.frame(
-  Precision = c(as.numeric(other_tools_set[2:10,3])),
-  Precision_CI = c(as.numeric(other_tools_set[2:10,4])),
-  Sensitivity = c(as.numeric(other_tools_set[2:10,5])),
-  Sensitivity_CI = c(as.numeric(other_tools_set[2:10,6]))
+  Precision = c(as.numeric(other_tools_set[2:8,3]), as.numeric(other_tools_set[10,3]), as.numeric(other_tools_set[9,3])),
+  Precision_CI = c(as.numeric(other_tools_set[2:8,4]), as.numeric(other_tools_set[10,4]), as.numeric(other_tools_set[9,4])),
+  Sensitivity = c(as.numeric(other_tools_set[2:8,5]), as.numeric(other_tools_set[10,5]), as.numeric(other_tools_set[9,5])),
+  Sensitivity_CI = c(as.numeric(other_tools_set[2:8,6]), as.numeric(other_tools_set[10,6]), as.numeric(other_tools_set[9,6]))
   )
-other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+QC2", "QC1+QC2+QC3", "QC1+QC3")
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1", "QC1+QC2", "QC1+QC3", "QC1+QC2+QC3")
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
 other_tools_data$Type = factor(other_tools_data$Type, levels = c("Sift", "MCap", "CADD", "Revel","no QC", "QC1" ,"QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "black", "QC1" = "black", "QC1+QC2" = "black", "QC1+QC3" = "black", "QC1+QC2+QC3" = "black")
 fills = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#F1EEF6", "QC1" = "#D7B5D8", "QC1+QC2" = "#DF65B0", "QC1+QC3" = "#DD1C77", "QC1+QC2+QC3" = "#980043")
 shapes = c("Sift" = 6, "MCap" = 0, "CADD" = 2, "Revel" = 5, "no QC" = 21, "QC1" = 21, "QC1+QC2" = 21, "QC1+QC3" = 21, "QC1+QC2+QC3" = 21)
-gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15, stroke=2, fill = fills) + 
+sizes = c(rep(15,4),11,13,15,17,19)
+gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type, fill = Type)) + geom_point(size=sizes, stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
@@ -5541,6 +5542,7 @@ gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
 
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
+  scale_fill_manual(values = fills) +
   xlim(0,1) + ylim(0.75,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 20), 
@@ -5748,27 +5750,32 @@ colnames(other_tools_set) = c("Pathogenic variants","Benign variants","PPV","PPV
 # 
 
 other_tools_data = data.frame(
-  Precision = c(as.numeric(other_tools_set[2:10,3])),
-  Precision_CI = c(as.numeric(other_tools_set[2:10,4])),
-  Sensitivity = c(as.numeric(other_tools_set[2:10,5])),
-  Sensitivity_CI = c(as.numeric(other_tools_set[2:10,6]))
+  Precision = c(as.numeric(other_tools_set[2:8,3]), as.numeric(other_tools_set[10,3]), as.numeric(other_tools_set[9,3])),
+  Precision_CI = c(as.numeric(other_tools_set[2:8,4]), as.numeric(other_tools_set[10,4]), as.numeric(other_tools_set[9,4])),
+  Sensitivity = c(as.numeric(other_tools_set[2:8,5]), as.numeric(other_tools_set[10,5]), as.numeric(other_tools_set[9,5])),
+  Sensitivity_CI = c(as.numeric(other_tools_set[2:8,6]), as.numeric(other_tools_set[10,6]), as.numeric(other_tools_set[9,6]))
   )
-other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "none", "conserved ref AA" ,"fully conserved ref AA", "fully conserved ref AA +\nconserved alt AA", "conserved ref AA +\nconserved alt AA")
+other_tools_data$Type = c("Sift", "MCap", "CADD", "Revel", "none", "conserved ref AA", "fully conserved ref AA", "conserved ref AA +\nconserved alt AA", "fully conserved ref AA +\nconserved alt AA")
 # other_tools_data = rbind(other_tools_data, prc_data2[1:4,])
-other_tools_data$Type = factor(other_tools_data$Type, levels = c("none", "conserved ref AA" , "fully conserved ref AA", "conserved ref AA +\nconserved alt AA", "fully conserved ref AA +\nconserved alt AA", "Sift", "MCap", "CADD", "Revel"))
+other_tools_data$Type = factor(other_tools_data$Type, levels = c("conserved ref AA", "none",  "fully conserved ref AA", "conserved ref AA +\nconserved alt AA", "fully conserved ref AA +\nconserved alt AA", "Sift", "MCap", "CADD", "Revel"))
+other_tools_data = other_tools_data %>% 
+  dplyr::mutate(Type = factor(Type, levels = c("conserved ref AA", "none",  "fully conserved ref AA", "conserved ref AA +\nconserved alt AA", "fully conserved ref AA +\nconserved alt AA", "Sift", "MCap", "CADD", "Revel"))) %>%
+  dplyr::arrange(Type)
 # other_tools_data$Precision_CI_min = other_tools_data$Precision - other_tools_data$Precision_CI
 # other_tools_data$Precision_CI_max = sapply(other_tools_data$Precision + other_tools_data$Precision_CI, min, 1)
 
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "black", "conserved ref AA"  = "black", "fully conserved ref AA" = "black", "conserved ref AA +\nconserved alt AA" = "black", "fully conserved ref AA +\nconserved alt AA" = "black")
 fills = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "none" = "#F1EEF6", "conserved ref AA" = "#D7B5D8", "fully conserved ref AA" = "#DF65B0", "conserved ref AA +\nconserved alt AA" = "#DD1C77", "fully conserved ref AA +\nconserved alt AA" = "#980043")
 shapes = c("Sift" = 6, "MCap" = 0, "CADD" = 2, "Revel" = 5, "none" = 21, "conserved ref AA" = 21, "fully conserved ref AA" = 21, "conserved ref AA +\nconserved alt AA" = 21, "fully conserved ref AA +\nconserved alt AA" = 21)
-
-gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2, fill = fills) + 
+sizes = c("Sift" = 15, "MCap" = 15, "CADD" = 15, "Revel" = 15, "none" = 7, "conserved ref AA" = 15, "fully conserved ref AA" = 15, "conserved ref AA +\nconserved alt AA" = 15, "fully conserved ref AA +\nconserved alt AA" = 15)
+gg = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type, fill = Type, size = Type)) + geom_point(stroke=2) + 
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
   geom_hline(yintercept=0.86, linetype='dotted', col = 'red', size = 3) +
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
+  scale_fill_manual(values = fills) +
+  scale_size_manual(values = sizes) +
   xlim(0,1) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(size = 14)) +labs(y = "PPV", x = "Sensitivity") +
@@ -5858,21 +5865,24 @@ df1 = data.frame(
 )
 
 df1$Type = factor(c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2","QC1+QC2+QC3", "QC1+QC3"), levels = c("Sift", "MCap", "CADD", "Revel", "no QC","QC1","QC1+QC2", "QC1+QC3", "QC1+QC2+QC3"))
-
+df1 = df1 %>% 
+  dplyr::mutate(Type = factor(Type, levels = c("Sift", "MCap", "CADD", "Revel", "no QC", "QC1+QC2", "QC1", "QC1+QC2+QC3", "QC1+QC3"))) %>%
+  dplyr::arrange(Type)
 cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "black", "QC1" = "black", "QC1+QC2" = "black", "QC1+QC3" = "black", "QC1+QC2+QC3" = "black")
 shapes = c("Sift" = 6, "MCap" = 0, "CADD" = 2, "Revel" = 5, "no QC" = 21, "QC1" = 21, "QC1+QC2" = 21, "QC1+QC3" = 21, "QC1+QC2+QC3" = 21)
 fills = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#F1EEF6", "QC1" = "#D7B5D8", "QC1+QC2" = "#DF65B0", "QC1+QC3" = "#DD1C77", "QC1+QC2+QC3" = "#980043")
-
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2,fill=fills) + 
+sizes = c("Sift" = 15, "MCap" = 15, "CADD" = 15, "Revel" = 15, "no QC" = 15, "QC1" = 7, "QC1+QC2" = 15, "QC1+QC3" = 7, "QC1+QC2+QC3" = 15)
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type, size = Type, fill = Type)) + geom_point(stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
   geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
   geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
   geom_hline(yintercept=0.29, linetype='dotted', col = 'red', size = 3) +
-  
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
+  scale_size_manual(values = sizes) +
+  scale_fill_manual(values = fills) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
@@ -6026,7 +6036,7 @@ cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "
 shapes = c("Sift" = 6, "MCap" = 0, "CADD" = 2, "Revel" = 5, "no QC" = 21, "QC1" = 21, "QC1+QC2" = 21, "QC1+QC3" = 21, "QC1+QC2+QC3" = 21)
 fills = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#F1EEF6", "QC1" = "#D7B5D8", "QC1+QC2" = "#DF65B0", "QC1+QC3" = "#DD1C77", "QC1+QC2+QC3" = "#980043")
 
-gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15,stroke=2,fill=fills) + 
+gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type, fill = Type)) + geom_point(size=15,stroke=2) + 
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=.5) +
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,height=0) +
   
@@ -6036,6 +6046,7 @@ gg = ggplot(df1, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) +
   
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
+  scale_fill_manual(values = fills) +
   xlim(0,1) + ylim(0,1)  + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 16), 
