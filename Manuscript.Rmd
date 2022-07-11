@@ -7822,6 +7822,19 @@ ggsave("data/all_possible_mutations/synthetic_exome/Synthetic_exome_paralog_resu
 
 ```
 
+Count how many paralogous positions in total there are (how many all possible missense can potentially be annotated):
+```{r synthetic_exome, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE, results='hide'}
+
+Total_para_loc = 0
+for (i in c(1:22, "X", "Y")){
+  load(paste0("data/all_possible_mutations/synthetic_exome/Para_locations_chrom_",i,"_noQC.RData"))
+  para_loc = length(unique(Paraloc$var))
+  Total_para_loc = Total_para_loc + para_loc
+}
+
+
+```
+
 Count how many variant positions in total are predicted to be pathogenic using conserved AA/Para_con:
 ```{r synthetic_exome, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE, results='hide'}
 
