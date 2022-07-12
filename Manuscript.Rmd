@@ -1494,7 +1494,7 @@ if (!file.exists("data/clinvar/CORRECTED_redone_GRCh38_clinvar_set_predicted_pat
   write.table(complete_df, file = "data/clinvar/CORRECTED_redone_GRCh38_clinvar_set_predicted_patho.csv", na="", row.names = TRUE, col.names = NA, sep = ",", quote=FALSE)
 }
 
-##### Randomly selected 500 P/LP and 500 B/LB balanced test set
+##### Randomly selected 822 P/LP and 822 B/LB balanced test set
 
 tmp_p.full_con_ref_AA = p.full_con_ref_AA[p.full_con_ref_AA$paralog1 != "",]
 
@@ -1546,21 +1546,21 @@ dif_dens_plot = ggplot(test_positive_dif_set ,aes(test_positive_dif_set, y = ..d
   geom_vline(xintercept = mean(test_positive_dif_set$test_positive_dif_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_dif_set$test_positive_dif_set)+3, y = 0.02, label = signif(mean(test_positive_dif_set$test_positive_dif_set),2), colour = "blue", size = 6) +
   ylab("density") + xlab("Difference between true positives")
-ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_dif.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_dif.png", width = 10, height = 11)
 
 test_positive_PPV_set = data.frame(test_positive_PPV_set)
 PPV_dens_plot = ggplot(test_positive_PPV_set ,aes(test_positive_PPV_set, y = ..density..)) + geom_density() +
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   geom_vline(xintercept = mean(test_positive_PPV_set$test_positive_PPV_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_PPV_set$test_positive_PPV_set)+0.002, y = 40, label = signif(mean(test_positive_PPV_set$test_positive_PPV_set),3), colour = "blue", size = 6) + xlab("Precision")
-ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_PPV.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_PPV.png", width = 10, height = 11)
 
 test_positive_Sens_set = data.frame(test_positive_Sens_set)
 Sens_dens_plot = ggplot(test_positive_Sens_set ,aes(test_positive_Sens_set, y = ..density..)) + geom_density() +
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   geom_vline(xintercept = mean(test_positive_Sens_set$test_positive_Sens_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_Sens_set$test_positive_Sens_set)+0.003, y = 500, label = signif(mean(test_positive_Sens_set$test_positive_Sens_set),2), colour = "blue", size = 6) + xlab("Sensitivity")
-ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_Sensitivity.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_Sensitivity.png", width = 10, height = 11)
 
 test_positive_pvalue_set = data.frame(test_positive_pvalue_set)
 Pvalue_dens_plot = ggplot(test_positive_pvalue_set ,aes(test_positive_pvalue_set, y= ..density..)) + geom_density() +
@@ -1569,7 +1569,7 @@ Pvalue_dens_plot = ggplot(test_positive_pvalue_set ,aes(test_positive_pvalue_set
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   # geom_vline(xintercept = mean(test_positive_pvalue_set$test_positive_pvalue_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_pvalue_set$test_positive_pvalue_set)+(0.5*10^-28), y = (2*10^35), label = signif(mean(test_positive_pvalue_set$test_positive_pvalue_set),3), colour = "blue", size = 6) + xlab("P value")
-ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_pvalue.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_pvalue.png", width = 10, height = 11)
 
 ## With conserved alt aa
 test_positive_dif_set = c()
@@ -1619,21 +1619,21 @@ dif_dens_plot = ggplot(test_positive_dif_set ,aes(test_positive_dif_set, y = ..d
   geom_vline(xintercept = mean(test_positive_dif_set$test_positive_dif_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_dif_set$test_positive_dif_set)+3, y = 0.02, label = signif(mean(test_positive_dif_set$test_positive_dif_set),2), colour = "blue", size = 6) +
   ylab("density") + xlab("Difference between true positives")
-ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_dif.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_dif.png", width = 10, height = 11)
 
 test_positive_PPV_set = data.frame(test_positive_PPV_set)
 PPV_dens_plot = ggplot(test_positive_PPV_set ,aes(test_positive_PPV_set, y = ..density..)) + geom_density() +
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   geom_vline(xintercept = mean(test_positive_PPV_set$test_positive_PPV_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_PPV_set$test_positive_PPV_set)+0.002, y = 40, label = signif(mean(test_positive_PPV_set$test_positive_PPV_set),3), colour = "blue", size = 6) + xlab("Precision")
-ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_PPV.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_PPV.png", width = 10, height = 11)
 
 test_positive_Sens_set = data.frame(test_positive_Sens_set)
 Sens_dens_plot = ggplot(test_positive_Sens_set ,aes(test_positive_Sens_set, y = ..density..)) + geom_density() +
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   geom_vline(xintercept = mean(test_positive_Sens_set$test_positive_Sens_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_Sens_set$test_positive_Sens_set)+0.003, y = 500, label = signif(mean(test_positive_Sens_set$test_positive_Sens_set),2), colour = "blue", size = 6) + xlab("Sensitivity")
-ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_Sensitivity.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_Sensitivity.png", width = 10, height = 11)
 
 test_positive_pvalue_set = data.frame(test_positive_pvalue_set)
 Pvalue_dens_plot = ggplot(test_positive_pvalue_set ,aes(test_positive_pvalue_set, y= ..density..)) + geom_density() +
@@ -1642,7 +1642,7 @@ Pvalue_dens_plot = ggplot(test_positive_pvalue_set ,aes(test_positive_pvalue_set
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   # geom_vline(xintercept = mean(test_positive_pvalue_set$test_positive_pvalue_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_pvalue_set$test_positive_pvalue_set)+(0.5*10^-10), y = (2*10^14), label = signif(mean(test_positive_pvalue_set$test_positive_pvalue_set),3), colour = "blue", size = 6) + xlab("P value")
-ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_pvalue.png", width = 10, height = 11)
+ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_pvalue.png", width = 10, height = 11)
   # coord_cartesian(ylim = c(0, 70), clip = "off")
   # geom_text(aes(x=0.05, label="0.05", y=-5), colour="red", text=element_text(size=8)) 
 
@@ -2543,7 +2543,7 @@ bar_chart = ggplot(df, aes(y=reclassified_vus,x=bar,fill=Type)) + geom_bar(stat=
   # scale_x_discrete(expand = c(0,0)) 
 ggsave("images/reclassified_vus_clinvar_set_bar_chart.png", height = 3, width = 14)
 ```
-127080 missense VUS in clinvar
+127080 missense VUS in clinvar, 86894 have an equivalent position
 
 
 ## Analysis of FP
