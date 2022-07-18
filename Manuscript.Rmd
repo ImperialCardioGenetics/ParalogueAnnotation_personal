@@ -2882,39 +2882,50 @@ prc_data$Type[1:12] = "conserved ref AA +\nPara Z"
 # gg2 = gg2 + geom_abline(intercept = 0, slope = 1, linetype = "dotted")
 # 
 # ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = cutoff)) + geom_point() + xlim(0.1,0.2) + ylim(0.85,1) + scale_color_gradient(low="blue", high="red", limits=c(0, 11))
-cols = c("conserved ref AA +\nPara Z" = "#4D5656", "none" = "#000000", "conserved ref AA" = "#45B39D", "fully conserved ref AA" = "#5DADE2", "conserved ref AA +\nconserved alt AA" = "#A569BD", "fully conserved ref AA +\nconserved alt AA" = "#EC7063")
-shapes = c("conserved ref AA +\nPara Z" = 6, "none" = 4, "conserved ref AA" = 16, "fully conserved ref AA" = 17, "conserved ref AA +\nconserved alt AA" = 18, "fully conserved ref AA +\nconserved alt AA" = 15)
+prc_data = prc_data %>% 
+  dplyr::mutate(Type = factor(Type, levels = c("none", "conserved ref AA", "conserved ref AA +\nPara Z", "fully conserved ref AA", "conserved ref AA +\nconserved alt AA", "fully conserved ref AA +\nconserved alt AA"))) %>%
+  dplyr::arrange(Type)
+cols = c("none" = "black", "conserved ref AA" = "black", "conserved ref AA +\nPara Z" = "black", "fully conserved ref AA" = "black", "conserved ref AA +\nconserved alt AA" = "black", "fully conserved ref AA +\nconserved alt AA" = "black")
+fills = c("none" = "#F1EEF6", "conserved ref AA" = "#D7B5D8", "conserved ref AA +\nPara Z" = "#D7B5D8", "fully conserved ref AA" = "#DF65B0", "conserved ref AA +\nconserved alt AA" = "#DD1C77", "fully conserved ref AA +\nconserved alt AA" = "#980043")
+shapes = c("none" = 21, "conserved ref AA" = 21, "conserved ref AA +\nPara Z" = 22, "fully conserved ref AA" = 21, "conserved ref AA +\nconserved alt AA" = 21, "fully conserved ref AA +\nconserved alt AA" = 21)
+sizes = c("none" = 15, "conserved ref AA" = 15, "conserved ref AA +\nPara Z" = 9, "fully conserved ref AA" = 15, "conserved ref AA +\nconserved alt AA" = 15, "fully conserved ref AA +\nconserved alt AA" = 15)
 
-# cols = c("Sift" = "#4D5656", "MCap" = "#424949", "CADD" = "#1B2631", "Revel" = "#17202A", "no QC" = "#58D68D", "QC1" = "#45B39D", "QC1+QC2" = "#5DADE2", "QC1+QC3" = "#A569BD", "QC1+QC2+QC3" = "#EC7063")
-# shapes = c("Sift" = 0, "MCap" = 1, "CADD" = 2, "Revel" = 5, "no QC" = 15, "QC1" = 16, "QC1+QC2" = 17, "QC1+QC3" = 18, "QC1+QC2+QC3" = 19)
-
-gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=4) + 
+gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type, fill = Type, size = Type)) + geom_point(stroke=2) + 
   #  geom_point(size=4,data=prc_data[prc_data$Type=="conserved AA +\nPara_z",]) + 
   # geom_point(size=4,data=prc_data[prc_data$Type!="conserved AA +\nPara_z",]) + 
-  
   # geom_errorbar(aes(ymin=Precision-Precision_CI, ymax=Precision+Precision_CI),colour="black",linetype=1,size=.2,width=5) + 
   # geom_errorbarh(aes(xmin=Sensitivity-Sensitivity_CI, xmax=Sensitivity+Sensitivity_CI),colour="black",linetype=1,size=.2,width=5) +
-  
-  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=.2,width=0) +
-  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=.2,height=0) +
-  
+  geom_errorbar(aes(ymin=sapply(Precision-Precision_CI, max, 0), ymax=sapply(Precision+Precision_CI, min, 1)),colour="black",linetype=1,size=1,width=0) +
+  geom_errorbarh(aes(xmin=sapply(Sensitivity-Sensitivity_CI, max, 0), xmax=sapply(Sensitivity+Sensitivity_CI, min, 1)),colour="black",linetype=1,size=1,height=0) +
+  geom_hline(yintercept=0.79, linetype='dotted', col = 'red', size = 3) +
   scale_shape_manual(values = shapes) +
   scale_color_manual(values = cols) +
-  xlim(0,0.25) + ylim(0.8,1)  + theme(plot.subtitle = element_text(vjust = 1), 
+  scale_size_manual(values = sizes) +
+  scale_fill_manual(values = fills) +
+  xlim(0,0.25) + ylim(0.75,1) + 
+  theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
-    axis.title = element_text(size = 16), 
-    plot.title = element_text(size = 14)) +labs(y = "Precision", x = "Sensitivity") + 
-  theme(axis.text = element_text(size = 13)) + 
-  theme(plot.background = element_blank(),
-         panel.grid.minor = element_blank())+
-  theme(axis.line.x = element_line(color="black", size = 2),
-        axis.line.y = element_line(color="black", size = 2)) +
-  theme(legend.text=element_text(size=16), legend.title=element_text(size=16), legend.key.size = unit(3,"line")) +
-  guides(shape = guide_legend(override.aes = list(size = 8))) +
-  labs(shape="conservation stringency", color="conservation stringency")
+    axis.title = element_text(size = 35), 
+    plot.title = element_text(size = 14, hjust = 0.5),
+    # plot.margin = unit(c(1,1,1,1), "cm"),
+    axis.text = element_text(size = 35),
+    plot.background = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line.x = element_line(color="black", size = 2),
+    axis.line.y = element_line(color="black", size = 2),
+    legend.text=element_text(size=35), 
+    legend.title=element_text(size=35), 
+    legend.key.size = unit(5,"line")) + 
+  labs(y = "Precision", 
+       x = "Sensitivity",
+       shape="conservation stringency", 
+       color="conservation stringency",
+       fill="conservation stringency",
+       size="conservation stringency") + 
+  guides(color = guide_legend(override.aes = list(colour = cols, fill = fills)))
   
  # theme(legend.text=element_text(size=25), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(5,"line"))
-ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2.png")
+ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2_v2.png", width = 15, height = 11)
 
 gg3 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
   
@@ -5572,7 +5583,7 @@ gg5 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
     plot.caption = element_text(vjust = 1), 
     axis.title = element_text(size = 20), 
     plot.title = element_text(size = 14),
-    plot.margin = unit(c(1,1,1,1), "cm"),) + 
+    plot.margin = unit(c(1,1,1,1), "cm")) + 
   theme(plot.background = element_blank(),
          panel.grid.minor = element_blank())+
   theme(axis.line.x = element_line(color="black", size = 2),
