@@ -1261,9 +1261,9 @@ for (gene in clinvar_P_LP_tableized_genes){
 }
 
 ####JUST TO GET THE SAME NUMBER OF VARIANTS AS STATED IN THE PIPELINE DIAGRAM####
-start_comment = grepl("^#", readLines("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38.vcf"))
+start_comment = grepl("^#", readLines("/mnt/hgfs/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38.vcf"))
 start_comment = sum(head(start_comment, which(!start_comment)[1] - 1))
-clinvar_20190114_vcf = read.csv("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38.vcf", sep = "\t", comment.char = "", header = F, stringsAsFactors = F, skip = start_comment)
+clinvar_20190114_vcf = read.csv("/mnt/hgfs/PhD/Paralogues/data/clinvar/clinvar_20190114_GRCh38.vcf", sep = "\t", comment.char = "", header = F, stringsAsFactors = F, skip = start_comment)
 colnames(clinvar_20190114_vcf) = c("CHROM","POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO") 
 clinvar_20190114_vcf$GENE = sapply(strsplit(clinvar_20190114_vcf$INFO, "GENEINFO="), "[", 2)
 clinvar_20190114_vcf$GENE = sapply(strsplit(clinvar_20190114_vcf$GENE, ":"), "[", 1) 
