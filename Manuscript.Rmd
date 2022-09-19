@@ -1544,8 +1544,8 @@ test_positive_dif_set = data.frame(test_positive_dif_set)
 dif_dens_plot = ggplot(test_positive_dif_set ,aes(test_positive_dif_set, y = ..density..)) + geom_density() +
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   geom_vline(xintercept = mean(test_positive_dif_set$test_positive_dif_set), linetype='dotted', col = 'blue', size = 1) +
-  annotate("text", x = mean(test_positive_dif_set$test_positive_dif_set)+3, y = 0.02, label = signif(mean(test_positive_dif_set$test_positive_dif_set),2), colour = "blue", size = 6) +
-  ylab("density") + xlab("Difference between true positives")
+  annotate("text", x = mean(test_positive_dif_set$test_positive_dif_set)+3, y = 0.02, label = signif(mean(test_positive_dif_set$test_positive_dif_set),3), colour = "blue", size = 6) +
+  ylab("density") + xlab("Difference between number of positive predictions")
 ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_aa_balanced_testset_dif.png", width = 10, height = 11)
 
 test_positive_PPV_set = data.frame(test_positive_PPV_set)
@@ -1618,7 +1618,7 @@ dif_dens_plot = ggplot(test_positive_dif_set ,aes(test_positive_dif_set, y = ..d
   theme(axis.title = element_text(size = 20), axis.text = element_text(size = 20)) +
   geom_vline(xintercept = mean(test_positive_dif_set$test_positive_dif_set), linetype='dotted', col = 'blue', size = 1) +
   annotate("text", x = mean(test_positive_dif_set$test_positive_dif_set)+3, y = 0.02, label = signif(mean(test_positive_dif_set$test_positive_dif_set),2), colour = "blue", size = 6) +
-  ylab("density") + xlab("Difference between true positives")
+  ylab("density") + xlab("Difference between number of positive predictions")
 ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_testset_dif.png", width = 10, height = 11)
 
 test_positive_PPV_set = data.frame(test_positive_PPV_set)
