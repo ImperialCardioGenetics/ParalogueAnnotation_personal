@@ -586,6 +586,10 @@ raw_conf_matrix = function(num_patho_pred_patho, p.tableized_data, num_benign_pr
 }
 
 calc_EF = function(a, b, c, d, add_0.5 = 0){ #function for calculating Odds Ratios and Etiological Fractions
+  # a is number of exposed cases
+  # b is number of exposed controls
+  # c is number of unexposed cases
+  # d is number of unexposed controls
   if (a == 0 | b == 0 | c == 0 | d == 0){
     if (add_0.5 == 0){
     OR = "NA"
@@ -594,13 +598,30 @@ calc_EF = function(a, b, c, d, add_0.5 = 0){ #function for calculating Odds Rati
     OR_p_value = "NA"
     EF = "NA"
     EF_CI = "NA"
+    
+    return(list(
+      # "VAR_hat_Phi_hat" = VAR_hat_Phi_hat,
+      # "Phi_hat_squared" = Phi_hat_squared,
+      # "EF_hat" = EF_hat,
+      # "pi_hat_1" = pi_hat_1,
+      # "pi_hat_0" = pi_hat_0,
+      # "N_0" = N_0,
+      # "N_1" = N_1,
+      "OR" = OR, 
+      "OR_CI" = OR_CI, 
+      "OR_Z_value" = OR_Z_value,
+      "OR_p_value" = OR_p_value,
+      "EF" = EF, 
+      "EF_CI" = EF_CI
+    ))
+    
     } else if (add_0.5 == 1){
       a = a + 0.5
       b = b + 0.5
       c = c + 0.5
       d = d + 0.5
     }
-  } else {
+  }
   
   OR = (a/b)/(c/d)
   
@@ -625,10 +646,10 @@ calc_EF = function(a, b, c, d, add_0.5 = 0){ #function for calculating Odds Rati
   VAR_hat_Phi_hat = Phi_hat_squared * (((1-pi_hat_0)/(N_0 * pi_hat_0)) + ((1-pi_hat_1)/(N_1 * pi_hat_1)))
   
   EF_CI = c(
-    EF_hat - 1.96 * sqrt(VAR_hat_Phi_hat),
-    min(EF_hat + 1.96 * sqrt(VAR_hat_Phi_hat), 1)
+    EF - 1.96 * sqrt(VAR_hat_Phi_hat),
+    min(EF + 1.96 * sqrt(VAR_hat_Phi_hat), 1)
   )
-  }
+  
   return(list(
               # "VAR_hat_Phi_hat" = VAR_hat_Phi_hat,
               # "Phi_hat_squared" = Phi_hat_squared,
