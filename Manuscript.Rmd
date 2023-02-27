@@ -6280,6 +6280,16 @@ ASD_rates$Ratio = round(ASD_rates$Ratio,3)
 if(!file.exists("data/J_Li_data/Rates_of_ASD.csv")){
     write.table(ASD_rates, file = "data/J_Li_data/Rates_of_ASD.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE) #RUN PA ON THIS FILE
 }
+
+#Two-sampled poisson hypothesis test on rates
+ASD_pvalues = c()
+for (row in 1:nrow(ASD_rates)){
+  pvalue = poisson.test(c(ASD_rates$Num_DNM_cases[row],ASD_rates$Num_DNM_controls[row]),c(ASD_rates$Num_cases[row],ASD_rates$Num_controls[row]))$p.value
+  ASD_pvalues = c(ASD_pvalues, pvalue)
+}
+
+
+
 ```
 
 
