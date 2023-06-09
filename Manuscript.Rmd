@@ -6288,8 +6288,45 @@ for (row in 1:nrow(ASD_rates)){
   ASD_pvalues = c(ASD_pvalues, pvalue)
 }
 
+#Boostrapping and 95% CI for rate ratios
+# Set seed for reproducibility
+set.seed(123)
 
+### bootrstrapping =========
+PA_levels = list(c(38,14),
+                 c(24,6),
+                 c(15,1),
+                 c(9,2),
+                 c(6,0))
 
+for (level in PA_levels){
+  # create output vectors
+  vec_ratio_A <- rep(NA, 10000)
+  vec_ratio_B <- rep(NA, 10000)
+  vec_dif <- rep(NA, 10000)
+  
+  # resampling 10000 times
+  for (i in 1:10000){
+    # calculate ratios by sampling with the observed sample size and lamda values
+    vec_ratio_A[i] <- sum(rpois(2508, 1650/2508)) / sum(rpois(1911, 1107/1911))
+    vec_ratio_B[i] <- sum(rpois(2508, level[1]/2508)) / sum(rpois(1911, level[2]/1911))
+    
+    # calculate the difference between ratios
+    vec_dif[i] <- vec_ratio_A[i] - vec_ratio_B[i]
+  }
+
+  ### calculate confidence intervals 
+  # Sort the differences
+  vec_dif <- sort(vec_dif)
+  
+  # Find the 2.5th and 97.5th percentiles
+  lower_bound <- quantile(vec_dif, 0.025, names = FALSE)
+  upper_bound <- quantile(vec_dif, 0.975, names = FALSE)
+  
+  # Display the 95% confidence interval
+  cat(level, "95% Confidence Interval: [", lower_bound, ", ", upper_bound, "]\n")
+  # if confidence interval does not overlap 0 you can reject the null hypothesis. 
+}
 ```
 
 
