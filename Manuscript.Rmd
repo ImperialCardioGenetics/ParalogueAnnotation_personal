@@ -3439,8 +3439,8 @@ disease_data_ref$total_cases = sapply(disease_data_ref$total_cases,function(x) x
 #total cases sequenced for each gene
 disease_total_variant_cases = data.frame(genes = c("KCNE1","KCNE2","KCNH2","KCNQ1","SCN5A"), cases = c(2500,2500,2500,2500,2500))
 ##load up reverse gene disease cohort variants
-SCN5A_disease_cohort_variants = read.csv("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Pfams/Pfam_meta_domains/data/LQTS/rare_disease_cohort_variants_SCN5A_only.vcf", sep = "\t", stringsAsFactors = 0)
-KCNH2_disease_cohort_variants = read.csv("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Pfams/Pfam_meta_domains/data/LQTS/rare_disease_cohort_variants_KCNH2_only.vcf", sep = "\t", stringsAsFactors = 0)
+SCN5A_disease_cohort_variants = read.csv("data/LQTS/rare_disease_cohort_variants_SCN5A_only.vcf", sep = "\t", stringsAsFactors = 0)
+KCNH2_disease_cohort_variants = read.csv("data/LQTS/rare_disease_cohort_variants_KCNH2_only.vcf", sep = "\t", stringsAsFactors = 0)
 #individual cases for rare variants
 KCNE1_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE1" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
 KCNE2_disease_rare_variant_cases = sum(as.numeric(disease_data_ref[disease_data_ref$gene_symbol == "KCNE2" & disease_data_ref$mut_id %in% rare_disease_cohort_variants$ID, "cases"]))
