@@ -3589,7 +3589,10 @@ gene_EFs = data.frame(
   )
 gene_EFs = add_column(gene_EFs, "rare_p-values" = sapply(c(KCNE1_rare_EF$OR_p_value, KCNE2_rare_EF$OR_p_value, KCNH2_rare_EF$OR_p_value, KCNQ1_rare_EF$OR_p_value, SCN5A_rare_EF$OR_p_value), signif, digits = 2), .after = "rare_variant_EF")
 gene_EFs = add_column(gene_EFs, "pa_p-values" = c(KCNE1_pa_EF$OR_p_value, KCNE2_pa_EF$OR_p_value, sapply(c(KCNH2_pa_EF$OR_p_value, KCNQ1_pa_EF$OR_p_value, SCN5A_pa_EF$OR_p_value), signif, digits = 2)), .after = "pa_variant_EF")
-write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+if (!file.exists("data/LQTS/Ackerman_LQTS_EFs.csv")){
+  write.table(gene_EFs, file = "data/LQTS/Ackerman_LQTS_EFs.csv", na="", row.names = FALSE, col.names = FALSE, sep = ",", quote=FALSE)
+}
+
 
 
 ### KCNQ1 OR plot
