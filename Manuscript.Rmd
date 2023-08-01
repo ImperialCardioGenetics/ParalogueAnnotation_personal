@@ -2906,7 +2906,7 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
   scale_color_manual(values = cols) +
   scale_size_manual(values = sizes) +
   scale_fill_manual(values = fills) +
-  xlim(0,0.25) + ylim(0.65,1) + 
+  xlim(0,0.2) + ylim(0.65,1) + 
   scale_y_continuous(breaks=seq(0.65,1,0.05)) +
   theme(plot.subtitle = element_text(vjust = 1), 
     plot.caption = element_text(vjust = 1), 
@@ -2930,7 +2930,7 @@ gg2 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Ty
   guides(color = guide_legend(override.aes = list(colour = cols, fill = fills)))
   
  # theme(legend.text=element_text(size=25), axis.text = element_text(size = 16), axis.title.x=element_blank(), axis.title.y=element_blank()) + theme(plot.title = element_text(hjust = 0.25)) + theme(legend.key.size = unit(5,"line"))
-ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2_v2.png", width = 15, height = 11)
+ggsave("images/PRC_plot_paraz_with_QC1_and_QC3_no_QC2_v2.png", width = 25, height =10)
 
 gg3 = ggplot(prc_data, aes(x=Sensitivity, y=Precision, colour = Type, shape = Type)) + geom_point(size=15) + 
   
