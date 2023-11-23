@@ -1,5 +1,5 @@
 #PBS -lwalltime=72:0:0
-#PBS -lselect=1:ncpus=1:mem=10gb
+#PBS -lselect=1:ncpus=2:mem=10gb
 
 module load anaconda3/personal
 source /home/nyl112/.bashrc
