@@ -6686,7 +6686,6 @@ for (level in PA_levels){
 }
 ```
 
-
 TP53-TA, PPARG and SSC combined all in one:
 ```{r cf_UniFun_TP53-TA, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 ###TP53
@@ -6963,6 +6962,62 @@ avg_PPV_inc = (PA_avg_PPV-other_avg_PPV)/other_avg_PPV
 PA_avg_FPR = mean(c(as.numeric(clinvar_cf_sift_revel[6:10,"FPR"]),TP53_cf_sift_revel[5:9,"FPR"],PPARG_cf_sift_revel[5:9,"FPR"],SSC_cf_sift_revel[5:9,"FPR"]))
 other_avg_FPR = mean(c(as.numeric(clinvar_cf_sift_revel[2:5,"FPR"]),TP53_cf_sift_revel[1:4,"FPR"],PPARG_cf_sift_revel[1:4,"FPR"],SSC_cf_sift_revel[1:4,"FPR"]))
 avg_FPR_dec = (other_avg_FPR-PA_avg_FPR)/other_avg_FPR
+```
+
+Formatting MaveDB genes and variants (PTEN, MSH2, KCNQ4, BRCA1)
+```{r formatting_mavdb_files, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+#PTEN, NOTE IN B37 
+#Get coords from the clinvar/gnomad variants the study precollected
+PTEN_clinvar = read.csv("data/otherMaveDB_score/PTEN_mmc2_clinvar.csv", sep = ",", stringsAsFactors = F, header = F)
+PTEN_clinvar = PTEN_clinvar[-1,]
+colnames(PTEN_clinvar) = PTEN_clinvar[1,]
+PTEN_clinvar = PTEN_clinvar[-1,]
+PTEN_clinvar$Protein_consequence = sapply(PTEN_clinvar[,"Name"], strsplit, "(", fixed = T)
+PTEN_clinvar$Protein_consequence = sapply(PTEN_clinvar[,"Protein_consequence"], function(x) x[3])
+PTEN_clinvar$Protein_consequence = gsub(")","",as.character(PTEN_clinvar$Protein_consequence))
+
+PTEN_gnomad = read.csv("data/otherMaveDB_score/PTEN_mmc2_gnomad.csv", sep = ",", stringsAsFactors = F, header = F)
+PTEN_gnomad= PTEN_gnomad[-1,]
+colnames(PTEN_gnomad) = PTEN_gnomad[1,]
+PTEN_gnomad= PTEN_gnomad[-1,]
+
+#make vcfs
+PTEN_clinvar_vcf = PTEN_clinvar[,c("GRCh37Chromosome", "GRCh37Location", "Protein_consequence", "Name")]
+PTEN_clinvar_vcf$Ref = sapply(PTEN_clinvar_vcf[,"Name"], strsplit, ">", fixed = T)
+PTEN_clinvar_vcf$Ref = sapply(PTEN_clinvar_vcf[,"Ref"], function(x) x[1])
+PTEN_clinvar_vcf$Ref = substring(PTEN_clinvar_vcf$Ref, nchar(PTEN_clinvar_vcf$Ref))
+PTEN_clinvar_vcf$Alt = sapply(PTEN_clinvar_vcf[,"Name"], strsplit, ">", fixed = T)
+PTEN_clinvar_vcf$Alt = sapply(PTEN_clinvar_vcf[,"Alt"], function(x) x[2])
+PTEN_clinvar_vcf$Alt = sapply(PTEN_clinvar_vcf[,"Alt"], strsplit, " ", fixed = T)
+PTEN_clinvar_vcf$Alt = sapply(PTEN_clinvar_vcf[,"Alt"], function(x) x[1])
+PTEN_clinvar_vcf = PTEN_clinvar_vcf[-c(4)]
+PTEN_clinvar_vcf$Qual = "."
+PTEN_clinvar_vcf$Filter = "."
+PTEN_clinvar_vcf$Info = "."
+colnames(PTEN_clinvar_vcf) = c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
+
+PTEN_gnomad_vcf = PTEN_gnomad[,c("Chrom", "Position", "Protein_consequence", "Reference", "Alternate")]
+PTEN_gnomad_vcf$Qual = "."
+PTEN_gnomad_vcf$Filter = "."
+PTEN_gnomad_vcf$Info = "."
+colnames(PTEN_gnomad_vcf) = c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
+
+PTEN_total_vcf = rbind(PTEN_clinvar_vcf, PTEN_gnomad_vcf)
+PTEN_total_vcf = unique(PTEN_total_vcf)
+
+#mave scores
+PTEN_mave_scores = read.csv("data/otherMaveDB_score/PTEN_urn_mavedb_00000054-a-1_scores.csv", sep = ",", stringsAsFactors = F, header = T)
+PTEN_mave_scores = PTEN_mave_scores[,c("accession", "hgvs_nt", "hgvs_splice", "hgvs_pro", "score")]
+PTEN_mave_scores = PTEN_mave_scores[PTEN_mave_scores$hgvs_pro %in% PTEN_clinvar$Protein_consequence | PTEN_mave_scores$hgvs_pro %in% PTEN_gnomad$Protein_consequence,]
+PTEN_mave_benign_scores = PTEN_mave_scores[PTEN_mave_scores$score > -1.11 & PTEN_mave_scores$score < 0.89,]
+PTEN_mave_patho_scores = PTEN_mave_scores[PTEN_mave_scores$score <= -1.11 | PTEN_mave_scores$score >= 0.89,]
+
+PTEN_mave_benign_vcf = PTEN_total_vcf[PTEN_total_vcf$ID %in% PTEN_mave_benign_scores$hgvs_pro,]
+PTEN_mave_benign_vcf = PTEN_mave_benign_vcf[complete.cases(PTEN_mave_benign_vcf),]
+write.table(PTEN_mave_benign_vcf, file="data/otherMaveDB_score/PTEN_mave_benign_b37.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+PTEN_mave_patho_vcf = PTEN_total_vcf[PTEN_total_vcf$ID %in% PTEN_mave_patho_scores$hgvs_pro,]
+PTEN_mave_patho_vcf = PTEN_mave_patho_vcf[complete.cases(PTEN_mave_patho_vcf),]
+write.table(PTEN_mave_patho_vcf, file="data/otherMaveDB_score/PTEN_mave_patho_b37.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
 ```
 
 
