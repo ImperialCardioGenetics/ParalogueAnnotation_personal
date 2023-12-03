@@ -7018,6 +7018,23 @@ write.table(PTEN_mave_benign_vcf, file="data/otherMaveDB_score/PTEN_mave_benign_
 PTEN_mave_patho_vcf = PTEN_total_vcf[PTEN_total_vcf$ID %in% PTEN_mave_patho_scores$hgvs_pro,]
 PTEN_mave_patho_vcf = PTEN_mave_patho_vcf[complete.cases(PTEN_mave_patho_vcf),]
 write.table(PTEN_mave_patho_vcf, file="data/otherMaveDB_score/PTEN_mave_patho_b37.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+#MSH2
+MSH2_mave_scores = read.csv("data/otherMaveDB_score/MSH2_urn_mavedb_00000050-a-1_scores.csv", sep = ",", stringsAsFactors = F, header = T)
+MSH2_mave_scores = MSH2_mave_scores[!is.na(MSH2_mave_scores$score),]
+# MSH2_mave_scores$hgvs_pro = str_replace_all(MSH2_mave_scores$hgvs_pro, c("Ala"="A", "Arg"="R", "Asn"="N", "Asp"="D", "Cys"="C", "Glu"="E", "Gln"="Q", "Gly"="G", "His"="H", "Ile"="I", "Leu"="L", "Lys"="K", "Met"="M", "Phe"="F", "Pro"="P", "Ser"="S", "Thr"="T", "Trp"="W", "Tyr"="Y", "Val"="V"))
+MSH2_mave_scores$Protein_consequence = paste0("MSH2:", MSH2_mave_scores$hgvs_pro)
+write_MSH2_mave_scores = MSH2_mave_scores$Protein_consequence
+write.table(write_MSH2_mave_scores, file="data/otherMaveDB_score/write_MSH2_mave_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+#KCNQ4
+KCNQ4_mave_scores = read.csv("data/otherMaveDB_score/KCNQ4_urn_mavedb_00000094-a-2_scores.csv", sep = ",", stringsAsFactors = F, header = T)
+KCNQ4_mave_scores = KCNQ4_mave_scores[!is.na(KCNQ4_mave_scores$score),]
+KCNQ4_mave_scores$Protein_consequence = paste0("KCNQ4:", KCNQ4_mave_scores$hgvs_pro)
+write_KCNQ4_mave_scores = KCNQ4_mave_scores$Protein_consequence
+write.table(write_KCNQ4_mave_scores, file="data/otherMaveDB_score/write_KCNQ4_mave_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+
 ```
 
 
