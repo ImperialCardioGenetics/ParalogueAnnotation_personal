@@ -7024,16 +7024,81 @@ MSH2_mave_scores = read.csv("data/otherMaveDB_score/MSH2_urn_mavedb_00000050-a-1
 MSH2_mave_scores = MSH2_mave_scores[!is.na(MSH2_mave_scores$score),]
 # MSH2_mave_scores$hgvs_pro = str_replace_all(MSH2_mave_scores$hgvs_pro, c("Ala"="A", "Arg"="R", "Asn"="N", "Asp"="D", "Cys"="C", "Glu"="E", "Gln"="Q", "Gly"="G", "His"="H", "Ile"="I", "Leu"="L", "Lys"="K", "Met"="M", "Phe"="F", "Pro"="P", "Ser"="S", "Thr"="T", "Trp"="W", "Tyr"="Y", "Val"="V"))
 MSH2_mave_scores$Protein_consequence = paste0("MSH2:", MSH2_mave_scores$hgvs_pro)
-write_MSH2_mave_scores = MSH2_mave_scores$Protein_consequence
-write.table(write_MSH2_mave_scores, file="data/otherMaveDB_score/write_MSH2_mave_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+MSH2_mave_deleterious_scores = MSH2_mave_scores[MSH2_mave_scores$score >= 0,]
+write_MSH2_mave_deleterious_scores = MSH2_mave_deleterious_scores$Protein_consequence
+write.table(write_MSH2_mave_deleterious_scores, file="data/otherMaveDB_score/write_MSH2_mave_deleterious_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+MSH2_mave_benign_scores = MSH2_mave_scores[MSH2_mave_scores$score < 0,]
+write_MSH2_mave_benign_scores = MSH2_mave_benign_scores$Protein_consequence
+write.table(write_MSH2_mave_benign_scores, file="data/otherMaveDB_score/write_MSH2_mave_benign_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
 
 #KCNQ4
 KCNQ4_mave_scores = read.csv("data/otherMaveDB_score/KCNQ4_urn_mavedb_00000094-a-2_scores.csv", sep = ",", stringsAsFactors = F, header = T)
 KCNQ4_mave_scores = KCNQ4_mave_scores[!is.na(KCNQ4_mave_scores$score),]
 KCNQ4_mave_scores$Protein_consequence = paste0("KCNQ4:", KCNQ4_mave_scores$hgvs_pro)
-write_KCNQ4_mave_scores = KCNQ4_mave_scores$Protein_consequence
-write.table(write_KCNQ4_mave_scores, file="data/otherMaveDB_score/write_KCNQ4_mave_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
 
+KCNQ4_mave_benign_scores = KCNQ4_mave_scores[KCNQ4_mave_scores$score > 0.54 & KCNQ4_mave_scores$score < 2.08,]
+write_KCNQ4_mave_benign_scores = KCNQ4_mave_benign_scores$Protein_consequence
+write.table(write_KCNQ4_mave_benign_scores, file="data/otherMaveDB_score/write_KCNQ4_mave_benign_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+KCNQ4_mave_deleterious_scores = KCNQ4_mave_scores[KCNQ4_mave_scores$score <= 0.54 | KCNQ4_mave_scores$score >= 2.08,]
+write_KCNQ4_mave_deleterious_scores = KCNQ4_mave_deleterious_scores$Protein_consequence
+write.table(write_KCNQ4_mave_deleterious_scores, file="data/otherMaveDB_score/write_KCNQ4_mave_deleterious_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+#BRCA1
+BRCA1_mave_scores = read.csv("data/otherMaveDB_score/BRCA1_urn_mavedb_00000081-a-1_scores.csv", sep = ",", stringsAsFactors = F, header = T)
+BRCA1_mave_scores = BRCA1_mave_scores[!is.na(BRCA1_mave_scores$score),]
+BRCA1_mave_scores$Protein_consequence = paste0("BRCA1:", BRCA1_mave_scores$hgvs_pro)
+
+BRCA1_mave_benign_scores = BRCA1_mave_scores[BRCA1_mave_scores$score==0,]
+write_BRCA1_mave_benign_scores = BRCA1_mave_benign_scores$Protein_consequence
+write.table(write_BRCA1_mave_benign_scores, file="data/otherMaveDB_score/write_BRCA1_mave_benign_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+BRCA1_mave_patho_scores = BRCA1_mave_scores[BRCA1_mave_scores$score > 0,]
+write_BRCA1_mave_patho_scores = BRCA1_mave_patho_scores$Protein_consequence
+write.table(write_BRCA1_mave_patho_scores, file="data/otherMaveDB_score/write_BRCA1_mave_patho_scores.txt", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+```
+Generating VCFs for MSH2, KCNQ4, and BRCA1 after using VEP to reverse annotate amino acid change to genomic variant
+```{r formatting_mavdb_files, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+#MSH2
+MSH2_patho = read.csv("data/otherMaveDB_score/MSH2_mave_deleterious_b38_vep.vcf", sep = "\t", stringsAsFactors = F, header = F, comment.char = "#")
+colnames(MSH2_patho) = c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
+MSH2_patho$INFO = "."
+# MSH2_patho = MSH2_patho[str_count(MSH2_patho$REF) == str_count(MSH2_patho$ALT) & str_count(MSH2_patho$REF) == 1,]
+write.table(MSH2_patho, file="data/otherMaveDB_score/MSH2_mave_deleterious_b38.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+MSH2_benign = read.csv("data/otherMaveDB_score/MSH2_mave_benign_b38_vep.vcf", sep = "\t", stringsAsFactors = F, header = F, comment.char = "#")
+colnames(MSH2_benign) = c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
+MSH2_benign$INFO = "."
+# MSH2_benign = MSH2_benign[str_count(MSH2_benign$REF) == str_count(MSH2_benign$ALT) & str_count(MSH2_benign$REF) == 1,]
+write.table(MSH2_benign, file="data/otherMaveDB_score/MSH2_mave_benign_b38.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+#KCNQ4
+KCNQ4_patho = read.csv("data/otherMaveDB_score/KCNQ4_mave_deleterious_b38_vep.vcf", sep = "\t", stringsAsFactors = F, header = F, comment.char = "#")
+colnames(KCNQ4_patho) = c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
+KCNQ4_patho$INFO = "."
+# KCNQ4_patho = KCNQ4_patho[str_count(KCNQ4_patho$REF) == str_count(KCNQ4_patho$ALT) & str_count(KCNQ4_patho$REF) == 1,]
+write.table(KCNQ4_patho, file="data/otherMaveDB_score/KCNQ4_mave_deleterious_b38.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+KCNQ4_benign = read.csv("data/otherMaveDB_score/KCNQ4_mave_benign_b38_vep.vcf", sep = "\t", stringsAsFactors = F, header = F, comment.char = "#")
+colnames(KCNQ4_benign) = c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
+KCNQ4_benign$INFO = "."
+# KCNQ4_benign = KCNQ4_benign[str_count(KCNQ4_benign$REF) == str_count(KCNQ4_benign$ALT) & str_count(KCNQ4_benign$REF) == 1,]
+write.table(KCNQ4_benign, file="data/otherMaveDB_score/KCNQ4_mave_benign_b38.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+#BRCA1
+BRCA1_patho = read.csv("data/otherMaveDB_score/BRCA1_mave_patho_b38_vep.vcf", sep = "\t", stringsAsFactors = F, header = F, comment.char = "#")
+colnames(BRCA1_patho) = c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
+BRCA1_patho$INFO = "."
+# BRCA1_patho = BRCA1_patho[str_count(BRCA1_patho$REF) == str_count(BRCA1_patho$ALT) & str_count(BRCA1_patho$REF) == 1,]
+write.table(BRCA1_patho, file="data/otherMaveDB_score/BRCA1_mave_patho_b38.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
+
+BRCA1_benign = read.csv("data/otherMaveDB_score/BRCA1_mave_benign_b38_vep.vcf", sep = "\t", stringsAsFactors = F, header = F, comment.char = "#")
+colnames(BRCA1_benign) = c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
+BRCA1_benign$INFO = "."
+# BRCA1_benign = BRCA1_benign[str_count(BRCA1_benign$REF) == str_count(BRCA1_benign$ALT) & str_count(BRCA1_benign$REF) == 1,]
+write.table(BRCA1_benign, file="data/otherMaveDB_score/BRCA1_mave_benign_b38.vcf", na="", row.names = FALSE, col.names = FALSE, sep = "\t", quote=FALSE)
 
 ```
 
