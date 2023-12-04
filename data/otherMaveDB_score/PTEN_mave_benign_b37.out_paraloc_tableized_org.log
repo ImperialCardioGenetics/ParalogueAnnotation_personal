@@ -1,0 +1,29 @@
+Running file: PTEN_mave_benign_b37.out_paraloc
+Started at: 2023_12_04_09_13_27
+--add_ucsc_link False
+--lof_only False
+--biallelic_only False
+--split_size None
+--canonical_only True
+--mysql False
+--original_position False
+--split_by_gene False
+--all_csqs False
+--vcf PTEN_mave_benign_b37.out_paraloc
+--simplify_gtex False
+--ucsc_link_window 20
+--samples False
+--only_pass False
+--do_not_minrep True
+--snps_only False
+--omit_filter False
+--dont_collapse_annotations False
+--include_id True
+--functional_simplify False
+--vep_info SYMBOL,Protein_position,Amino_acids,Codons,BIOTYPE,Paralogue_Vars
+--info None
+--sample_info None
+--split_by_transcript True
+--hom_samples False
+--output PTEN_mave_benign_b37.out_paraloc_tableized_org
+--options False
