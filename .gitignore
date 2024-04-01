@@ -26,3 +26,4 @@ data/clinvar/clinvar_20190114_GRCh38_onlyPathogenic_and_Likely_pathogenic.out_no
 data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_no_plugin
 data/clinvar/clinvar_20190114_GRCh38_onlyBenign_and_Likely_benign.out_no_plugin_summary.html
 *core.*
+data/AlphaMissense_hg38.tsv.gz

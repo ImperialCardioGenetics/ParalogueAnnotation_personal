@@ -5647,28 +5647,43 @@ colnames(other_tools_file2) = c("ID", "CHROM", "POS", "REF", "ALT", "aaref", "aa
 other_tools_file2 = other_tools_file2[,!(names(other_tools_file2) %in% c("EVE_Class10_pred", "EVE_Class20_pred", "EVE_Class30_pred", "EVE_Class40_pred", "EVE_Class50_pred", "EVE_Class60_pred", "EVE_Class70_pred", "EVE_Class75_pred", "EVE_Class80_pred", "EVE_Class90_pred", "SIFT_converted_rankscore", "MutationAssessor_rankscore", "MetaRNN_rankscore", "M-CAP_rankscore", "REVEL_rankscore", "PrimateAI_rankscore", "DEOGEN2_rankscore", "ClinPred_rankscore", "ESM1b_rankscore", "EVE_rankscore", "AlphaMissense_rankscore", "CADD_raw_rankscore"))]
 
 other_tools_file2 = filter(other_tools_file2, ID %in% p.normal_initial$n_occur$Var1)
-# other_tools_file2 = other_tools_file2[complete.cases(other_tools_file2),]
+other_tools_file2 = other_tools_file2[grepl("YES", other_tools_file2$VEP_canonical),]
 
-find_yes_index = function(row){
-  yes_index = which(unlist(strsplit(row, ";")) == "YES")
-  return(yes_index)
+# find_yes_index = function(row){
+#   yes_index = which(unlist(strsplit(row, ";")) == "YES")
+#   return(yes_index)
+# }
+
+# other_tools_file2$canonical_index = sapply(other_tools_file2$VEP_canonical, find_yes_index)
+other_tools_file2$canonical_index = strsplit(as.character(other_tools_file2$VEP_canonical), ";")
+other_tools_file2$canonical_index = sapply(other_tools_file2$canonical_index, function(x) which(x == "YES"))
+# df$yes_index <- sapply(df$x_split, function(x) which(x == "YES"))
+
+columns_to_edit = colnames(other_tools_file2[grepl(";", other_tools_file2)])
+
+other_tools_file2[columns_to_edit] = lapply(other_tools_file2[columns_to_edit], strsplit, ";")
+for (i in columns_to_edit){
+  other_tools_file2[,i] = sapply(1:nrow(other_tools_file2), function(x) other_tools_file2[,i][[x]][other_tools_file2$canonical_index[[x]]])
 }
 
-other_tools_file2$canonical_index = as.character(sapply(other_tools_file2$VEP_canonical, find_yes_index))
+df$result <- sapply(1:nrow(df), function(i) df$y_split[[i]][df$yes_index[i]])
 
-for (row in 1:nrow(other_tools_file2)){
-  canonical_i = other_tools_file2[row, "canonical_index"]
-  df = other_tools_file2[row,]
-  df = df[grepl(";", df)]
-  df = sapply(df, function(x) unlist(strsplit(x, ";"))[canonical_i])
-  # df = sapply(df, function(x) x[canonical_i])
-}
 
-colnames(other_tools_file2[grepl(";", other_tools_file2)])
-other_tools_file2[colnames(other_tools_file2[grepl(";", other_tools_file2)])] = lapply(other_tools_file2[colnames(other_tools_file2[grepl(";", other_tools_file2)])], function(x) unlist(strsplit(x, ";"))[as.numeric(other_tools_file2[1,"canonical_index"])])
+other_tools_file2 = other_tools_file2 %>%
+  mutate(across(
+    colnames(other_tools_file2[grepl(";", other_tools_file2)]),
+    strsplit, ";"
+                ))
 
-split_and_select = function(x){
-  list(unlist(strsplit(x, ";")), mean(x))
+# colnames(other_tools_file2[grepl(";", other_tools_file2)])
+other_tools_file2[colnames(other_tools_file2[grepl(";", other_tools_file2)])] = lapply(other_tools_file2[colnames(other_tools_file2[grepl(";", other_tools_file2)])], split_and_select, canonical_index = as.numeric(other_tools_file2[,"canonical_index"]))
+
+
+  [as.numeric(other_tools_file2[,"canonical_index"])]
+
+split_and_select = function(cell_value, canonical_index){
+  new_cell_value = unlist(strsplit(cell_value, ";"))[canonical_index]
+  return(new_cell_value)
 }
 
 sapply(df[grepl(";", other_tools_file2[1,])], split_and_select(x) )
