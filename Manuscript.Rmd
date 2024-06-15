@@ -232,6 +232,9 @@ full_genes_w_paralogues = intersect(full_genes, protein_genes_w_paralogues_genes
 
 # Total protein genes
 all_protein_genes = dplyr::bind_rows(protein_genes_wo_paralogues_wide, protein_genes_w_paralogues_wide)
+write.table(all_protein_genes,file="data/all_protein_genes.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
+
+
 his = ggplot(all_protein_genes, aes(x=number_of_paralogues, fill=paralogue)) + geom_histogram(binwidth = 1, colour = "black") + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +labs(title = "Overall distribution of human protein coding genes in Ensembl and their associated paralogues", 
@@ -243,6 +246,7 @@ genes in Ensembl and their associated paralogues")+ylim(0,6000) + theme(axis.tit
     legend.text = element_text(size = 12), 
     legend.title = element_text(size = 12))
 ggsave("images/Total_genes_paralogs.png")
+
 # Subset disease genes only
 disease_genes = vector()
 # for (gene in clinvar_P_LP_vcf_tableized_genes){
@@ -254,6 +258,9 @@ for (gene in clinvar_P_LP_tableized_genes){
 }
 # Disease genes
 disease_genes_wide = all_protein_genes[all_protein_genes$external_gene_name %in% disease_genes,]
+write.table(disease_genes_wide,file="data/disease_genes_wide.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
+
+
 his2 = ggplot(disease_genes_wide, aes(x=number_of_paralogues, fill=paralogue)) + geom_histogram(binwidth = 1, colour = "black") + theme(plot.subtitle = element_text(vjust = 1),
     plot.caption = element_text(vjust = 1), 
     plot.title = element_text(hjust = 0.5)) +labs(title = "Distribution of human protein coding genes involved in disease in Ensembl and their associated paralogues", 
@@ -540,7 +547,7 @@ Performing a simple kolmogorov smirnov test between the distribution of pathogen
 GRCh38:
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -1027,7 +1034,7 @@ ggsave("images/average_number_of_annotations_per_variant.png", height = 10, widt
 redoing GRCh38 to only have code for clinvar set and all variants removed comparisons:
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -1232,7 +1239,7 @@ Thesis corrections - GRCh38 to include paralogue locations (with paraZ cutoff th
 # FIRST BIT IS CALCULATING THE NUMBER OF VARIANTS IN THE TEST SET THAT HAVE OR DO NOT HAVE AN ALIGNED PARALOGUE POSITION 
 
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -1661,7 +1668,7 @@ ggsave("images/KDE_full_ref_and_alt_con_822_full_con_ref_and_alt_aa_balanced_tes
 GRCh37
 ```{r clinvar_table, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:clinvar_table}Total number of known P/LP variants and known B/LB variants predicted to be pathogenic"}
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -2270,7 +2277,7 @@ NB in clinvar_P_LP_genes_w_paralogs there are 3621 genes with paralogues but in 
 Getting numbers for experimental design flow chart for only disease genes:
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -2354,7 +2361,7 @@ length(setdiff(unique(b.paralogous_var_align$paralog_data$Gene),unique(p.paralog
 Getting numbers for experimental design flow chart for only disease genes with disease paralogues:
 ```{r, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -2558,7 +2565,7 @@ ggsave("images/reclassified_vus_clinvar_set_bar_chart.png", height = 3, width = 
 
 ```{r FP, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -3140,7 +3147,7 @@ This could suggest either PA does not perform well on sarcomeric genes for the r
 \newpage
 
 ```{r sarco_para, cache=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:sarco_para}Number of paralogues each sarcomeric gene has"}
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 gene_id = c("MYH7", "MYBPC3", "TNNT2", "TPM1", "MYL2", "MYL3", "TNNI3", "ACTC1")
 
@@ -5310,7 +5317,7 @@ p.num_of_mcap = length(which(other_tools_file$M.CAP_pred == "D"))
 p.num_of_cadd = length(which(other_tools_file$CADD_phred > 15))
 
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -5700,7 +5707,7 @@ p.num_of_mcap = length(which(other_tools_file$M.CAP_pred == "D"))
 p.num_of_cadd = length(which(other_tools_file$CADD_phred > 15))
 
 #Disease gene subset
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
