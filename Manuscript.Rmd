@@ -148,7 +148,7 @@ After GenomeMed reviewers notes, dbnsfp45a was used to also include neural netwo
 ## Paralogue stats
 
 ```{r paralog_dist, cache=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:paralog_dist}Distribution of genes with paralogues by the number of paralogues they're related to"}
-ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2018.archive.ensembl.org")
+ensembl = useMart("ENSEMBL_MART_ENSEMBL", host = "jul2019.archive.ensembl.org")
 ens_human <- useDataset("hsapiens_gene_ensembl",mart=ensembl)
 protein_genes_w_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", TRUE), mart = ens_human)
 protein_genes_w_paralogues_genes = as.vector(unique(protein_genes_w_paralogues$external_gene_name))
@@ -162,6 +162,8 @@ protein_genes_w_paralogues_wide = plyr::count(protein_genes_w_paralogues, "exter
 protein_genes_w_paralogues_wide$paralogue = "Yes"
 colnames(protein_genes_w_paralogues_wide)[2] = "number_of_paralogues"
 par(mfrow=c(2,2))
+write.table(protein_genes_w_paralogues_wide,file="data/protein_genes_w_paralogues_wide.csv", na="", row.names = FALSE, col.names = TRUE, sep = ",", quote=FALSE)
+
 # hist(protein_genes_w_paralogues_wide$number_of_paralogues, breaks = seq(0,50,1), xlab = "number of paralogues", ylab = "number of genes", main="A) Overall distribution of genes with paralogues", cex.main = 0.7)
 
 protein_genes_wo_paralogues = getBM(attributes = c("external_gene_name", "hsapiens_paralog_associated_gene_name"), filters = c("biotype", "with_hsapiens_paralog"), values = list("protein_coding", FALSE), mart = ens_human)
@@ -6017,6 +6019,16 @@ gg6 = ggplot(other_tools_data, aes(x=Sensitivity, y=Precision, colour = Type, sh
 # ggsave("images/PRC_with_QC3_QC1_no_QC2.png")
 
 ```
+
+GenMed_corrections - looking Alphamissense predictions for clinvar variants:
+```{r cf_sift_revel, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
+Alphamissense_scores = read.csv(file=gzfile("data/AlphaMissense_hg38.tsv.gz"), sep = "\t", header=FALSE, comment.char = "#", stringsAsFactors=FALSE)
+
+
+
+
+```
+
 
 Looking at only SCN5A:
 ```{r cf_sift_revel_SCN%A, cache=TRUE, echo = FALSE, results='asis', message = FALSE, warning=FALSE}
