@@ -3690,7 +3690,7 @@ rare vs rare+pa
 ```{r eval=FALSE, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 
 #Finding only rare variants
-disease_cohort_variants = read.csv("/media/nick/821ED5711ED55F2B/Users/Nick/Documents/PhD/Pfams/Pfam_meta_domains/data/BrS/Mayo_BrS_variants_for_vcf_conversion_SCN5A.vcf", sep = "\t", stringsAsFactors = 0)
+disease_cohort_variants = read.csv("/mnt/hgfs/PhD/Pfams/Pfam_meta_domains/data/BrS/Mayo_BrS_variants_for_vcf_conversion_SCN5A.vcf", sep = "\t", stringsAsFactors = 0)
 
 gnomad_total_variants = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A.vcf", sep = "\t", stringsAsFactors = 0)
 gnomad_rare_variants = read.csv("data/BrS/gnomAD_v2.1.1_ENSG00000183873_2019_03_21_17_12_57_SCN5A_rare.vcf", sep = "\t", stringsAsFactors = 0) #RUN PA ON THIS FILE
